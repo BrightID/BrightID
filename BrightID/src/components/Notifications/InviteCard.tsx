@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { SvgXml } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -20,16 +22,14 @@ import {
   selectConnectionById,
   addOperation,
 } from '@/actions';
-import GroupPhoto from '@/components/Groups/GroupPhoto';
+import { GroupPhoto } from '@/components/Groups/GroupPhoto';
 import {
   backupUser,
   backupPhoto,
 } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
-import { useNavigation } from '@react-navigation/native';
 import BrightidError from '@/api/brightidError';
-import { useContext } from 'react';
 import { NodeApiContext } from '@/components/NodeApiGate';
 
 const InviteCard = (props) => {
@@ -87,7 +87,9 @@ const InviteCard = (props) => {
       if (backupCompleted) {
         await dispatch(backupUser());
         if (invite.group.photo && invite.group.photo.filename) {
-          await dispatch(backupPhoto(invite.group.id, invite.group.photo.filename));
+          await dispatch(
+            backupPhoto(invite.group.id, invite.group.photo.filename),
+          );
         }
       }
       navigation.navigate('Members', { group: invite.group });

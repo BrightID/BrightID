@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "Mehr Details",
+      "title": "Bitu-Überprüfung"
+    },
     "getSponsored": {
       "description": "Lass dich sponsern von einer Anwendung, die Sponsoring anbietet",
       "title": "Werde gesponsert"
@@ -11,6 +15,10 @@
     "joinConnectionPartyWithFriend": {
       "description": "Bring Familie und enge Freunde zu einer BrightID-Verbindungsparty",
       "title": "Verbindungsparty mit Familie oder Freunden"
+    },
+    "joinMeet": {
+      "description": "An einem BrightID-Treffen teilnehmen",
+      "title": "BrightID-Treffen"
     },
     "linkApp": {
       "description": "Verknüpfe deine BrightID mit einer Anwendung",
@@ -197,7 +205,8 @@
     "label": {
       "connectionLevel": "Verbindungsstufe",
       "mutualConnections": "Gemeinsame Verbindungen",
-      "mutualGroups": "Gemeinsame Gruppen"
+      "mutualGroups": "Gemeinsame Gruppen",
+      "possibleDuplicates": "Mögliche Duplikate"
     },
     "tags": {
       "connectedAt": "Verbunden {{date}}",

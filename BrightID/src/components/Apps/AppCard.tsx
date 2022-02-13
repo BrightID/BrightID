@@ -8,8 +8,9 @@ import {
   View,
   Linking,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
@@ -23,11 +24,10 @@ import {
 import {
   updateLinkedContext,
   selectLinkedContext,
-  selectLinkedSigsForApp,
+  createSelectLinkedSigsForApp,
 } from '@/actions';
 
 import { isVerified } from '@/utils/verifications';
-import _ from 'lodash';
 import Check from '../Icons/Check';
 
 /**
@@ -63,8 +63,12 @@ const AppCard = (props: AppInfo) => {
   const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
-  const linkedSigsSelector = useMemo(() => selectLinkedSigsForApp, []);
-  const linkedSigs = useSelector((state) => linkedSigsSelector(state, id));
+
+  const selectLinkedSigs = useMemo(
+    () => createSelectLinkedSigsForApp(id),
+    [id],
+  );
+  const linkedSigs = useSelector(selectLinkedSigs);
 
   const { t } = useTranslation();
 

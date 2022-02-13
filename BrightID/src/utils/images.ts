@@ -1,7 +1,8 @@
 import { compose } from 'ramda';
+import { Image, Options } from 'react-native-image-crop-picker';
 import ImagePicker from './ImagePickerProvider';
 
-const options = {
+const options: Options = {
   cropping: true,
   width: 180,
   height: 180,
@@ -11,14 +12,12 @@ const options = {
   cropperToolbarTitle: 'Select Photo',
   smartAlbums: ['RecentlyAdded', 'UserLibrary', 'PhotoStream', 'SelfPortraits'],
   useFrontCamera: true,
-  // compressImageMaxWidth: 180,
-  // compressImageMaxHeight: 180,
   compressImageQuality: 0.8,
   mediaType: 'photo',
 };
 
 export const takePhoto = () =>
-  new Promise((res, rej) => {
+  new Promise<Image>((res, rej) => {
     ImagePicker.openCamera(options)
       .then((response) => {
         res(response);
@@ -32,7 +31,7 @@ export const takePhoto = () =>
   });
 
 export const chooseImage = () =>
-  new Promise((res, rej) => {
+  new Promise<Image>((res, rej) => {
     ImagePicker.openPicker(options)
       .then((response) => {
         res(response);
@@ -48,9 +47,9 @@ export const chooseImage = () =>
 /**
  *
  * @param {string} str
- * @returns {string}
+ * @returns {string[]}
  */
-const splitDataURI = (str) => str.split(',', 2);
+const splitDataURI = (str: string): string[] => str.split(',', 2);
 
 /**
  *
@@ -81,14 +80,14 @@ export const parseDataUri = compose(mediaTypeToFileExtension, splitDataURI);
  * @param {string} str
  * @returns string
  */
-const fileType = (str) => str.split('.').pop().toLowerCase();
+const fileType = (str: string) => str.split('.').pop().toLowerCase();
 /**
  *
  * @param {string} t
  * @returns string
  */
 
-const normalizeType = (t) => {
+const normalizeType = (t: 'jpg' | 'png' | 'gif' | 'svg') => {
   switch (t) {
     case 'jpg':
       return 'image/jpeg';

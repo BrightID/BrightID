@@ -14,7 +14,7 @@ type AppsState = {
 
 type ConnectionsState = {
   connections: EntityState<Connection>;
-  connectionsSort: string;
+  connectionsSort: SortTypes;
   searchParam: string;
   searchOpen: boolean;
   filters: ConnectionLevel[];
@@ -25,7 +25,7 @@ type LocalConnectionData = {
   id: string;
   name: string;
   connectionDate: number;
-  photo: { filename: string };
+  photo: Photo;
   status?: string;
   level?: ConnectionLevel;
   socialMedia?: string[];
@@ -44,7 +44,6 @@ type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
  */
 
 type GroupsState = {
-  newGroupInvitees: string[];
   invites: Invite[];
   groups: Group[];
   searchParam: string;
@@ -53,7 +52,7 @@ type GroupsState = {
 
 type Group = GroupInfo & {
   name?: string;
-  photo?: { filename: string };
+  photo?: Photo;
   aesKey?: string;
   joined: number;
   state: string;
@@ -63,11 +62,6 @@ type Invite = InviteInfo & {
   group: Group;
   state: string;
 };
-
-// type Invite = Omit<InviteInfo, 'group'> & {
-//   group: Group;
-//   state: string;
-// };
 
 /**
  * KeypairSlice
@@ -91,6 +85,14 @@ type OperationsState = EntityState<NodeOps>;
 /**
  * UserSlice
  */
+type UserState = User & {
+  searchParam: string;
+  backupCompleted: boolean;
+  verifications: Array<Verification>;
+  isSponsored: boolean;
+  eula: boolean;
+  migrated?: boolean;
+};
 
 /**
  * WalkthroughSlice
@@ -103,6 +105,10 @@ type OperationsState = EntityState<NodeOps>;
 type SettingsState = {
   baseUrl: string;
   api: any | undefined;
+};
+
+type Photo = {
+  filename: string;
 };
 
 /**
@@ -118,5 +124,3 @@ type Device = {
 type DevicesState = {
   devices: EntityState<Device>;
 };
-
-

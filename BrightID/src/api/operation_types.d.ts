@@ -12,132 +12,104 @@ type NodeOps =
   | LinkContextIdOp
   | RemoveGroupOp
   | RemoveMembershipOp
-  | SocialRecoveryOp
-  | SponsorOp;
+  | SocialRecoveryOp;
 
-type AddAdminOp = {
+type BaseOp = {
+  apiUrl?: string;
+  v: number;
+  hash?: string;
+  timestamp: number;
+};
+
+type AddAdminOp = BaseOp & {
   name: 'Add Admin';
   id: string;
   admin: string;
   group: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type AddGroupOp = {
+type AddGroupOp = BaseOp & {
   name: 'Add Group';
   group: string;
   id: string;
   url: string;
   type: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type AddMembershipOp = {
+type AddMembershipOp = BaseOp & {
   name: 'Add Membership';
   id: string;
   group: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type ConnectOp = {
+type ConnectOp = BaseOp & {
   name: 'Connect';
   id1: string;
   id2: string;
   level: string;
-  timestamp: number;
-  v: number;
   sig1?: string;
   reportReason?: string;
   replacedWith?: string;
   requestProof?: string;
-  hash?: string;
 };
 
-type DismissOp = {
+type DismissOp = BaseOp & {
   name: string;
   dismisser: string;
   dismissee: string;
   group: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type InviteOp = {
+type InviteOp = BaseOp & {
   name: 'Invite';
   inviter: string;
   invitee: string;
   group: string;
   data: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type LinkContextIdOp = {
-  api?: NodeApi;
+type LinkContextIdOp = BaseOp & {
   name: 'Link ContextId';
-  timestamp: number;
-  v: number;
   context: string;
   contextId?: string;
   encrypted?: string;
   id?: string;
   sig?: string;
-  hash?: string;
 };
 
-type RemoveGroupOp = {
+type RemoveGroupOp = BaseOp & {
   name: 'Remove Group';
   id: string;
   group: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type RemoveMembershipOp = {
+type RemoveMembershipOp = BaseOp & {
   name: string;
   id: string;
   group: string;
-  timestamp: number;
-  v: number;
   sig?: string;
-  hash?: string;
 };
 
-type SocialRecoveryOp = {
+type SocialRecoveryOp = BaseOp & {
   name: 'Social Recovery';
   id: string;
   signingKey: string;
-  timestamp: number;
-  v: number;
   id1?: string;
   id2?: string;
   sig1?: string;
   sig2?: string;
-  hash?: string;
 };
 
-type SpendSponsorshipOp = {
+type SpendSponsorshipOp = BaseOp & {
   name: 'Spend Sponsorship';
   app: string;
   appId: string;
-  timestamp: number;
-  v: number;
-  hash?: string;
 };
 
 type AddSigningKeyOp = {

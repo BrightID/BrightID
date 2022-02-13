@@ -129,8 +129,7 @@ type AppInfo = {
   nodeUrl?: string;
 };
 
-type OperationInfo = {
-  state: string;
+type OperationInfo = OperationState & {
   result: string;
 };
 
@@ -196,4 +195,8 @@ type SponsorshipInfo = {
   timestamp: number;
   appHasAuthorized: boolean;
   spendRequested: boolean;
+};
+
+type GetRecoveryRes = {
+  data: string;
 };

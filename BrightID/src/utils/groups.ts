@@ -1,11 +1,8 @@
-import store from '@/store';
-import { createSelector } from '@reduxjs/toolkit';
-import {
-  selectAllConnections,
-  selectConnectionById,
-} from '@/reducer/connectionsSlice';
+import store, {RootState} from '@/store';
+import {createSelector} from '@reduxjs/toolkit';
+import {selectAllConnections, selectConnectionById,} from '@/reducer/connectionsSlice';
 
-const threeKnownMembers = (group) => {
+const threeKnownMembers = (group: Group): Array<Connection> => {
   const {
     user: { id, photo, name },
   } = store.getState();
@@ -19,21 +16,20 @@ const threeKnownMembers = (group) => {
       id,
     },
   ];
-  let list = members
+  return members
     .map((u) => connsWithMe.find((conn) => conn.id === u))
     .filter((u) => u)
-    .sort((u1, u2) => (group.admins.includes(u1) ? -1 : 1))
+    .sort((u1) => (group.admins.includes(u1.id) ? -1 : 1))
     .slice(0, 3);
-  return list;
 };
 
-export const groupCirclePhotos = (group) => {
+export const groupCirclePhotos = (group: Group) => {
   return threeKnownMembers(group).map((member) => {
     return { photo: member.photo };
   });
 };
 
-export const getGroupName = (group) => {
+export const getGroupName = (group: Group) => {
   return (
     group?.name ||
     threeKnownMembers(group)
@@ -42,7 +38,7 @@ export const getGroupName = (group) => {
   );
 };
 
-export const ids2connections = (ids) => {
+export const ids2connections = (ids: Array<string>): Array<Connection> => {
   const {
     user: { name, id, photo },
   } = store.getState();
@@ -60,18 +56,17 @@ export const ids2connections = (ids) => {
   });
 };
 
-export const knownMemberIDs = (group) => {
+export const knownMemberIDs = (group: Group) => {
   // only members that are in my connections are known
-  let knownMemberIDs = group.members.filter((memberId) =>
+  return group.members.filter((memberId) =>
     selectConnectionById(store.getState(), memberId),
   );
-  return knownMemberIDs;
 };
 
 export const groupByIdSelector = createSelector(
-  (state) => state.groups.groups,
-  (_, groupId) => groupId,
-  (groups, groupId) => {
+  (state: RootState) => state.groups.groups,
+  (_, groupId: string) => groupId,
+  (groups: Group[], groupId: string) => {
     const group = groups.find((group) => group.id === groupId);
     return {
       group,

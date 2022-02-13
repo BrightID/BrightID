@@ -1,8 +1,8 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 import { resetStore } from '@/actions';
 import { store } from '@/store';
-import RNFetchBlob from 'rn-fetch-blob';
 
 const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 

@@ -11,6 +11,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
+import { StackScreenProps } from '@react-navigation/stack';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
@@ -33,7 +34,6 @@ import {
   updateNotifications,
 } from '@/actions';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
-import { StackScreenProps } from '@react-navigation/stack';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();
@@ -122,7 +122,7 @@ const ChangePasswordModal = ({ navigation }: props) => {
                   {t('profile.label.currentPassword')}
                 </Text>
                 <TextInput
-                  autoCompleteType="password"
+                  autoComplete="password"
                   autoCorrect={false}
                   onChangeText={setOldPassword}
                   value={oldPassword}
@@ -142,7 +142,7 @@ const ChangePasswordModal = ({ navigation }: props) => {
                   : t('profile.label.password')}
               </Text>
               <TextInput
-                autoCompleteType="password"
+                autoComplete="password"
                 autoCorrect={false}
                 onChangeText={setNewPassword}
                 value={newPassword}
@@ -163,7 +163,7 @@ const ChangePasswordModal = ({ navigation }: props) => {
                 {t('profile.label.newPasswordAgain')}
               </Text>
               <TextInput
-                autoCompleteType="password"
+                autoComplete="password"
                 autoCorrect={false}
                 onChangeText={setNewPasswordAgain}
                 value={newPasswordAgain}

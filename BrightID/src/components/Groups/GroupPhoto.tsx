@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
 import { photoDirectory } from '@/utils/filesystem';
 import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
-const GroupPhoto = ({ group }) => {
+type GroupPhotoProps = {
+  group: Group;
+};
+
+export const GroupPhoto = ({ group }: GroupPhotoProps) => {
   if (group.photo?.filename) {
     return (
       <View style={styles.container}>
@@ -19,38 +22,31 @@ const GroupPhoto = ({ group }) => {
       </View>
     );
   } else {
-    const circlePhotos = groupCirclePhotos(group).map((item) => {
-      if (item.photo?.filename) {
-        item.source = {
-          uri: `file://${photoDirectory()}/${item.photo?.filename}`,
-        };
-      } else {
-        item.source = require('@/static/default_profile.jpg');
-      }
-      return item;
-    });
+    const circlePhotos = groupCirclePhotos(group).map(
+      (item: { photo: Photo; source: any }) => {
+        if (item.photo?.filename) {
+          item.source = {
+            uri: `file://${photoDirectory()}/${item.photo?.filename}`,
+          };
+        } else {
+          item.source = require('@/static/default_profile.jpg');
+        }
+        return item;
+      },
+    );
     return (
       <View style={styles.container}>
         <View style={styles.topPhotos}>
           {circlePhotos[0] && (
-            <Image
-              source={circlePhotos[0].source}
-              style={styles.photo}
-            />
+            <Image source={circlePhotos[0].source} style={styles.photo} />
           )}
         </View>
         <View style={styles.bottomPhotos}>
           {circlePhotos[1] && (
-            <Image
-              source={circlePhotos[1].source}
-              style={styles.photo}
-            />
+            <Image source={circlePhotos[1].source} style={styles.photo} />
           )}
           {circlePhotos[2] && (
-            <Image
-              source={circlePhotos[2].source}
-              style={styles.photo}
-            />
+            <Image source={circlePhotos[2].source} style={styles.photo} />
           )}
         </View>
       </View>
@@ -89,5 +85,3 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
-export default connect()(GroupPhoto);

@@ -75,7 +75,7 @@ const linkContextId = async (
   const api = new NodeApi({ url: baseUrl, id, secretKey });
   try {
     const op = await api.linkContextId(context, contextId);
-    op.api = api;
+    op.apiUrl = baseUrl;
     store.dispatch(addOperation(op));
     store.dispatch(
       addLinkedContext({

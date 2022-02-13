@@ -111,10 +111,8 @@ describe('Group Management', () => {
       await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
-      // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
-        .toBeVisible()
-        .withTimeout(30000);
+      // there should be 3 known members in the first group
+      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
     });
   });
 
@@ -140,10 +138,8 @@ describe('Group Management', () => {
       await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
-      // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
-        .toBeVisible()
-        .withTimeout(30000);
+      // there should be 4 known members in first group
+      expect(element(by.id('groupMembersCount-0'))).toHaveText('4 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 4 members, so check for memberItem with index 3
@@ -193,30 +189,16 @@ describe('Group Management', () => {
 
   describe('Promote regular member to admin', () => {
     beforeAll(async () => {
-      /*
-      // invite
-      await inviteConnectionToGroup(GroupName);
-      // accept invitation
-      await joinAllGroups(0);
-      await joinAllGroups(1);
-      await joinAllGroups(2);
-
-       */
-
       // check group members
       // navigate to groups screen
       await element(by.id('toggleDrawer')).tap();
       await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
-      // wait 20 seconds until all join ops should be done on the backend
-      // await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
-      // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
-        .toBeVisible()
-        .withTimeout(30000);
+      // there should be 3 known members
+      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 3 members, so check for memberItem with index 2

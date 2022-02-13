@@ -42,6 +42,7 @@
     "skipLibCheck": true, /* Skip type checking of declaration files. */
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "useUnknownInCatchVariables": false,
     "paths": {
       "@/*": [
         "src/*"

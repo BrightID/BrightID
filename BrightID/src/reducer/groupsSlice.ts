@@ -1,12 +1,14 @@
-import { difference } from 'ramda';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
+import { RootState } from '@/store';
+import { toSearchString } from '@/utils/strings';
+import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
+import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
 
 /* ******** INITIAL STATE ************** */
 
 const initialState: GroupsState = {
-  newGroupInvitees: [],
   groups: [],
   invites: [],
   searchParam: '',
@@ -20,7 +22,7 @@ const groupsSlice = createSlice({
     createGroup(state, action: PayloadAction<Group>) {
       state.groups.push(action.payload);
     },
-    updateGroup(state, action: PayloadAction<Group>) {
+    updateGroup(state, action: PayloadAction<GroupInfo>) {
       const group = state.groups.find(
         (group) => group.id === action.payload.id,
       );
@@ -30,12 +32,6 @@ const groupsSlice = createSlice({
       state.groups = state.groups.filter(
         (group) => group.id !== action.payload.id,
       );
-    },
-    setNewGroupInvitees(state, action: PayloadAction<string[]>) {
-      state.newGroupInvitees = action.payload;
-    },
-    clearNewGroupInvitees(state) {
-      state.newGroupInvitees = [];
     },
     setGroups(state, action: PayloadAction<Group[]>) {
       state.groups = action.payload;
@@ -144,13 +140,52 @@ const groupsSlice = createSlice({
   },
 });
 
-// Export channel actions
+export const allGroupsSelector = (state: RootState) => state.groups.groups;
+
+export const activeGroupsSelector = (state: RootState) =>
+  state.groups.groups.filter(
+    (group) => group.state === 'initiated' || group.state === 'verified',
+  );
+
+export const searchParamSelector = (state: RootState) =>
+  state.groups.searchParam;
+
+export const filteredGroupsSelector = createSelector(
+  activeGroupsSelector,
+  searchParamSelector,
+  (allGroups, searchParam) => {
+    let filteredGroups: Array<Group>;
+    if (searchParam !== '') {
+      const searchString = toSearchString(searchParam);
+      filteredGroups = allGroups.filter((group) => {
+        if (toSearchString(getGroupName(group)).includes(searchString)) {
+          // direct group name match
+          return true;
+        } else {
+          // check group members
+          const allMemberNames = ids2connections(knownMemberIDs(group)).map(
+            (member) => toSearchString(member.name),
+          );
+          for (const name of allMemberNames) {
+            if (name.includes(searchString)) {
+              // stop looking if a match is found
+              return true;
+            }
+          }
+          return false;
+        }
+      });
+    } else {
+      filteredGroups = allGroups;
+    }
+    return filteredGroups.sort(compareCreatedDesc);
+  },
+);
+
 export const {
   createGroup,
   updateGroup,
   deleteGroup,
-  setNewGroupInvitees,
-  clearNewGroupInvitees,
   setGroups,
   updateMemberships,
   joinGroup,

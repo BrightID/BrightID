@@ -77,6 +77,11 @@ const settingsPersistConfig = {
   blacklist: ['baseUrl'],
 };
 
+const operationsPersistConfig = {
+  ...fsPersistConfig,
+  key: 'operations',
+};
+
 const keypairPersistConfig = {
   key: 'keypair',
   storage: KeychainStorage,
@@ -102,6 +107,7 @@ const rootReducer = combineReducers({
   tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
   settings: persistReducer(settingsPersistConfig, reducers.settings),
+  operations: persistReducer(operationsPersistConfig, reducers.operations),
   devices: persistReducer(devicesPersistConfig, reducers.devices),
 });
 

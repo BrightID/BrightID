@@ -66,8 +66,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkSuccess": "Success",
-        "linkingFailed": "App linking failed"
+        "linkingFailed": "App linking failed",
+        "linkSuccess": "Success"
       }
     },
     "text": {
@@ -143,9 +143,9 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
-      "reportReason": " as {{reportReason}}",
       "reported": "(reported)",
-      "reportedByUser": "reported by you"
+      "reportedByUser": "reported by you",
+      "reportReason": " as {{reportReason}}"
     },
     "text": {
       "uploadingData": "Uploading encrypted data to backup server…"
@@ -167,6 +167,7 @@
       "connectionLevel": "Connection Level",
       "mutualConnections": "Mutual Connections",
       "mutualGroups": "Mutual Groups",
+      "possibleDuplicates": "Possible Duplicates",
       "recoveryConnections": "Recovery Connections"
     },
     "tags": {
@@ -688,6 +689,7 @@
       "complete": "Restore complete",
       "error": "Restore failed. Wrong password?",
       "restoring": "Restoring data…",
+      "restoringProgress": "Restoring item {{currentItem}} of {{totalItems}}",
       "skipped": "Restore skipped",
       "waitingAccount": "Waiting for account recovery",
       "waitingPassword": "Enter password or skip"

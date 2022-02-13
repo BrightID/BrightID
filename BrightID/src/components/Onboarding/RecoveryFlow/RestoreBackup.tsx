@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { useTranslation } from 'react-i18next';
-import { fontSize } from '@/theme/fonts';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
+import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /* Component to track backup restore */
 type RestoreBackupParams = {
@@ -21,6 +21,8 @@ type RestoreBackupParams = {
   setPassword: (pass: string) => void;
   doRestore: () => void;
   doSkip: () => void;
+  totalItems: number;
+  currentItem: number;
 };
 export const RestoreBackup = ({
   currentStep,
@@ -28,12 +30,13 @@ export const RestoreBackup = ({
   doSkip,
   password,
   setPassword,
+  totalItems,
+  currentItem,
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(true);
-  const [iconData, setIconData] = useState<{ color: string; name: string }>(
-    undefined,
-  );
+  const [iconData, setIconData] =
+    useState<{ color: string; name: string }>(undefined);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -54,7 +57,19 @@ export const RestoreBackup = ({
         break;
       case BackupSteps.RESTORING_DATA:
         setIconData(undefined);
-        setStateDescription(t('restore.steps.restoring', 'Restoring data...'));
+        if (totalItems) {
+          setStateDescription(
+            t(
+              'restore.steps.restoringProgress',
+              'Restoring item {{currentItem}} of {{totalItems}}',
+              { totalItems, currentItem },
+            ),
+          );
+        } else {
+          setStateDescription(
+            t('restore.steps.restoring', 'Restoring data ...'),
+          );
+        }
         setShowPasswordInput(false);
         break;
       case BackupSteps.COMPLETE:
@@ -79,7 +94,7 @@ export const RestoreBackup = ({
         setStateDescription(`Unhandled state ${BackupSteps[currentStep]}`);
         break;
     }
-  }, [currentStep, t]);
+  }, [currentItem, currentStep, t, totalItems]);
 
   const submitDisabled = password.length < 1;
 
@@ -134,7 +149,7 @@ export const RestoreBackup = ({
               style={styles.textInput}
               autoCorrect={false}
               textContentType="password"
-              autoCompleteType="password"
+              autoComplete="password"
               underlineColorAndroid="transparent"
               secureTextEntry={true}
             />

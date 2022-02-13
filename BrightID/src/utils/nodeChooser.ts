@@ -1,6 +1,7 @@
 // Shim Promise.any() which is not yet available in react native
 import any from 'promise.any';
-import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
+import { satisfies } from 'compare-versions';
+import { NODE_CHOOSER_TIMEOUT_MS, requiredSemVer } from '@/utils/constants';
 
 any.shim();
 
@@ -96,9 +97,9 @@ const validateProfileService = (baseUrl: string) =>
  *   if the reply makes sense.
  * @param baseUrl
  */
-const validateAPI = (baseUrl: string, version: number) =>
+const validateAPI = (baseUrl: string, apiVersion: number) =>
   new Promise<string>((resolve, reject) => {
-    const stateUrl = `${baseUrl}/brightid/v${version}/state`;
+    const stateUrl = `${baseUrl}/brightid/v${apiVersion}/state`;
     fetch(stateUrl)
       .then((response) => {
         // network request was okay, now check server response on http level
@@ -114,12 +115,12 @@ const validateAPI = (baseUrl: string, version: number) =>
       })
       .then((json) => {
         // Body contains JSON. Now check if JSON content is acceptable.
-        validateAPIJsonResponse(json); // will throw if invalid
+        validateAPIJsonResponse(json, apiVersion); // will throw if invalid
         resolve(baseUrl);
       })
       .catch((error) => {
         console.log(
-          `Nodechooser: Node ${baseUrl} failed v${version} test with ${error}`,
+          `Nodechooser: Node ${baseUrl} failed v${apiVersion} test with ${error}`,
         );
         reject(error);
       });
@@ -142,26 +143,46 @@ const validateAPI = (baseUrl: string, version: number) =>
  * @param json
  */
 const expectedAPIRootKey = 'data';
-const expectedAPIBodyKeys = [
-  'lastProcessedBlock',
-  'verificationsBlock',
-  'initOp',
-  'sentOp',
-  'verificationsHashes',
-];
+const expectedAPIBodyKeys = {
+  5: [
+    'lastProcessedBlock',
+    'verificationsBlock',
+    'initOp',
+    'sentOp',
+    'verificationsHashes',
+  ],
+  6: [
+    'lastProcessedBlock',
+    'verificationsBlock',
+    'initOp',
+    'sentOp',
+    'verificationsHashes',
+    'wISchnorrPublic',
+    'ethSigningAddress',
+    'consensusSenderAddress',
+    'version',
+  ],
+};
 
-const validateAPIJsonResponse = (json) => {
+const validateAPIJsonResponse = (json, apiVersion: number) => {
   const body = json[expectedAPIRootKey];
   if (!body) {
     throw new Error(`Missing rootkey ${expectedAPIRootKey}`);
   }
   const keys = Object.keys(body);
-  for (const key of expectedAPIBodyKeys) {
+  for (const key of expectedAPIBodyKeys[apiVersion]) {
     if (keys.indexOf(key) === -1) {
       throw new Error(`Missing bodykey ${key}`);
     }
   }
-  return true;
+  if (apiVersion >= 6) {
+    // starting with v6, BrightID node state response includes a version string. Check if it satisfies client requirements
+    if (!satisfies(body.version, requiredSemVer)) {
+      throw new Error(
+        `Node version ${body.version} does not satisfy required version ${requiredSemVer}`,
+      );
+    }
+  }
 };
 
 /**
