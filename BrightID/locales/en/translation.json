@@ -576,7 +576,8 @@
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
       "password": "Password",
-      "socialMediaLink": "Social Media Link"
+      "socialMediaLink": "Social Media Link",
+      "phoneNumber": "Phone Number"
     },
     "placeholder": {
       "name": "Enter Name",

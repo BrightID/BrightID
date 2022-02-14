@@ -548,7 +548,8 @@
       "newPassword": "नया पासवर्ड",
       "newPasswordAgain": "पासवर्ड दोहराएं",
       "password": "पासवर्ड",
-      "socialMediaLink": "सोशल मीडिया लिंक"
+      "socialMediaLink": "सोशल मीडिया लिंक",
+      "phoneNumber": "फ़ोन नंबर"
     },
     "placeholder": {
       "name": "नाम दर्ज करें",

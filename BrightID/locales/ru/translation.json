@@ -585,7 +585,8 @@
       "newPassword": "Новый пароль",
       "newPasswordAgain": "Повторите пароль",
       "password": "Пароль",
-      "socialMediaLink": "Ссылка на социальные сети"
+      "socialMediaLink": "Ссылка на социальные сети",
+      "phoneNumber": "Телефонный номер"
     },
     "placeholder": {
       "name": "Введите имя",
