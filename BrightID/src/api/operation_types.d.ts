@@ -57,7 +57,7 @@ type ConnectOp = BaseOp & {
 };
 
 type DismissOp = BaseOp & {
-  name: string;
+  name: 'Dismiss';
   dismisser: string;
   dismissee: string;
   group: string;
@@ -90,7 +90,7 @@ type RemoveGroupOp = BaseOp & {
 };
 
 type RemoveMembershipOp = BaseOp & {
-  name: string;
+  name: 'Remove Membership';
   id: string;
   group: string;
   sig?: string;
