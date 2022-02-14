@@ -13,7 +13,7 @@ import {
   SocialMediaShareActionType,
   ShareType,
   ShareTypeDisplay,
-} from '@/components/EditProfile/socialMediaList';
+} from '@/components/EditProfile/socialMediaVariationList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -189,12 +189,15 @@ declare global {
 
   // We are sure that these properties are
   // shared in old or new versions of app
-  interface SocialMediaCompanyShared {
+  interface SocialMediaVariationShared {
     name: string;
     shareType: ShareType;
   }
 
-  type SocialMediaCompany = SocialMediaCompanyShared & {
+  type SocialMediaId = string;
+
+  type SocialMediaVariation = SocialMediaVariationShared & {
+    id: SocialMediaId;
     type: SocialMediaType;
     shareTypeDisplay: ShareTypeDisplay;
     shareActionType: SocialMediaShareActionType;
@@ -202,15 +205,14 @@ declare global {
     icon: any;
   };
 
-  type SocialMediaId = string;
 
-  type SocialMediaList = {
-    [key: SocialMediaId]: SocialMediaCompany;
-  };
+  type SocialMediaVariationState = EntityState<SocialMediaVariation>;
+
+  type SocialMediaVariationList = SocialMediaVariation[];
 
   type SocialMedia = {
     id: SocialMediaId;
-    company: SocialMediaCompanyShared;
+    company: SocialMediaVariationShared;
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
