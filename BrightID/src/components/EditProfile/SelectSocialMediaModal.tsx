@@ -23,8 +23,8 @@ import {
 import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import socialMediaList from './socialMediaList';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
+import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 
 /** Helper functions */
 
@@ -32,11 +32,6 @@ import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 const toPickerItem = ([value, { name }]) => (
   <Picker.Item key={value} value={value} label={name} />
 );
-
-const socialMediaKeyValues = Object.entries(socialMediaList) as [
-  SocialMediaId,
-  ValueOf<typeof socialMediaList>,
-][];
 
 const keyboardTypes: { [id: string]: KeyboardTypeOptions } = {
   username: 'default',
@@ -64,6 +59,12 @@ const SelectMediaModal = ({ route }: props) => {
   const existingSocialMediaIds = useSelector(
     (state: State) => state.socialMedia.ids,
   ) as SocialMediaId[];
+  const socialMediaVariationList = useSelector(selectAllSocialMediaVariations);
+
+  const socialMediaKeyValues = socialMediaVariationList.map((item) => [
+    item.id,
+    item,
+  ]);
 
   // only display social media not already selected by user when adding a new one to the list
   // or allow the user to switch order if editing the social media from the list
@@ -74,7 +75,7 @@ const SelectMediaModal = ({ route }: props) => {
         : socialMediaKeyValues.filter(
             ([id]) => !existingSocialMediaIds.includes(id),
           ),
-    [existingSocialMediaIds, prevId],
+    [existingSocialMediaIds, prevId, socialMediaKeyValues],
   );
 
   const PickerItems = useMemo(
@@ -89,8 +90,18 @@ const SelectMediaModal = ({ route }: props) => {
   // or display the first item in the picker if the user is adding a new social media
   const firstItem = prevId ?? defaultItem;
 
-  // selectedId tracks state of the picker, will always be an id from socialMediaList.js
+  // selectedId tracks state of the picker, will always be an id from socialMediaVariationList.js
   const [selectedId, setSelectedId] = useState<SocialMediaId>(firstItem);
+  const [socialMediaVariationListItem, setSocialMediaVariationListItem] =
+    useState<SocialMediaVariation>();
+
+  useEffect(() => {
+    console.log("calllllllllllled")
+    console.log(selectedId)
+    setSocialMediaVariationListItem(
+      socialMediaVariationList.find((item) => item.id === selectedId),
+    );
+  }, [selectedId, socialMediaVariationList]);
 
   const prevProfile = useSelector((state: State) =>
     selectSocialMediaById(state, selectedId),
@@ -120,7 +131,7 @@ const SelectMediaModal = ({ route }: props) => {
   const saveProfile = () => {
     const socialMedia: SocialMedia = {
       id: selectedId,
-      company: socialMediaList[selectedId],
+      company: socialMediaVariationListItem,
       order: route.params?.order ?? 0,
       profile,
     };
@@ -151,7 +162,7 @@ const SelectMediaModal = ({ route }: props) => {
         ) : (
           <View style={styles.inputContainer}>
             <Text style={styles.label}>
-              {socialMediaList[selectedId].shareTypeDisplay}
+              {socialMediaVariationListItem.shareTypeDisplay}
             </Text>
             <TextInput
               style={styles.socialMediaInput}
@@ -161,12 +172,12 @@ const SelectMediaModal = ({ route }: props) => {
               autoFocus={true}
               blurOnSubmit={true}
               keyboardType={
-                keyboardTypes[socialMediaList[selectedId].shareType]
+                keyboardTypes[socialMediaVariationListItem.shareType]
               }
-              placeholder={`add ${socialMediaList[selectedId].shareTypeDisplay}`}
+              placeholder={`add ${socialMediaVariationListItem.shareTypeDisplay}`}
               placeholderTextColor={DARKER_GREY}
               textContentType={
-                textContentTypes[socialMediaList[selectedId].shareType]
+                textContentTypes[socialMediaVariationListItem.shareType]
               }
               onChangeText={setProfile}
               value={profile}

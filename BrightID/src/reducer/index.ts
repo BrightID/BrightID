@@ -12,6 +12,7 @@ import socialMedia from '../components/EditProfile/socialMediaSlice';
 import recoveryData from '../components/Onboarding/RecoveryFlow/recoveryDataSlice';
 import walkthrough from './walkthroughSlice';
 import settings from './settingsSlice';
+import socialMediaVariations from './socialMediaVariationSlice';
 import devices from './devicesSlice';
 
 export default {
@@ -26,6 +27,7 @@ export default {
   notifications,
   user,
   tasks,
+  socialMediaVariations,
   socialMedia,
   walkthrough,
   settings,

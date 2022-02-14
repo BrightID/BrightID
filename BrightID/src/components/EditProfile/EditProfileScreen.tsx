@@ -239,7 +239,7 @@ const SocialMediaLinks = () => {
 
   console.log('socialMedia', socialMediaItems);
 
-  const SocialMediaList = socialMediaItems.map((item) => (
+  const SocialMediaVariationList = socialMediaItems.map((item) => (
     <SocialMediaLink key={item.id} {...item} />
   ));
 
@@ -265,7 +265,7 @@ const SocialMediaLinks = () => {
         </TouchableOpacity>
       </View>
 
-      {SocialMediaList}
+      {SocialMediaVariationList}
 
       <View style={styles.bottomDivider} />
     </View>
