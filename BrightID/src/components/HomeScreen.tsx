@@ -34,7 +34,7 @@ import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-import { selectBaseUrl } from '@/reducer/settingsSlice';
+import { selectBaseUrl, selectIsPrimaryDevice } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -68,7 +68,7 @@ export const HomeScreen = (props) => {
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
-
+  const isPrimaryDevice = useSelector(selectIsPrimaryDevice);
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
@@ -85,7 +85,9 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(updateBlindSigs());
+      if (isPrimaryDevice) {
+        dispatch(updateBlindSigs());
+      }
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
