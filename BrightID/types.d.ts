@@ -1,5 +1,6 @@
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
+import { BigInteger } from 'jsbn';
 import {
   channel_states,
   channel_types,
@@ -37,12 +38,7 @@ declare global {
   };
 
   type SigInfo = {
-    sig: {
-      rho: string;
-      omega: string;
-      sigma: string;
-      delta: string;
-    };
+    sig?: WISchnorrBlindSignature;
     app: string;
     appUserId?: string;
     roundedTimestamp: number;
@@ -50,6 +46,9 @@ declare global {
     uid: string;
     linked: boolean;
     linkedTimestamp: number;
+    signedTimestamp: number;
+    pub: string;
+    challenge: WISchnorrChallenge;
   };
 
   type DisplayChannel = {
@@ -272,6 +271,23 @@ declare global {
       successCallback?: () => void;
     };
     NodeModal: undefined;
+  };
+
+  type WISchnorrChallenge = {
+    e: string;
+    t: {
+      t1: BigInteger;
+      t2: BigInteger;
+      t3: BigInteger;
+      t4: BigInteger;
+    };
+  };
+
+  type WISchnorrBlindSignature = {
+    rho: string;
+    omega: string;
+    sigma: string;
+    delta: string;
   };
 
   // Jest global functions
