@@ -519,7 +519,8 @@
       "newPassword": "新密碼",
       "newPasswordAgain": "重複密碼",
       "password": "密碼",
-      "socialMediaLink": "社交媒體鏈接"
+      "socialMediaLink": "社交媒體鏈接",
+      "phoneNumber": "電話號碼"
     },
     "placeholder": {
       "name": "輸入姓名",

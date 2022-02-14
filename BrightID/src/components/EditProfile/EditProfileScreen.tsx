@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   Text,
@@ -10,9 +16,13 @@ import {
   Alert,
   LayoutChangeEvent,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useIsDrawerOpen } from '@react-navigation/drawer';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -25,19 +35,17 @@ import {
   BLUE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   selectAllSocialMedia,
   removeSocialMedia,
   setProfileDisplayWidth,
 } from './socialMediaSlice';
+import { selectAllSocialMediaVariationsByType } from '@/reducer/socialMediaVariationSlice';
+import { SocialMediaType } from './socialMediaVariations';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -151,10 +159,15 @@ const EditName = ({ nextName, setNextName }) => {
   );
 };
 
-const SocialMediaLink = (props: SocialMedia) => {
+const SocialMediaLink = (props: {
+  socialMedia: SocialMedia;
+  type: SocialMediaType;
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order, company } = props;
+  const { id, profile, profileDisplayWidth, order, company } =
+    props.socialMedia;
+  const { t } = useTranslation();
 
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
@@ -186,20 +199,28 @@ const SocialMediaLink = (props: SocialMedia) => {
       <TouchableOpacity
         style={styles.socialMediaSelect}
         onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            order,
-            prevId: id,
-            page: 0,
-          });
+          if (props.type === SocialMediaType.SOCIAL_PROFILE) {
+            navigation.navigate('SelectSocialMedia', {
+              order,
+              prevId: id,
+              page: 0,
+            });
+          }
         }}
       >
-        <Text style={styles.socialMediaType}>{company.name}</Text>
-        <Chevron
-          width={DEVICE_LARGE ? 14 : 12}
-          height={DEVICE_LARGE ? 14 : 12}
-          color={DARK_BLUE}
-          strokeWidth={2}
-        />
+        <Text style={styles.socialMediaType}>
+          {props.type === SocialMediaType.SOCIAL_PROFILE
+            ? company.name
+            : t('profile.label.phoneNumber')}
+        </Text>
+        {props.type === SocialMediaType.SOCIAL_PROFILE ? (
+          <Chevron
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            color={DARK_BLUE}
+            strokeWidth={2}
+          />
+        ) : null}
       </TouchableOpacity>
       <TouchableOpacity
         style={innerTextStyle}
@@ -232,40 +253,71 @@ const SocialMediaLink = (props: SocialMedia) => {
   );
 };
 
-const SocialMediaLinks = () => {
+const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const navigation = useNavigation();
   const socialMediaItems = useSelector(selectAllSocialMedia);
+  const selectSocialMediaVariations = useMemo(
+    selectAllSocialMediaVariationsByType,
+    [],
+  );
+  const socialMediaVariations = useSelector((state) =>
+    selectSocialMediaVariations(state, props.type),
+  );
+  const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
   console.log('socialMedia', socialMediaItems);
 
-  const SocialMediaVariationList = socialMediaItems.map((item) => (
-    <SocialMediaLink key={item.id} {...item} />
-  ));
+  const SocialMediaVariations = socialMediaItems
+    .filter((item) => socialMediaVariationIds.includes(item.id))
+    .map((item) => (
+      <SocialMediaLink key={item.id} socialMedia={item} type={props.type} />
+    ));
+
+  // disable adding new item if we are entering phone number and
+  // phone number is already entered
+  const disableAdd =
+    props.type === SocialMediaType.PHONE_NUMBER &&
+    SocialMediaVariations.length;
 
   return (
     <View style={styles.socialMediaContainer}>
       <View style={styles.socialMediaLinkLabel}>
-        <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SelectSocialMedia', {
-              order: socialMediaItems.length,
-              prevId: null,
-              page: 0,
-            });
-          }}
-          style={styles.addSocialMediaBtn}
-        >
-          <Material
-            name="plus-thick"
-            size={DEVICE_LARGE ? 18 : 16}
-            color={DARK_BLUE}
-          />
-        </TouchableOpacity>
+        {props.type === SocialMediaType.PHONE_NUMBER ? (
+          <Text style={styles.label}>{t('profile.label.phoneNumber')}</Text>
+        ) : (
+          <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
+        )}
+
+        {!disableAdd ? (
+          <TouchableOpacity
+            onPress={() => {
+              if (props.type === SocialMediaType.PHONE_NUMBER) {
+                navigation.navigate('SelectSocialMedia', {
+                  order: socialMediaItems.length,
+                  prevId: socialMediaVariations[0].id,
+                  page: 1,
+                });
+              } else {
+                navigation.navigate('SelectSocialMedia', {
+                  order: socialMediaItems.length,
+                  prevId: null,
+                  page: 0,
+                });
+              }
+            }}
+            style={styles.addSocialMediaBtn}
+          >
+            <Material
+              name="plus-thick"
+              size={DEVICE_LARGE ? 18 : 16}
+              color={DARK_BLUE}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
-      {SocialMediaVariationList}
+      {SocialMediaVariations}
 
       <View style={styles.bottomDivider} />
     </View>
@@ -453,7 +505,8 @@ export const EditProfileScreen = ({ navigation }) => {
           setProfilePhoto={setProfilePhoto}
         />
         <EditName nextName={nextName} setNextName={setNextName} />
-        <SocialMediaLinks />
+        <SocialMediaLinks type={SocialMediaType.PHONE_NUMBER} />
+        <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <ShowEditPassword />
         <View style={styles.saveContainer}>
           <TouchableOpacity

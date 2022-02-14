@@ -34,7 +34,7 @@ export enum ShareTypeDisplay {
   USERNAME_OR_TELEPHONE = 'username or telephone',
 }
 
-export const socialMediaVariationList: SocialMediaVariationList = [
+export const socialMediaVariations: SocialMediaVariations = [
   {
     id: 'fab9a32f-e968-495e-807f-7f1b27642506',
     name: 'Discord',
@@ -135,6 +135,16 @@ export const socialMediaVariationList: SocialMediaVariationList = [
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://wa.me/%%PROFILE%%/`,
   },
+  {
+    id: '9d79c2ec-632c-4a5f-a04f-73d8e06024ec',
+    name: 'Phone Number',
+    icon: null,
+    type: SocialMediaType.PHONE_NUMBER,
+    shareType: ShareType.TELEPHONE,
+    shareTypeDisplay: ShareTypeDisplay.TELEPHONE,
+    shareActionType: SocialMediaShareActionType.COPY,
+    shareActionDataFormat: `%%PROFILE%%`,
+  },
 ];
 
-export default Object.freeze(socialMediaVariationList);
+export default Object.freeze(socialMediaVariations);

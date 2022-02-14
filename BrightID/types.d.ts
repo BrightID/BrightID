@@ -13,7 +13,7 @@ import {
   SocialMediaShareActionType,
   ShareType,
   ShareTypeDisplay,
-} from '@/components/EditProfile/socialMediaVariationList';
+} from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -205,10 +205,9 @@ declare global {
     icon: any;
   };
 
-
   type SocialMediaVariationState = EntityState<SocialMediaVariation>;
 
-  type SocialMediaVariationList = SocialMediaVariation[];
+  type SocialMediaVariations = SocialMediaVariation[];
 
   type SocialMedia = {
     id: SocialMediaId;

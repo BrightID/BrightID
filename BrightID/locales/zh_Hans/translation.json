@@ -548,7 +548,8 @@
       "newPassword": "新密码",
       "newPasswordAgain": "请再次输入密码",
       "password": "密码",
-      "socialMediaLink": "社交媒体账号链接"
+      "socialMediaLink": "社交媒体账号链接",
+      "phoneNumber": "电话号码"
     },
     "placeholder": {
       "name": "输入姓名",

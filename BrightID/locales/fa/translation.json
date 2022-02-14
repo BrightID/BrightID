@@ -513,7 +513,8 @@
       "name": "نام",
       "newPassword": "رمزعبور جدید",
       "newPasswordAgain": "رمزعبور جدید دوباره",
-      "socialMediaLink": "لینک شبکه های اجتماعی"
+      "socialMediaLink": "لینک شبکه های اجتماعی",
+      "phoneNumber": "شماره موبایل"
     },
     "placeholder": {
       "name": "ورود نام",
