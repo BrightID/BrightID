@@ -43,9 +43,8 @@ import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
 import stringSimilarity from '@/utils/stringSimilarity';
-import socialMediaList, {
-  SocialMediaShareActionType,
-} from '@/components/EditProfile/socialMediaList';
+import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaVariationList';
+import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 
 /**
  Connection details screen
@@ -102,6 +101,7 @@ function ConnectionScreen(props: Props) {
   } = props;
   const navigation = useNavigation();
   const myConnections = useSelector(selectAllConnections);
+  const socialMediaVariationList = useSelector(selectAllSocialMediaVariations);
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
@@ -128,10 +128,10 @@ function ConnectionScreen(props: Props) {
 
   useEffect(() => {
     const socialMediaOnConnectionPage: SocialMediaOnConnectionPage[] = [];
-    for (const socialMediaId in socialMediaList) {
-      const element = socialMediaList[socialMediaId];
+    for (let i = 0; i < socialMediaVariationList.length; i++) {
+      const element = socialMediaVariationList[i];
       const profile = connection.socialMedia?.find(
-        (s) => s.id === socialMediaId,
+        (s) => s.id === element.id,
       )?.profile;
       if (profile) {
         let { shareActionType } = element;
@@ -146,7 +146,7 @@ function ConnectionScreen(props: Props) {
           }
         }
         socialMediaOnConnectionPage.push({
-          id: socialMediaId,
+          id: element.id,
           icon: element.icon,
           shareActionType,
           shareActionData: element.shareActionDataFormat.replace(
@@ -158,7 +158,7 @@ function ConnectionScreen(props: Props) {
     }
     console.log(socialMediaOnConnectionPage);
     setConnectionSocailMedia(socialMediaOnConnectionPage);
-  }, [connection]);
+  }, [connection, socialMediaVariationList]);
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
@@ -343,7 +343,7 @@ function ConnectionScreen(props: Props) {
       return renderRecoveryItem({ item, index });
     }
     if (section.key === ConnectionScreenSectionKeys.SOCIAL_MEDIA) {
-      return renderSocialMediaList({ item, index });
+      return renderSocialMediaVariationList({ item, index });
     }
     const testID = `${section.key}-${index}`;
     console.log(
@@ -359,7 +359,7 @@ function ConnectionScreen(props: Props) {
     );
   };
 
-  const renderSocialMediaList = ({
+  const renderSocialMediaVariationList = ({
     item,
     index,
   }: {
@@ -368,21 +368,21 @@ function ConnectionScreen(props: Props) {
   }) => {
     return (
       <FlatList
-        style={styles.socialMediaList}
-        columnWrapperStyle={styles.socialMediaListColumn}
+        style={styles.socialMediaVariationList}
+        columnWrapperStyle={styles.socialMediaVariationListColumn}
         data={item}
         numColumns={5}
-        renderItem={renderSocialMediaListItem}
-        keyExtractor={socialMediaListKeyExtractor}
+        renderItem={renderSocialMediaVariationListItem}
+        keyExtractor={socialMediaVariationListKeyExtractor}
       />
     );
   };
 
-  const socialMediaListKeyExtractor = (item: SocialMediaOnConnectionPage) => {
+  const socialMediaVariationListKeyExtractor = (item: SocialMediaOnConnectionPage) => {
     return item.id;
   };
 
-  const renderSocialMediaListItem = ({
+  const renderSocialMediaVariationListItem = ({
     item,
   }: {
     item: SocialMediaOnConnectionPage;
@@ -575,11 +575,11 @@ const ItemSeparator = () => {
 };
 
 const styles = StyleSheet.create({
-  socialMediaList: {
+  socialMediaVariationList: {
     marginTop: DEVICE_LARGE ? 8 : 6,
     marginBottom: DEVICE_LARGE ? 8 : 6,
   },
-  socialMediaListColumn: {
+  socialMediaVariationListColumn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
