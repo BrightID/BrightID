@@ -578,7 +578,8 @@
       "newPasswordAgain": "Passwort wiederholen",
       "password": "Passwort",
       "passwordAgain": "Passwort wiederholen",
-      "socialMediaLink": "Social Media Verknüpfung"
+      "socialMediaLink": "Social Media Verknüpfung",
+      "phoneNumber": "Telefonnummer"
     },
     "placeholder": {
       "name": "Namen eingeben",

@@ -25,6 +25,7 @@ import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
+import { SocialMediaType } from './socialMediaVariations';
 
 /** Helper functions */
 
@@ -59,12 +60,12 @@ const SelectMediaModal = ({ route }: props) => {
   const existingSocialMediaIds = useSelector(
     (state: State) => state.socialMedia.ids,
   ) as SocialMediaId[];
-  const socialMediaVariationList = useSelector(selectAllSocialMediaVariations);
 
-  const socialMediaKeyValues = socialMediaVariationList.map((item) => [
-    item.id,
-    item,
-  ]);
+  const socialMediaVariations = useSelector(selectAllSocialMediaVariations);
+
+  const socialMediaKeyValues = socialMediaVariations
+    .filter((item) => item.type === SocialMediaType.SOCIAL_PROFILE)
+    .map((item) => [item.id, item]) as [SocialMediaId, SocialMediaVariation][];
 
   // only display social media not already selected by user when adding a new one to the list
   // or allow the user to switch order if editing the social media from the list
@@ -89,19 +90,20 @@ const SelectMediaModal = ({ route }: props) => {
   // if the user is clicking on an existing social media, select that first
   // or display the first item in the picker if the user is adding a new social media
   const firstItem = prevId ?? defaultItem;
-
-  // selectedId tracks state of the picker, will always be an id from socialMediaVariationList.js
+  console.log('firstItem');
+  console.log(firstItem);
+  // selectedId tracks state of the picker, will always be an id from socialMediaVariations.js
   const [selectedId, setSelectedId] = useState<SocialMediaId>(firstItem);
-  const [socialMediaVariationListItem, setSocialMediaVariationListItem] =
-    useState<SocialMediaVariation>();
+  const [socialMediaVariation, setSocialMediaVariation] =
+    useState<SocialMediaVariation>(
+      socialMediaVariations.find((item) => item.id === selectedId),
+    );
 
   useEffect(() => {
-    console.log("calllllllllllled")
-    console.log(selectedId)
-    setSocialMediaVariationListItem(
-      socialMediaVariationList.find((item) => item.id === selectedId),
+    setSocialMediaVariation(
+      socialMediaVariations.find((item) => item.id === selectedId),
     );
-  }, [selectedId, socialMediaVariationList]);
+  }, [selectedId, socialMediaVariations]);
 
   const prevProfile = useSelector((state: State) =>
     selectSocialMediaById(state, selectedId),
@@ -131,7 +133,7 @@ const SelectMediaModal = ({ route }: props) => {
   const saveProfile = () => {
     const socialMedia: SocialMedia = {
       id: selectedId,
-      company: socialMediaVariationListItem,
+      company: socialMediaVariation,
       order: route.params?.order ?? 0,
       profile,
     };
@@ -162,7 +164,7 @@ const SelectMediaModal = ({ route }: props) => {
         ) : (
           <View style={styles.inputContainer}>
             <Text style={styles.label}>
-              {socialMediaVariationListItem.shareTypeDisplay}
+              {socialMediaVariation.shareTypeDisplay}
             </Text>
             <TextInput
               style={styles.socialMediaInput}
@@ -171,14 +173,10 @@ const SelectMediaModal = ({ route }: props) => {
               autoCorrect={false}
               autoFocus={true}
               blurOnSubmit={true}
-              keyboardType={
-                keyboardTypes[socialMediaVariationListItem.shareType]
-              }
-              placeholder={`add ${socialMediaVariationListItem.shareTypeDisplay}`}
+              keyboardType={keyboardTypes[socialMediaVariation.shareType]}
+              placeholder={`add ${socialMediaVariation.shareTypeDisplay}`}
               placeholderTextColor={DARKER_GREY}
-              textContentType={
-                textContentTypes[socialMediaVariationListItem.shareType]
-              }
+              textContentType={textContentTypes[socialMediaVariation.shareType]}
               onChangeText={setProfile}
               value={profile}
             />

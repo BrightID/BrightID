@@ -648,7 +648,8 @@
       "newPasswordAgain": "Répétez le mot de passe",
       "password": "Mot de passe",
       "passwordAgain": "Répétez le mot de passe",
-      "socialMediaLink": "Liens de réseaux sociaux"
+      "socialMediaLink": "Liens de réseaux sociaux",
+      "phoneNumber": "Numéro de téléphone"
     },
     "placeholder": {
       "name": "Entrez un nom",

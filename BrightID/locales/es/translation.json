@@ -549,7 +549,8 @@
       "newPasswordAgain": "Repita la contraseña",
       "password": "Contraseña",
       "passwordAgain": "Repita la contraseña",
-      "socialMediaLink": "Enlace de redes sociales"
+      "socialMediaLink": "Enlace de redes sociales",
+      "phoneNumber": "Número de teléfono"
     },
     "placeholder": {
       "name": "Ingrese su Nombre",
