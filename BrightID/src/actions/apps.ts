@@ -9,6 +9,7 @@ import {
   upsertSig,
   updateSig,
   selectAllSigs,
+  selectExpireableBlindSigApps,
 } from '@/reducer/appsSlice';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
@@ -47,8 +48,8 @@ export const updateBlindSig =
 
       try {
         const network = __DEV__ ? 'test' : 'node';
-        // noinspection HttpUrlsUsage
         // TODO: Don't fallback to node.brightid.org. 'app.nodeUrl' should be mandatory.
+        // noinspection HttpUrlsUsage
         const url = app.nodeUrl || `http://${network}.brightid.org`;
         const api = new NodeApi({ url, id, secretKey });
         const info = stringify({
@@ -87,7 +88,7 @@ export const updateBlindSig =
             linkedTimestamp: 0,
             signedTimestamp: Date.now(),
           };
-          await dispatch(upsertSig(sigInfo));
+          dispatch(upsertSig(sigInfo));
         } else if (sigInfo && !sigInfo.sig) {
           pub = sigInfo.pub;
           uid = sigInfo.uid;
@@ -139,15 +140,8 @@ export const updateBlindSigs =
   () => async (dispatch: dispatch, getState: GetState) => {
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
-        const {
-          apps: { apps },
-        } = getState();
-
-        // blind sigs for apps with no verification expiration time will be created at linking time
-        const expirableBlindSigApps = apps.filter(
-          (app) => app.usingBlindSig && app.verificationExpirationLength,
-        );
-        for (const app of expirableBlindSigApps) {
+        const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
+        for (const app of expireableBlindSigApps) {
           dispatch(updateBlindSig(app));
         }
       });

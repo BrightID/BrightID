@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -6,14 +6,14 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-  Alert
+  Alert,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from '@/store';
-import { selectActiveDevices, addDevice } from '@/reducer/devicesSlice';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useSelector, useDispatch } from '@/store';
+import { selectActiveDevices } from '@/reducer/devicesSlice';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE, BLUE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -23,11 +23,16 @@ import { qrCodeURL_types } from '@/utils/constants';
 import {
   pollImportChannel,
   clearImportChannel,
-  getOtherSideDeviceInfo
+  getOtherSideDeviceInfo,
 } from './thunks/channelThunks';
-import { uploadAllInfoAfter, uploadDeviceInfo } from './thunks/channelUploadThunks';
-import { resetRecoveryData, uploadCompletedByOtherSide } from '../RecoveryFlow/recoveryDataSlice';
-
+import {
+  uploadAllInfoAfter,
+  uploadDeviceInfo,
+} from './thunks/channelUploadThunks';
+import {
+  resetRecoveryData,
+  uploadCompletedByOtherSide,
+} from '../RecoveryFlow/recoveryDataSlice';
 
 /* Description */
 
@@ -46,47 +51,53 @@ export const DevicesScreen = ({ route }) => {
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
   const devices = useSelector(selectActiveDevices);
-  const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const signingKey = useSelector((state) => state.keypair.publicKey);
   const settings = useSelector((state) => state.settings);
-  const syncCompleted = useSelector((state) => uploadCompletedByOtherSide(state));
-  const isCurrentDevice = (d) => d.signingKey === signingKey
-  const getName = (d) => isCurrentDevice(d) ? 'Current device' : d.name || 'Unknown';
+  const syncCompleted = useSelector(uploadCompletedByOtherSide);
+
+  const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
+  const isCurrentDevice = (d) => d.signingKey === signingKey;
+  const getName = (d) =>
+    isCurrentDevice(d) ? 'Current device' : d.name || 'Unknown';
   const [waiting, setWaiting] = useState(!!route.params?.syncing);
 
   useEffect(() => {
     const runEffect = async () => {
-      let { isPrimaryDevice, lastSyncTime } = await getOtherSideDeviceInfo();
-      // if other side (code generator) did not push its info, it was primary.
-      if (isPrimaryDevice === undefined) {
-        isPrimaryDevice = true;
-      }
+      const { isPrimaryDevice, lastSyncTime } = await getOtherSideDeviceInfo();
       if (isPrimaryDevice && settings.isPrimaryDevice) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
-          t("common.alert.error"),
-          t("devices.alert.bothPrimary")
+          t('common.alert.error'),
+          t('devices.alert.bothPrimary'),
         );
       } else if (!isPrimaryDevice && !settings.isPrimaryDevice) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
-          t("common.alert.error"),
-          t("devices.alert.noPrimary")
+          t('common.alert.error'),
+          t('devices.alert.noPrimary'),
         );
       }
       if (!settings.isPrimaryDevice) {
         await uploadDeviceInfo();
       }
-      const after = settings.isPrimaryDevice ? lastSyncTime : settings.lastSyncTime;
+      const after = settings.isPrimaryDevice
+        ? lastSyncTime
+        : settings.lastSyncTime;
       await uploadAllInfoAfter(after);
       dispatch(pollImportChannel());
     };
     if (route.params?.asScanner) {
       runEffect();
     }
-  }, []);
+  }, [
+    dispatch,
+    route.params?.asScanner,
+    settings.isPrimaryDevice,
+    settings.lastSyncTime,
+    t,
+  ]);
 
   useEffect(() => {
     setWaiting(!!route.params?.syncing);
@@ -95,10 +106,7 @@ export const DevicesScreen = ({ route }) => {
   useFocusEffect(() => {
     // this is triggered when navigating back from sync code screen
     if (waiting && syncCompleted) {
-      Alert.alert(
-        t('common.alert.info'),
-        t('devices.text.syncCompleted'),
-      );
+      Alert.alert(t('common.alert.info'), t('devices.text.syncCompleted'));
       clearImportChannel();
       setWaiting(false);
       if (!settings.isPrimaryDevice) {
@@ -111,32 +119,37 @@ export const DevicesScreen = ({ route }) => {
   const sync = () => {
     navigation.navigate('SyncCode', {
       urlType: qrCodeURL_types.SYNC,
-      action: 'sync'
+      action: 'sync',
     });
-  }
+  };
 
   const remove = (device) => {
     Alert.alert(
-      t("common.alert.title.pleaseConfirm"),
-      t("devices.alert.confirmRemove", { name: getName(device) }),
-      [{
-        text: t("common.alert.yes"),
-        onPress: () => {
-          api.removeSigningKey(device.signingKey).then(() => {
-            dispatch(removeDevice(device.signingKey));
-          });
+      t('common.alert.title.pleaseConfirm'),
+      t('devices.alert.confirmRemove', { name: getName(device) }),
+      [
+        {
+          text: t('common.alert.yes'),
+          onPress: () => {
+            api.removeSigningKey(device.signingKey).then(() => {
+              dispatch(removeDevice(device.signingKey));
+            });
+          },
         },
-      }, {
-        text: t("common.alert.no"),
-      }]
+        {
+          text: t('common.alert.no'),
+        },
+      ],
     );
-  }
+  };
 
   const renderItem = ({ item: device, index }) => (
     <View testID={`device-${index}`} style={styles.deviceContainer}>
       <View style={styles.deviceLabel}>
         <Text style={styles.deviceName}>{getName(device)}</Text>
-        <Text style={styles.deviceSigningKey}>{ shortenSigningKey(device.signingKey) }</Text>
+        <Text style={styles.deviceSigningKey}>
+          {shortenSigningKey(device.signingKey)}
+        </Text>
       </View>
       <View style={{ flex: 1 }} />
       {!isCurrentDevice(device) && (
@@ -161,15 +174,19 @@ export const DevicesScreen = ({ route }) => {
       <View style={styles.orangeTop} />
       <View style={styles.container} testID="DevicesScreen">
         <View style={styles.devicesContainer}>
-          <Text style={styles.description}>{t('devices.text.listDescription')}</Text>
+          <Text style={styles.description}>
+            {t('devices.text.listDescription')}
+          </Text>
           <FlatList
             data={devices}
             renderItem={renderItem}
             keyExtractor={(item) => item.signingKey}
           />
-          { waiting ? (
+          {waiting ? (
             <View style={styles.waitingContainer}>
-              <Text style={styles.waitingMessage}>{t('devices.text.waitSyncing')}</Text>
+              <Text style={styles.waitingMessage}>
+                {t('devices.text.waitSyncing')}
+              </Text>
               <Spinner
                 isVisible={waiting}
                 size={DEVICE_LARGE ? 48 : 42}
@@ -180,11 +197,15 @@ export const DevicesScreen = ({ route }) => {
           ) : (
             <TouchableOpacity
               style={styles.syncBtn}
-              testID={`SyncBtn`}
+              testID="SyncBtn"
               onPress={sync}
             >
               <View style={styles.syncBtnContainer}>
-                <Material name="sync" size={DEVICE_LARGE ? 22 : 20} color={WHITE} />
+                <Material
+                  name="sync"
+                  size={DEVICE_LARGE ? 22 : 20}
+                  color={WHITE}
+                />
                 <Text style={styles.syncText}>Sync Devices</Text>
               </View>
             </TouchableOpacity>
@@ -236,6 +257,7 @@ const styles = StyleSheet.create({
   syncBtn: {
     // flex: 1,
   },
+  removeBtn: {},
   syncBtnContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -265,6 +287,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: BLUE,
   },
+  deviceLabel: {},
 });
 
 export default DevicesScreen;

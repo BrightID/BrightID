@@ -90,9 +90,9 @@ const AppCard = (props: AppInfo) => {
     setVerifiedCount(count);
   }, [appVerifications, name, userVerifications]);
 
-  const isLinked = usingBlindSig ?
-    linkedSigs.length > 0 :
-    linkedContext && linkedContext.state === 'applied';
+  const isLinked = usingBlindSig
+    ? linkedSigs.length > 0
+    : linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { selectAllSigs } from '@/reducer/appsSlice';
 import ChannelAPI from '@/api/channelService';
 import {
   uploadConnection,
-  uploadGroup
+  uploadGroup,
 } from '../../RecoveryFlow/thunks/channelUploadThunks';
 
 export const uploadAllInfoAfter = async (after) => {
@@ -33,7 +33,7 @@ export const uploadAllInfoAfter = async (after) => {
     isSponsored: user.isSponsored,
     backupCompleted: user.backupCompleted,
     password: user.password,
-    updateTimestamps: user.updateTimestamps
+    updateTimestamps: user.updateTimestamps,
   };
 
   const encrypted = encryptData(data, aesKey);
@@ -66,7 +66,6 @@ export const uploadAllInfoAfter = async (after) => {
         await uploadBlindSig({ sig, channelApi, aesKey });
       }
     }
-
   }
 
   console.log('uploading completed flag');
@@ -75,14 +74,25 @@ export const uploadAllInfoAfter = async (after) => {
     dataId: `completed_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
     data: 'completed',
   });
-
 };
 
-const uploadBlindSig = async ({ sig, channelApi, aesKey }) => {
-  const { keypair: { publicKey: signingKey } } = store.getState();
+const uploadBlindSig = async ({
+  sig,
+  channelApi,
+  aesKey,
+}: {
+  sig: SigInfo;
+  channelApi: ChannelAPI;
+  aesKey: string;
+}) => {
+  const {
+    keypair: { publicKey: signingKey },
+  } = store.getState();
   try {
     const encrypted = encryptData(sig, aesKey);
-    console.log(`Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`);
+    console.log(
+      `Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`,
+    );
     await channelApi.upload({
       channelId: hash(aesKey),
       data: encrypted,
@@ -100,12 +110,9 @@ export const uploadDeviceInfo = async () => {
       channel: { url, channelId },
       publicKey: signingKey,
     },
-    settings: {
-      lastSyncTime,
-      isPrimaryDevice,
-    }
+    settings: { lastSyncTime, isPrimaryDevice },
   } = store.getState();
-  const dataObj = { signingKey, lastSyncTime, isPrimaryDevice };
+  const dataObj: SyncDeviceInfo = { signingKey, lastSyncTime, isPrimaryDevice };
   const data = JSON.stringify(dataObj);
   const channelApi = new ChannelAPI(url.href);
   await channelApi.upload({

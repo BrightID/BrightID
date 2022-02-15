@@ -212,44 +212,41 @@ const downloadGroup = async ({
   }
 };
 
-export const downloadGroups = ({
-  channelApi,
-  dataIds,
-}: {
-  channelApi: ChannelAPI;
-  dataIds: Array<string>;
-}) => async (dispatch: dispatch, getState: getState) => {
-  try {
-    const {
-      keypair: {
-        publicKey: signingKey
-      },
-      recoveryData: {
-        aesKey,
-        channel: { channelId },
-      },
-      groups: { groups },
-    } = getState();
+export const downloadGroups =
+  ({
+    channelApi,
+    dataIds,
+  }: {
+    channelApi: ChannelAPI;
+    dataIds: Array<string>;
+  }) =>
+  async (dispatch: dispatch, getState: getState) => {
+    try {
+      const {
+        keypair: { publicKey: signingKey },
+        recoveryData: {
+          aesKey,
+          channel: { channelId },
+        },
+      } = getState();
 
-    const existingGroupIds = groups.map((c) => c.id);
-    const isGroup = (id) => id.startsWith('group_');
-    const groupId = (id) => id.replace('group_', '').split(':')[0];
-    const uploader = (id) => id.replace('group_', '').split(':')[1];
-    const groupDataIds = dataIds.filter(
-      (id) =>
-        isGroup(id) &&
-        uploader(id) != b64ToUrlSafeB64(signingKey));
-    let count = 0;
-    for (const dataId of groupDataIds) {
-      const groupData = await downloadGroup({
-        dataId,
-        channelApi,
-        aesKey,
-        channelId,
-      });
-      if (groupData) {
-        dispatch(upsertGroup(groupData));
-        count++;
+      const isGroup = (id) => id.startsWith('group_');
+      const uploader = (id) => id.replace('group_', '').split(':')[1];
+      const groupDataIds = dataIds.filter(
+        (id) => isGroup(id) && uploader(id) !== b64ToUrlSafeB64(signingKey),
+      );
+      let count = 0;
+      for (const dataId of groupDataIds) {
+        const groupData = await downloadGroup({
+          dataId,
+          channelApi,
+          aesKey,
+          channelId,
+        });
+        if (groupData) {
+          dispatch(upsertGroup(groupData));
+          count++;
+        }
       }
       if (count > 0) {
         dispatch(increaseRecoveredGroups(count));

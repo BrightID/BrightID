@@ -2,7 +2,7 @@ import {
   createSlice,
   PayloadAction,
   createEntityAdapter,
-  createSelector
+  createSelector,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
@@ -18,15 +18,19 @@ const devicesSlice = createSlice({
     removeDevice: devicesAdapter.removeOne,
     setActiveDevices: (state, action: PayloadAction<string[]>) => {
       console.log('updating devices based on server state');
-      devicesAdapter.updateMany(state,
+      devicesAdapter.updateMany(
+        state,
         state.ids.map((signingKey: string) => {
           const active = action.payload.indexOf(signingKey) > -1;
           return { id: signingKey, changes: { active } };
         }),
       );
-      devicesAdapter.upsertMany(state, action.payload.map((signingKey) => {
-        return { signingKey: signingKey, active: true }
-      }));
+      devicesAdapter.upsertMany(
+        state,
+        action.payload.map((signingKey) => {
+          return { signingKey, active: true, name: 'Unknown' };
+        }),
+      );
     },
   },
   extraReducers: {
@@ -37,16 +41,13 @@ const devicesSlice = createSlice({
 });
 
 // Export channel actions
-export const {
-  addDevice,
-  removeDevice,
-  setActiveDevices,
-} = devicesSlice.actions;
+export const { addDevice, removeDevice, setActiveDevices } =
+  devicesSlice.actions;
 
 // export selectors
-export const {
-  selectAll: selectAllDevices,
-} = devicesAdapter.getSelectors((state: State) => state.devices);
+export const { selectAll: selectAllDevices } = devicesAdapter.getSelectors(
+  (state: State) => state.devices,
+);
 
 export const selectActiveDevices = createSelector(
   selectAllDevices,

@@ -35,8 +35,8 @@ const recoveryData = createSlice({
     init(
       state,
       action: PayloadAction<{
-        publicKey: Uint8Array;
-        secretKey: Uint8Array;
+        publicKey?: Uint8Array;
+        secretKey?: Uint8Array;
         aesKey: string;
       }>,
     ) {

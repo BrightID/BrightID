@@ -9,56 +9,60 @@ import {
   downloadGroups,
 } from '../../RecoveryFlow/thunks/channelDownloadThunks';
 import {
-  downloadUserInfo,
+  checkCompletedFlags,
   downloadBlindSigs,
-  checkCompletedFlags
+  downloadUserInfo,
 } from './channelDownloadThunks';
-import { uploadDeviceInfo, uploadAllInfoAfter } from './channelUploadThunks';
+import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
 
-export const setupSync = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const { recoveryData } = getState();
-  // setup recovery data
-  if (!recoveryData.aesKey) {
-    const aesKey = await randomKey(16);
-    // setup recovery data slice with sync info
-    dispatch(init({ aesKey }));
-  }
-};
+export const setupSync =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const { recoveryData } = getState();
+    // setup recovery data
+    if (!recoveryData.aesKey) {
+      const aesKey = await randomKey(16);
+      // setup recovery data slice with sync info
+      dispatch(init({ aesKey }));
+    }
+  };
 
-export const createSyncChannel = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const {
-    recoveryData: { aesKey } } = getState();
-  const baseUrl = selectBaseUrl(getState());
-  const url = new URL(`${baseUrl}/profile`);
-  const channelId = hash(aesKey);
-  console.log(`created channel ${channelId} for sync data`);
-  dispatch(setRecoveryChannel({ channelId, url }));
-  const { settings } = getState();
-  if (!settings.isPrimaryDevice) {
-    await uploadDeviceInfo();
-    console.log(`Finished uploading last sync time to the channel ${channelId}`);
-  } else {
-    console.log(`Polling last sync time from the scanner of the channel ${channelId}`);
-    var { lastSyncTime } = await pollOtherSideDeviceInfo();
-    console.log(`Last sync time was ${lastSyncTime}`);
-  }
-  const after = settings.isPrimaryDevice ? lastSyncTime : settings.lastSyncTime;
-  uploadAllInfoAfter(after).then(() => {
-    console.log(`Finished uploading sync data to the channel ${channelId}`);
-  });
-};
+export const createSyncChannel =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const {
+      recoveryData: { aesKey },
+    } = getState();
+    const baseUrl = selectBaseUrl(getState());
+    const url = new URL(`${baseUrl}/profile`);
+    const channelId = hash(aesKey);
+    console.log(`created channel ${channelId} for sync data`);
+    dispatch(setRecoveryChannel({ channelId, url }));
+    const { settings } = getState();
+    let lastSyncTime = 0;
+    if (!settings.isPrimaryDevice) {
+      await uploadDeviceInfo();
+      console.log(
+        `Finished uploading last sync time to the channel ${channelId}`,
+      );
+    } else {
+      console.log(
+        `Polling last sync time from the scanner of the channel ${channelId}`,
+      );
+      lastSyncTime = (await pollOtherSideDeviceInfo()).lastSyncTime;
+      console.log(`Last sync time was ${lastSyncTime}`);
+    }
+    const after = settings.isPrimaryDevice
+      ? lastSyncTime
+      : settings.lastSyncTime;
+    uploadAllInfoAfter(after).then(() => {
+      console.log(`Finished uploading sync data to the channel ${channelId}`);
+    });
+  };
 
-export const getOtherSideDeviceInfo = async () => {
+export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
   const {
     recoveryData: {
       channel: { url, channelId },
-    }
+    },
   } = store.getState();
   const channelApi = new ChannelAPI(url.href);
   try {
@@ -66,21 +70,25 @@ export const getOtherSideDeviceInfo = async () => {
       channelId,
       dataId: 'data',
     });
-    const data = JSON.parse(dataString);
-    return data;
+    return JSON.parse(dataString) as SyncDeviceInfo;
   } catch (err) {
-    return {};
+    // TODO: handle real errors, like network issues etc?
+    // if other side (code generator) did not push its info, it was primary.
+    return {
+      isPrimaryDevice: true,
+    };
   }
-}
+};
 
-export const pollOtherSideDeviceInfo = async () => {
-  let data = {};
+export const pollOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
+  // TODO: This is an endless loop. Needs refactoring and error handling.
+  let data = await getOtherSideDeviceInfo();
   while (data.lastSyncTime === undefined) {
+    await new Promise((r) => setTimeout(r, CHANNEL_POLL_INTERVAL));
     data = await getOtherSideDeviceInfo();
-    await new Promise(r => setTimeout(r, CHANNEL_POLL_INTERVAL));
   }
   return data;
-}
+};
 
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
@@ -110,25 +118,21 @@ export const clearImportChannel = () => {
   clearInterval(channelIntervalId);
 };
 
-export const checkImportChannel = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const {
-    recoveryData: {
-      channel: { channelId, url },
-    },
-    settings: {
-      isPrimaryDevice
+export const checkImportChannel =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const {
+      recoveryData: {
+        channel: { channelId, url },
+      },
+      settings: { isPrimaryDevice },
+    } = getState();
+    const channelApi = new ChannelAPI(url.href);
+    const dataIds = await channelApi.list(channelId);
+    await dispatch(downloadUserInfo({ channelApi, dataIds }));
+    await dispatch(downloadConnections({ channelApi, dataIds }));
+    await dispatch(downloadGroups({ channelApi, dataIds }));
+    if (!isPrimaryDevice) {
+      await dispatch(downloadBlindSigs({ channelApi, dataIds }));
     }
-  } = getState();
-  const channelApi = new ChannelAPI(url.href);
-  const dataIds = await channelApi.list(channelId);
-  await dispatch(downloadUserInfo({ channelApi, dataIds }));
-  await dispatch(downloadConnections({ channelApi, dataIds }));
-  await dispatch(downloadGroups({ channelApi, dataIds }));
-  if (!isPrimaryDevice) {
-    await dispatch(downloadBlindSigs({ channelApi, dataIds }));
-  }
-  await dispatch(checkCompletedFlags({ channelApi, dataIds }));
-};
+    await dispatch(checkCompletedFlags({ channelApi, dataIds }));
+  };

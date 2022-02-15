@@ -123,5 +123,13 @@ export const createSelectLinkedSigsForApp = (appId) =>
     return linkedSigs.filter((sig) => sig.app === appId);
   });
 
+export const selectBlindSigApps = (state: State) =>
+  state.apps.apps.filter((app) => app.usingBlindSig);
+
+export const selectExpireableBlindSigApps = createSelector(
+  selectBlindSigApps,
+  (apps) => apps.filter((app) => app.verificationExpirationLength),
+);
+
 // Export reducer
 export default appsSlice.reducer;

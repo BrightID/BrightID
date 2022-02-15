@@ -28,20 +28,18 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 
 // THUNKS
 
-export const setupRecovery = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const { recoveryData } = getState();
-  await createImageDirectory();
-  // setup recovery data
-  if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
-    const { publicKey, secretKey } = await nacl.sign.keyPair();
-    const aesKey = await randomKey(16);
-    // setup recovery data slice with new keypair
-    dispatch(init({ publicKey, secretKey, aesKey }));
-  }
-};
+export const setupRecovery =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const { recoveryData } = getState();
+    await createImageDirectory();
+    // setup recovery data
+    if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
+      const { publicKey, secretKey } = await nacl.sign.keyPair();
+      const aesKey = await randomKey(16);
+      // setup recovery data slice with new keypair
+      dispatch(init({ publicKey, secretKey, aesKey }));
+    }
+  };
 
 export const socialRecovery =
   (api: NodeApi) => async (dispatch: dispatch, getState: getState) => {

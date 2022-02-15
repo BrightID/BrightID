@@ -181,7 +181,9 @@ declare global {
   type RecoveryChannel = {
     aesKey: string;
     url: URL;
+    t: QrCodeURL_Type;
   };
+  type QrCodeURL_Type = typeof qrCodeURL_types[keyof typeof qrCodeURL_types];
 
   type SocialMediaId = keyof typeof socialMediaList;
 
@@ -290,6 +292,12 @@ declare global {
     omega: string;
     sigma: string;
     delta: string;
+  };
+
+  type SyncDeviceInfo = {
+    signingKey?: string;
+    lastSyncTime?: number;
+    isPrimaryDevice: boolean;
   };
 
   // Jest global functions

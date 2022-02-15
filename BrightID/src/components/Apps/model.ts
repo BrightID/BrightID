@@ -6,12 +6,12 @@ import {
   addOperation,
   setIsSponsored,
   updateSig,
+  updateBlindSig,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
-import { updateBlindSig } from '@/actions';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
