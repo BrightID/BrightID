@@ -12,7 +12,13 @@ const initialState: UserState = {
   verifications: [],
   secretKey: '',
   eula: false,
-  updateTimestamps: {},
+  updateTimestamps: {
+    backupCompleted: 0,
+    isSponsored: 0,
+    photo: 0,
+    name: 0,
+    password: 0,
+  },
 };
 
 const userSlice = createSlice({
