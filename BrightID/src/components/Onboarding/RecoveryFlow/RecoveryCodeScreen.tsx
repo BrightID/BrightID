@@ -27,6 +27,7 @@ import {
   setupSync,
   createSyncChannel,
   pollImportChannel,
+  clearImportChannel
 } from '../ImportFlow/thunks/channelThunks';
 
 /**
@@ -96,6 +97,10 @@ const RecoveryCodeScreen = ({ route }) => {
         runSyncEffect();
       }
     }
+    navigation.addListener('blur', () => {
+      clearChannel();
+      clearImportChannel();
+    });
   }, [dispatch, recoveryData]);
 
   // set QRCode and SVG

@@ -97,7 +97,7 @@ export const uploadGroup = async ({
 }) => {
   const { keypair: { publicKey: signingKey } } = store.getState();
   try {
-    const { id, name, photo, aesKey: groupKey } = group;
+    const { id, name, photo, aesKey: groupKey, members, admins } = group;
     let photoString = '';
     if (!groupKey) {
       // not worth uploading group data is missing
@@ -113,6 +113,8 @@ export const uploadGroup = async ({
       photo: photoString,
       name,
       aesKey: groupKey,
+      members,
+      admins,
     };
 
     const encrypted = encryptData(dataObj, aesKey);

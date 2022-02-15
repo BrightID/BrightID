@@ -2,7 +2,7 @@ import ChannelAPI from '@/api/channelService';
 import { saveImage } from '@/utils/filesystem';
 import { decryptData } from '@/utils/cryptoHelper';
 import { hash, b64ToUrlSafeB64 } from '@/utils/encoding';
-import { addConnection, createGroup, selectAllConnections } from '@/actions';
+import { addConnection, upsertGroup, selectAllConnections } from '@/actions';
 import {
   RecoveryError,
   RecoveryErrorType,
@@ -218,6 +218,9 @@ export const downloadGroups = ({
 }) => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
+      keypair: {
+        publicKey: signingKey
+      },
       recoveryData: {
         aesKey,
         channel: { channelId },
@@ -230,14 +233,10 @@ export const downloadGroups = ({
     const isGroup = (id) => id.startsWith('group_');
     const groupId = (id) => id.replace('group_', '').split(':')[0];
     const uploader = (id) => id.replace('group_', '').split(':')[1];
-
     const groupDataIds = dataIds.filter(
       (id) =>
         isGroup(id) &&
-        uploader(id) != b64ToUrlSafeB64(signingKey) &&
-        !existingGroupIds.includes(groupId(id)),
-    );
-
+        uploader(id) != b64ToUrlSafeB64(signingKey));
     let count = 0;
     for (const dataId of groupDataIds) {
       const groupData = await downloadGroup({
@@ -247,7 +246,7 @@ export const downloadGroups = ({
         channelId,
       });
       if (groupData) {
-        dispatch(createGroup(groupData));
+        dispatch(upsertGroup(groupData));
         count++;
       }
     }
