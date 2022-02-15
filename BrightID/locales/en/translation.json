@@ -287,7 +287,7 @@
       "editProfile": "Edit Profile",
       "groups": "Groups",
       "home": "Home",
-      "devices": "Devices",
+      "devices": "Devices"
     }
   },
   "eula": {
@@ -600,7 +600,7 @@
     "text": {
       "additionalInfo": "This QR code should be scanned using your other device to import your BrightID into this one",
       "askScanning": "Please scan this QR code using your other device",
-      "waitImporting": "Importing connections, please wait ...",
+      "waitImporting": "Importing connections, please wait ..."
     }
   },
   "sync": {
@@ -609,7 +609,7 @@
     },
     "text": {
       "additionalInfo": "This QR code should be scanned using your other device to sync data between them",
-      "askScanning": "Please scan this QR code using your other device",
+      "askScanning": "Please scan this QR code using your other device"
     }
   },
   "recovery": {
@@ -729,24 +729,23 @@
   },
   "devices": {
     "button": {
-      "submit": "Submit",
+      "submit": "Submit"
     },
     "alert": {
       "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
       "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
       "noPrimary": "Your devices can only be synced by the primary device.",
-      "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them.",
+      "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them."
     },
     "text": {
       "whatsDeviceName": "Please choose a name for the new device",
       "listDescription": "Your BrightID is available on following devices:",
       "waitingForExport": "Exporting connections, please wait ...",
       "syncCompleted": "Your device synced successfully.",
-      "waitSyncing": "Syncing devices, please wait ...",
+      "waitSyncing": "Syncing devices, please wait ..."
     },
     "placeholder": {
-      "deviceName": "Device Name",
+      "deviceName": "Device Name"
     }
-
-  },
+  }
 }
