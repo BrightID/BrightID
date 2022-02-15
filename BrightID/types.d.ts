@@ -165,6 +165,8 @@ declare global {
     timestamp: number;
     recoveredConnections: number;
     recoveredGroups: number;
+    recoveredBlindSigs: number;
+    uploadCompletedBy: { [uploader: string]: boolean };
     sigs: { [sig: string]: Signature };
     qrcode: string;
     channel: {
