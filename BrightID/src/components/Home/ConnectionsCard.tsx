@@ -1,11 +1,69 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Svg, { Path, SvgXml } from 'react-native-svg';
+import { PieChart } from 'react-native-svg-charts';
+import { Circle, G, Image } from 'react-native-svg';
 import { ORANGE } from '@/theme/colors';
+import { connection_levels } from '@/utils/constants';
 
 export default function ConnectionsCard(props) {
-  const { onPress } = props;
+  const { onPress, connections = [] } = props;
+
+  const alreadyKnowConnection = connections.filter(
+    (conn) => conn?.level === connection_levels.ALREADY_KNOWN,
+  ).length;
+  const justMetConnection = connections.filter(
+    (conn) => conn?.level === connection_levels.JUST_MET,
+  ).length;
+  const recoveryConnection = connections.filter(
+    (conn) => conn?.level === connection_levels.RECOVERY,
+  ).length;
+  const suspicousConnection = connections.filter(
+    (conn) => conn?.level === connection_levels.SUSPICIOUS,
+  ).length;
+
+  const data = [
+    {
+      key: 1,
+      amount: alreadyKnowConnection,
+      svg: { fill: '#4EC580' },
+    },
+    {
+      key: 2,
+      amount: justMetConnection,
+      svg: { fill: '#FFD037' },
+    },
+    {
+      key: 3,
+      amount: recoveryConnection,
+      svg: { fill: '#2185D0' },
+    },
+    {
+      key: 4,
+      amount: suspicousConnection,
+      svg: { fill: '#ED1B24' },
+    },
+  ];
+
+  const Labels = ({ slices, height, width }) => {
+    return slices.map((slice, index) => {
+      const { labelCentroid, pieCentroid, data } = slice;
+      return (
+        <G key={index} x={labelCentroid[0]} y={labelCentroid[1]}>
+          <Circle r={18} fill={'white'} />
+          <Image
+            x={-10}
+            y={10}
+            width={20}
+            height={20}
+            preserveAspectRatio="xMidYMid slice"
+            opacity="1"
+            // href={Images.memes[index + 1]}
+          />
+        </G>
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -14,41 +72,43 @@ export default function ConnectionsCard(props) {
         <Material name="arrow-right" size={25} color={ORANGE} />
       </TouchableOpacity>
 
-      <View
-        style={{
-          height: 90,
-          width: 90,
-          // backgroundColor: 'black',
-          marginBottom: 10,
-          alignSelf: 'center',
-        }}
-      >
-        {/* <Svg width={400} height={100}>
-          <Path fill="grey" stroke="#DDDDDD" strokeWidth={1} {...{ d }} />
-        </Svg> */}
+      <View style={styles.chartContainer}>
+        <PieChart
+          style={styles.pieChart}
+          valueAccessor={({ item }) => item.amount}
+          data={data}
+          spacing={0}
+          innerRadius="70%"
+          outerRadius="95%"
+          padAngle={0}
+        />
+        <View style={styles.chartLabelContainer}>
+          <Text style={styles.connectionTotal}>{connections.length}</Text>
+          <Text style={styles.connection}>Connections</Text>
+        </View>
       </View>
 
       <View style={styles.rowHeader}>
         <View style={styles.rowDetail}>
           <Text style={styles.alreadyKnowLabel}>😎 Already know</Text>
-          <Text style={styles.scoreLabel}>2</Text>
+          <Text style={styles.scoreLabel}>{alreadyKnowConnection}</Text>
         </View>
         <View style={{ width: 15 }} />
         <View style={styles.rowDetail}>
           <Text style={styles.recoveryLabel}>🔐 Recovery</Text>
-          <Text style={styles.scoreLabel}>2</Text>
+          <Text style={styles.scoreLabel}>{recoveryConnection}</Text>
         </View>
       </View>
 
       <View style={styles.rowHeader}>
         <View style={styles.rowDetail}>
           <Text style={styles.justMetLabel}>👋 Just Met</Text>
-          <Text style={styles.scoreLabel}>2</Text>
+          <Text style={styles.scoreLabel}>{justMetConnection}</Text>
         </View>
         <View style={{ width: 15 }} />
         <View style={styles.rowDetail}>
           <Text style={styles.suspiciousLabel}>🤔 Suspicious</Text>
-          <Text style={styles.scoreLabel}>2</Text>
+          <Text style={styles.scoreLabel}>{suspicousConnection}</Text>
         </View>
       </View>
     </View>
@@ -58,7 +118,7 @@ export default function ConnectionsCard(props) {
 const styles = StyleSheet.create({
   container: {
     width: 330,
-    height: 222,
+    height: 250,
     padding: 15,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -104,5 +164,28 @@ const styles = StyleSheet.create({
   scoreLabel: {
     fontFamily: 'Poppins-Bold',
     fontSize: 12,
+  },
+  chartContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  pieChart: {
+    height: 115,
+    width: 115,
+  },
+  chartLabelContainer: {
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  connectionTotal: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 15,
+  },
+  connection: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 9,
   },
 });
