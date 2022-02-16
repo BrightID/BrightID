@@ -535,7 +535,8 @@
       },
       "text": {
         "discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
-        "passwordMatch": "Current password does not match."
+        "passwordMatch": "Current password does not match.",
+        "invalidPhoneNumber": "Enter a valid phone number"
       },
       "title": {
         "discardChanges": "Discard changes?",

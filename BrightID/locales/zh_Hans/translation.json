@@ -531,7 +531,8 @@
       },
       "text": {
         "discardChanges": "您有未储存的更改。确定放弃更改并离开此页吗？",
-        "passwordMatch": "当前密码不匹配。"
+        "passwordMatch": "当前密码不匹配。",
+        "invalidPhoneNumber": "输入有效的电话号码"
       },
       "title": {
         "discardChanges": "放弃更改？",

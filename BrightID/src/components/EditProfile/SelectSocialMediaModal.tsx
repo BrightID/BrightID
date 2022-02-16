@@ -14,6 +14,7 @@ import { BlurView } from '@react-native-community/blur';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
+import PhoneInput from 'react-native-phone-number-input';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -26,6 +27,7 @@ import { useDispatch, useSelector } from '@/store';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
+import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
 
 /** Helper functions */
 
@@ -90,8 +92,7 @@ const SelectMediaModal = ({ route }: props) => {
   // if the user is clicking on an existing social media, select that first
   // or display the first item in the picker if the user is adding a new social media
   const firstItem = prevId ?? defaultItem;
-  console.log('firstItem');
-  console.log(firstItem);
+
   // selectedId tracks state of the picker, will always be an id from socialMediaVariations.js
   const [selectedId, setSelectedId] = useState<SocialMediaId>(firstItem);
   const [socialMediaVariation, setSocialMediaVariation] =
@@ -112,10 +113,17 @@ const SelectMediaModal = ({ route }: props) => {
   // social media profile value
   const [profile, setProfile] = useState(prevProfile?.profile ?? '');
 
+  const [phoneNumberObject, setPhoneNumberObject] = useState<PhoneNumberObject>(
+    parsePhoneNumber(prevProfile?.profile),
+  );
+
   // update profile when modal is re-opened or new profile selected
   useEffect(() => {
     setProfile(prevProfile?.profile ?? '');
+    setPhoneNumberObject(parsePhoneNumber(prevProfile?.profile));
   }, [prevProfile]);
+
+  const [invalidPhoneNumber, setInvalidPhoneNumber] = useState(false);
 
   // which page of the modal are we on
   // user can directly start editing profile if they click on their profile
@@ -131,6 +139,12 @@ const SelectMediaModal = ({ route }: props) => {
   );
 
   const saveProfile = () => {
+    if (socialMediaVariation.type === SocialMediaType.PHONE_NUMBER) {
+      if (!isPhoneNumberValid(profile)) {
+        setInvalidPhoneNumber(true);
+        return;
+      }
+    }
     const socialMedia: SocialMedia = {
       id: selectedId,
       company: socialMediaVariation,
@@ -166,20 +180,46 @@ const SelectMediaModal = ({ route }: props) => {
             <Text style={styles.label}>
               {socialMediaVariation.shareTypeDisplay}
             </Text>
-            <TextInput
-              style={styles.socialMediaInput}
-              autoCapitalize="none"
-              autoComplete="off"
-              autoCorrect={false}
-              autoFocus={true}
-              blurOnSubmit={true}
-              keyboardType={keyboardTypes[socialMediaVariation.shareType]}
-              placeholder={`add ${socialMediaVariation.shareTypeDisplay}`}
-              placeholderTextColor={DARKER_GREY}
-              textContentType={textContentTypes[socialMediaVariation.shareType]}
-              onChangeText={setProfile}
-              value={profile}
-            />
+            {socialMediaVariation.type === SocialMediaType.PHONE_NUMBER ? (
+              <>
+                <PhoneInput
+                  defaultCode={phoneNumberObject.country}
+                  defaultValue={phoneNumberObject.number}
+                  containerStyle={styles.phoneInputContainerStyle}
+                  textContainerStyle={styles.phoneInputTextContainerStyle}
+                  textInputStyle={styles.phoneInputTextInputStyle}
+                  countryPickerButtonStyle={
+                    styles.phoneInputCountryPickerButtonStyle
+                  }
+                  layout="second"
+                  autoFocus={true}
+                  placeholder={`add ${socialMediaVariation.shareTypeDisplay}`}
+                  onChangeFormattedText={setProfile}
+                />
+                {invalidPhoneNumber ? (
+                  <Text style={styles.label}>
+                    {t('profile.alert.text.invalidPhoneNumber')}
+                  </Text>
+                ) : null}
+              </>
+            ) : (
+              <TextInput
+                style={styles.socialMediaInput}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                autoFocus={true}
+                blurOnSubmit={true}
+                keyboardType={keyboardTypes[socialMediaVariation.shareType]}
+                placeholder={`add ${socialMediaVariation.shareTypeDisplay}`}
+                placeholderTextColor={DARKER_GREY}
+                textContentType={
+                  textContentTypes[socialMediaVariation.shareType]
+                }
+                onChangeText={setProfile}
+                value={profile}
+              />
+            )}
           </View>
         )}
         <View style={styles.saveContainer}>
@@ -222,6 +262,25 @@ const SelectMediaModal = ({ route }: props) => {
 };
 
 const styles = StyleSheet.create({
+  phoneInputContainerStyle: {
+    width: '100%',
+    height: 50,
+  },
+  phoneInputTextContainerStyle: {
+    flexGrow: 1,
+  },
+  phoneInputCountryPickerButtonStyle: {
+    width: 'auto',
+    paddingRight: 10,
+  },
+  phoneInputTextInputStyle: {
+    fontFamily: 'Poppins-Light',
+    fontSize: fontSize[14],
+    color: BLACK,
+    width: '100%',
+    padding: 0,
+    height: 30,
+  },
   blurView: {
     position: 'absolute',
     left: 0,
