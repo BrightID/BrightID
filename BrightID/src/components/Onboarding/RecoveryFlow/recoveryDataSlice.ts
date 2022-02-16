@@ -41,11 +41,20 @@ const recoveryData = createSlice({
       }>,
     ) {
       const { publicKey, secretKey, aesKey } = action.payload;
-      state = initialState;
       state.publicKey = uInt8ArrayToB64(publicKey ?? new Uint8Array());
       state.secretKey = secretKey;
       state.aesKey = aesKey;
       state.timestamp = Date.now();
+      state.errorMessage = '';
+      state.errorType = RecoveryErrorType.NONE;
+      state.id = '';
+      state.name = '';
+      state.photo = '';
+      state.recoveredConnections = 0;
+      state.recoveredGroups = 0;
+      state.recoveredBlindSigs = 0;
+      state.sigs = {};
+      state.uploadCompletedBy = {};
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
