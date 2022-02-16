@@ -502,7 +502,8 @@
       },
       "text": {
         "discardChanges": "您有未保存的更改。您確定要丟棄它們並離開屏幕嗎？",
-        "passwordMatch": "當前密碼不匹配。"
+        "passwordMatch": "當前密碼不匹配。",
+        "invalidPhoneNumber": "輸入有效的電話號碼"
       },
       "title": {
         "discardChanges": "放棄更改？",
