@@ -531,7 +531,8 @@
       },
       "text": {
         "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
-        "passwordMatch": "La contraseña actual no coincide."
+        "passwordMatch": "La contraseña actual no coincide.",
+        "invalidPhoneNumber": "Introduce un número de teléfono válido"
       },
       "title": {
         "discardChanges": "¿Descartar los cambios?",

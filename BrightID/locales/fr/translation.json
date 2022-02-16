@@ -630,7 +630,8 @@
       },
       "text": {
         "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr·e de vouloir les annuler en quittant l'écran ?",
-        "passwordMatch": "Le mot de passe actuel est incorrect."
+        "passwordMatch": "Le mot de passe actuel est incorrect.",
+        "invalidPhoneNumber": "Entrez un numéro de téléphone valide"
       },
       "title": {
         "discardChanges": "Annuler les changements ?",

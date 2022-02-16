@@ -1,5 +1,6 @@
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
+import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
 import {
   channel_states,
@@ -218,6 +219,11 @@ declare global {
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
+  };
+
+  type PhoneNumberObject = {
+    country: CountryCode;
+    number: string;
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
