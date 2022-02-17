@@ -18,6 +18,7 @@ const devicesSlice = createSlice({
     removeDevice: devicesAdapter.removeOne,
     setActiveDevices: (state, action: PayloadAction<string[]>) => {
       console.log('updating devices based on server state');
+      // update existing devices
       devicesAdapter.updateMany(
         state,
         state.ids.map((signingKey: string) => {
@@ -25,9 +26,11 @@ const devicesSlice = createSlice({
           return { id: signingKey, changes: { active } };
         }),
       );
-      devicesAdapter.upsertMany(
+      // add new devices
+      const newDevices = action.payload.filter((id) => !state.ids.includes(id));
+      devicesAdapter.addMany(
         state,
-        action.payload.map((signingKey) => {
+        newDevices.map((signingKey) => {
           return { signingKey, active: true, name: 'Unknown' };
         }),
       );
