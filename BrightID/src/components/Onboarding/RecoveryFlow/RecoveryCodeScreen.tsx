@@ -37,18 +37,18 @@ import {
  *
  * displays a qrcode
  */
+enum RecoverSteps {
+  NOT_STARTED,
+  RUNNING,
+  ERROR,
+}
+
 const RecoveryCodeScreen = ({ route }) => {
   const { action, urlType } = route.params;
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
-
   const recoveryData = useSelector((state: State) => state.recoveryData);
-
-  const sigCount = recoveryData.sigs
-    ? Object.values(recoveryData.sigs).length
-    : 0;
-
   const isScanned = useSelector(
     (state: State) =>
       uploadCompletedByOtherSide(state) ||
@@ -56,10 +56,14 @@ const RecoveryCodeScreen = ({ route }) => {
       state.recoveryData.recoveredGroups ||
       state.recoveryData.recoveredBlindSigs,
   );
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [step, setStep] = useState<RecoverSteps>(RecoverSteps.NOT_STARTED);
+
+  const sigCount = recoveryData.sigs
+    ? Object.values(recoveryData.sigs).length
+    : 0;
 
   // create recovery data and start polling channel
   useEffect(() => {
@@ -89,7 +93,8 @@ const RecoveryCodeScreen = ({ route }) => {
       // start polling channel to get new connections/groups/blindsigs info
       dispatch(pollImportChannel());
     };
-    if (!recoveryData.aesKey) {
+
+    if (step === RecoverSteps.NOT_STARTED) {
       if (action === 'recovery') {
         console.log(`initializing recovery process`);
         runRecoveryEffect();
@@ -100,12 +105,9 @@ const RecoveryCodeScreen = ({ route }) => {
         console.log(`initializing sync process`);
         runSyncEffect();
       }
+      setStep(RecoverSteps.RUNNING);
     }
-    navigation.addListener('blur', () => {
-      clearChannel();
-      clearImportChannel();
-    });
-  }, [action, dispatch, navigation, recoveryData]);
+  }, [action, dispatch, recoveryData.aesKey, step]);
 
   // set QRCode and SVG
   useEffect(() => {
@@ -154,11 +156,17 @@ const RecoveryCodeScreen = ({ route }) => {
         t('recovery.error.title', 'Account recovery failed'),
         message,
       );
-      clearChannel();
+      if (action === 'recovery') {
+        clearChannel();
+      } else if (action === 'import') {
+        clearImportChannel();
+      }
       dispatch(resetRecoveryData());
+      setStep(RecoverSteps.ERROR);
       navigation.goBack();
     }
   }, [
+    action,
     dispatch,
     navigation,
     recoveryData.errorMessage,
