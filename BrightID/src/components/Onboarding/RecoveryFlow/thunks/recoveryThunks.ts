@@ -30,6 +30,7 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 
 export const setupRecovery =
   () => async (dispatch: dispatch, getState: getState) => {
+    console.log(`Setting up recovery...`);
     const { recoveryData } = getState();
     await createImageDirectory();
     // setup recovery data

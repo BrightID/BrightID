@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -21,18 +21,9 @@ import { loadRecoveryData } from '../RecoveryFlow/thunks/channelDownloadThunks';
 import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
 import { NodeApiContext } from '@/components/NodeApiGate';
 
-
-/* Description */
-
-/* ======================================== */
-
 /**
  * Screen for adding a new device
  */
-
-/* Add Device Screen */
-
-/* ======================================== */
 export const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -47,30 +38,35 @@ export const AddDeviceScreen = () => {
     setWaiting(true);
     const channelApi = new ChannelAPI(url.href);
     const { signingKey } = await loadRecoveryData(channelApi, aesKey);
+    console.log(`adding new signing key`);
     await api.addSigningKey(signingKey);
+    console.log(`Starting upload of local info`);
     await uploadAllInfoAfter(0);
+    console.log(`Finished upload of local info`);
     dispatch(addDevice({ name: deviceName, signingKey, active: true }));
     navigation.navigate('Devices');
   };
 
   const disabled = deviceName.length < 3;
 
-  const showConfirmDialog = () => {
-    return Alert.alert(
-      t("common.alert.title.pleaseConfirm"),
-      t("devices.alert.confirmAdd"),
-      [{
-        text: t("common.alert.yes"),
-      }, {
-        text: t("common.alert.no"),
-        onPress: () => {
-          navigation.navigate("Home");
-        },
-      }]
-    );
-  };
-
   useEffect(() => {
+    const showConfirmDialog = () => {
+      return Alert.alert(
+        t('common.alert.title.pleaseConfirm'),
+        t('devices.alert.confirmAdd'),
+        [
+          {
+            text: t('common.alert.yes'),
+          },
+          {
+            text: t('common.alert.no'),
+            onPress: () => {
+              navigation.navigate('Home');
+            },
+          },
+        ],
+      );
+    };
     showConfirmDialog();
   }, []);
 

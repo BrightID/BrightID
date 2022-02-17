@@ -15,9 +15,11 @@ import {
 } from '@react-navigation/native';
 import { Trans, useTranslation } from 'react-i18next';
 import BarcodeMask from 'react-native-barcode-mask';
-import { useDispatch, useSelector } from '@/store';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import i18next from 'i18next';
+import { BarCodeReadEvent } from 'react-native-camera';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -29,8 +31,6 @@ import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/Pendin
 import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
-import i18next from 'i18next';
-import { BarCodeReadEvent } from 'react-native-camera';
 import { hash } from '@/utils/encoding';
 import { qrCodeURL_types } from '@/utils/constants';
 import { NodeApiContext } from '@/components/NodeApiGate';
@@ -147,7 +147,7 @@ export const ScanCodeScreen = () => {
 
               const channelId = hash(aesKey);
               console.log(
-                `handleQrData: Got recovery channel ${channelId} at ${channelURL.href}`,
+                `handleQrData: Got type ${urlType} recovery channel ${channelId} at ${channelURL.href}`,
               );
 
               dispatch(setRecoveryAesKey(aesKey));
@@ -160,7 +160,10 @@ export const ScanCodeScreen = () => {
               if (urlType === qrCodeURL_types.RECOVERY) {
                 navigation.navigate('RecoveringConnection');
               } else if (urlType === qrCodeURL_types.SYNC) {
-                navigation.navigate('Devices', { syncing: true, asScanner: true });
+                navigation.navigate('Devices', {
+                  syncing: true,
+                  asScanner: true,
+                });
               } else if (urlType === qrCodeURL_types.IMPORT) {
                 navigation.navigate('Add Device');
               }

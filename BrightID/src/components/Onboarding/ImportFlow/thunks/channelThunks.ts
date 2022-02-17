@@ -105,16 +105,16 @@ export const pollImportChannel = () => async (dispatch: dispatch) => {
         })
         .catch((err) => {
           checkInProgress = false;
-          console.error(`polling import channel: ${err.message}`);
+          console.error(`error polling sync/import channel: ${err.message}`);
         });
     }
   }, CHANNEL_POLL_INTERVAL);
 
-  console.log('begin polling sync channel', channelIntervalId);
+  console.log(`start polling sync/import channel (${channelIntervalId})`);
 };
 
 export const clearImportChannel = () => {
-  console.log(`clearing channel for ${channelIntervalId}`);
+  console.log(`stop polling sync/import channel (${channelIntervalId})`);
   clearInterval(channelIntervalId);
 };
 
