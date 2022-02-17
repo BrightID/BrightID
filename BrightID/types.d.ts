@@ -299,10 +299,4 @@ declare global {
     lastSyncTime?: number;
     isPrimaryDevice: boolean;
   };
-
-  // Jest global functions
-  let element: any;
-  let by: any;
-  let waitFor: any;
-  let device: any;
 }

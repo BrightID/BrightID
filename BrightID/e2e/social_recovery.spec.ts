@@ -1,5 +1,4 @@
-/* global element:false, by:false, waitFor:false */
-
+import { by, element, expect } from 'detox';
 import { connection_levels } from '@/utils/constants';
 import {
   createBrightID,

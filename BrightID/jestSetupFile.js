@@ -10,7 +10,7 @@ configure({ adapter: new Adapter() });
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
 
-jest.mock('react-native', () => {
+jest.doMock('react-native', () => {
   return {
     Dimensions: {
       get: () => {
