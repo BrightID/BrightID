@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useRef,
+  useMemo,
 } from 'react';
 import {
   ActivityIndicator,
@@ -30,7 +31,7 @@ import VerificationBadges from './VerificationBadges';
 import AchivementCompletion from './AchievementCompletion';
 import ConnectionsCard from './ConnectionsCard';
 import ApplicationLinkedCard from './ApplicationLinkedCard';
-// import { path, bottomNav } from './BottomNavigation';
+import { button, bottomNav } from './BottomNavigation';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
@@ -38,11 +39,11 @@ import {
   setActiveNotification,
   updateBlindSigs,
 } from '@/actions';
-import { linkedContextTotal } from '@/reducer/appsSlice';
 import {
-  verifiedConnectionsSelector,
-  recoveryConnectionsSelector,
-} from '@/reducer/connectionsSlice';
+  linkedContextTotal,
+  selectAllLinkedContexts,
+} from '@/reducer/appsSlice';
+import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -90,8 +91,10 @@ export const HomeScreen = (props) => {
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
-  const connectionsCount = useSelector(verifiedConnectionsSelector).length;
+
+  const connectionsCount = useSelector(verifiedConnectionsSelector);
   const linkedContextsCount = useSelector(linkedContextTotal);
+  const linkedContext = useSelector(selectAllLinkedContexts);
   const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
@@ -100,9 +103,6 @@ export const HomeScreen = (props) => {
   const { t } = useTranslation();
 
   const carouseRef = useRef();
-
-  // NEW
-  const recoveryConnections = useSelector(recoveryConnectionsSelector).length;
 
   useFocusEffect(
     useCallback(() => {
@@ -143,6 +143,12 @@ export const HomeScreen = (props) => {
   }, [dispatch, headerHeight]);
 
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const listLinkedApp = useMemo(() => {
+    const linkedContextTemp = linkedContext.map((context) => context.context);
+    const linked = apps.filter((app) => linkedContextTemp.includes(app.id));
+    return linked;
+  }, [apps, linkedContext]);
 
   const handleChat = () => {
     if (__DEV__) {
@@ -216,8 +222,6 @@ export const HomeScreen = (props) => {
       return null;
     }
   };
-
-  // const d = path();
 
   console.log('RENDERING HOME PAGE');
 
@@ -297,23 +301,50 @@ export const HomeScreen = (props) => {
                     dispatch(setActiveNotification(null));
                     navigation.navigate('Connections');
                   }}
+                  connections={connectionsCount}
                 />
               );
             case 1:
-              return <AchivementCompletion />;
+              return (
+                <AchivementCompletion
+                  onPress={() => {
+                    navigation.navigate('Achievements');
+                  }}
+                  completedTaskIDs={completedTaskIds.length}
+                  taskIDs={taskIds.length}
+                />
+              );
             case 2:
-              return <ApplicationLinkedCard />;
+              return (
+                <ApplicationLinkedCard
+                  onPress={() => {
+                    dispatch(setActiveNotification(null));
+                    navigation.navigate('Apps', {
+                      baseUrl: '',
+                      context: '',
+                      contextId: '',
+                    });
+                  }}
+                  data={listLinkedApp}
+                />
+              );
             default:
               return null;
           }
         }}
       />
 
-      <View style={{ alignSelf: 'center', position: 'absolute', bottom: 0 }}>
-        {/* <Svg width={400} height={100}>
-          <Path fill="grey" stroke="#DDDDDD" strokeWidth={1} {...{ d }} />
-        </Svg> */}
-        {/* <SvgXml xml={bottomNav} width={500} height={100} /> */}
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(setActiveNotification(null));
+          navigation.navigate('MyCode');
+        }}
+        style={styles.scanButton}
+      >
+        <SvgXml xml={button} width={100} height={100} />
+      </TouchableOpacity>
+      <View style={styles.bottomNav}>
+        <SvgXml xml={bottomNav} width="100%" height={100} />
       </View>
     </View>
   );
@@ -358,7 +389,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
     color: ORANGE,
-    marginTop: 5,
+  },
+  scanButton: {
+    position: 'absolute',
+    bottom: 10,
+    alignItems: 'center',
+    width: '100%',
+    height: 100,
+    zIndex: 10,
+  },
+  bottomNav: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: -20,
+    width: '100%',
+    height: 100,
   },
 });
 
