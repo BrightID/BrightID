@@ -90,6 +90,7 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-spinkit": "1.5.1",
     "react-native-svg": "12.1.0",
+    "react-native-svg-charts": "^5.4.0",
     "react-native-tab-view": "2.15.2",
     "react-native-url-polyfill": "1.2.0",
     "react-native-vector-icons": "7.1.0",
