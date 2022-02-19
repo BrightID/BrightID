@@ -93,13 +93,42 @@ export function arc() {
 
   return arc;
 }
-
-export const bottomNav = `<svg width="360" height="122" viewBox="0 0 360 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const button = `<svg width="81" height="81" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_2_269)">
+<path d="M33.4289 8.07106C37.3342 4.16582 43.6658 4.16582 47.5711 8.07107L67.9289 28.4289C71.8342 32.3342 71.8342 38.6658 67.9289 42.5711L47.5711 62.9289C43.6658 66.8342 37.3342 66.8342 33.4289 62.9289L13.0711 42.5711C9.16582 38.6658 9.16582 32.3342 13.0711 28.4289L33.4289 8.07106Z" fill="url(#paint0_linear_2_269)"/>
+</g>
+<path d="M34.4824 35.9012H46.5173" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M34.4824 35.9012H46.5173" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M34.4824 35.9012H46.5173" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M40.4999 29.8838V41.9187" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M40.4999 29.8838V41.9187" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M40.4999 29.8838V41.9187" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<defs>
+<filter id="filter0_d_2_269" x="0.14212" y="0.142151" width="80.7157" height="80.7157" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="5"/>
+<feGaussianBlur stdDeviation="5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.768627 0 0 0 0 0.768627 0 0 0 0 0.768627 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_269"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_269" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_2_269" x1="47.7209" y1="67.593" x2="-4.02907" y2="-17.0523" gradientUnits="userSpaceOnUse">
+<stop stop-color="#ED7A5D"/>
+<stop offset="0.205109" stop-color="#EF886E"/>
+<stop offset="0.677083" stop-color="#999ECD"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+export const bottomNav = `<svg width="360" height="79" viewBox="0 0 360 79" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_2_229)">
-<path d="M124.24 7H0V122H360V7H237.859C232.251 7 226.901 9.35443 223.113 13.4893L195.441 43.6924C187.443 52.4214 173.656 52.3316 165.773 43.4991L139.162 13.6826C135.367 9.431 129.939 7 124.24 7Z" fill="url(#paint0_linear_2_229)"/>
+<path d="M124.24 7H0V76H360V7H237.859C232.251 7 226.901 9.35443 223.113 13.4893L195.441 43.6924C187.443 52.4214 173.656 52.3316 165.773 43.4991L139.162 13.6826C135.367 9.431 129.939 7 124.24 7Z" fill="url(#paint0_linear_2_229)"/>
 </g>
 <defs>
-<filter id="filter0_d_2_229" x="-6" y="0" width="370" height="125" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_d_2_229" x="-6" y="0" width="370" height="79" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dx="-1" dy="-2"/>
@@ -117,4 +146,5 @@ export const bottomNav = `<svg width="360" height="122" viewBox="0 0 360 122" fi
 </linearGradient>
 </defs>
 </svg>
+
 `;
