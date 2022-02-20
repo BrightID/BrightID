@@ -12,6 +12,7 @@ import {
   resetChannelExpiration,
   setRecoveryChannel,
 } from '../recoveryDataSlice';
+import { uploadRecoveryData } from '@/utils/recovery';
 
 // CONSTANTS
 
@@ -38,23 +39,6 @@ export const createChannel =
       }
     }
   };
-
-const uploadRecoveryData = async (
-  recoveryData: RecoveryData,
-  channelApi: ChannelAPI,
-) => {
-  const channelId = hash(recoveryData.aesKey);
-  const dataObj = {
-    signingKey: recoveryData.publicKey,
-    timestamp: recoveryData.timestamp,
-  };
-  const data = JSON.stringify(dataObj);
-  await channelApi.upload({
-    channelId,
-    data,
-    dataId: 'data',
-  });
-};
 
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
