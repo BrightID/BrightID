@@ -63,9 +63,11 @@ describe('Add Device', () => {
     console.log(`Finished uploading recovery data to channel ${channelId}`);
     qrUrl = new URL(url.href);
     qrUrl.searchParams.append('aes', recoveryData.aesKey);
-    qrUrl.searchParams.append('t', 3);
+    qrUrl.searchParams.append('t', '3');
     console.log(`new qrCode url: ${qrUrl.href}`);
   });
+
+  xit('user should have one signingkey');
 
   it('should add another device', async () => {
     const deviceName = 'TestDevice';
@@ -93,10 +95,13 @@ describe('Add Device', () => {
     await element(by.id('submitDeviceName')).tap();
 
     // should be on Devices screen after submitting
-    await expect(element(by.id('DevicesScreen'))).toBeVisible();
-    // new device name should be listed on screen
-    await expect(element(by.text(deviceName))).toBeVisible();
+    await waitFor(element(by.id('homeScreen')))
+      .toBeVisible()
+      .withTimeout(20000);
 
-    // node api should return
+    // new device name should be listed on screen
+    await expect(element(by.id(deviceName))).toBeVisible();
   });
+
+  xit('user should have two signingkeys');
 });

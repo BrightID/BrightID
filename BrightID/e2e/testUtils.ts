@@ -101,8 +101,11 @@ const createBrightID = async (name = testUserName, withPassword = false) => {
   // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
-  const attributes = await element(by.id('userBrightId')).getAttributes();
-  console.log(`User brightID: ${attributes.text}`);
+
+  // get brightID of user
+  const attributes = await element(by.id('userBrightId')).getAttributes(); // as ElementAttributes;
+  // @ts-ignore
+  // console.log(`User brightID: ${attributes.text}`);
   return attributes.text;
 };
 

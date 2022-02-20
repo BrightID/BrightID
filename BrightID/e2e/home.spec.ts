@@ -1,8 +1,8 @@
 import { by, element, expect } from 'detox';
-import { createBrightID, expectHomescreen } from './testUtils';
+import { createBrightID, expectHomescreen, testUserName } from './testUtils';
 
 describe('Homescreen', () => {
-  let mainUser = '';
+  const mainUser = testUserName;
   let hasBackButton = true;
 
   beforeAll(async () => {
@@ -10,7 +10,7 @@ describe('Homescreen', () => {
     hasBackButton = platform === 'android';
     await device.launchApp({ permissions: { notifications: 'YES' } });
     // create identity and proceed to main screen
-    mainUser = await createBrightID();
+    await createBrightID();
   });
 
   it('should show home screen with all elements', async () => {

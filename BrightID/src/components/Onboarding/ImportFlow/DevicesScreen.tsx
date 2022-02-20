@@ -145,7 +145,7 @@ export const DevicesScreen = ({ route }) => {
 
   const renderItem = ({ item: device, index }) => (
     <View testID={`device-${index}`} style={styles.deviceContainer}>
-      <View style={styles.deviceLabel}>
+      <View testID={getName(device)} style={styles.deviceLabel}>
         <Text style={styles.deviceName}>{getName(device)}</Text>
         <Text style={styles.deviceSigningKey}>
           {shortenSigningKey(device.signingKey)}
