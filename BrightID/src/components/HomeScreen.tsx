@@ -78,6 +78,7 @@ export const HomeScreen = (props) => {
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
   const api = useContext(NodeApiContext);
+  const { id } = useSelector((state: State) => state.user);
 
   const { t } = useTranslation();
 
@@ -195,6 +196,14 @@ export const HomeScreen = (props) => {
       return null;
     }
   };
+
+  const userBrightId = __DEV__ ? (
+    <View>
+      <Text testID="userBrightId" style={styles.nodeLink}>
+        {id}
+      </Text>
+    </View>
+  ) : null;
 
   console.log('RENDERING HOME PAGE');
 
@@ -393,6 +402,7 @@ export const HomeScreen = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
+        {userBrightId}
       </View>
     </View>
   );
