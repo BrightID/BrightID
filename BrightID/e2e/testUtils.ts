@@ -101,7 +101,9 @@ const createBrightID = async (name = testUserName, withPassword = false) => {
   // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
-  return name;
+  const attributes = await element(by.id('userBrightId')).getAttributes();
+  console.log(`User brightID: ${attributes.text}`);
+  return attributes.text;
 };
 
 const createFakeConnection = async (
