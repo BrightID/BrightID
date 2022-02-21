@@ -101,7 +101,6 @@ describe('Add Device', () => {
   it('user should have one signingkey', async () => {
     const { signingKeys } = await apiInstance.getProfile(userBrightId);
     jestExpect(signingKeys.length).toBe(1);
-    [firstSigningKey] = signingKeys;
   });
 
   it('should add another device', async () => {
@@ -129,16 +128,15 @@ describe('Add Device', () => {
     await expect(element(by.id('submitDeviceName'))).toExist();
     await element(by.id('submitDeviceName')).tap();
 
-    // should be on Devices screen after submitting
-    await waitFor(element(by.id('homeScreen')))
+    // should be on Devices screen when upload is finished and operation got applied.
+    await waitFor(element(by.id('DevicesScreen')))
       .toBeVisible()
-      .withTimeout(20000);
+      .withTimeout(40000);
 
     // new device name should be listed on screen
     await expect(element(by.id(deviceName))).toBeVisible();
   });
 
-  // TODO: This test fails because client is not waiting for the 'addSigningKey' operation to be applied
   it('user should have two signingkeys', async () => {
     const { signingKeys } = await apiInstance.getProfile(userBrightId);
     jestExpect(signingKeys.length).toBe(2);
