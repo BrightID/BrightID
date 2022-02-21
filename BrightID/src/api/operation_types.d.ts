@@ -6,6 +6,7 @@ type NodeOps =
   | AddAdminOp
   | AddGroupOp
   | AddMembershipOp
+  | AddSigningKeyOp
   | ConnectOp
   | DismissOp
   | InviteOp
