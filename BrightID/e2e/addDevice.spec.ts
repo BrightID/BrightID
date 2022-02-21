@@ -1,22 +1,29 @@
 /*
 E2E Test add device:
-- test script: Create channel, upload fake data and create according URL
 - Detox: Prepare account
+- test script: Create channel, upload fake data and create according URL
 - Detox: Inject qrcode into app
 - Detox: walk through "Add device" screens
-- test script: Verify correct data is uploaded to channel
 - Detox: verify new device is visible in devices list after refresh
-
+- test script: Verify new signingkey is set via NodeAPI
  */
 import { by, element, expect } from 'detox';
-import nacl from 'tweetnacl';
-import B64 from 'base64-js';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { expect as jestExpect } from '@jest/globals';
 import ChannelAPI from '../src/api/channelService';
-import { createBrightID } from './testUtils';
+import {
+  createBrightID,
+  createFakeConnection,
+  expectConnectionsScreen,
+  expectHomescreen,
+  navigateHome,
+} from './testUtils';
 import { hash } from '@/utils/encoding';
+import { NodeApi } from '@/api/brightId';
 
 describe('Add Device', () => {
   const profileServerUrl = 'http://test.brightid.org/profile';
+  const apiUrl = 'http://test.brightid.org';
   let channelApi: ChannelAPI;
   let recoveryData: {
     aesKey: string;
@@ -26,6 +33,9 @@ describe('Add Device', () => {
   let qrUrl: URL;
   let yes: string;
   let no: string;
+  let apiInstance: NodeApi;
+  let userBrightId: string;
+  let firstSigningKey: string;
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
@@ -33,13 +43,35 @@ describe('Add Device', () => {
     no = android ? 'NO' : 'No';
     yes = android ? 'YES' : 'Yes';
 
+    // prepare nodeAPI instance
+    apiInstance = new NodeApi({
+      url: apiUrl,
+      id: undefined,
+      secretKey: undefined,
+    });
+
+    // create user
+    userBrightId = await createBrightID();
+    console.log(`User BrightID: ${userBrightId}`);
+    jestExpect(userBrightId).toBeDefined();
+
+    // add a connection, so the user is actually created on the backend
+    await createFakeConnection();
+    // make sure all connections are established
+    await element(by.id('connectionsBtn')).tap();
+    await expectConnectionsScreen();
+    await waitFor(element(by.id('connection-0')))
+      .toExist()
+      .withTimeout(20000);
+    await navigateHome();
+    await expectHomescreen();
+
+    // prepare recovery channel
     // created with https://ed25519.herokuapp.com/
     const publicKey = '0e6ta650W8E/QY+7E5B1id0l5veLflnsKG8FotasAh4=';
     const secretKey =
       '8OTC92xYkW7CWPJGhRvqCR0U1CR6L8PhhpRGGxgW4TvR7q1rrnRbwT9Bj7sTkHWJ3SXm94t+WewobwWi1qwCHg==';
     const aesKey = `${Date.now()}000`; // padded to 16 chars
-
-    await createBrightID();
 
     // setup minimal recovery data
     recoveryData = {
@@ -60,14 +92,17 @@ describe('Add Device', () => {
       data,
       dataId: 'data',
     });
-    console.log(`Finished uploading recovery data to channel ${channelId}`);
     qrUrl = new URL(url.href);
     qrUrl.searchParams.append('aes', recoveryData.aesKey);
     qrUrl.searchParams.append('t', '3');
-    console.log(`new qrCode url: ${qrUrl.href}`);
+    // console.log(`new qrCode url: ${qrUrl.href}`);
   });
 
-  xit('user should have one signingkey');
+  it('user should have one signingkey', async () => {
+    const { signingKeys } = await apiInstance.getProfile(userBrightId);
+    jestExpect(signingKeys.length).toBe(1);
+    [firstSigningKey] = signingKeys;
+  });
 
   it('should add another device', async () => {
     const deviceName = 'TestDevice';
@@ -103,5 +138,9 @@ describe('Add Device', () => {
     await expect(element(by.id(deviceName))).toBeVisible();
   });
 
-  xit('user should have two signingkeys');
+  // TODO: This test fails because client is not waiting for the 'addSigningKey' operation to be applied
+  it('user should have two signingkeys', async () => {
+    const { signingKeys } = await apiInstance.getProfile(userBrightId);
+    jestExpect(signingKeys.length).toBe(2);
+  });
 });
