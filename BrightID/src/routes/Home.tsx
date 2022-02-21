@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { useSelector } from '@/store';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -45,7 +46,7 @@ const inviteSelector = createSelector(
 
 /** COMPONENTS */
 
-const NotificationBell = () => {
+const NotificationBell = ({ routeName }) => {
   const pendingConnections = useSelector(
     (state: State) => unconfirmedSelector(state)?.length,
   );
@@ -67,14 +68,17 @@ const NotificationBell = () => {
         resetNotifications();
       }}
     >
-      <Bell color={WHITE} alert={!!displayBadge} />
+      <Bell
+        color={routeName === 'Home' ? WHITE : BLACK}
+        alert={!!displayBadge}
+      />
     </TouchableOpacity>
   );
 };
 
 /** OPTIONS */
 
-const BrightIdLogo = () => {
+const BrightIdLogo = ({ routeName }) => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -84,7 +88,11 @@ const BrightIdLogo = () => {
       testID="BrightIdLogo"
     >
       <Image
-        source={require('@/static/brightid-white.png')}
+        source={
+          routeName === 'Home'
+            ? require('@/static/brightid-white.png')
+            : require('@/static/brightid-final.png')
+        }
         accessible={true}
         accessibilityLabel="Home Header Logo"
         resizeMode="contain"
@@ -94,35 +102,45 @@ const BrightIdLogo = () => {
   );
 };
 
-const homeScreenOptions: StackNavigationOptions = {
-  headerTitle: () => <BrightIdLogo />,
-  headerLeft: () => {
-    return (
-      <TouchableOpacity
-        testID="toggleDrawer"
-        style={{
-          width: DEVICE_LARGE ? 80 : 70,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        onPress={() => {
-          Keyboard.dismiss();
-          toggleDrawer();
-        }}
-      >
-        <Menu width={DEVICE_LARGE ? 30 : 24} />
-      </TouchableOpacity>
-    );
-  },
-  headerRight: () => <NotificationBell />,
-  headerStyle: {
-    height: DEVICE_LARGE ? 80 : 70,
-    shadowRadius: 0,
-    elevation: -1,
-  },
-  headerTitleAlign: 'center',
-  headerTintColor: 'transparent',
-  headerTransparent: true,
+const ToogleDrawer = ({ routeName }) => {
+  return (
+    <TouchableOpacity
+      testID="toggleDrawer"
+      style={{
+        width: DEVICE_LARGE ? 80 : 70,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onPress={() => {
+        Keyboard.dismiss();
+        toggleDrawer();
+      }}
+    >
+      <Menu
+        width={DEVICE_LARGE ? 30 : 24}
+        color={routeName === 'Home' ? WHITE : BLACK}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const homeScreenOptions = ({ route }): StackNavigationOptions => {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
+  return {
+    headerTitle: () => <BrightIdLogo routeName={routeName} />,
+    headerLeft: () => <ToogleDrawer routeName={routeName} />,
+    headerRight: () => <NotificationBell routeName={routeName} />,
+    headerStyle: {
+      height: DEVICE_LARGE ? 80 : 70,
+      shadowRadius: 0,
+      elevation: -1,
+      borderWidth: 1,
+    },
+    headerTitleAlign: 'center',
+    headerTintColor: 'transparent',
+    headerTransparent: true,
+  };
 };
 
 /** SCREENS */
