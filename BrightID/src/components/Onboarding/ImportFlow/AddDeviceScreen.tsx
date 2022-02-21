@@ -8,22 +8,40 @@ import {
   View,
   Alert,
 } from 'react-native';
-import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import store, { useDispatch, useSelector } from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { addDevice } from '@/actions';
+import { addDevice, addOperation, selectOperationByHash } from '@/actions';
 import ChannelAPI from '@/api/channelService';
 import { loadRecoveryData } from '../RecoveryFlow/thunks/channelDownloadThunks';
 import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { operation_states } from '@/utils/constants';
+import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey';
+import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
 
 /**
  * Screen for adding a new device
  */
+
+export enum AddSigningKeySteps {
+  WAITING, // not yet started
+  DOWNLOADING, // open channel and download signing key data from other device/client
+  WAITING_OPERATION, // Op to add signing key submitted to backend but not yet applied
+  OPERATION_APPLIED, // op successfully applied in backend
+  ERROR,
+}
+
+export enum UploadDataSteps {
+  WAITING, // upload not yet started
+  UPLOADING, // upload of data in progress
+  COMPLETE, // all data uploaded
+  ERROR,
+}
+
 export const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -31,23 +49,114 @@ export const AddDeviceScreen = () => {
   const url = useSelector((state) => state.recoveryData.channel?.url);
   const aesKey = useSelector((state) => state.recoveryData.aesKey);
   const [deviceName, setDeviceName] = useState('');
-  const [waiting, setWaiting] = useState(false);
+  const [signingKey, setSigningKey] = useState('');
   const api = useContext(NodeApiContext);
+  const [addSigningKeyOpHash, setSigningKeyOpHash] = useState<string>('');
+  const [addSigningKeyError, setAddSigningKeyError] = useState('');
+  const addSigningKeyOp = useSelector((state) =>
+    selectOperationByHash(state, addSigningKeyOpHash),
+  );
+  const [addSigningKeyStep, setAddSigningKeyStep] = useState(
+    AddSigningKeySteps.WAITING,
+  );
+  const [uploadDataStep, setUploadDataStep] = useState(UploadDataSteps.WAITING);
+  const [uploadDataError, setUploadDataError] = useState('');
 
   const handleSubmit = async () => {
-    setWaiting(true);
-    const channelApi = new ChannelAPI(url.href);
-    const { signingKey } = await loadRecoveryData(channelApi, aesKey);
-    console.log(`adding new signing key`);
-    await api.addSigningKey(signingKey);
-    console.log(`Starting upload of local info`);
-    await uploadAllInfoAfter(0);
-    console.log(`Finished upload of local info`);
-    dispatch(addDevice({ name: deviceName, signingKey, active: true }));
-    navigation.navigate('Devices');
+    try {
+      setAddSigningKeyStep(AddSigningKeySteps.DOWNLOADING);
+      const channelApi = new ChannelAPI(url.href);
+      const { signingKey } = await loadRecoveryData(channelApi, aesKey);
+      console.log(`adding new signing key`);
+      setSigningKey(signingKey);
+      const op = await api.addSigningKey(signingKey);
+      store.dispatch(addOperation(op));
+      setSigningKeyOpHash(op.hash);
+      setAddSigningKeyStep(AddSigningKeySteps.WAITING_OPERATION);
+    } catch (err) {
+      console.log(`Error setting signing key: ${err.message}`);
+      setAddSigningKeyStep(AddSigningKeySteps.ERROR);
+      setAddSigningKeyError(err.message);
+    }
   };
 
-  const disabled = deviceName.length < 3;
+  // start data upload as soon as signing keys have been added
+  useEffect(() => {
+    const runEffect = async () => {
+      console.log(`Starting upload of local info`);
+      try {
+        setUploadDataStep(UploadDataSteps.UPLOADING);
+        await uploadAllInfoAfter(0);
+        setUploadDataStep(UploadDataSteps.COMPLETE);
+        console.log(`Finished upload of local info`);
+      } catch (err) {
+        console.log(`Error uploading data: ${err.message}`);
+        setUploadDataStep(UploadDataSteps.ERROR);
+        setUploadDataError(err.message);
+      }
+    };
+    if (
+      addSigningKeyStep === AddSigningKeySteps.OPERATION_APPLIED &&
+      uploadDataStep === UploadDataSteps.WAITING
+    ) {
+      runEffect();
+    }
+  }, [addSigningKeyStep, uploadDataStep]);
+
+  // track overall progress
+  useEffect(() => {
+    if (
+      addSigningKeyStep === AddSigningKeySteps.OPERATION_APPLIED &&
+      uploadDataStep === UploadDataSteps.COMPLETE
+    ) {
+      console.log(`Completed add device workflow!`);
+      // add new device to local storage and navigate to device screen
+      dispatch(addDevice({ name: deviceName, signingKey, active: true }));
+      navigation.navigate('Devices');
+    }
+  }, [
+    addSigningKeyStep,
+    deviceName,
+    dispatch,
+    navigation,
+    signingKey,
+    uploadDataStep,
+  ]);
+
+  // track addSigningKey operation status
+  useEffect(() => {
+    if (
+      addSigningKeyOp &&
+      addSigningKeyStep === AddSigningKeySteps.WAITING_OPERATION
+    ) {
+      switch (addSigningKeyOp.state) {
+        case operation_states.UNKNOWN:
+        case operation_states.INIT:
+        case operation_states.SENT:
+          // op being processed. do nothing.
+          break;
+        case operation_states.APPLIED:
+          setAddSigningKeyStep(AddSigningKeySteps.OPERATION_APPLIED);
+          setSigningKeyOpHash('');
+          break;
+        case operation_states.FAILED:
+          setAddSigningKeyStep(AddSigningKeySteps.ERROR);
+          setAddSigningKeyError('Operation could not be applied');
+          setSigningKeyOpHash('');
+          break;
+        case operation_states.EXPIRED:
+          // operation did not get applied within time window. Abort and show error.
+          setAddSigningKeyStep(AddSigningKeySteps.ERROR);
+          setAddSigningKeyError('Operation timed out');
+          setSigningKeyOpHash('');
+          break;
+        default:
+          setAddSigningKeyStep(AddSigningKeySteps.ERROR);
+          setAddSigningKeyError('Unhandled operation state');
+          setSigningKeyOpHash('');
+      }
+    }
+  }, [addSigningKeyOp, addSigningKeyStep]);
 
   useEffect(() => {
     const showConfirmDialog = () => {
@@ -57,6 +166,9 @@ export const AddDeviceScreen = () => {
         [
           {
             text: t('common.alert.yes'),
+            onPress: () => {
+              resetFlow();
+            },
           },
           {
             text: t('common.alert.no'),
@@ -70,6 +182,22 @@ export const AddDeviceScreen = () => {
     showConfirmDialog();
   }, []);
 
+  const resetFlow = () => {
+    setAddSigningKeyStep(AddSigningKeySteps.WAITING);
+    setUploadDataStep(UploadDataSteps.WAITING);
+    setAddSigningKeyError('');
+    setUploadDataError('');
+  };
+
+  const submitEnabled =
+    deviceName.length >= 3 &&
+    addSigningKeyStep === AddSigningKeySteps.WAITING &&
+    uploadDataStep === UploadDataSteps.WAITING;
+
+  const pendingSubmit =
+    addSigningKeyStep === AddSigningKeySteps.WAITING &&
+    uploadDataStep === UploadDataSteps.WAITING;
+
   return (
     <>
       <StatusBar
@@ -79,49 +207,60 @@ export const AddDeviceScreen = () => {
       />
       <View style={styles.orangeTop} />
       <View style={styles.container} testID="AddDeviceScreen">
-        <View style={styles.descContainer}>
-          <Text style={styles.registerText}>
-            {t('devices.text.whatsDeviceName')}
-          </Text>
-        </View>
-        <View style={styles.midContainer}>
-          <TextInput
-            testID="editDeviceName"
-            onChangeText={setDeviceName}
-            value={deviceName}
-            placeholder={t('devices.placeholder.deviceName')}
-            placeholderTextColor={DARKER_GREY}
-            style={styles.textInput}
-            autoCapitalize="words"
-            autoCorrect={false}
-            textContentType="name"
-            underlineColorAndroid="transparent"
-            blurOnSubmit={true}
-          />
-        </View>
-        <View style={styles.submitContainer}>
-          {waiting ? (
-            <View style={styles.waitingContainer}>
-              <Text>{t('devices.text.waitingForExport')}</Text>
-              <Spinner
-                isVisible={true}
-                size={DEVICE_LARGE ? 64 : 44}
-                type="Wave"
-                color={ORANGE}
+        {pendingSubmit && (
+          <>
+            <View style={styles.descContainer}>
+              <Text style={styles.registerText}>
+                {t('devices.text.whatsDeviceName')}
+              </Text>
+            </View>
+            <View style={styles.midContainer}>
+              <TextInput
+                testID="editDeviceName"
+                onChangeText={setDeviceName}
+                value={deviceName}
+                placeholder={t('devices.placeholder.deviceName')}
+                placeholderTextColor={DARKER_GREY}
+                style={styles.textInput}
+                autoCapitalize="words"
+                autoCorrect={false}
+                textContentType="name"
+                underlineColorAndroid="transparent"
+                blurOnSubmit={true}
               />
             </View>
-          ) : (
-            <TouchableOpacity
-              style={[styles.submitBtn, { opacity: disabled ? 0.7 : 1 }]}
-              onPress={handleSubmit}
-              accessibilityLabel={t('devices.button.submit')}
-              disabled={disabled}
-              testID="submitDeviceName"
-            >
-              <Text style={styles.submitBtnText}>
-                {t('devices.button.submit')}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.submitContainer}>
+              <TouchableOpacity
+                style={[styles.submitBtn, { opacity: submitEnabled ? 1 : 0.7 }]}
+                onPress={handleSubmit}
+                accessibilityLabel={t('devices.button.submit')}
+                disabled={!submitEnabled}
+                testID="submitDeviceName"
+              >
+                <Text style={styles.submitBtnText}>
+                  {t('devices.button.submit')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        <View style={styles.progressContainer}>
+          {addSigningKeyStep !== AddSigningKeySteps.WAITING && (
+            <>
+              <View style={styles.addSigningKeyContainer}>
+                <AddSigningKey
+                  currentStep={addSigningKeyStep}
+                  errorMessage={addSigningKeyError}
+                />
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.uploadDataContainer}>
+                <UploadData
+                  currentStep={uploadDataStep}
+                  errorMessage={uploadDataError}
+                />
+              </View>
+            </>
           )}
         </View>
       </View>
@@ -152,7 +291,7 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 100 : 85,
   },
   midContainer: {
-    flex: 1,
+    flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -172,10 +311,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: 10,
   },
+  addSigningKeyContainer: {
+    // marginTop: DEVICE_LARGE ? 25 : 20,
+    // minHeight: '25%',
+  },
+  uploadDataContainer: {
+    // height: '50%',
+  },
   submitContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: DEVICE_LARGE ? 85 : 70,
   },
   submitBtn: {
     alignItems: 'center',
@@ -193,6 +338,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     color: WHITE,
+  },
+  divider: {
+    marginTop: DEVICE_LARGE ? 40 : 20,
+    marginBottom: DEVICE_LARGE ? 30 : 20,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: BLACK,
+  },
+  progressContainer: {
+    marginTop: DEVICE_LARGE ? 50 : 40,
   },
 });
 
