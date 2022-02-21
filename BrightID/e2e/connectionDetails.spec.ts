@@ -107,7 +107,7 @@ describe('Connection details', () => {
     await element(by.id('groupsFlatList')).swipe('down');
 
     // there should be 3 known members in the first group
-    expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+    await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
 
     await navigateHome();
     await expectHomescreen();
