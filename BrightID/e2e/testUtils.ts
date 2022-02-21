@@ -88,7 +88,10 @@ const skipWalkthrough = async () => {
   await element(by.id('BrightIdLogo')).tap();
 };
 
-const createBrightID = async (name = testUserName, withPassword = false) => {
+const createBrightID = async (
+  name = testUserName,
+  withPassword = false,
+): Promise<string> => {
   await acceptEula();
   await createKeypair();
   await addName(name);
