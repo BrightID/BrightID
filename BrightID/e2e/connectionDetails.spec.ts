@@ -1,5 +1,4 @@
-/* global element:false, by:false, waitFor:false */
-import i18next from 'i18next';
+import { by, element, expect } from 'detox';
 import {
   createBrightID,
   createFakeConnection,
@@ -11,8 +10,8 @@ import {
   joinAllGroups,
   navigateHome,
 } from './testUtils';
-import { connectionLevelStrings } from '../src/utils/connectionLevelStrings';
-import { connection_levels } from '../src/utils/constants';
+import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { connection_levels } from '@/utils/constants';
 
 describe('Connection details', () => {
   const groupName = 'Test Group';
@@ -108,11 +107,11 @@ describe('Connection details', () => {
     await element(by.id('groupsFlatList')).swipe('down');
 
     // there should be 3 known members in the first group
-    expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+    await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
 
     await navigateHome();
     await expectHomescreen();
-  });
+  }, 180000);
 
   describe('Information', () => {
     beforeAll(async () => {

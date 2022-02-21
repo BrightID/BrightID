@@ -1,6 +1,6 @@
-/* global element, by, waitFor */
-
+import './i18n_for_tests';
 import i18next from 'i18next';
+import { by, element, expect } from 'detox';
 import { connection_levels } from '@/utils/constants';
 import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 
@@ -21,7 +21,7 @@ const createKeypair = async () => {
   await element(by.id('createBrightID')).tap();
 };
 
-const addName = async (name) => {
+const addName = async (name: string) => {
   await expect(element(by.id('NameScreen'))).toBeVisible();
   await expect(element(by.id('editName'))).toExist();
   await element(by.id('editName')).tap();
@@ -48,7 +48,7 @@ const addPhoto = async () => {
     .toBeVisible()
     .withTimeout(15000);
 
-  const submitPhoto = element(by.id('submitPhoto'))
+  const submitPhoto = element(by.id('submitPhoto'));
   await expect(submitPhoto).toExist();
   // wait for the button to be enabled after setting the photo
   await new Promise((r) => setTimeout(r, 2000));
@@ -88,7 +88,10 @@ const skipWalkthrough = async () => {
   await element(by.id('BrightIdLogo')).tap();
 };
 
-const createBrightID = async (name = testUserName, withPassword = false) => {
+const createBrightID = async (
+  name = testUserName,
+  withPassword = false,
+): Promise<string> => {
   await acceptEula();
   await createKeypair();
   await addName(name);
@@ -101,12 +104,17 @@ const createBrightID = async (name = testUserName, withPassword = false) => {
   // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
-  return name;
+
+  // get brightID of user
+  const attributes = await element(by.id('userBrightId')).getAttributes(); // as ElementAttributes;
+  // @ts-ignore
+  // console.log(`User brightID: ${attributes.text}`);
+  return attributes.text;
 };
 
 const createFakeConnection = async (
   doConfirm = true,
-  connectionLevel = connection_levels.JUST_MET,
+  connectionLevel: ConnectionLevel = connection_levels.JUST_MET,
 ) => {
   // need to be on Homescreen to continue
   await expectHomescreen();
@@ -155,6 +163,7 @@ const navigateHome = async () => {
       } catch (err) {
         try {
           await element(by.id('NavHomeBtn')).atIndex(3).tap();
+          // eslint-disable-next-line no-empty
         } catch (err) {}
       }
     }
@@ -191,7 +200,7 @@ const expectAppsScreen = async (bool = true) => {
         .withTimeout(5000);
 };
 
-const inviteConnectionToGroup = async (groupName) => {
+const inviteConnectionToGroup = async (groupName: string) => {
   const inviteUserText = 'Invite user';
 
   // should start on home screen
@@ -231,7 +240,7 @@ const inviteConnectionToGroup = async (groupName) => {
   await expectHomescreen();
 };
 
-const joinAllGroups = async (connectionIndex) => {
+const joinAllGroups = async (connectionIndex: number) => {
   await expectHomescreen();
   // navigate to connections screen to make invited user join the group
   await element(by.id('connectionsBtn')).tap();
@@ -259,8 +268,8 @@ const joinAllGroups = async (connectionIndex) => {
 
 /* Connect a fake connection with all other fake connections */
 const interConnect = async (
-  connectionIndex,
-  connectionLevel = connection_levels.JUST_MET,
+  connectionIndex: number,
+  connectionLevel: ConnectionLevel = connection_levels.JUST_MET,
 ) => {
   await expectHomescreen();
   await element(by.id('connectionsBtn')).tap();
@@ -293,7 +302,7 @@ const interConnect = async (
   opens connection screen and triggers reconnect,
   ends at preview connection screen
  */
-const reconnect = async (connectionIndex, changeProfile) => {
+const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   const action = changeProfile
     ? 'Reconnect with changed profile'
     : 'Reconnect with identical profile';

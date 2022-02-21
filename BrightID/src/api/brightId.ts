@@ -469,11 +469,9 @@ export class NodeApi {
   }
 
   async getProfile(id: string) {
-    this.requiresCredentials();
     const requester = this.id;
-    const res = await this.api.get<UserProfileRes, ErrRes>(
-      `/users/${id}/profile/${requester}`,
-    );
+    const url = `/users/${id}/profile/${requester || ''}`;
+    const res = await this.api.get<UserProfileRes, ErrRes>(url);
     NodeApi.throwOnError(res);
     return (res.data as UserProfileRes).data;
   }

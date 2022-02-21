@@ -1,6 +1,4 @@
-/* global device:false, element:false, by:false, waitFor:false */
-
-import i18next from 'i18next';
+import { by, element, expect } from 'detox';
 import {
   createBrightID,
   createFakeConnection,
