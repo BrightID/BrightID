@@ -15,7 +15,7 @@ const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
   // let hasBackButton = true;
-  let leaveGroupText = 'Leave group';
+  const leaveGroupText = 'Leave group';
   const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
@@ -83,7 +83,7 @@ describe('Group Management', () => {
 
     it('should create group', async () => {
       await element(by.id('createNewGroupBtn')).tap();
-      await expect(element(by.id('createNewGroupBtn'))).toBeNotVisible();
+      await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
       // if group was created successfully we should be back at the Groups screen
       await expectGroupsScreen();
       // there should be exactly one group now
