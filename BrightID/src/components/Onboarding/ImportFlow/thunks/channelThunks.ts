@@ -1,4 +1,4 @@
-import { hash, randomKey } from '@/utils/encoding';
+import { hash, urlSafeRandomKey } from '@/utils/encoding';
 import { store } from '@/store';
 import ChannelAPI from '@/api/channelService';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
@@ -20,7 +20,7 @@ export const setupSync =
     const { recoveryData } = getState();
     // setup recovery data
     if (!recoveryData.aesKey) {
-      const aesKey = await randomKey(16);
+      const aesKey = await urlSafeRandomKey(16);
       // setup recovery data slice with sync info
       dispatch(init({ aesKey }));
     }

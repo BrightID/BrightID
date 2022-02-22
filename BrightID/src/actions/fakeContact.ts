@@ -2,9 +2,12 @@ import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
-import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
+import {
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+  urlSafeRandomKey,
+} from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
-import { createRandomId } from '@/utils/channels';
 import { selectChannelById } from '@/components/PendingConnections/channelSlice';
 import {
   selectConnectionById,
@@ -70,7 +73,10 @@ export const addFakeConnection =
       };
 
       const encrypted = encryptData(dataObj, channel.aesKey);
-      const fakeChannel = { ...channel, myProfileId: await createRandomId() };
+      const fakeChannel = {
+        ...channel,
+        myProfileId: await urlSafeRandomKey(9),
+      };
 
       await fakeChannel.api.upload({
         channelId: fakeChannel.id,
@@ -204,7 +210,7 @@ export const reconnectFakeConnection =
     };
 
     const encrypted = encryptData(dataObj, channel.aesKey);
-    const fakeChannel = { ...channel, myProfileId: await createRandomId() };
+    const fakeChannel = { ...channel, myProfileId: await urlSafeRandomKey(9) };
 
     await fakeChannel.api.upload({
       channelId: fakeChannel.id,

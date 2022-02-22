@@ -91,7 +91,7 @@ export const createNewGroup =
       }
       return true;
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       Alert.alert(
         i18next.t('createGroup.alert.title.createFailed'),
         err.message,

@@ -1,6 +1,6 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import { hash, randomKey } from '@/utils/encoding';
+import { hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
   setUserData,
   setConnections,
@@ -36,7 +36,7 @@ export const setupRecovery =
     // setup recovery data
     if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
       const { publicKey, secretKey } = await nacl.sign.keyPair();
-      const aesKey = await randomKey(16);
+      const aesKey = await urlSafeRandomKey(16);
       // setup recovery data slice with new keypair
       dispatch(init({ publicKey, secretKey, aesKey }));
     }

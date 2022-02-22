@@ -1,4 +1,4 @@
-import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
+import { urlSafeRandomKey } from '@/utils/encoding';
 import {
   CHANNEL_TTL,
   CHANNEL_INFO_NAME,
@@ -14,20 +14,15 @@ import {
 import ChannelAPI from '@/api/channelService';
 import i18next from 'i18next';
 
-export const createRandomId = async (size = 9) => {
-  const key = await randomKey(size);
-  return b64ToUrlSafeB64(key);
-};
-
 export const generateChannelData = async (
   channelType: ChannelType,
   url: URL,
 ): Promise<Channel> => {
-  const aesKey = await randomKey(16);
-  const id = await createRandomId();
+  const aesKey = await urlSafeRandomKey(16);
+  const id = await urlSafeRandomKey(9);
   const timestamp = Date.now();
   const ttl = CHANNEL_TTL;
-  const myProfileId = await createRandomId();
+  const myProfileId = await urlSafeRandomKey(9);
   const initiatorProfileId = myProfileId;
   const type = channelType;
   const state = channel_states.OPEN;
@@ -113,7 +108,7 @@ export const parseChannelQrURL = async (url: URL) => {
     throw new Error(msg);
   }
 
-  const myProfileId = await createRandomId();
+  const myProfileId = await urlSafeRandomKey(9);
 
   const channel: Channel = {
     aesKey,
