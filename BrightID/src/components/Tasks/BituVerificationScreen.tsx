@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   StyleSheet,
   View,
@@ -27,15 +28,22 @@ export const BituVerificationScreen = function ({ route }) {
     user: { verifications },
   } = store.getState();
   const connections = useSelector(selectAllConnections);
-  const bituVerification = verifications.find(
-    (v) => v.name === 'Bitu',
-  ) as BituVerification;
+  const bituVerification = (verifications.find((v) => v.name === 'Bitu') || {
+    directReports: {},
+    reportedConnections: {},
+    score: 0,
+    linksNum: 0,
+    tempScore: 0,
+  }) as BituVerification;
   const directReports = bituVerification
     ? Object.keys(bituVerification.directReports)
     : [];
   const reportedConnections = bituVerification
     ? Object.keys(bituVerification.reportedConnections)
     : [];
+  const negativeScore = bituVerification.linksNum - bituVerification.score;
+  const currentLinksNum = bituVerification.tempScore + negativeScore;
+  const releaseTime = moment(bituVerification.releaseTime).fromNow();
 
   const renderItem = (item, index, section) => {
     let score, reportedBy;
@@ -56,7 +64,9 @@ export const BituVerificationScreen = function ({ route }) {
         <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
         <View style={styles.itemLabel}>
           <Text style={styles.itemLabelText}>{item.name || 'Unknown'}</Text>
-          { reportedBy.length > 0 && <Text style={styles.itemReportedByText}>{reportedBy}</Text> }
+          {reportedBy.length > 0 && (
+            <Text style={styles.itemReportedByText}>{reportedBy}</Text>
+          )}
         </View>
         <View style={{ flex: 1 }} />
         <View style={styles.negativeScoreContainer}>
@@ -114,6 +124,10 @@ export const BituVerificationScreen = function ({ route }) {
           <Text style={styles.scoreText}>{bituVerification?.score || 0}</Text>
         </View>
       </View>
+      <Text style={styles.infoText}>
+        Bitu is released once a week and last release was {releaseTime}.{'\n'}
+        You have {currentLinksNum} Bitu verified connections now.
+      </Text>
       <Text style={styles.guideText}>
         You can get verified and increase your score in "Bitu" by making
         "already known" connections to friends or family who are connected to
@@ -129,7 +143,9 @@ export const BituVerificationScreen = function ({ route }) {
       )}
       <FlatList
         data={directReports}
-        renderItem={({ item, index }) => renderItem(item, index, 'directReports')}
+        renderItem={({ item, index }) =>
+          renderItem(item, index, 'directReports')
+        }
         keyExtractor={(item) => item}
       />
       {reportedConnections.length > 0 && (
@@ -137,7 +153,9 @@ export const BituVerificationScreen = function ({ route }) {
       )}
       <FlatList
         data={reportedConnections}
-        renderItem={({ item, index }) => renderItem(item, index, 'reportedConnections')}
+        renderItem={({ item, index }) =>
+          renderItem(item, index, 'reportedConnections')
+        }
         keyExtractor={(item) => item}
       />
     </ScrollView>
@@ -206,6 +224,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     paddingTop: 30,
     fontFamily: 'Poppins-Mediums',
+    lineHeight: 25,
+  },
+  infoText: {
+    fontSize: fontSize[16],
+    paddingTop: 30,
+    fontFamily: 'Poppins-Bold',
     lineHeight: 25,
   },
   reportTitle: {

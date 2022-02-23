@@ -40,8 +40,10 @@ type YektaVerification = HashVerification & {
 type BituVerification = HashVerification & {
   name: 'Bitu';
   score: number;
+  tempScore: number;
   directReports: Record<string, number>;
   reportedConnections: Record<string, Array<string>>;
+  releaseTime: number;
 };
 
 type Verification =
