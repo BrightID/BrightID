@@ -262,6 +262,13 @@ const RecoveryCodeScreen = ({ route }) => {
               />
               <Text style={styles.copyText}> {t('common.button.copy')}</Text>
             </TouchableOpacity>
+            {__DEV__ && (
+              <View>
+                <Text style={{ fontSize: 6 }} testID="qrcode">
+                  {qrUrl?.href}
+                </Text>
+              </View>
+            )}
           </View>
         ) : (
           <View style={styles.qrsvgContainer}>
