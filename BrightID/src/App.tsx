@@ -2,7 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  getStateFromPath,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import AppRoutes from './routes';
@@ -26,7 +29,7 @@ export const App = () => {
         App: {
           screens: {
             Apps: {
-              path: 'link-verification/:baseUrl?/:context/:contextId',
+              path: 'link-verification/:baseUrl?/:context/:contextId/',
               exact: true,
             },
             ScanCode: {
@@ -36,6 +39,48 @@ export const App = () => {
           },
         },
       },
+    },
+    getStateFromPath: (path, options) => {
+      // handle link-app paths
+      let linkAppParams = null;
+      if (path.startsWith('/link-app/')) {
+        let paramsString = path.substring(10);
+
+        const version = paramsString.split('/')[0];
+        paramsString = paramsString.substring(paramsString.indexOf('/') + 1);
+
+        if (version === 'v1') {
+          const [context, contextId, callbackUrl] = paramsString.split('/');
+          if (context && contextId) {
+            linkAppParams = {
+              context,
+              contextId,
+              callbackUrl: callbackUrl
+                ? decodeURIComponent(callbackUrl)
+                : undefined,
+            };
+          }
+        }
+      }
+      console.log(linkAppParams);
+      if (linkAppParams) {
+        return {
+          routes: [
+            {
+              name: 'App',
+              state: {
+                routes: [
+                  {
+                    name: 'Apps',
+                    params: linkAppParams,
+                  },
+                ],
+              },
+            },
+          ],
+        };
+      }
+      return getStateFromPath(path, options);
     },
     // Add custom subscribe method to prevent crashes when url is undefined
     subscribe(listener) {

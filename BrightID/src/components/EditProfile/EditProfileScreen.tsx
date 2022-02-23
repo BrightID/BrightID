@@ -43,7 +43,7 @@ import {
   selectAllSocialMedia,
   removeSocialMedia,
   setProfileDisplayWidth,
-} from './socialMediaSlice';
+} from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariationsByType } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
 
@@ -266,7 +266,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
-  console.log('socialMedia', socialMediaItems);
+  // console.log('socialMedia', socialMediaItems);
 
   const SocialMediaVariations = socialMediaItems
     .filter((item) => socialMediaVariationIds.includes(item.id))
@@ -277,8 +277,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   // disable adding new item if we are entering phone number and
   // phone number is already entered
   const disableAdd =
-    props.type === SocialMediaType.PHONE_NUMBER &&
-    SocialMediaVariations.length;
+    props.type === SocialMediaType.PHONE_NUMBER && SocialMediaVariations.length;
 
   return (
     <View style={styles.socialMediaContainer}>

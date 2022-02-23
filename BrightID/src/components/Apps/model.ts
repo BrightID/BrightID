@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { propEq, find } from 'ramda';
 import i18next from 'i18next';
+import { create } from 'apisauce';
 import {
   addLinkedContext,
   addOperation,
@@ -17,6 +18,11 @@ import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 const sponsorTimeout = 1000 * 60; // 60 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
+
+export enum BrightIdNetwork {
+  TEST = 'test',
+  NODE = 'node',
+}
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -43,6 +49,7 @@ export const handleBlindSigApp = async (
   params: Params,
   setSponsoringApp,
   api: NodeApi,
+  callbackUrl: string,
 ) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
@@ -52,7 +59,13 @@ export const handleBlindSigApp = async (
       {
         text: i18next.t('common.alert.yes'),
         onPress: () =>
-          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
+          sponsorAndlinkAppId(
+            appId,
+            appUserId,
+            setSponsoringApp,
+            api,
+            callbackUrl,
+          ),
         // linkAppId(appId, appUserId),
       },
       {
@@ -100,7 +113,12 @@ const linkContextId = async (
   }
 };
 
-const linkAppId = async (appId: string, appUserId: string) => {
+export const linkAppId = async (
+  appId: string,
+  appUserId: string,
+  callbackUrl: string,
+  silent = false,
+) => {
   const {
     apps: { apps },
     user: { id },
@@ -109,6 +127,18 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+  const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
+
+  const onSuccess = async () => {
+    const api = create({
+      baseURL: callbackUrl,
+    });
+    const res = await api.post('/', {
+      network,
+      contextId: appUserId,
+    });
+  };
+
   // generate blind sig for apps with no verification expiration at linking time
   // and also ensure blind sig is not missed because of delay in generation for all apps
   await store.dispatch(updateBlindSig(appInfo));
@@ -136,19 +166,21 @@ const linkAppId = async (appId: string, appUserId: string) => {
       }
     }
     if (previousAppUserIds.size) {
-      Alert.alert(
-        i18next.t('apps.alert.title.linkingFailed'),
-        i18next.t(
-          'apps.alert.text.blindSigAlreadyLinkedDifferent',
-          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
-          {
-            app: appId,
-            appUserId,
-            previousAppUserIds: Array.from(previousAppUserIds).join(', '),
-          },
-        ),
-      );
-      return; // don't link app when userId is different
+      if (!silent) {
+        Alert.alert(
+          i18next.t('apps.alert.title.linkingFailed'),
+          i18next.t(
+            'apps.alert.text.blindSigAlreadyLinkedDifferent',
+            'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
+            {
+              app: appId,
+              appUserId,
+              previousAppUserIds: Array.from(previousAppUserIds).join(', '),
+            },
+          ),
+        );
+      }
+      return false; // don't link app when userId is different
     }
 
     // check if all app verifications are already linked
@@ -161,15 +193,17 @@ const linkAppId = async (appId: string, appUserId: string) => {
       },
     );
     if (allVerificationsLinked) {
-      Alert.alert(
-        i18next.t('apps.alert.title.linkingFailed'),
-        i18next.t(
-          'apps.alert.text.blindSigAlreadyLinked',
-          'You are already linked with {{app}} with id {{appUserId}}',
-          { app: appId, appUserId },
-        ),
-      );
-      return;
+      if (!silent) {
+        Alert.alert(
+          i18next.t('apps.alert.title.linkingFailed'),
+          i18next.t(
+            'apps.alert.text.blindSigAlreadyLinked',
+            'You are already linked with {{app}} with id {{appUserId}}',
+            { app: appId, appUserId },
+          ),
+        );
+      }
+      return false;
     }
   }
 
@@ -201,31 +235,32 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const linkedVerifications = previousSigs.map((sig) => sig.verification);
 
   if (sigs.length === 0) {
-    Alert.alert(
-      i18next.t('apps.alert.title.linkingFailed'),
-      i18next.t(
-        'apps.alert.text.missingBlindSig',
-        'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
-        {
-          appId,
-          missingVerifications: missingVerifications.join(),
-          linkedVerifications: linkedVerifications.join(),
-        },
-      ),
-      [
-        {
-          text: i18next.t('common.alert.dismiss'),
-          style: 'cancel',
-          onPress: () => null,
-        },
-      ],
-    );
-    return;
+    if (!silent) {
+      Alert.alert(
+        i18next.t('apps.alert.title.linkingFailed'),
+        i18next.t(
+          'apps.alert.text.missingBlindSig',
+          'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
+          {
+            appId,
+            missingVerifications: missingVerifications.join(),
+            linkedVerifications: linkedVerifications.join(),
+          },
+        ),
+        [
+          {
+            text: i18next.t('common.alert.dismiss'),
+            style: 'cancel',
+            onPress: () => null,
+          },
+        ],
+      );
+    }
+    return false;
   }
 
   // Create temporary NodeAPI object, since the node at the specified nodeUrl will
   // be queried for the verification
-  const network = __DEV__ ? 'test' : 'node';
   const url = appInfo.nodeUrl || `http://${network}.brightid.org`;
   const api = new NodeApi({ url, id, secretKey });
   const linkedTimestamp = Date.now();
@@ -244,32 +279,39 @@ const linkAppId = async (appId: string, appUserId: string) => {
     } catch (err) {
       console.log(err);
       const msg = err instanceof Error ? err.message : err;
-      Alert.alert(
-        i18next.t('apps.alert.title.linkingFailed'),
-        i18next.t(
-          'apps.alert.text.linkSigFailed',
-          'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
-          { verification: sig.verification, appId, msg },
-        ),
-        [
-          {
-            text: i18next.t('common.alert.dismiss'),
-            style: 'cancel',
-            onPress: () => null,
-          },
-        ],
-      );
+      if (!silent) {
+        Alert.alert(
+          i18next.t('apps.alert.title.linkingFailed'),
+          i18next.t(
+            'apps.alert.text.linkSigFailed',
+            'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
+            { verification: sig.verification, appId, msg },
+          ),
+          [
+            {
+              text: i18next.t('common.alert.dismiss'),
+              style: 'cancel',
+              onPress: () => null,
+            },
+          ],
+        );
+      }
     }
   }
 
   if (linkSuccess) {
-    Alert.alert(
-      i18next.t('apps.alert.title.linkSuccess'),
-      i18next.t('apps.alert.text.linkSuccess', {
-        context: appInfo.name,
-      }),
-    );
+    if (!silent) {
+      Alert.alert(
+        i18next.t('apps.alert.title.linkSuccess'),
+        i18next.t('apps.alert.text.linkSuccess', {
+          context: appInfo.name,
+        }),
+      );
+    }
+    onSuccess();
+    return true;
   }
+  return false;
 };
 
 const sponsorAndlinkAppId = async (
@@ -277,13 +319,14 @@ const sponsorAndlinkAppId = async (
   appUserId: string,
   setSponsoringApp,
   api: NodeApi,
+  callbackUrl: string,
 ) => {
   const {
     apps: { apps },
     user: { isSponsored },
   } = store.getState();
   if (isSponsored) {
-    await linkAppId(appId, appUserId);
+    await linkAppId(appId, appUserId, callbackUrl);
   } else {
     /*
     1. get appId from deep link
@@ -337,7 +380,7 @@ const sponsorAndlinkAppId = async (
       // sponsoring complete
       store.dispatch(setIsSponsored(true));
       // now link app.
-      await linkAppId(appId, appUserId);
+      await linkAppId(appId, appUserId, callbackUrl);
     } catch (err) {
       const msg = err instanceof Error ? err.message : err;
       console.log(`Error getting sponsored: ${msg}`);
