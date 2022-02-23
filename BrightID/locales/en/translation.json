@@ -734,6 +734,7 @@
     "alert": {
       "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
       "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
+      "confirmSync": "Are you sure that you want to share and sync your BrightID data with this device?",
       "noPrimary": "Your devices can only be synced by the primary device.",
       "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them."
     },

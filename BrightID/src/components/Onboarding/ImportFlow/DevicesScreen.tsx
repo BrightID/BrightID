@@ -88,8 +88,28 @@ export const DevicesScreen = ({ route }) => {
       await uploadAllInfoAfter(after);
       dispatch(pollImportChannel());
     };
+    const showConfirmDialog = () => {
+      return Alert.alert(
+        t('common.alert.title.pleaseConfirm'),
+        t('devices.alert.confirmSync'),
+        [
+          {
+            text: t('common.alert.yes'),
+            onPress: () => {
+              runEffect();
+            },
+          },
+          {
+            text: t('common.alert.no'),
+            onPress: () => {
+              navigation.navigate('Home');
+            },
+          },
+        ],
+      );
+    };
     if (route.params?.asScanner) {
-      runEffect();
+      showConfirmDialog();
     }
   }, [
     dispatch,
