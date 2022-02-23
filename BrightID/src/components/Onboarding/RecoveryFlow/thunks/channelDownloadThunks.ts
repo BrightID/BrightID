@@ -15,28 +15,6 @@ import {
   setRecoveryError,
 } from '../recoveryDataSlice';
 
-export const loadRecoveryData = async (
-  channelApi: ChannelAPI,
-  aesKey: string,
-): Promise<{ signingKey: string; timestamp: number }> => {
-  try {
-    const dataString = await channelApi.download({
-      channelId: hash(aesKey),
-      dataId: 'data',
-    });
-    const data = JSON.parse(dataString);
-    if (!data.signingKey || !data.timestamp) {
-      throw new Error(
-        'Please ask the connection to reload their QR code and try again',
-      );
-    } else {
-      return data;
-    }
-  } catch (err) {
-    throw new Error('Bad QR Data');
-  }
-};
-
 const downloadConnection = async ({
   dataId,
   channelApi,

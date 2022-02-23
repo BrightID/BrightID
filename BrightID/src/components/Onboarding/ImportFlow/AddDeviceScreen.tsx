@@ -16,12 +16,12 @@ import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { addDevice, addOperation, selectOperationByHash } from '@/actions';
 import ChannelAPI from '@/api/channelService';
-import { loadRecoveryData } from '../RecoveryFlow/thunks/channelDownloadThunks';
 import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { operation_states } from '@/utils/constants';
 import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey';
 import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
+import { loadRecoveryData } from '@/utils/recovery';
 
 /**
  * Screen for adding a new device

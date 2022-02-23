@@ -10,10 +10,10 @@ import {
   hash,
 } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { loadRecoveryData } from './channelDownloadThunks';
 import ChannelAPI from '@/api/channelService';
 import { NodeApi } from '@/api/brightId';
 import { store } from '@/store';
+import { loadRecoveryData } from '@/utils/recovery';
 
 export const uploadSig =
   ({ id, aesKey, channelApi }) =>
