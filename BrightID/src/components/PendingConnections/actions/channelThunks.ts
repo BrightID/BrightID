@@ -8,7 +8,10 @@ import {
   channel_types,
   selectAllChannels,
 } from '@/components/PendingConnections/channelSlice';
-import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
+import {
+  selectAllSocialMedia,
+  selectAllSocialMediaToShare,
+} from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData, createChannelInfo } from '@/utils/channels';
@@ -336,7 +339,7 @@ export const encryptAndUploadProfileToChannel =
 
     const { notificationToken } = getState().notifications;
 
-    const socialMedia = selectAllSocialMedia(getState());
+    const socialMedia = selectAllSocialMediaToShare(getState());
 
     // retrieve photo
     const photo = await retrieveImage(filename);

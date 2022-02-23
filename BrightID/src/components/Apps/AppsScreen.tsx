@@ -80,8 +80,10 @@ export const AppsScreen = () => {
   const handleAppDeepLink = useCallback(() => {
     const appId = route.params?.context;
     const appInfo = find(propEq('id', appId))(apps) as AppInfo;
+    const callbackUrl = route.params?.callbackUrl;
+
     if (api && appInfo && appInfo.usingBlindSig) {
-      handleBlindSigApp(route.params, setSponsoringApp, api);
+      handleBlindSigApp(route.params, setSponsoringApp, api, callbackUrl);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),

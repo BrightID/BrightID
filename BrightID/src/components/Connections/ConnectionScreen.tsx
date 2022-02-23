@@ -119,9 +119,9 @@ function ConnectionScreen(props: Props) {
     useState(true);
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] =
     useState(true);
-  const [socailMediaCollapsed, setSocialMediaCollapsed] = useState(true);
+  const [socialMediaCollapsed, setSocialMediaCollapsed] = useState(true);
   const [possibleDuplicates, setPossibleDuplicates] = useState([]);
-  const [connectionSocailMedia, setConnectionSocailMedia] = useState<
+  const [connectionSocialMedia, setConnectionSocialMedia] = useState<
     SocialMediaOnConnectionPage[]
   >([]);
 
@@ -166,7 +166,7 @@ function ConnectionScreen(props: Props) {
         });
       }
     }
-    setConnectionSocailMedia(socialMediaOnConnectionPage);
+    setConnectionSocialMedia(socialMediaOnConnectionPage);
   }, [connection, socialMediaVariations]);
   const { t } = useTranslation();
 
@@ -185,7 +185,7 @@ function ConnectionScreen(props: Props) {
         setPossibleDuplicatesCollapsed(!possibleDuplicatesCollapsed);
         break;
       case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
-        setSocialMediaCollapsed(!socailMediaCollapsed);
+        setSocialMediaCollapsed(!socialMediaCollapsed);
         break;
     }
   };
@@ -222,9 +222,9 @@ function ConnectionScreen(props: Props) {
       },
       {
         title: t('connectionDetails.label.socialMedia'),
-        data: socailMediaCollapsed ? [] : [connectionSocailMedia],
+        data: socialMediaCollapsed ? [] : [connectionSocialMedia],
         key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
-        numEntries: connectionSocailMedia.filter((s) => !!s.shareActionData)
+        numEntries: connectionSocialMedia.filter((s) => !!s.shareActionData)
           .length,
       },
     ];
@@ -239,8 +239,8 @@ function ConnectionScreen(props: Props) {
     recoveryConnections,
     possibleDuplicatesCollapsed,
     possibleDuplicates,
-    connectionSocailMedia,
-    socailMediaCollapsed,
+    connectionSocialMedia,
+    socialMediaCollapsed,
   ]);
 
   const renderSticker = () => {
@@ -518,7 +518,7 @@ function ConnectionScreen(props: Props) {
         collapsed = possibleDuplicatesCollapsed;
         break;
       case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
-        collapsed = socailMediaCollapsed;
+        collapsed = socialMediaCollapsed;
         break;
     }
     return (

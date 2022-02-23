@@ -2,9 +2,11 @@ import {
   createSlice,
   createEntityAdapter,
   PayloadAction,
+  createSelector,
 } from '@reduxjs/toolkit';
 
 import { original, Draft } from 'immer';
+import socialMediaService from '@/api/socialMediaService';
 
 const socialMediaAdapter = createEntityAdapter<SocialMedia>({
   sortComparer: (a, b) => a.order - b.order,
@@ -23,6 +25,7 @@ const socialMediaSlice = createSlice({
         id: incomingId,
         order: incomingOrder,
         profile: incomingProfile,
+        brightIdSocialAppData: incomingBrightIdSocialAppData,
       } = action.payload;
 
       // access previous values from the reducer
@@ -49,6 +52,7 @@ const socialMediaSlice = createSlice({
           id: incomingId,
           changes: {
             profile: incomingProfile,
+            brightIdSocialAppData: incomingBrightIdSocialAppData,
           },
         });
       }
@@ -63,10 +67,11 @@ const socialMediaSlice = createSlice({
         const shouldDecrement = !shouldIncrement;
 
         const updateList = Object.values(entities).map((entity) => {
-          let { order, profile } = entity;
+          let { order, profile, brightIdSocialAppData } = entity;
           if (entity.id === incomingId) {
             order = incomingOrder;
             profile = incomingProfile;
+            brightIdSocialAppData = incomingBrightIdSocialAppData;
           } else if (
             shouldIncrement &&
             order >= incomingOrder &&
@@ -83,7 +88,7 @@ const socialMediaSlice = createSlice({
 
           return {
             id: entity.id,
-            changes: { order, profile },
+            changes: { order, profile, brightIdSocialAppData },
           };
         });
 
@@ -101,19 +106,39 @@ const socialMediaSlice = createSlice({
         },
       });
     },
-    removeSocialMedia: socialMediaAdapter.removeOne,
+    removeSocialMedia: (
+      state: Draft<SocialMediaState>,
+      action: PayloadAction<string>,
+    ) => {
+      // access previous values from the reducer
+      const { entities } = original(state);
+
+      const prevEntity = entities[action.payload];
+      socialMediaService.deleteSocialMediaProfile(
+        prevEntity.brightIdSocialAppData.token,
+      );
+      socialMediaAdapter.removeOne(state, action.payload);
+    },
   },
 });
 
-export const {
-  saveSocialMedia,
-  removeSocialMedia,
-  setProfileDisplayWidth,
-} = socialMediaSlice.actions;
+export const { saveSocialMedia, removeSocialMedia, setProfileDisplayWidth } =
+  socialMediaSlice.actions;
 
 export const {
   selectById: selectSocialMediaById,
   selectAll: selectAllSocialMedia,
 } = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
 
+export const selectAllSocialMediaToShare = createSelector(
+  selectAllSocialMedia,
+  (socialMedias) =>
+    socialMedias.map((socialMedia) => ({
+      id: socialMedia.id,
+      company: socialMedia.company,
+      order: socialMedia.order,
+      profile: socialMedia.profile,
+      profileDisplayWidth: socialMedia.profileDisplayWidth,
+    })) as SocialMediaShared[],
+);
 export default socialMediaSlice.reducer;

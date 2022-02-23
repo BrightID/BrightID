@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   TextInput,
   View,
@@ -15,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import PhoneInput from 'react-native-phone-number-input';
+import { any, propEq, find } from 'ramda';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -24,10 +31,18 @@ import {
 import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
+import {
+  saveSocialMedia,
+  selectSocialMediaById,
+} from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
+import { updateBlindSigs, selectAllApps } from '@/actions';
+import { NodeApiContext } from '@/components/NodeApiGate';
+import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
+import socialMediaService, { socialMediaUrl } from '@/api/socialMediaService';
+import { saveAndLinkSocialMedia } from '@/utils/socailMedia';
 
 /** Helper functions */
 
@@ -137,18 +152,30 @@ const SelectMediaModal = ({ route }: props) => {
       setSelectedId(firstItem);
     }, [firstItem]),
   );
+  const nodeApi = useContext(NodeApiContext);
 
-  const saveProfile = () => {
+  const saveProfile = async () => {
     if (socialMediaVariation.type === SocialMediaType.PHONE_NUMBER) {
       if (!isPhoneNumberValid(profile)) {
         setInvalidPhoneNumber(true);
         return;
       }
     }
+    let brightIdSocialAppData = prevProfile?.brightIdSocialAppData;
+    try {
+      brightIdSocialAppData = await saveAndLinkSocialMedia(
+        socialMediaVariation,
+        prevProfile,
+        profile,
+      );
+    } catch (e) {
+      // simply ignore errors
+    }
     const socialMedia: SocialMedia = {
       id: selectedId,
       company: socialMediaVariation,
       order: route.params?.order ?? 0,
+      brightIdSocialAppData,
       profile,
     };
     dispatch(saveSocialMedia(socialMedia));
