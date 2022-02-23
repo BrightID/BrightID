@@ -113,6 +113,7 @@ export const DevicesScreen = ({ route }) => {
     }
   }, [
     dispatch,
+    navigation,
     route.params?.asScanner,
     settings.isPrimaryDevice,
     settings.lastSyncTime,
