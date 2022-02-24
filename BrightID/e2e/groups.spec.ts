@@ -62,20 +62,20 @@ describe('Groups', () => {
     it('should show "noGroups" screen', async () => {
       await expect(element(by.id('noGroupsView'))).toBeVisible();
       await expect(element(by.id('groupsLearnMoreBtn'))).toBeVisible();
-      await expect(element(by.id('groupsCreateGroupBtn'))).toBeVisible();
+      await expect(element(by.id('addGroupBtn'))).toBeVisible();
     });
 
     it('should show group creation screen and go back (backbutton)', async () => {
       if (!hasBackButton) return;
 
-      await element(by.id('groupsCreateGroupBtn')).tap();
+      await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
       await device.pressBack();
       await expect(element(by.id('noGroupsView'))).toBeVisible();
     });
 
     it('should show group creation screen and go back', async () => {
-      await element(by.id('groupsCreateGroupBtn')).tap();
+      await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
       await element(by.id('header-back')).tap();
       // header-back button takes 1-2 seconds to complete switch, so use waitFor() here
@@ -92,7 +92,7 @@ describe('Groups', () => {
       await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
-      await element(by.id('groupsCreateGroupBtn')).tap();
+      await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
     });
 

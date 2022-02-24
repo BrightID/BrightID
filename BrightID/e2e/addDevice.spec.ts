@@ -51,7 +51,8 @@ describe('Add Device', () => {
     });
 
     // create user
-    userBrightId = await createBrightID();
+    const userData = await createBrightID();
+    userBrightId = userData.brightId;
     console.log(`User BrightID: ${userBrightId}`);
     jestExpect(userBrightId).toBeDefined();
 

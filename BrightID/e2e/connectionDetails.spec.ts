@@ -58,7 +58,7 @@ describe('Connection details', () => {
     await expect(element(by.id('groupsBtn'))).toBeVisible();
     await element(by.id('groupsBtn')).tap();
     await expectGroupsScreen();
-    await element(by.id('groupsCreateGroupBtn')).tap();
+    await element(by.id('addGroupBtn')).tap();
     await expect(element(by.id('groupInfoScreen'))).toBeVisible();
     await element(by.id('editGroupName')).tap();
     await element(by.id('editGroupName')).typeText(groupName);
