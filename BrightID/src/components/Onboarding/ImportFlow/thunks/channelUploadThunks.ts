@@ -5,10 +5,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import ChannelAPI from '@/api/channelService';
-import {
-  uploadConnection,
-  uploadGroup,
-} from '../../RecoveryFlow/thunks/channelUploadThunks';
+import { uploadConnection, uploadGroup } from '@/utils/channels';
 
 export const uploadAllInfoAfter = async (after) => {
   const {
@@ -47,14 +44,14 @@ export const uploadAllInfoAfter = async (after) => {
   const connections = selectAllConnections(store.getState());
   for (const conn of connections) {
     if (conn.timestamp > after) {
-      await uploadConnection({ conn, channelApi, aesKey });
+      await uploadConnection({ conn, channelApi, aesKey, signingKey });
     }
   }
 
   console.log('uploading groups');
   for (const group of groups) {
     if (group.joined > after) {
-      await uploadGroup({ group, channelApi, aesKey });
+      await uploadGroup({ group, channelApi, aesKey, signingKey });
     }
   }
 

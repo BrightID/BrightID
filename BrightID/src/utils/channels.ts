@@ -1,4 +1,5 @@
-import { urlSafeRandomKey } from '@/utils/encoding';
+import i18next from 'i18next';
+import { b64ToUrlSafeB64, hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
   CHANNEL_TTL,
   CHANNEL_INFO_NAME,
@@ -12,7 +13,8 @@ import {
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
-import i18next from 'i18next';
+import { encryptData } from '@/utils/cryptoHelper';
+import { retrieveImage } from '@/utils/filesystem';
 
 export const generateChannelData = async (
   channelType: ChannelType,
@@ -123,4 +125,103 @@ export const parseChannelQrURL = async (url: URL) => {
     url,
   };
   return channel;
+};
+
+export const uploadConnection = async ({
+  conn,
+  channelApi,
+  aesKey,
+  signingKey,
+}: {
+  conn: {
+    id?: string;
+    name?: string;
+    photo?: Photo;
+    timestamp?: number;
+  };
+  channelApi: ChannelAPI;
+  aesKey: string;
+  signingKey: string;
+}) => {
+  try {
+    const { id, name, photo, timestamp } = conn;
+    let photoString = '';
+
+    if (!name) {
+      return;
+    }
+
+    // retrieve photo
+    if (photo?.filename) {
+      photoString = await retrieveImage(photo.filename);
+    }
+
+    const dataObj = {
+      id,
+      photo: photoString,
+      name,
+      timestamp,
+    };
+
+    const encrypted = encryptData(dataObj, aesKey);
+    console.log(`Posting profile data of ${id} ...`);
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      dataId: `connection_${id}:${b64ToUrlSafeB64(signingKey)}`,
+    });
+  } catch (err) {
+    console.error(`uploadConnection: ${err.message}`);
+  }
+};
+
+export const uploadGroup = async ({
+  group,
+  channelApi,
+  aesKey,
+  signingKey,
+}: {
+  group: {
+    id: string;
+    name?: string;
+    photo?: Photo;
+    aesKey?: string;
+    members: Array<string>;
+    admins: Array<string>;
+  };
+  channelApi: ChannelAPI;
+  aesKey: string;
+  signingKey: string;
+}) => {
+  try {
+    const { id, name, photo, aesKey: groupKey, members, admins } = group;
+    let photoString = '';
+    if (!groupKey) {
+      // not worth uploading group data is missing
+      return;
+    }
+    // retrieve photo
+    if (photo?.filename) {
+      photoString = await retrieveImage(photo.filename);
+    }
+
+    const dataObj = {
+      id,
+      photo: photoString,
+      name,
+      aesKey: groupKey,
+      members,
+      admins,
+    };
+
+    const encrypted = encryptData(dataObj, aesKey);
+    console.log(`Posting group data of ${id} ...`);
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      dataId: `group_${id}:${b64ToUrlSafeB64(signingKey)}`,
+    });
+  } catch (err) {
+    console.error(`uploadGroup: ${err.message}`);
+  }
 };

@@ -14,6 +14,7 @@ import ChannelAPI from '@/api/channelService';
 import { NodeApi } from '@/api/brightId';
 import { store } from '@/store';
 import { loadRecoveryData } from '@/utils/recovery';
+import { uploadConnection, uploadGroup } from '@/utils/channels';
 
 export const uploadSig =
   ({ id, aesKey, channelApi }) =>
@@ -49,95 +50,6 @@ export const uploadSig =
     });
   };
 
-export const uploadConnection = async ({
-  conn,
-  channelApi,
-  aesKey,
-}: {
-  conn: Connection;
-  channelApi: ChannelAPI;
-  aesKey: string;
-}) => {
-  const {
-    keypair: { publicKey: signingKey },
-  } = store.getState();
-  try {
-    const { id, name, photo, timestamp } = conn;
-    let photoString = '';
-
-    if (!name) {
-      return;
-    }
-
-    // retrieve photo
-    if (photo?.filename) {
-      photoString = await retrieveImage(photo.filename);
-    }
-
-    const dataObj = {
-      id,
-      photo: photoString,
-      name,
-      timestamp,
-    };
-
-    const encrypted = encryptData(dataObj, aesKey);
-    console.log(`Posting profile data of ${id} ...`);
-    await channelApi.upload({
-      channelId: hash(aesKey),
-      data: encrypted,
-      dataId: `connection_${id}:${b64ToUrlSafeB64(signingKey)}`,
-    });
-  } catch (err) {
-    console.error(`uploadConnection: ${err.message}`);
-  }
-};
-
-export const uploadGroup = async ({
-  group,
-  channelApi,
-  aesKey,
-}: {
-  group: Group;
-  channelApi: ChannelAPI;
-  aesKey: string;
-}) => {
-  const {
-    keypair: { publicKey: signingKey },
-  } = store.getState();
-  try {
-    const { id, name, photo, aesKey: groupKey, members, admins } = group;
-    let photoString = '';
-    if (!groupKey) {
-      // not worth uploading group data is missing
-      return;
-    }
-    // retrieve photo
-    if (photo?.filename) {
-      photoString = await retrieveImage(photo.filename);
-    }
-
-    const dataObj = {
-      id,
-      photo: photoString,
-      name,
-      aesKey: groupKey,
-      members,
-      admins,
-    };
-
-    const encrypted = encryptData(dataObj, aesKey);
-    console.log(`Posting group data of ${id} ...`);
-    await channelApi.upload({
-      channelId: hash(aesKey),
-      data: encrypted,
-      dataId: `group_${id}:${b64ToUrlSafeB64(signingKey)}`,
-    });
-  } catch (err) {
-    console.error(`uploadGroup: ${err.message}`);
-  }
-};
-
 export const uploadMutualInfo = async ({
   conn,
   aesKey,
@@ -159,7 +71,7 @@ export const uploadMutualInfo = async ({
     !dataIds.includes(`connection_${conn.id}:${b64ToUrlSafeB64(signingKey)}`)
   ) {
     console.log(`uploading recovery data for connection`);
-    await uploadConnection({ conn, channelApi, aesKey });
+    await uploadConnection({ conn, channelApi, aesKey, signingKey });
   }
   const connections = selectAllConnections(store.getState());
 
@@ -197,10 +109,10 @@ export const uploadMutualInfo = async ({
 
   console.log('uploading mutual connections');
   for (const c of mutualConnections) {
-    await uploadConnection({ conn: c, channelApi, aesKey });
+    await uploadConnection({ conn: c, channelApi, aesKey, signingKey });
   }
   console.log('uploading mutual groups');
   for (const g of mutualGroups) {
-    await uploadGroup({ group: g, channelApi, aesKey });
+    await uploadGroup({ group: g, channelApi, aesKey, signingKey });
   }
 };
