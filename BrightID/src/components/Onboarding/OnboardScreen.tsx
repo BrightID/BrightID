@@ -10,8 +10,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -103,16 +103,20 @@ export const Onboard = () => {
               onPress={() => {
                 navigation.navigate('Restore', {
                   screen: 'RecoveryCode',
-                  params: { urlType: qrCodeURL_types.RECOVERY, action: 'recovery' },
+                  params: {
+                    urlType: qrCodeURL_types.RECOVERY,
+                    action: 'recovery',
+                  },
                 });
               }}
               accessibilityLabel={t('onboarding.button.recover')}
+              testID="recoverBrightID"
             >
               <Text style={styles.recoverBtnText}>
                 {t('onboarding.button.recover')}
               </Text>
             </TouchableOpacity>
-            <View style={styles.space}></View>
+            <View style={styles.space} />
             <TouchableOpacity
               style={styles.recoverBtn}
               onPress={() => {
@@ -122,6 +126,7 @@ export const Onboard = () => {
                 });
               }}
               accessibilityLabel={t('onboarding.button.import')}
+              testID="importBrightID"
             >
               <Text style={styles.recoverBtnText}>
                 {t('onboarding.button.import')}

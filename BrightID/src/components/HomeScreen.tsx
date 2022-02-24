@@ -43,6 +43,7 @@ import {
 } from '@/components/Tasks/TasksSlice';
 
 import { version as app_version } from '../../package.json';
+import { uInt8ArrayToB64 } from '@/utils/encoding';
 
 /**
  * Home screen of BrightID
@@ -79,6 +80,7 @@ export const HomeScreen = (props) => {
   const [loading, setLoading] = useState(true);
   const api = useContext(NodeApiContext);
   const { id } = useSelector((state: State) => state.user);
+  const { secretKey, publicKey } = useSelector((state) => state.keypair);
 
   const { t } = useTranslation();
 
@@ -98,7 +100,7 @@ export const HomeScreen = (props) => {
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [api, dispatch, photoFilename]),
+    }, [api, dispatch, isPrimaryDevice, photoFilename]),
   );
 
   /* Update list of apps from server if
@@ -199,8 +201,14 @@ export const HomeScreen = (props) => {
 
   const userBrightId = __DEV__ ? (
     <View>
-      <Text testID="userBrightId" style={styles.nodeLink}>
+      <Text testID="userBrightId" style={{ fontSize: 6, color: WHITE }}>
         {id}
+      </Text>
+      <Text testID="userPublicKey" style={{ fontSize: 6, color: WHITE }}>
+        {publicKey}
+      </Text>
+      <Text testID="userSecretKey" style={{ fontSize: 6, color: WHITE }}>
+        {uInt8ArrayToB64(secretKey)}
       </Text>
     </View>
   ) : null;
