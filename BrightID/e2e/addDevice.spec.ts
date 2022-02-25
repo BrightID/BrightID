@@ -1,7 +1,7 @@
 /*
 E2E Test add device:
 - Detox: Prepare account
-- test script: Create channel, upload fake data and create according URL
+- test script: Create channel, upload fake device data to import and create according URL
 - Detox: Inject qrcode into app
 - Detox: walk through "Add device" screens
 - Detox: verify new device is visible in devices list after refresh
@@ -10,6 +10,7 @@ E2E Test add device:
 import { by, element, expect } from 'detox';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { expect as jestExpect } from '@jest/globals';
+import nacl from 'tweetnacl';
 import ChannelAPI from '../src/api/channelService';
 import {
   createBrightID,
@@ -18,7 +19,12 @@ import {
   expectHomescreen,
   navigateHome,
 } from './testUtils';
-import { hash } from '@/utils/encoding';
+import {
+  b64ToUrlSafeB64,
+  hash,
+  uInt8ArrayToB64,
+  urlSafeRandomKey,
+} from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 
 describe('Add Device', () => {
@@ -67,17 +73,14 @@ describe('Add Device', () => {
     await navigateHome();
     await expectHomescreen();
 
-    // prepare recovery channel
-    // created with https://ed25519.herokuapp.com/
-    const publicKey = '0e6ta650W8E/QY+7E5B1id0l5veLflnsKG8FotasAh4=';
-    const secretKey =
-      '8OTC92xYkW7CWPJGhRvqCR0U1CR6L8PhhpRGGxgW4TvR7q1rrnRbwT9Bj7sTkHWJ3SXm94t+WewobwWi1qwCHg==';
-    const aesKey = `${Date.now()}000`; // padded to 16 chars
+    // create new signingkey to be added
+    const { publicKey, secretKey } = await nacl.sign.keyPair();
 
     // setup minimal recovery data
+    const aesKey = await urlSafeRandomKey(16);
     recoveryData = {
       aesKey,
-      publicKey,
+      publicKey: uInt8ArrayToB64(publicKey),
       timestamp: Date.now(),
     };
     const url = new URL(profileServerUrl);
@@ -102,6 +105,8 @@ describe('Add Device', () => {
   it('user should have one signingkey', async () => {
     const { signingKeys } = await apiInstance.getProfile(userBrightId);
     jestExpect(signingKeys.length).toBe(1);
+    [firstSigningKey] = signingKeys;
+    jestExpect(b64ToUrlSafeB64(firstSigningKey)).toEqual(userBrightId);
   });
 
   it('should add another device', async () => {
@@ -138,8 +143,13 @@ describe('Add Device', () => {
     await expect(element(by.id(deviceName))).toBeVisible();
   });
 
-  it('user should have two signingkeys', async () => {
+  it('user should have two correct signingkeys', async () => {
     const { signingKeys } = await apiInstance.getProfile(userBrightId);
+    console.log(signingKeys);
     jestExpect(signingKeys.length).toBe(2);
+    jestExpect(signingKeys.indexOf(firstSigningKey)).toBeGreaterThanOrEqual(0);
+    jestExpect(
+      signingKeys.indexOf(recoveryData.publicKey),
+    ).toBeGreaterThanOrEqual(0);
   });
 });
