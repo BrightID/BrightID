@@ -22,12 +22,18 @@ describe('social recovery', () => {
       await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
       await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
 
-      // wait upto 30 seconds till all connect operations are applied
+      // make sure all connections are established
       await element(by.id('connectionsBtn')).tap();
       await expectConnectionsScreen();
+      await waitFor(element(by.id('connection-0')))
+        .toExist()
+        .withTimeout(20000);
+      await waitFor(element(by.id('connection-1')))
+        .toExist()
+        .withTimeout(20000);
       await waitFor(element(by.id('connection-2')))
         .toExist()
-        .withTimeout(30000);
+        .withTimeout(20000);
       await navigateHome();
     });
 
