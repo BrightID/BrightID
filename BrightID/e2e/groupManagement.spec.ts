@@ -111,7 +111,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 3 known members in the first group
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
     });
   });
 
@@ -138,7 +138,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 4 known members in first group
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('4 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('4 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 4 members, so check for memberItem with index 3
@@ -197,7 +197,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 3 known members
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 3 members, so check for memberItem with index 2
