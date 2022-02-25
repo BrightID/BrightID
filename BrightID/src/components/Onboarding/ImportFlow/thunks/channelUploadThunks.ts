@@ -1,11 +1,15 @@
 import { store } from '@/store';
-import { b64ToUrlSafeB64, hash } from '@/utils/encoding';
+import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { retrieveImage } from '@/utils/filesystem';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import ChannelAPI from '@/api/channelService';
-import { uploadConnection, uploadGroup } from '@/utils/channels';
+import {
+  uploadBlindSig,
+  uploadConnection,
+  uploadGroup,
+} from '@/utils/channels';
 
 export const uploadAllInfoAfter = async (after) => {
   const {
@@ -60,7 +64,7 @@ export const uploadAllInfoAfter = async (after) => {
     const sigs = selectAllSigs(store.getState());
     for (const sig of sigs) {
       if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
-        await uploadBlindSig({ sig, channelApi, aesKey });
+        await uploadBlindSig({ sig, channelApi, aesKey, signingKey });
       }
     }
   }
@@ -71,34 +75,6 @@ export const uploadAllInfoAfter = async (after) => {
     dataId: `completed_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
     data: 'completed',
   });
-};
-
-const uploadBlindSig = async ({
-  sig,
-  channelApi,
-  aesKey,
-}: {
-  sig: SigInfo;
-  channelApi: ChannelAPI;
-  aesKey: string;
-}) => {
-  const {
-    keypair: { publicKey: signingKey },
-  } = store.getState();
-  try {
-    const encrypted = encryptData(sig, aesKey);
-    console.log(
-      `Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`,
-    );
-    await channelApi.upload({
-      channelId: hash(aesKey),
-      data: encrypted,
-      // use hash of sig.uid to avoid revealing it
-      dataId: `blindsig_${hash(sig.uid)}:${b64ToUrlSafeB64(signingKey)}`,
-    });
-  } catch (err) {
-    console.error(`uploadBlindSig: ${err.message}`);
-  }
 };
 
 export const uploadDeviceInfo = async () => {

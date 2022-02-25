@@ -225,3 +225,30 @@ export const uploadGroup = async ({
     console.error(`uploadGroup: ${err.message}`);
   }
 };
+
+export const uploadBlindSig = async ({
+  sig,
+  channelApi,
+  aesKey,
+  signingKey,
+}: {
+  sig: SigInfo;
+  channelApi: ChannelAPI;
+  aesKey: string;
+  signingKey: string;
+}) => {
+  try {
+    const encrypted = encryptData(sig, aesKey);
+    console.log(
+      `Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`,
+    );
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      // use hash of sig.uid to avoid revealing it
+      dataId: `blindsig_${hash(sig.uid)}:${b64ToUrlSafeB64(signingKey)}`,
+    });
+  } catch (err) {
+    console.error(`uploadBlindSig: ${err.message}`);
+  }
+};
