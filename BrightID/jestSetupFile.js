@@ -3,14 +3,14 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import MockAsyncStorage from 'mock-async-storage';
-import { randomBytes } from 'crypto';
 
 configure({ adapter: new Adapter() });
 
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
 
-jest.doMock('react-native', () => {
+jest.mock('react-native', () => {
+  const { randomBytes } = require('crypto');
   return {
     Dimensions: {
       get: () => {
