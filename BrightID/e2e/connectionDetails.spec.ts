@@ -198,7 +198,6 @@ describe('Connection details', () => {
     });
 
     afterAll(async () => {
-      await element(by.id('header-back')).tap();
       await navigateHome();
       await expectHomescreen();
     });

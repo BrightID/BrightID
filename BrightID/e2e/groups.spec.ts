@@ -203,7 +203,7 @@ describe('Groups', () => {
       await element(by.id('groupsFlatList')).swipe('down');
 
       // there should be 3 known members in second group
-      expect(element(by.id('groupMembersCount-1'))).toHaveText('3 ');
+      await expect(element(by.id('groupMembersCount-1'))).toHaveText('3 ');
     });
   });
 
