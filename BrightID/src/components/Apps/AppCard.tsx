@@ -235,15 +235,36 @@ const AppCard = (props: AppInfo) => {
 
   // If app is testing and user is not linked, do not display card
   if (testing && !isLinked) {
+    console.log(appVerifications);
     return null;
   }
 
   return (
     <View
-      style={[styles.container, { opacity: notSponsored ? 0.7 : 1 }]}
+      style={[
+        styles.container,
+        styles.shadow,
+        { opacity: notSponsored ? 0.5 : 1 },
+      ]}
       testID={`app-${id}`}
     >
-      <TouchableOpacity onPress={openApp}>
+      <View style={styles.logoBackground} />
+      <View style={[styles.logoContainer, !notSponsored && styles.shadow]}>
+        <Image
+          source={{
+            uri: logo !== '' ? logo : null,
+          }}
+          style={styles.logo}
+        />
+      </View>
+
+      <Text style={styles.label}>{name}</Text>
+
+      <View style={styles.divider}>
+        <LinkedSticker />
+      </View>
+
+      {/* <TouchableOpacity onPress={openApp}>
         <Image
           source={{
             uri: logo !== '' ? logo : null,
@@ -260,55 +281,65 @@ const AppCard = (props: AppInfo) => {
           <LinkedSticker />
         </View>
         <Labels />
-      </View>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    flexDirection: 'row',
+    width: '45%',
+    aspectRatio: 1,
     alignItems: 'center',
+    borderRadius: 10,
     backgroundColor: WHITE,
-    paddingVertical: 10,
-    marginBottom: DEVICE_LARGE ? 11.8 : 6,
-    elevation: 2,
-    shadowColor: 'rgba(0,0,0,0.32)',
+    paddingTop: 20,
+  },
+  shadow: {
+    shadowColor: 'rgba(0,0,0,1)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.43,
+    shadowOpacity: 1,
     shadowRadius: 4,
+    elevation: 5,
+  },
+  logoBackground: {
+    position: 'absolute',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    backgroundColor: 'red',
+    height: 50,
+    width: '100%',
+  },
+  logoContainer: {
+    height: 60,
+    aspectRatio: 1,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   logo: {
-    width: DEVICE_LARGE ? 50 : 40,
-    height: DEVICE_LARGE ? 50 : 40,
+    height: 35,
+    aspectRatio: 1,
     resizeMode: 'contain',
-    marginLeft: DEVICE_LARGE ? 22 : 12,
   },
-  appContainer: {
-    flexDirection: 'column',
-    marginLeft: DEVICE_LARGE ? 20 : 12,
-    flexGrow: 1,
-  },
-  titleContainer: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  titleBtn: {
-    maxWidth: '63%',
-  },
-  title: {
+  label: {
+    marginTop: 10,
     fontFamily: 'Poppins-Medium',
-    color: BLACK,
-    fontSize: fontSize[18],
+    fontSize: 12,
+  },
+  divider: {
+    flex: 1,
+    flexDirection: 'row',
+    borderTopWidth: 0.5,
+    width: '100%',
+    marginTop: 10,
+    paddingHorizontal: 15,
+    alignItems: 'center',
   },
   linkedContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    alignSelf: 'center',
-    flexGrow: 1,
   },
   linkedSticker: {
     alignItems: 'center',
@@ -327,66 +358,129 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 15 : 10,
     fontSize: fontSize[13],
   },
-  labelsContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginTop: 5.5,
-  },
-  unverifiedContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: DARKER_GREY,
-    borderRadius: 10,
-  },
-  unverifiedLabel: {
-    fontSize: fontSize[10],
-    marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
-    marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
-    color: DARKER_GREY,
-  },
-  partVerifiedContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: YELLOW,
-    borderRadius: 10,
-  },
-  partVerifiedLabel: {
-    fontSize: fontSize[10],
-    marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
-    marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
-    color: YELLOW,
-  },
-  verifiedContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: ORANGE,
-    borderRadius: 10,
-  },
-  verifiedLabel: {
-    fontSize: fontSize[10],
-    marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
-    marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
-    color: ORANGE,
-  },
-  sponsorshipContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: DARKER_GREY,
-    borderRadius: 10,
-    marginRight: 5,
-  },
-  sponsorshipLabel: {
-    fontSize: fontSize[10],
-    marginHorizontal: 5,
-    marginVertical: 1.3,
-    color: DARKER_GREY,
-  },
 });
+// const styles = StyleSheet.create({
+//   container: {
+//     width: '100%',
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: WHITE,
+//     paddingVertical: 10,
+//     marginBottom: DEVICE_LARGE ? 11.8 : 6,
+//     elevation: 2,
+//     shadowColor: 'rgba(0,0,0,0.32)',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.43,
+//     shadowRadius: 4,
+//   },
+//   logo: {
+//     width: DEVICE_LARGE ? 50 : 40,
+//     height: DEVICE_LARGE ? 50 : 40,
+//     resizeMode: 'contain',
+//     marginLeft: DEVICE_LARGE ? 22 : 12,
+//   },
+//   appContainer: {
+//     flexDirection: 'column',
+//     marginLeft: DEVICE_LARGE ? 20 : 12,
+//     flexGrow: 1,
+//   },
+//   titleContainer: {
+//     flexGrow: 1,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//   },
+//   titleBtn: {
+//     maxWidth: '63%',
+//   },
+//   title: {
+//     fontFamily: 'Poppins-Medium',
+//     color: BLACK,
+//     fontSize: fontSize[18],
+//   },
+//   linkedContainer: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'flex-end',
+//     alignSelf: 'center',
+//     flexGrow: 1,
+//   },
+//   linkedSticker: {
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderWidth: 1,
+//     borderColor: BLUE,
+//     borderRadius: 50,
+//     backgroundColor: BLUE,
+//     width: fontSize[18],
+//     height: fontSize[18],
+//     marginRight: 10,
+//   },
+//   linkedText: {
+//     fontFamily: 'Poppins-Regular',
+//     color: BLUE,
+//     marginRight: DEVICE_LARGE ? 15 : 10,
+//     fontSize: fontSize[13],
+//   },
+//   labelsContainer: {
+//     width: '100%',
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'flex-start',
+//     marginTop: 5.5,
+//   },
+//   unverifiedContainer: {
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderWidth: 1,
+//     borderColor: DARKER_GREY,
+//     borderRadius: 10,
+//   },
+//   unverifiedLabel: {
+//     fontSize: fontSize[10],
+//     marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
+//     marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
+//     color: DARKER_GREY,
+//   },
+//   partVerifiedContainer: {
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderWidth: 1,
+//     borderColor: YELLOW,
+//     borderRadius: 10,
+//   },
+//   partVerifiedLabel: {
+//     fontSize: fontSize[10],
+//     marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
+//     marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
+//     color: YELLOW,
+//   },
+//   verifiedContainer: {
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderWidth: 1,
+//     borderColor: ORANGE,
+//     borderRadius: 10,
+//   },
+//   verifiedLabel: {
+//     fontSize: fontSize[10],
+//     marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
+//     marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
+//     color: ORANGE,
+//   },
+//   sponsorshipContainer: {
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     borderWidth: 1,
+//     borderColor: DARKER_GREY,
+//     borderRadius: 10,
+//     marginRight: 5,
+//   },
+//   sponsorshipLabel: {
+//     fontSize: fontSize[10],
+//     marginHorizontal: 5,
+//     marginVertical: 1.3,
+//     color: DARKER_GREY,
+//   },
+// });
 
 export default AppCard;
