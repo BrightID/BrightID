@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useRef,
+  useMemo,
 } from 'react';
 import {
   Alert,
@@ -42,6 +43,12 @@ import AppCard from './AppCard';
 import { handleAppContext, handleBlindSigApp } from './model';
 
 export const AppsScreen = () => {
+  const filters = [
+    { name: 'All Apps', id: 1 },
+    { name: 'Linked', id: 2 },
+    { name: 'Verified', id: 3 },
+  ];
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
@@ -49,6 +56,7 @@ export const AppsScreen = () => {
 
   const apps = useSelector(selectAllApps);
   const [search, setSearch] = useState('');
+  const [activefilter, SetFilter] = useState(0);
   const [filteredApp, setFilteredApp] = useState(apps);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
@@ -58,11 +66,6 @@ export const AppsScreen = () => {
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
     undefined,
   );
-  const [filter, SetFilter] = useState([
-    { name: 'All Apps', active: 0 },
-    { name: 'Linked', active: 0 },
-    { name: 'Verified', active: 0 },
-  ]);
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
 
@@ -155,20 +158,27 @@ export const AppsScreen = () => {
     );
   };
 
-  const handleFilterApp = useCallback(
-    (text) => {
-      console.log(text);
-      if (text !== '') {
-        const filterResult = apps.filter(
-          (app) => app.name.toLowerCase().indexOf(text) !== -1,
-        );
-        setFilteredApp(filterResult);
-      } else {
-        setFilteredApp(apps);
-      }
-    },
-    [apps],
-  );
+  // handle filter
+  useEffect(() => {
+    // let result = [];
+    // if (activefilter === 1) {
+
+    // } else if (activefilter === 2) {
+
+    // } else if (activeFilter === 3) {
+    // } else {
+    // }
+
+    // filter using search bar
+    if (search !== '') {
+      const filterResult = apps.filter(
+        (app) => app.name.toLowerCase().indexOf(search.toLowerCase()) !== -1,
+      );
+      setFilteredApp(filterResult);
+    } else {
+      setFilteredApp(apps);
+    }
+  }, [search, activefilter, apps]);
 
   // Animation
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -290,28 +300,35 @@ export const AppsScreen = () => {
                 borderRadius: 5,
               },
             ]}
-            onChangeText={handleFilterApp}
+            onChangeText={(value) => setSearch(value)}
             placeholder="App name"
           />
 
           <View style={{ width: '90%', flexDirection: 'row', marginTop: 10 }}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: ORANGE,
-                padding: 5,
-                borderRadius: 5,
-              }}
-            >
-              <Text
+            {filters.map((item, index) => (
+              <TouchableOpacity
+                key={index}
                 style={{
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 12,
-                  color: 'white',
+                  backgroundColor: index === activefilter ? ORANGE : WHITE,
+                  borderWidth: 1,
+                  borderColor: ORANGE,
+                  padding: 5,
+                  borderRadius: 5,
+                  marginRight: 5,
                 }}
+                onPress={() => SetFilter(index)}
               >
-                All Apps
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: 12,
+                    color: index === activefilter ? WHITE : ORANGE,
+                  }}
+                >
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </Animated.View>
 
