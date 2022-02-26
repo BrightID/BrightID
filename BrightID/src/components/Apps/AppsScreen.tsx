@@ -55,12 +55,14 @@ export const AppsScreen = () => {
   const api = useContext(NodeApiContext);
 
   const apps = useSelector(selectAllApps);
-  const [search, setSearch] = useState('');
-  const [activefilter, SetFilter] = useState(0);
-  const [filteredApp, setFilteredApp] = useState(apps);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
+
+  // filter state
+  const [search, setSearch] = useState('');
+  const [activefilter, SetFilter] = useState(0);
+  const [filteredApp, setFilteredApp] = useState(apps);
 
   const [refreshing, setRefreshing] = useState(false);
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
