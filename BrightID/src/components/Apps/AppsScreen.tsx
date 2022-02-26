@@ -1,12 +1,21 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import {
   Alert,
   StyleSheet,
   View,
   FlatList,
   Text,
+  TextInput,
   StatusBar,
   RefreshControl,
+  Animated,
+  TouchableOpacity,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
@@ -16,6 +25,8 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { linkedContextTotal } from '@/reducer/appsSlice';
 import { useDispatch, useSelector } from '@/store';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
@@ -37,6 +48,9 @@ export const AppsScreen = () => {
   const api = useContext(NodeApiContext);
 
   const apps = useSelector(selectAllApps);
+  const [search, setSearch] = useState('');
+  const [filteredApp, setFilteredApp] = useState(apps);
+  const linkedContextsCount = useSelector(linkedContextTotal);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
 
@@ -44,7 +58,13 @@ export const AppsScreen = () => {
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
     undefined,
   );
+  const [filter, SetFilter] = useState([
+    { name: 'All Apps', active: 0 },
+    { name: 'Linked', active: 0 },
+    { name: 'Verified', active: 0 },
+  ]);
   const { t } = useTranslation();
+  const headerHeight = useHeaderHeight();
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -135,20 +155,185 @@ export const AppsScreen = () => {
     );
   };
 
+  const handleFilterApp = useCallback(
+    (text) => {
+      console.log(text);
+      if (text !== '') {
+        const filterResult = apps.filter(
+          (app) => app.name.toLowerCase().indexOf(text) !== -1,
+        );
+        setFilteredApp(filterResult);
+      } else {
+        setFilteredApp(apps);
+      }
+    },
+    [apps],
+  );
+
+  // Animation
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const fadeBackgroundSearch = scrollY.interpolate({
+    inputRange: [0, 230],
+    outputRange: [0, 1],
+  });
+  const fadeBackgroundHeader = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+  });
+  const handleScroll = Animated.event(
+    [
+      {
+        nativeEvent: {
+          contentOffset: { y: scrollY },
+        },
+      },
+    ],
+    { useNativeDriver: true },
+  );
+
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
-        animated={true}
-      />
-      <View style={styles.orangeTop} />
       <View style={styles.container} testID="appsScreen">
-        <AppStatus />
-        <FlatList
+        {/* <AppStatus /> */}
+
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: 0,
+            backgroundColor: 'red',
+            width: '100%',
+            height: headerHeight,
+            zIndex: 100,
+          }}
+        />
+        <Animated.View
+          style={[
+            styles.headerContainer,
+            {
+              paddingTop: headerHeight,
+              opacity: fadeBackgroundHeader,
+            },
+          ]}
+        >
+          <View style={styles.rowContainer}>
+            <View style={styles.appDetailContainer}>
+              <Text style={styles.detailLabel}>Total</Text>
+              <Text style={styles.detail}>
+                12 <Text style={styles.detailLabel}>apps</Text>
+              </Text>
+            </View>
+            <View style={{ width: 10 }} />
+            <View style={styles.appDetailContainer}>
+              <Text style={styles.detailLabel}>You're linked to</Text>
+              <Text style={styles.detail}>
+                {linkedContextsCount}
+                <Text style={styles.detailLabel}> apps</Text>
+              </Text>
+            </View>
+          </View>
+          <View style={styles.criteriaContainer}>
+            <Text style={styles.detailLabel}>
+              You meet the verification criteria of
+            </Text>
+            <Text style={[styles.detail, { textAlign: 'right' }]}>
+              12 <Text style={styles.detailLabel}>apps</Text>
+            </Text>
+          </View>
+        </Animated.View>
+
+        <Animated.View
+          testID="searchBarBackground"
+          style={{
+            position: 'absolute',
+            top: headerHeight,
+            width: '100%',
+            height: 120,
+            backgroundColor: `white`,
+            opacity: fadeBackgroundSearch,
+            zIndex: 5,
+          }}
+        />
+
+        <Animated.View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: headerHeight + 10,
+            alignSelf: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: 100,
+            // backgroundColor: 'blue',
+            zIndex: 6,
+            overflow: 'visible',
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [0, 150],
+                  outputRange: [150, 0],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ],
+          }}
+        >
+          {/* <View /> */}
+
+          <TextInput
+            style={[
+              styles.shadow,
+              {
+                backgroundColor: 'white',
+                width: '90%',
+                height: 50,
+                borderRadius: 5,
+              },
+            ]}
+            onChangeText={handleFilterApp}
+            placeholder="App name"
+          />
+
+          <View style={{ width: '90%', flexDirection: 'row', marginTop: 10 }}>
+            <TouchableOpacity
+              style={{
+                backgroundColor: ORANGE,
+                padding: 5,
+                borderRadius: 5,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Medium',
+                  fontSize: 12,
+                  color: 'white',
+                }}
+              >
+                All Apps
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+
+        <Animated.FlatList
           testID="appsList"
-          data={apps}
-          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+          data={filteredApp}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          numColumns={2}
+          columnWrapperStyle={{
+            justifyContent: 'space-between',
+            marginBottom: 20,
+          }}
+          contentContainerStyle={{
+            marginTop: headerHeight + 190,
+            paddingTop: 100,
+            paddingBottom: 50,
+            paddingHorizontal: 20,
+            backgroundColor: 'white',
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+          }}
           keyExtractor={({ name }, index) => name + index}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -174,11 +359,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: WHITE,
-    borderTopLeftRadius: 58,
-    marginTop: -58,
-    zIndex: 10,
-    overflow: 'hidden',
+    // borderTopLeftRadius: 58,
+    // marginTop: -58,
+    // zIndex: 10,
+    // overflow: 'hidden',
+  },
+  shadow: {
+    shadowColor: 'rgba(0,0,0,1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   centerItem: {
     alignItems: 'center',
@@ -200,6 +391,49 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
+  },
+  headerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 310,
+    backgroundColor: 'red',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingBottom: 80,
+  },
+  rowContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  appDetailContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    padding: 12,
+    borderRadius: 10,
+  },
+  criteriaContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    padding: 12,
+    borderRadius: 10,
+    justifyContent: 'space-between',
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  detailLabel: {
+    flex: 1,
+    fontFamily: 'Poppins-Light',
+    fontSize: 13,
+    color: WHITE,
+  },
+  detail: {
+    flex: 1,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 20,
+    color: WHITE,
   },
 });
 
