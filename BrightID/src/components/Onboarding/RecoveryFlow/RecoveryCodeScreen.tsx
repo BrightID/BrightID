@@ -227,7 +227,9 @@ const RecoveryCodeScreen = ({ route }) => {
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <Text style={styles.recoveryCodeInfoText}>
-          {t(`${action}.text.askScanning`)}
+          {action === 'recovery' && t('recovery.text.askScanning')}
+          {action === 'import' && t('import.text.askScanning')}
+          {action === 'sync' && t('sync.text.askScanning')}
         </Text>
 
         {qrsvg ? (
@@ -281,7 +283,9 @@ const RecoveryCodeScreen = ({ route }) => {
           </View>
         )}
         <Text style={styles.additionalInfo}>
-          {t(`${action}.text.additionalInfo`)}
+          {action === 'recovery' && t('recovery.text.additionalInfo')}
+          {action === 'import' && t('import.text.additionalInfo')}
+          {action === 'sync' && t('sync.text.additionalInfo')}
         </Text>
       </View>
     </>
