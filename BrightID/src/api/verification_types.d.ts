@@ -39,6 +39,7 @@ type YektaVerification = HashVerification & {
 
 type BituVerification = HashVerification & {
   name: 'Bitu';
+  linksNum: number;
   score: number;
   tempScore: number;
   directReports: Record<string, number>;
