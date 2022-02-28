@@ -44,6 +44,18 @@
       "title": "Setup social recovery"
     }
   },
+  "addSigningKey": {
+    "header": {
+      "text": "Add device info"
+    },
+    "info": "Allowing the new device to use your BrightID",
+    "steps": {
+      "adding": "Adding signing key...",
+      "complete": "Signing key added",
+      "downloading": "Downloading new device data...",
+      "error": "Adding signing key failed"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
@@ -129,9 +141,6 @@
       "message": "We need your permission to use your camera",
       "ok": "Ok",
       "title": "Permission to use camera"
-    },
-    "language": {
-      "and": "and"
     },
     "photoActionSheet": {
       "choosePhoto": "Choose From Library",
@@ -270,6 +279,27 @@
       "noConnections": "No connections"
     }
   },
+  "devices": {
+    "alert": {
+      "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them.",
+      "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
+      "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
+      "confirmSync": "Are you sure that you want to share and sync your BrightID data with this device?",
+      "noPrimary": "Your devices can only be synced by the primary device."
+    },
+    "button": {
+      "submit": "Submit"
+    },
+    "placeholder": {
+      "deviceName": "Device Name"
+    },
+    "text": {
+      "listDescription": "Your BrightID is available on following devices:",
+      "syncCompleted": "Your device synced successfully.",
+      "waitSyncing": "Syncing devices, please wait ...",
+      "whatsDeviceName": "Please choose a name for the new device"
+    }
+  },
   "drawer": {
     "alert": {
       "text": {
@@ -284,10 +314,10 @@
       "checkForUpdates": "Check for Updates",
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
+      "devices": "Devices",
       "editProfile": "Edit Profile",
       "groups": "Groups",
-      "home": "Home",
-      "devices": "Devices"
+      "home": "Home"
     }
   },
   "eula": {
@@ -387,6 +417,16 @@
       "community": "Join the Community"
     }
   },
+  "import": {
+    "header": {
+      "title": "Import Account"
+    },
+    "text": {
+      "additionalInfo": "This QR code should be scanned using your other device to import your BrightID into this one",
+      "askScanning": "Please scan this QR code using your other device",
+      "waitImporting": "Importing connections, please wait ..."
+    }
+  },
   "nodeApiGate": {
     "reset": {
       "button": "Restore default nodelist",
@@ -461,8 +501,8 @@
   "onboarding": {
     "button": {
       "create": "Create My BrightID",
-      "recover": "Recover",
-      "import": "Import"
+      "import": "Import",
+      "recover": "Recover"
     },
     "text": {
       "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
@@ -593,25 +633,6 @@
       "scanCode": "<text>Hey {{name}}, scan a code and</text><text>make a new connection today</text>"
     }
   },
-  "import": {
-    "header": {
-      "title": "Import Account"
-    },
-    "text": {
-      "additionalInfo": "This QR code should be scanned using your other device to import your BrightID into this one",
-      "askScanning": "Please scan this QR code using your other device",
-      "waitImporting": "Importing connections, please wait ..."
-    }
-  },
-  "sync": {
-    "header": {
-      "title": "Sync devices"
-    },
-    "text": {
-      "additionalInfo": "This QR code should be scanned using your other device to sync data between them",
-      "askScanning": "Please scan this QR code using your other device"
-    }
-  },
   "recovery": {
     "alert": {
       "clipboardmessage": "Help me recover my BrightID: {{link}}",
@@ -720,33 +741,29 @@
       "whatsYouName": "What do your friends know you by?"
     }
   },
+  "sync": {
+    "text": {
+      "additionalInfo": "This QR code should be scanned using your other device to sync data between them",
+      "askScanning": "Please scan this QR code using your other device"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Upload user data"
+    },
+    "info": "Uploading user data (connections, linked apps, ...) to the new device",
+    "steps": {
+      "complete": "Upload complete.",
+      "downloading": "Uploading user data...",
+      "error": "Upload data failed",
+      "waiting": "Waiting for Signing keys..."
+    }
+  },
   "walkthroughs": {
     "text": {
       "gotIt": "Got it!",
       "setPassword": "You can always set your\nBrightID password in here",
       "viewPassword": "You can always see your\nBrightID password in here"
-    }
-  },
-  "devices": {
-    "button": {
-      "submit": "Submit"
-    },
-    "alert": {
-      "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
-      "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
-      "confirmSync": "Are you sure that you want to share and sync your BrightID data with this device?",
-      "noPrimary": "Your devices can only be synced by the primary device.",
-      "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them."
-    },
-    "text": {
-      "whatsDeviceName": "Please choose a name for the new device",
-      "listDescription": "Your BrightID is available on following devices:",
-      "waitingForExport": "Exporting connections, please wait ...",
-      "syncCompleted": "Your device synced successfully.",
-      "waitSyncing": "Syncing devices, please wait ..."
-    },
-    "placeholder": {
-      "deviceName": "Device Name"
     }
   }
 }
