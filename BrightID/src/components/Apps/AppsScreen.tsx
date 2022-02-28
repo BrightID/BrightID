@@ -27,7 +27,11 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { linkedContextTotal } from '@/reducer/appsSlice';
+import {
+  linkedContextTotal,
+  selectAllLinkedContexts,
+  selectAllLinkedSigs,
+} from '@/reducer/appsSlice';
 import { useDispatch, useSelector } from '@/store';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
@@ -55,7 +59,9 @@ export const AppsScreen = () => {
   const api = useContext(NodeApiContext);
 
   const apps = useSelector(selectAllApps);
+  const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
+  const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
 
@@ -162,25 +168,35 @@ export const AppsScreen = () => {
 
   // handle filter
   useEffect(() => {
-    // let result = [];
-    // if (activefilter === 1) {
+    const allApps = apps.filter((app) => {
+      const isLinked = linkedContext.find(
+        (link) => link.context === app.context,
+      );
 
-    // } else if (activefilter === 2) {
+      // linked app
+      const isLinkedTemp = isLinked && isLinked.state === 'applied';
+      const appSig = selectLinkedSigs.filter((sig) => sig.app === app.id);
 
-    // } else if (activeFilter === 3) {
-    // } else {
-    // }
+      if (activefilter === 0) {
+        return !app.testing || isLinkedTemp;
+      } else if (activefilter === 1) {
+        return (
+          !app.testing &&
+          ((app.usingBlindSig && appSig.length > 0) || isLinkedTemp)
+        );
+      }
+    });
 
     // filter using search bar
     if (search !== '') {
-      const filterResult = apps.filter(
+      const filterResult = allApps.filter(
         (app) => app.name.toLowerCase().indexOf(search.toLowerCase()) !== -1,
       );
       setFilteredApp(filterResult);
     } else {
-      setFilteredApp(apps);
+      setFilteredApp(allApps);
     }
-  }, [search, activefilter, apps]);
+  }, [search, activefilter, apps, selectLinkedSigs, linkedContext]);
 
   // Animation
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -276,7 +292,6 @@ export const AppsScreen = () => {
             alignItems: 'center',
             width: '100%',
             height: 100,
-            // backgroundColor: 'blue',
             zIndex: 6,
             overflow: 'visible',
             transform: [
@@ -347,7 +362,7 @@ export const AppsScreen = () => {
           contentContainerStyle={{
             marginTop: headerHeight + 190,
             paddingTop: 100,
-            paddingBottom: 50,
+            paddingBottom: 500,
             paddingHorizontal: 20,
             backgroundColor: 'white',
             borderTopLeftRadius: 10,
