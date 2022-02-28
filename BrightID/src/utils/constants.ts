@@ -58,8 +58,7 @@ export const MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION = 3;
 export const MIN_RECOVERY_CONNECTIONS = 3;
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
-type connection_levels =
-  typeof connection_levels[keyof typeof connection_levels];
+
 export const connection_levels = {
   REPORTED: 'reported',
   SUSPICIOUS: 'suspicious',
@@ -79,4 +78,6 @@ export const report_reasons = {
 export enum qrCodeURL_types {
   CONNECTION = '1', // qrcode url is for connection channel
   RECOVERY = '2', // qrcode url is for recovery channel
+  IMPORT = '3', // qrcode url is for import channel
+  SYNC = '4', // qrcode url is for syncing devices channel
 }

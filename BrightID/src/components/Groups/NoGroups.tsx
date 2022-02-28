@@ -57,7 +57,7 @@ export const NoGroups = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          testID="groupsCreateGroupBtn"
+          testID="addGroupBtn"
           style={styles.createGroupButton}
           onPress={() => {
             navigation.navigate('GroupInfo');

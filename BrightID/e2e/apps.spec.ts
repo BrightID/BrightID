@@ -1,5 +1,3 @@
-/* global device:false, element:false, by:false, waitFor:false */
-
 import {
   createBrightID,
   createFakeConnection,
@@ -7,6 +5,8 @@ import {
   expectHomescreen,
   navigateHome,
 } from './testUtils';
+import { by, element, expect } from 'detox';
+
 
 function getRandomAddres() {
   var letters = '0123456789ABCDEF';

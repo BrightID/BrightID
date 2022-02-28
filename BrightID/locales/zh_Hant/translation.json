@@ -173,13 +173,15 @@
       "connectionLevel": "連接級別",
       "mutualConnections": "互相連接",
       "mutualGroups": "關聯團隊",
-      "possibleDuplicates": "可能的重複"
+      "possibleDuplicates": "可能的重複",
+      "socialMedia": "社交媒體"
     },
     "tags": {
       "connectedAt": "已連接{{date}}",
       "loading": "加載中…"
     },
     "text": {
+      "copied": "已復製到剪貼板！",
       "level": "您對{{name}}瞭解多少？",
       "levelAlreadyKnown": "我認識這個人",
       "levelJustMet": "剛認識的陌生人",

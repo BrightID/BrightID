@@ -52,8 +52,8 @@ const appsSlice = createSlice({
         update,
       );
     },
-    addSig(state, action: PayloadAction<SigInfo>) {
-      state.sigs = sigsAdapter.addOne(state.sigs, action);
+    upsertSig(state, action: PayloadAction<SigInfo>) {
+      state.sigs = sigsAdapter.upsertOne(state.sigs, action);
     },
     removeAllSigs(state) {
       state.sigs = sigsAdapter.removeAll(state.sigs);
@@ -75,7 +75,7 @@ export const {
   addLinkedContext,
   removeLinkedContext,
   updateLinkedContext,
-  addSig,
+  upsertSig,
   removeAllSigs,
   updateSig,
 } = appsSlice.actions;
@@ -122,6 +122,14 @@ export const createSelectLinkedSigsForApp = (appId) =>
     // return all linked sigs that belong to provided app
     return linkedSigs.filter((sig) => sig.app === appId);
   });
+
+export const selectBlindSigApps = (state: State) =>
+  state.apps.apps.filter((app) => app.usingBlindSig);
+
+export const selectExpireableBlindSigApps = createSelector(
+  selectBlindSigApps,
+  (apps) => apps.filter((app) => app.verificationExpirationLength),
+);
 
 // Export reducer
 export default appsSlice.reducer;

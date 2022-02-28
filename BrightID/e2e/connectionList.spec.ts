@@ -1,4 +1,4 @@
-/* global element:false, by:false, waitFor:false, device: false */
+import { by, element, expect } from 'detox';
 import {
   createBrightID,
   createFakeConnection,

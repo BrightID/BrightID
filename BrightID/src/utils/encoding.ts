@@ -98,3 +98,8 @@ export const randomKey = (size: number) =>
       err ? reject(err) : resolve(bytes);
     });
   });
+
+export const urlSafeRandomKey = async (size: number = 9) => {
+  const key = await randomKey(size);
+  return b64ToUrlSafeB64(key);
+};

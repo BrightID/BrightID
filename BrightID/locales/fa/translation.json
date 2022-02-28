@@ -176,13 +176,15 @@
       "connectionLevel": "سطح کانکشن",
       "mutualConnections": "کانکشن های مشترک",
       "mutualGroups": "گروه های مشترک",
-      "possibleDuplicates": "موارد تکراری احتمالی"
+      "possibleDuplicates": "موارد تکراری احتمالی",
+      "socialMedia": "شبکه های اجتماعی"
     },
     "tags": {
       "connectedAt": "{{date}} با هم کانکشن زدید",
       "loading": "درحال بارگیری…"
     },
     "text": {
+      "copied": "کپی شد!",
       "level": "چقدر {{name}} رو میشناسی؟",
       "levelAlreadyKnown": "از قبل میشناسم",
       "levelJustMet": "این شخص غریبه ایست که تازه ملاقاتش کردم",

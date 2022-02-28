@@ -207,13 +207,15 @@
       "mutualConnections": "Общие подключения",
       "mutualGroups": "Общие группы",
       "recoveryConnections": "Связи для восстановления",
-      "possibleDuplicates": "Возможные дубликаты"
+      "possibleDuplicates": "Возможные дубликаты",
+      "socialMedia": "Социальные медиа"
     },
     "tags": {
       "connectedAt": "Подключено {{date}}",
       "loading": "Загрузка…"
     },
     "text": {
+      "copied": "Скопировано в буфер обмена!",
       "level": "Насколько хорошо ты знаешь {{name}}?",
       "levelAlreadyKnown": "Я знаю этого человека",
       "levelJustMet": "Этот человек - незнакомец, которого я только что встретил",

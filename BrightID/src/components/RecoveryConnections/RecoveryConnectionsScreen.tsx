@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useFocusEffect } from '@react-navigation/native';
-import { selectOperationsTotal } from '@/reducer/operationsSlice';
+import { selectPendingOperations } from '@/reducer/operationsSlice';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { useSelector } from '@/store';
 import {
@@ -27,7 +27,7 @@ import { fontSize } from '@/theme/fonts';
 // Import Components Local
 import RecoveryConnectionCard from './RecoverConnectionsCard';
 
-// Create Custom Local Componenets
+// Create Custom Local Components
 const EmptyList = () => {
   const { t } = useTranslation();
   return (
@@ -69,14 +69,14 @@ export const RecoveryConnectionsScreen = (props) => {
     ProfileInfo | undefined
   >(undefined);
   const myConnections = useSelector(selectAllConnections);
-  const opTotal = useSelector(selectOperationsTotal);
+  const pendingOpsCount = useSelector(selectPendingOperations).length;
   const api = useContext(NodeApiContext);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         setLoading(true);
-        if (opTotal > 0) {
+        if (pendingOpsCount > 0) {
           console.log('waiting for pending operations to apply');
           return;
         }
@@ -91,7 +91,7 @@ export const RecoveryConnectionsScreen = (props) => {
         setLoading(false);
       };
       fetchData();
-    }, [api, me.id, myConnections, opTotal]),
+    }, [api, me.id, myConnections, pendingOpsCount]),
   );
 
   const getActiveTime = (item) => {

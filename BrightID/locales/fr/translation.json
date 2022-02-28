@@ -212,13 +212,15 @@
       "mutualConnections": "Connexions en Commun",
       "mutualGroups": "Groupes en Commun",
       "recoveryConnections": "Connexions de récupération",
-      "possibleDuplicates": "Doublons Possibles"
+      "possibleDuplicates": "Doublons Possibles",
+      "socialMedia": "Média social"
     },
     "tags": {
       "connectedAt": "Connecté(e) {{date}}",
       "loading": "Chargement…"
     },
     "text": {
+      "copied": "Code copié !",
       "level": "À quel point connaissez-vous {{name}} ?",
       "levelAlreadyKnown": "Je connais cette personne",
       "levelJustMet": "Je viens de rencontrer cette personne",
