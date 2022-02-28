@@ -92,6 +92,13 @@ type UserState = User & {
   isSponsored: boolean;
   eula: boolean;
   migrated?: boolean;
+  updateTimestamps: {
+    isSponsored: number;
+    photo: number;
+    name: number;
+    backupCompleted: number;
+    password: number;
+  };
 };
 
 /**
@@ -109,4 +116,18 @@ type SettingsState = {
 
 type Photo = {
   filename: string;
+};
+
+/**
+ * DevicesSlice
+ */
+
+type Device = {
+  name: string;
+  signingKey: string;
+  active: boolean;
+};
+
+type DevicesState = {
+  devices: EntityState<Device>;
 };

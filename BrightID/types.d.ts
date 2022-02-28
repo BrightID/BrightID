@@ -1,5 +1,6 @@
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
+import { BigInteger } from 'jsbn';
 import {
   channel_states,
   channel_types,
@@ -37,12 +38,7 @@ declare global {
   };
 
   type SigInfo = {
-    sig: {
-      rho: string;
-      omega: string;
-      sigma: string;
-      delta: string;
-    };
+    sig?: WISchnorrBlindSignature;
     app: string;
     appUserId?: string;
     roundedTimestamp: number;
@@ -50,6 +46,9 @@ declare global {
     uid: string;
     linked: boolean;
     linkedTimestamp: number;
+    signedTimestamp: number;
+    pub: string;
+    challenge: WISchnorrChallenge;
   };
 
   type DisplayChannel = {
@@ -166,6 +165,8 @@ declare global {
     timestamp: number;
     recoveredConnections: number;
     recoveredGroups: number;
+    recoveredBlindSigs: number;
+    uploadCompletedBy: { [uploader: string]: boolean };
     sigs: { [sig: string]: Signature };
     qrcode: string;
     channel: {
@@ -180,7 +181,9 @@ declare global {
   type RecoveryChannel = {
     aesKey: string;
     url: URL;
+    t: QrCodeURL_Type;
   };
+  type QrCodeURL_Type = typeof qrCodeURL_types[keyof typeof qrCodeURL_types];
 
   // We are sure that these properties are
   // shared in old or new versions of app
@@ -296,9 +299,26 @@ declare global {
     NodeModal: undefined;
   };
 
-  // Jest global functions
-  let element: any;
-  let by: any;
-  let waitFor: any;
-  let device: any;
+  type WISchnorrChallenge = {
+    e: string;
+    t: {
+      t1: BigInteger;
+      t2: BigInteger;
+      t3: BigInteger;
+      t4: BigInteger;
+    };
+  };
+
+  type WISchnorrBlindSignature = {
+    rho: string;
+    omega: string;
+    sigma: string;
+    delta: string;
+  };
+
+  type SyncDeviceInfo = {
+    signingKey?: string;
+    lastSyncTime?: number;
+    isPrimaryDevice: boolean;
+  };
 }

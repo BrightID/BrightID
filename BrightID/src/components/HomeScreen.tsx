@@ -34,7 +34,7 @@ import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-import { selectBaseUrl } from '@/reducer/settingsSlice';
+import { selectBaseUrl, selectIsPrimaryDevice } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -43,6 +43,7 @@ import {
 } from '@/components/Tasks/TasksSlice';
 
 import { version as app_version } from '../../package.json';
+import { uInt8ArrayToB64 } from '@/utils/encoding';
 
 /**
  * Home screen of BrightID
@@ -68,7 +69,7 @@ export const HomeScreen = (props) => {
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
-
+  const isPrimaryDevice = useSelector(selectIsPrimaryDevice);
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
@@ -78,6 +79,8 @@ export const HomeScreen = (props) => {
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
   const api = useContext(NodeApiContext);
+  const { id } = useSelector((state: State) => state.user);
+  const { secretKey, publicKey } = useSelector((state) => state.keypair);
 
   const { t } = useTranslation();
 
@@ -85,7 +88,9 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(updateBlindSigs());
+      if (isPrimaryDevice) {
+        dispatch(updateBlindSigs());
+      }
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
@@ -95,7 +100,7 @@ export const HomeScreen = (props) => {
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [api, dispatch, photoFilename]),
+    }, [api, dispatch, isPrimaryDevice, photoFilename]),
   );
 
   /* Update list of apps from server if
@@ -193,6 +198,20 @@ export const HomeScreen = (props) => {
       return null;
     }
   };
+
+  const userBrightId = __DEV__ ? (
+    <View>
+      <Text testID="userBrightId" style={{ fontSize: 6, color: WHITE }}>
+        {id}
+      </Text>
+      <Text testID="userPublicKey" style={{ fontSize: 6, color: WHITE }}>
+        {publicKey}
+      </Text>
+      <Text testID="userSecretKey" style={{ fontSize: 6, color: WHITE }}>
+        {uInt8ArrayToB64(secretKey)}
+      </Text>
+    </View>
+  ) : null;
 
   console.log('RENDERING HOME PAGE');
 
@@ -391,6 +410,7 @@ export const HomeScreen = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
+        {userBrightId}
       </View>
     </View>
   );

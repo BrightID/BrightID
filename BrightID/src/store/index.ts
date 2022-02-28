@@ -61,6 +61,11 @@ const tasksPersistConfig = {
   key: 'tasks',
 };
 
+const devicesPersistConfig = {
+  ...fsPersistConfig,
+  key: 'devices',
+};
+
 const socialMediaPersistConfig = {
   ...fsPersistConfig,
   key: 'socialMedia',
@@ -103,6 +108,7 @@ const rootReducer = combineReducers({
   user: persistReducer(userPersistConfig, reducers.user),
   settings: persistReducer(settingsPersistConfig, reducers.settings),
   operations: persistReducer(operationsPersistConfig, reducers.operations),
+  devices: persistReducer(devicesPersistConfig, reducers.devices),
 });
 
 export const store = configureStore({

@@ -1,5 +1,4 @@
-/* global element:false, by:false, waitFor:false */
-
+import { by, element, expect } from 'detox';
 import i18next from 'i18next';
 import {
   createBrightID,
@@ -16,7 +15,7 @@ const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
   // let hasBackButton = true;
-  let leaveGroupText = 'Leave group';
+  const leaveGroupText = 'Leave group';
   const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
@@ -52,7 +51,7 @@ describe('Group Management', () => {
       await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
-      await element(by.id('groupsCreateGroupBtn')).tap();
+      await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
     });
 
@@ -84,7 +83,7 @@ describe('Group Management', () => {
 
     it('should create group', async () => {
       await element(by.id('createNewGroupBtn')).tap();
-      await expect(element(by.id('createNewGroupBtn'))).toBeNotVisible();
+      await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
       // if group was created successfully we should be back at the Groups screen
       await expectGroupsScreen();
       // there should be exactly one group now
@@ -112,7 +111,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 3 known members in the first group
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
     });
   });
 
@@ -139,7 +138,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 4 known members in first group
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('4 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('4 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 4 members, so check for memberItem with index 3
@@ -198,7 +197,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 3 known members
-      expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+      await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
       // open group
       await element(by.text(GroupName)).tap();
       // Group should now have 3 members, so check for memberItem with index 2

@@ -7,6 +7,7 @@ import {
   updateConnections,
   setIsSponsored,
   updateNotifications,
+  setActiveDevices,
 } from './index';
 
 const fetchUserInfo =
@@ -33,9 +34,9 @@ const fetchUserInfo =
             conn.incomingLevel = incomingConnsById[conn.id]?.level;
           }
           dispatch(updateConnections(connections));
-
-          const { sponsored } = await api.getProfile(id);
+          const { sponsored, signingKeys } = await api.getProfile(id);
           dispatch(setIsSponsored(sponsored));
+          dispatch(setActiveDevices(signingKeys));
           dispatch(updateNotifications(api));
           resolve(null);
         } catch (err) {
@@ -43,6 +44,6 @@ const fetchUserInfo =
         }
       });
     });
-  };
+  }
 
 export default fetchUserInfo;

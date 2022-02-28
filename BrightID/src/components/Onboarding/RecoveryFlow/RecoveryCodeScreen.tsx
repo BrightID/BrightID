@@ -3,61 +3,111 @@ import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
-import { useDispatch, useSelector } from '@/store';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
+import { RecoveryErrorType } from './RecoveryError';
+import { setupRecovery } from './thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
   clearChannel,
   createChannel,
   pollChannel,
 } from './thunks/channelThunks';
-import { resetRecoveryData } from './recoveryDataSlice';
+import {
+  resetRecoveryData,
+  uploadCompletedByOtherSide,
+} from './recoveryDataSlice';
+import {
+  setupSync,
+  createSyncChannel,
+  pollImportChannel,
+  clearImportChannel,
+} from '../ImportFlow/thunks/channelThunks';
 
 /**
  * Recovery Code screen of BrightID
  *
  * displays a qrcode
  */
-const RecoveryCodeScreen = () => {
+enum RecoverSteps {
+  NOT_STARTED,
+  RUNNING,
+  ERROR,
+}
+
+const RecoveryCodeScreen = ({ route }) => {
+  const { action, urlType } = route.params;
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
-
   const recoveryData = useSelector((state: State) => state.recoveryData);
+  const isScanned = useSelector(
+    (state: State) =>
+      uploadCompletedByOtherSide(state) ||
+      state.recoveryData.recoveredConnections ||
+      state.recoveryData.recoveredGroups ||
+      state.recoveryData.recoveredBlindSigs,
+  );
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [step, setStep] = useState<RecoverSteps>(RecoverSteps.NOT_STARTED);
 
   const sigCount = recoveryData.sigs
     ? Object.values(recoveryData.sigs).length
     : 0;
 
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-
   // create recovery data and start polling channel
   useEffect(() => {
-    const runEffect = async () => {
+    const runRecoveryEffect = async () => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
-      // create channel for recovery sigs
+      // create channel and upload new publicKey to get signed by the scanner
       await dispatch(createChannel());
-      // start polling channel
+      // start polling channel to get sig and mutual info
       dispatch(pollChannel());
     };
-    if (!recoveryData.aesKey) {
-      console.log(`initializing recovery process`);
-      runEffect();
+    const runImportEffect = async () => {
+      // create publicKey, secretKey, aesKey for user
+      await dispatch(setupRecovery());
+      // create channel and upload new publicKey to be added as a new signing key by the scanner
+      await dispatch(createChannel());
+      // start polling channel to get connections/groups/blindsigs info
+      dispatch(pollImportChannel());
+    };
+    const runSyncEffect = async () => {
+      // create a new aesKey
+      await dispatch(setupSync());
+      // create channel and upload lastSyncTime to the channel if it is not primary device
+      // or poll lastSyncTime from other side if it is and then upload connections/groups/blindsigs
+      // added after lastSyncTime to the channel
+      await dispatch(createSyncChannel());
+      // start polling channel to get new connections/groups/blindsigs info
+      dispatch(pollImportChannel());
+    };
+
+    if (step === RecoverSteps.NOT_STARTED) {
+      if (action === 'recovery') {
+        console.log(`initializing recovery process`);
+        runRecoveryEffect();
+      } else if (action === 'import') {
+        console.log(`initializing import process`);
+        runImportEffect();
+      } else if (action === 'sync') {
+        console.log(`initializing sync process`);
+        runSyncEffect();
+      }
+      setStep(RecoverSteps.RUNNING);
     }
-  }, [dispatch, recoveryData]);
+  }, [action, dispatch, recoveryData.aesKey, step]);
 
   // set QRCode and SVG
   useEffect(() => {
@@ -65,6 +115,7 @@ const RecoveryCodeScreen = () => {
       const newQrUrl = buildRecoveryChannelQrUrl({
         aesKey: recoveryData.aesKey,
         url: recoveryData.channel.url,
+        t: urlType,
       });
       console.log(`new qrCode url: ${newQrUrl.href}`);
       setQrUrl(newQrUrl);
@@ -79,7 +130,7 @@ const RecoveryCodeScreen = () => {
         parseString(qr, parseQrString);
       });
     }
-  }, [recoveryData.aesKey, recoveryData.channel.url]);
+  }, [recoveryData.aesKey, recoveryData.channel.url, urlType]);
 
   // track errors
   useEffect(() => {
@@ -105,11 +156,17 @@ const RecoveryCodeScreen = () => {
         t('recovery.error.title', 'Account recovery failed'),
         message,
       );
-      clearChannel();
+      if (action === 'recovery') {
+        clearChannel();
+      } else if (action === 'import') {
+        clearImportChannel();
+      }
       dispatch(resetRecoveryData());
+      setStep(RecoverSteps.ERROR);
       navigation.goBack();
     }
   }, [
+    action,
     dispatch,
     navigation,
     recoveryData.errorMessage,
@@ -119,17 +176,21 @@ const RecoveryCodeScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (!alreadyNotified && sigCount === 1) {
+      if (action === 'recovery' && !alreadyNotified && sigCount === 1) {
         // alert user that one of their sigs exists
         Alert.alert(
           t('common.alert.info'),
-          t('common.alert.text.trustedSigned'),
+          t('common.alert.text.recoverySigned'),
         );
         setAlreadyNotified(true);
-      } else if (sigCount > 1) {
+      } else if (action === 'recovery' && sigCount > 1) {
         navigation.navigate('Restore');
+      } else if (action === 'import' && isScanned) {
+        navigation.navigate('Import');
+      } else if (action === 'sync' && isScanned) {
+        navigation.navigate('Devices', { syncing: true, asScanner: false });
       }
-    }, [sigCount, alreadyNotified, t, navigation]),
+    }, [action, alreadyNotified, sigCount, isScanned, t, navigation]),
   );
 
   const copyQr = () => {
@@ -166,13 +227,17 @@ const RecoveryCodeScreen = () => {
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <Text style={styles.recoveryCodeInfoText}>
-          {t('recovery.text.askTrustedConnections')}
+          {action === 'recovery' && t('recovery.text.askScanning')}
+          {action === 'import' && t('import.text.askScanning')}
+          {action === 'sync' && t('sync.text.askScanning')}
         </Text>
 
         {qrsvg ? (
           <View style={styles.qrsvgContainer}>
             <Text style={styles.signatures}>
-              {t('recovery.text.signatures', { count: sigCount })}
+              {action === 'recovery'
+                ? t('recovery.text.signatures', { count: sigCount })
+                : ''}
             </Text>
             <Svg
               height={DEVICE_LARGE ? '240' : '200'}
@@ -199,6 +264,13 @@ const RecoveryCodeScreen = () => {
               />
               <Text style={styles.copyText}> {t('common.button.copy')}</Text>
             </TouchableOpacity>
+            {__DEV__ && (
+              <View>
+                <Text style={{ fontSize: 6 }} testID="qrcode">
+                  {qrUrl?.href}
+                </Text>
+              </View>
+            )}
           </View>
         ) : (
           <View style={styles.qrsvgContainer}>
@@ -211,7 +283,9 @@ const RecoveryCodeScreen = () => {
           </View>
         )}
         <Text style={styles.additionalInfo}>
-          {t('recovery.text.additionalInfo')}
+          {action === 'recovery' && t('recovery.text.additionalInfo')}
+          {action === 'import' && t('import.text.additionalInfo')}
+          {action === 'sync' && t('sync.text.additionalInfo')}
         </Text>
       </View>
     </>
