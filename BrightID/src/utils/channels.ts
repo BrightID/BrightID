@@ -231,11 +231,13 @@ export const uploadBlindSig = async ({
   channelApi,
   aesKey,
   signingKey,
+  prefix,
 }: {
   sig: SigInfo;
   channelApi: ChannelAPI;
   aesKey: string;
   signingKey: string;
+  prefix: string;
 }) => {
   try {
     const encrypted = encryptData(sig, aesKey);
@@ -246,7 +248,9 @@ export const uploadBlindSig = async ({
       channelId: hash(aesKey),
       data: encrypted,
       // use hash of sig.uid to avoid revealing it
-      dataId: `blindsig_${hash(sig.uid)}:${b64ToUrlSafeB64(signingKey)}`,
+      dataId: `${prefix}blindsig_${hash(sig.uid)}:${b64ToUrlSafeB64(
+        signingKey,
+      )}`,
     });
   } catch (err) {
     console.error(`uploadBlindSig: ${err.message}`);

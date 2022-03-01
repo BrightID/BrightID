@@ -14,6 +14,7 @@ import {
   downloadUserInfo,
 } from './channelDownloadThunks';
 import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
+import { IMPORT_PREFIX } from '@/utils/constants';
 
 export const setupSync =
   () => async (dispatch: dispatch, getState: getState) => {
@@ -68,7 +69,7 @@ export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
   try {
     const dataString = await channelApi.download({
       channelId,
-      dataId: 'data',
+      dataId: `${IMPORT_PREFIX}data`,
     });
     return JSON.parse(dataString) as SyncDeviceInfo;
   } catch (err) {
