@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
-import { retrieveImage } from '@/utils/filesystem';
-import { encryptData } from '@/utils/cryptoHelper';
 import {
   b64ToUrlSafeB64,
   strToUint8Array,
@@ -71,7 +69,12 @@ export const uploadMutualInfo = async ({
     !dataIds.includes(`connection_${conn.id}:${b64ToUrlSafeB64(signingKey)}`)
   ) {
     console.log(`uploading recovery data for connection`);
-    await uploadConnection({ conn, channelApi, aesKey, signingKey });
+    await uploadConnection({
+      conn,
+      channelApi,
+      aesKey,
+      signingKey,
+    });
   }
   const connections = selectAllConnections(store.getState());
 
@@ -109,7 +112,12 @@ export const uploadMutualInfo = async ({
 
   console.log('uploading mutual connections');
   for (const c of mutualConnections) {
-    await uploadConnection({ conn: c, channelApi, aesKey, signingKey });
+    await uploadConnection({
+      conn: c,
+      channelApi,
+      aesKey,
+      signingKey,
+    });
   }
   console.log('uploading mutual groups');
   for (const g of mutualGroups) {

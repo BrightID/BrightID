@@ -10,6 +10,7 @@ import {
   uploadConnection,
   uploadGroup,
 } from '@/utils/channels';
+import { IMPORT_PREFIX } from '@/utils/constants';
 
 export const uploadAllInfoAfter = async (after) => {
   const {
@@ -38,24 +39,39 @@ export const uploadAllInfoAfter = async (after) => {
   };
 
   const encrypted = encryptData(data, aesKey);
+  const userDataId = `${IMPORT_PREFIX}userinfo_${user.id}:${b64ToUrlSafeB64(
+    signingKey,
+  )}`;
   await channelApi.upload({
     channelId,
-    dataId: `userinfo_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
+    dataId: userDataId,
     data: encrypted,
   });
 
   console.log('uploading connections');
-  const connections = selectAllConnections(store.getState());
+  const connections = selectAllConnections(store.getState()).filter(
+    (conn) => conn.timestamp > after,
+  );
   for (const conn of connections) {
     if (conn.timestamp > after) {
-      await uploadConnection({ conn, channelApi, aesKey, signingKey });
+      await uploadConnection({
+        conn,
+        channelApi,
+        aesKey,
+        signingKey,
+      });
     }
   }
 
   console.log('uploading groups');
   for (const group of groups) {
     if (group.joined > after) {
-      await uploadGroup({ group, channelApi, aesKey, signingKey });
+      await uploadGroup({
+        group,
+        channelApi,
+        aesKey,
+        signingKey,
+      });
     }
   }
 
@@ -64,15 +80,24 @@ export const uploadAllInfoAfter = async (after) => {
     const sigs = selectAllSigs(store.getState());
     for (const sig of sigs) {
       if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
-        await uploadBlindSig({ sig, channelApi, aesKey, signingKey });
+        await uploadBlindSig({
+          sig,
+          channelApi,
+          aesKey,
+          signingKey,
+          prefix: IMPORT_PREFIX,
+        });
       }
     }
   }
 
   console.log('uploading completed flag');
+  const completeDataId = `${IMPORT_PREFIX}completed_${
+    user.id
+  }:${b64ToUrlSafeB64(signingKey)}`;
   await channelApi.upload({
     channelId,
-    dataId: `completed_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
+    dataId: completeDataId,
     data: 'completed',
   });
 };
@@ -91,6 +116,6 @@ export const uploadDeviceInfo = async () => {
   await channelApi.upload({
     channelId,
     data,
-    dataId: 'data',
+    dataId: `${IMPORT_PREFIX}data`,
   });
 };

@@ -39,6 +39,8 @@ export const CHANNEL_INFO_VERSION_2 = 2; // Adds STAR channel type
 export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
 // the newest channel info format the client understands.
 export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
+// TODO: Set dedicated prefix for importing once node backends are updated
+export const IMPORT_PREFIX = 'sig_';
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
