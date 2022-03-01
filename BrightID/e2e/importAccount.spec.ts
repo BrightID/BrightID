@@ -10,7 +10,6 @@ import {
   createFakeConnection,
   createGroup,
   expectConnectionsScreen,
-  expectGroupsScreen,
   expectHomescreen,
   getGroupKeys,
   joinAllGroups,
@@ -22,6 +21,7 @@ import { b64ToUrlSafeB64, hash } from '@/utils/encoding';
 import { loadRecoveryData } from '@/utils/recovery';
 import { encryptData } from '@/utils/cryptoHelper';
 import { uploadConnection, uploadGroup } from '@/utils/channels';
+import { IMPORT_PREFIX } from '@/utils/constants';
 
 const apiUrl = 'http://test.brightid.org';
 
@@ -175,7 +175,9 @@ describe('Import BrightID', () => {
           password: 0,
         },
       };
-      const dataId = `userinfo_${brightId}:${b64ToUrlSafeB64(publicKey)}`;
+      const dataId = `${IMPORT_PREFIX}userinfo_${brightId}:${b64ToUrlSafeB64(
+        publicKey,
+      )}`;
       await uploadDataToChannel(
         channelApi,
         channelId,
@@ -209,13 +211,20 @@ describe('Import BrightID', () => {
           members: [],
           admins: [],
         };
-        await uploadGroup({ group, channelApi, aesKey, signingKey });
+        await uploadGroup({
+          group,
+          channelApi,
+          aesKey,
+          signingKey,
+        });
       }
 
       // upload "completed" flag
       await channelApi.upload({
         channelId,
-        dataId: `completed_${brightId}:${b64ToUrlSafeB64(publicKey)}`,
+        dataId: `${IMPORT_PREFIX}completed_${brightId}:${b64ToUrlSafeB64(
+          publicKey,
+        )}`,
         data: 'completed',
       });
     });

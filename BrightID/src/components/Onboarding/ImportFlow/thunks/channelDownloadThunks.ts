@@ -14,6 +14,7 @@ import {
   setPassword,
 } from '@/reducer/userSlice';
 import ChannelAPI from '@/api/channelService';
+import { IMPORT_PREFIX } from '@/utils/constants';
 
 export const downloadBlindSigs =
   ({
@@ -32,7 +33,8 @@ export const downloadBlindSigs =
         },
       } = getState();
 
-      const isBlindSig = (id: string) => id.startsWith('blindsig_');
+      const isBlindSig = (id: string) =>
+        id.startsWith(`${IMPORT_PREFIX}blindsig_`);
       const blindSigDataIds = dataIds.filter((dataId) => isBlindSig(dataId));
 
       for (const dataId of blindSigDataIds) {
@@ -65,8 +67,9 @@ export const downloadUserInfo =
         user: { updateTimestamps },
       } = getState();
 
-      const isUserInfo = (id: string) => id.startsWith('userinfo_');
-      const uploader = (id) => id.replace('userinfo_', '').split(':')[1];
+      const prefix = `${IMPORT_PREFIX}userinfo_`;
+      const isUserInfo = (id: string) => id.startsWith(prefix);
+      const uploader = (id) => id.replace(prefix, '').split(':')[1];
       const userInfoDataId = dataIds.find(
         (dataId) =>
           isUserInfo(dataId) &&
@@ -132,9 +135,10 @@ export const checkCompletedFlags =
         recoveryData: { uploadCompletedBy },
       } = getState();
 
-      const isCompleted = (id: string) => id.startsWith('completed_');
-      const completedBy = (id: string) => id.replace('completed_', '');
-      const uploader = (id) => id.replace('completed_', '').split(':')[1];
+      const prefix = `${IMPORT_PREFIX}completed_`;
+      const isCompleted = (id: string) => id.startsWith(prefix);
+      const completedBy = (id: string) => id.replace(prefix, '');
+      const uploader = (id) => id.replace(prefix, '').split(':')[1];
 
       const completedDataIds = dataIds.filter(
         (dataId) =>
