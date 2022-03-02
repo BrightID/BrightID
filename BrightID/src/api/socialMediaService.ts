@@ -1,7 +1,9 @@
 import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import {
-  SetSocialMediaRequest,
-  SetSocialMediaResponse,
+  CreateSocialMediaRequest,
+  CreateSocialMediaResponse,
+  UpdateSocialMediaRequest,
+  UpdateSocialMediaResponse,
 } from '@/api/socialMediaService_types.d';
 
 export const socialMediaUrl = 'http://168.119.127.117:8090/api';
@@ -28,25 +30,33 @@ class SocialMediaService {
     throw new Error(response.problem);
   }
 
-  async setSocialMedia({
-    token,
+  async createSocialMedia({
     variation,
     profile,
     network,
-  }: SetSocialMediaRequest) {
-    const res = await this.socialMediaApi.post<SetSocialMediaResponse>(
-      '/v1/social-media/set/',
+  }: CreateSocialMediaRequest) {
+    const res = await this.socialMediaApi.post<CreateSocialMediaResponse>(
+      '/v1/social-media/create/',
       {
         variation,
         profile,
         network,
       },
+    );
+    SocialMediaService.throwOnError(res);
+    return res.data;
+  }
+
+  async updateSocialMedia({ token, profile }: UpdateSocialMediaRequest) {
+    const res = await this.socialMediaApi.put<UpdateSocialMediaResponse>(
+      '/v1/social-media/update/',
       {
-        headers: token
-          ? {
-              Authorization: `Token ${token}`,
-            }
-          : null,
+        profile,
+      },
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
       },
     );
     SocialMediaService.throwOnError(res);

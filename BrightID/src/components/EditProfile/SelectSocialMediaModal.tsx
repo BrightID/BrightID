@@ -42,7 +42,7 @@ import { updateBlindSigs, selectAllApps } from '@/actions';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
 import socialMediaService, { socialMediaUrl } from '@/api/socialMediaService';
-import { saveAndLinkSocialMedia } from '@/utils/socailMedia';
+import { saveAndLinkSocialMedia } from '@/utils/socialMedia';
 
 /** Helper functions */
 
