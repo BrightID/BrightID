@@ -1,16 +1,24 @@
 import { BrightIdNetwork } from '@/components/Apps/model';
 
-type SetSocialMediaRequest = {
-  token?: string;
+type CreateSocialMediaRequest = {
   variation: string;
   profile: string;
   network: BrightIdNetwork;
 };
 
-type SetSocialMediaResponse = {
+type CreateSocialMediaResponse = {
   contextId: string;
   token: string;
   variation: string;
   profile: string;
   network: BrightIdNetwork;
+};
+
+type UpdateSocialMediaRequest = {
+  token: string;
+  profile: string;
+};
+
+type UpdateSocialMediaResponse = {
+  profile: string;
 };

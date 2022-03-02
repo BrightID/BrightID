@@ -18,16 +18,22 @@ export const saveAndLinkSocialMedia = async (
   };
   let { synced, token, contextId, linked } = brightIdSocialAppData;
 
-  if (!token || prevProfile?.profile !== newProfile || !synced) {
-    synced = false;
-    const data = await socialMediaService.setSocialMedia({
-      token,
+  if (!token) {
+    const data = await socialMediaService.createSocialMedia({
       profile: newProfile,
       variation: socialMediaVariation.id,
       network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
     });
     token = data.token;
     contextId = data.contextId;
+    synced = true;
+  } else if (prevProfile?.profile !== newProfile || !synced) {
+    synced = false;
+    await socialMediaService.updateSocialMedia({
+      token,
+      profile: newProfile,
+    });
+    synced = true;
   }
 
   const appId = socialMediaVariation.brightIdAppName;
