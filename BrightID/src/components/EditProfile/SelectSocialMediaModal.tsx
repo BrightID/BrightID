@@ -33,6 +33,7 @@ import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import {
   saveSocialMedia,
+  selectExistingSocialMediaIds,
   selectSocialMediaById,
 } from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
@@ -75,7 +76,7 @@ const SelectMediaModal = ({ route }: props) => {
   const initialPage = route.params?.page;
 
   const existingSocialMediaIds = useSelector(
-    (state: State) => state.socialMedia.ids,
+    selectExistingSocialMediaIds,
   ) as SocialMediaId[];
 
   const socialMediaVariations = useSelector(selectAllSocialMediaVariations);

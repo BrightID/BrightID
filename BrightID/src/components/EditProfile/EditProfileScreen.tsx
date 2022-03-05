@@ -41,11 +41,12 @@ import { setPhoto, setName } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
   selectAllSocialMedia,
-  removeSocialMedia,
+  selectExistingSocialMedia,
   setProfileDisplayWidth,
 } from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariationsByType } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
+import { removeSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -255,7 +256,7 @@ const SocialMediaLink = (props: {
 
 const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const navigation = useNavigation();
-  const socialMediaItems = useSelector(selectAllSocialMedia);
+  const socialMediaItems = useSelector(selectExistingSocialMedia);
   const selectSocialMediaVariations = useMemo(
     selectAllSocialMediaVariationsByType,
     [],
