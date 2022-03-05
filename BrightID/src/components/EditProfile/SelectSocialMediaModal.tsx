@@ -42,7 +42,7 @@ import { updateBlindSigs, selectAllApps } from '@/actions';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
 import socialMediaService, { socialMediaUrl } from '@/api/socialMediaService';
-import { saveAndLinkSocialMedia } from '@/utils/socialMedia';
+import { saveAndLinkSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 
 /** Helper functions */
 
@@ -154,31 +154,21 @@ const SelectMediaModal = ({ route }: props) => {
   );
   const nodeApi = useContext(NodeApiContext);
 
-  const saveProfile = async () => {
+  const saveProfile = () => {
     if (socialMediaVariation.type === SocialMediaType.PHONE_NUMBER) {
       if (!isPhoneNumberValid(profile)) {
         setInvalidPhoneNumber(true);
         return;
       }
     }
-    let brightIdSocialAppData = prevProfile?.brightIdSocialAppData;
-    try {
-      brightIdSocialAppData = await saveAndLinkSocialMedia(
-        socialMediaVariation,
-        prevProfile,
-        profile,
-      );
-    } catch (e) {
-      // simply ignore errors
-    }
     const socialMedia: SocialMedia = {
+      ...prevProfile,
       id: selectedId,
       company: socialMediaVariation,
       order: route.params?.order ?? 0,
-      brightIdSocialAppData,
       profile,
     };
-    dispatch(saveSocialMedia(socialMedia));
+    dispatch(saveAndLinkSocialMedia(socialMedia));
     navigation.navigate('Edit Profile');
   };
 
