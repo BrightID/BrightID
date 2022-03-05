@@ -1,4 +1,6 @@
 import { find, propEq } from 'ramda';
+import { Draft, original } from 'immer';
+import { PayloadAction } from '@reduxjs/toolkit';
 import socialMediaService, { socialMediaUrl } from '@/api/socialMediaService';
 import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
 import store from '@/store';
@@ -88,4 +90,17 @@ export const saveAndLinkSocialMedia =
     };
     dispatch(saveSocialMedia(socialMedia));
     return socialMedia;
+  };
+
+export const removeSocialMedia =
+  (id: string) => async (dispatch: dispatch, getState: getState) => {
+    const prevProfile = selectSocialMediaById(getState(), id);
+    socialMediaService
+      .deleteSocialMediaProfile(prevProfile.brightIdSocialAppData.token)
+      .catch((e) => console.log(e));
+    const socialMedia: SocialMedia = {
+      ...prevProfile,
+      profile: null,
+    };
+    dispatch(saveSocialMedia(socialMedia));
   };

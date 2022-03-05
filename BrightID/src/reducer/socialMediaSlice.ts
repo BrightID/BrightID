@@ -106,23 +106,10 @@ const socialMediaSlice = createSlice({
         },
       });
     },
-    removeSocialMedia: (
-      state: Draft<SocialMediaState>,
-      action: PayloadAction<string>,
-    ) => {
-      // access previous values from the reducer
-      const { entities } = original(state);
-
-      const prevEntity = entities[action.payload];
-      socialMediaService.deleteSocialMediaProfile(
-        prevEntity.brightIdSocialAppData.token,
-      );
-      socialMediaAdapter.removeOne(state, action.payload);
-    },
   },
 });
 
-export const { saveSocialMedia, removeSocialMedia, setProfileDisplayWidth } =
+export const { saveSocialMedia, setProfileDisplayWidth } =
   socialMediaSlice.actions;
 
 export const {
@@ -130,8 +117,18 @@ export const {
   selectAll: selectAllSocialMedia,
 } = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
 
-export const selectAllSocialMediaToShare = createSelector(
+export const selectExistingSocialMedia = createSelector(
   selectAllSocialMedia,
+  (socialMedias) => socialMedias.filter((socialMedia) => socialMedia.profile),
+);
+
+export const selectExistingSocialMediaIds = createSelector(
+  selectExistingSocialMedia,
+  (socialMedias) => socialMedias.map((socialMedia) => socialMedia.id),
+);
+
+export const selectAllSocialMediaToShare = createSelector(
+  selectExistingSocialMedia,
   (socialMedias) =>
     socialMedias.map((socialMedia) => ({
       id: socialMedia.id,
