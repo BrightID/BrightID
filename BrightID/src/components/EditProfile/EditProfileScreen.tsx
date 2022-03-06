@@ -200,34 +200,28 @@ const SocialMediaLink = (props: {
       <TouchableOpacity
         style={styles.socialMediaSelect}
         onPress={() => {
-          if (props.type === SocialMediaType.SOCIAL_PROFILE) {
-            navigation.navigate('SelectSocialMedia', {
-              order,
-              prevId: id,
-              page: 0,
-            });
-          }
+          navigation.navigate('SelectSocialMedia', {
+            type: props.type,
+            order,
+            prevId: id,
+            page: 0,
+          });
         }}
       >
-        <Text style={styles.socialMediaType}>
-          {props.type === SocialMediaType.SOCIAL_PROFILE
-            ? company.name
-            : t('profile.label.phoneNumber')}
-        </Text>
-        {props.type === SocialMediaType.SOCIAL_PROFILE ? (
-          <Chevron
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            color={DARK_BLUE}
-            strokeWidth={2}
-          />
-        ) : null}
+        <Text style={styles.socialMediaType}>{company.name}</Text>
+        <Chevron
+          width={DEVICE_LARGE ? 14 : 12}
+          height={DEVICE_LARGE ? 14 : 12}
+          color={DARK_BLUE}
+          strokeWidth={2}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={innerTextStyle}
         onLayout={updateInnerTextLayout}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
+            type: props.type,
             order,
             prevId: id,
             page: 1,
@@ -278,13 +272,13 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   // disable adding new item if we are entering phone number and
   // phone number is already entered
   const disableAdd =
-    props.type === SocialMediaType.PHONE_NUMBER && SocialMediaVariations.length;
+    socialMediaVariations.length === SocialMediaVariations.length;
 
   return (
     <View style={styles.socialMediaContainer}>
       <View style={styles.socialMediaLinkLabel}>
-        {props.type === SocialMediaType.PHONE_NUMBER ? (
-          <Text style={styles.label}>{t('profile.label.phoneNumber')}</Text>
+        {props.type === SocialMediaType.CONTACT_INFO ? (
+          <Text style={styles.label}>{t('profile.label.contactInfo')}</Text>
         ) : (
           <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
         )}
@@ -292,19 +286,12 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
         {!disableAdd ? (
           <TouchableOpacity
             onPress={() => {
-              if (props.type === SocialMediaType.PHONE_NUMBER) {
-                navigation.navigate('SelectSocialMedia', {
-                  order: socialMediaItems.length,
-                  prevId: socialMediaVariations[0].id,
-                  page: 1,
-                });
-              } else {
-                navigation.navigate('SelectSocialMedia', {
-                  order: socialMediaItems.length,
-                  prevId: null,
-                  page: 0,
-                });
-              }
+              navigation.navigate('SelectSocialMedia', {
+                order: socialMediaItems.length,
+                type: props.type,
+                prevId: null,
+                page: 0,
+              });
             }}
             style={styles.addSocialMediaBtn}
           >
@@ -505,7 +492,7 @@ export const EditProfileScreen = ({ navigation }) => {
           setProfilePhoto={setProfilePhoto}
         />
         <EditName nextName={nextName} setNextName={setNextName} />
-        <SocialMediaLinks type={SocialMediaType.PHONE_NUMBER} />
+        <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <ShowEditPassword />
         <View style={styles.saveContainer}>

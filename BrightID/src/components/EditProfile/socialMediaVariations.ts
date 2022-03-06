@@ -12,7 +12,7 @@ import TwitterIcon from '@/static/socialmedia/icons8-twitter-circled.svg';
 
 export enum SocialMediaType {
   SOCIAL_PROFILE = 'so',
-  PHONE_NUMBER = 'ph',
+  CONTACT_INFO = 'co',
 }
 
 export enum SocialMediaShareActionType {
@@ -25,19 +25,35 @@ export enum SocialMediaShareType {
   USERNAME = 'username',
   TELEPHONE = 'telephone #',
   URL = 'url',
+  EMAIL = 'email',
 }
 
 export enum SocialMediaShareTypeDisplay {
   USERNAME = 'username',
   TELEPHONE = 'telephone #',
   URL = 'url',
+  EMAIL = 'email',
   USERNAME_OR_TELEPHONE = 'username or telephone',
+}
+
+export enum SocialMediaVariationName {
+  DISCORD = 'Discord',
+  INSTAGRAM = 'Instagram',
+  KEYBASE = 'Keybase',
+  LINKEDIN = 'LinkedIn',
+  MEDIUM = 'Medium',
+  SIGNAL = 'Signal',
+  TELEGRAM = 'Telegram',
+  TWITTER = 'Twitter',
+  WHATSAPP = 'Whatsapp',
+  PHONE_NUMBER = 'Phone Number',
+  EMAIL = 'Email',
 }
 
 export const socialMediaVariations: SocialMediaVariations = [
   {
     id: 'fab9a32f-e968-495e-807f-7f1b27642506',
-    name: 'Discord',
+    name: SocialMediaVariationName.DISCORD,
     icon: DiscordIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -48,7 +64,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: 'efc5e269-195b-47e8-8634-b1899c00df9b',
-    name: 'Instagram',
+    name: SocialMediaVariationName.INSTAGRAM,
     icon: InstagramIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -59,7 +75,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '607223cc-7fbc-4b44-a595-e84d62146f30',
-    name: 'Keybase',
+    name: SocialMediaVariationName.KEYBASE,
     icon: KeybaseIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -70,7 +86,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: 'd750bd42-e2d3-465f-a3fd-40fde0080022',
-    name: 'LinkedIn',
+    name: SocialMediaVariationName.LINKEDIN,
     icon: LinkedinIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.URL,
@@ -81,7 +97,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '50ea1e56-f53b-4fa9-bbcb-846a3f3ac7b6',
-    name: 'Medium',
+    name: SocialMediaVariationName.MEDIUM,
     icon: MediumIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.URL,
@@ -103,7 +119,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '0e92b39b-e1b5-4236-be40-7377aadca4db',
-    name: 'Signal',
+    name: SocialMediaVariationName.SIGNAL,
     icon: SignalIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.TELEPHONE,
@@ -114,7 +130,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '4fc96842-0d3d-40ba-bb39-1aaf59a48a59',
-    name: 'Telegram',
+    name: SocialMediaVariationName.TELEGRAM,
     icon: TelegramIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -125,7 +141,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: 'a8b188b1-f9f9-416d-b002-7b7faf6e2d41',
-    name: 'Twitter',
+    name: SocialMediaVariationName.TWITTER,
     icon: TwitterIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -136,7 +152,7 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '283ade8a-6ef1-4d38-a744-70ee2f478ba4',
-    name: 'Whatsapp',
+    name: SocialMediaVariationName.WHATSAPP,
     icon: WhatsappIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.TELEPHONE,
@@ -147,14 +163,25 @@ export const socialMediaVariations: SocialMediaVariations = [
   },
   {
     id: '9d79c2ec-632c-4a5f-a04f-73d8e06024ec',
-    name: 'Phone Number',
+    name: SocialMediaVariationName.PHONE_NUMBER,
     icon: null,
-    type: SocialMediaType.PHONE_NUMBER,
+    type: SocialMediaType.CONTACT_INFO,
     shareType: SocialMediaShareType.TELEPHONE,
     shareTypeDisplay: SocialMediaShareTypeDisplay.TELEPHONE,
     shareActionType: SocialMediaShareActionType.COPY,
     shareActionDataFormat: `%%PROFILE%%`,
     brightIdAppName: 'phoneRegistry',
+  },
+  {
+    id: 'c01bee17-6f89-477f-8cd4-fe5505691a9a',
+    name: SocialMediaVariationName.EMAIL,
+    icon: null,
+    type: SocialMediaType.CONTACT_INFO,
+    shareType: SocialMediaShareType.EMAIL,
+    shareTypeDisplay: SocialMediaShareTypeDisplay.EMAIL,
+    shareActionType: SocialMediaShareActionType.COPY,
+    shareActionDataFormat: `%%PROFILE%%`,
+    brightIdAppName: 'emailRegistry',
   },
 ];
 

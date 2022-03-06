@@ -37,7 +37,11 @@ import {
   selectSocialMediaById,
 } from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
-import { SocialMediaType } from './socialMediaVariations';
+import {
+  SocialMediaShareType,
+  SocialMediaType,
+  SocialMediaVariationName,
+} from './socialMediaVariations';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
 import { updateBlindSigs, selectAllApps } from '@/actions';
 import { NodeApiContext } from '@/components/NodeApiGate';
@@ -53,17 +57,17 @@ const toPickerItem = ([value, { name }]) => (
 );
 
 const keyboardTypes: { [id: string]: KeyboardTypeOptions } = {
-  username: 'default',
-  'telephone #': 'phone-pad',
-  email: 'email-address',
-  url: DEVICE_IOS ? 'url' : 'default',
+  [SocialMediaShareType.USERNAME]: 'default',
+  [SocialMediaShareType.TELEPHONE]: 'phone-pad',
+  [SocialMediaShareType.EMAIL]: 'email-address',
+  [SocialMediaShareType.URL]: DEVICE_IOS ? 'url' : 'default',
 };
 
 const textContentTypes: { [id: string]: TextInputProps['textContentType'] } = {
-  username: 'username',
-  'telephone #': 'telephoneNumber',
-  email: 'emailAddress',
-  url: 'URL',
+  [SocialMediaShareType.USERNAME]: 'username',
+  [SocialMediaShareType.TELEPHONE]: 'telephoneNumber',
+  [SocialMediaShareType.EMAIL]: 'emailAddress',
+  [SocialMediaShareType.URL]: 'URL',
 };
 
 /** Main Component */
@@ -82,7 +86,7 @@ const SelectMediaModal = ({ route }: props) => {
   const socialMediaVariations = useSelector(selectAllSocialMediaVariations);
 
   const socialMediaKeyValues = socialMediaVariations
-    .filter((item) => item.type === SocialMediaType.SOCIAL_PROFILE)
+    .filter((item) => item.type === route.params?.type)
     .map((item) => [item.id, item]) as [SocialMediaId, SocialMediaVariation][];
 
   // only display social media not already selected by user when adding a new one to the list
@@ -156,7 +160,7 @@ const SelectMediaModal = ({ route }: props) => {
   const nodeApi = useContext(NodeApiContext);
 
   const saveProfile = () => {
-    if (socialMediaVariation.type === SocialMediaType.PHONE_NUMBER) {
+    if (socialMediaVariation.name === SocialMediaVariationName.PHONE_NUMBER) {
       if (!isPhoneNumberValid(profile)) {
         setInvalidPhoneNumber(true);
         return;
@@ -198,7 +202,8 @@ const SelectMediaModal = ({ route }: props) => {
             <Text style={styles.label}>
               {socialMediaVariation.shareTypeDisplay}
             </Text>
-            {socialMediaVariation.type === SocialMediaType.PHONE_NUMBER ? (
+            {socialMediaVariation.name ===
+            SocialMediaVariationName.PHONE_NUMBER ? (
               <>
                 <PhoneInput
                   defaultCode={phoneNumberObject.country}

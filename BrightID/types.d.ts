@@ -15,6 +15,7 @@ import {
   SocialMediaShareActionType,
   SocialMediaShareType,
   SocialMediaShareTypeDisplay,
+  SocialMediaVariationName,
 } from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
@@ -194,7 +195,7 @@ declare global {
   // We are sure that these properties are
   // shared in old or new versions of app
   interface SocialMediaVariationShared {
-    name: string;
+    name: SocialMediaVariationName | string;
     shareType: SocialMediaShareType;
   }
 
@@ -298,6 +299,7 @@ declare global {
     };
     ChangePassword: undefined;
     SelectSocialMedia: {
+      type: SocialMediaType;
       order: number;
       page: number;
       prevId: SocialMediaId;
