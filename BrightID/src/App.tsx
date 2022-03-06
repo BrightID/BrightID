@@ -40,9 +40,12 @@ export const App = () => {
         },
       },
     },
-    getStateFromPath: (path, options) => {
+    getStateFromPath: (path: string, options) => {
       // handle link-app paths
       let linkAppParams = null;
+      if (!path.startsWith('/')) {
+        path = `/${path}`;
+      }
       if (path.startsWith('/link-app/')) {
         let paramsString = path.substring(10);
 
