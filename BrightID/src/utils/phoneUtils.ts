@@ -1,10 +1,12 @@
 import { parsePhoneNumber as parsePhoneNumberLib } from 'libphonenumber-js';
 
 const isPhoneNumberValid = (phoneNumberString: string) => {
-  const phoneNumber = parsePhoneNumberLib(phoneNumberString);
-  if (phoneNumber) {
-    return phoneNumber.isValid();
-  }
+  try {
+    const phoneNumber = parsePhoneNumberLib(phoneNumberString);
+    if (phoneNumber) {
+      return phoneNumber.isValid();
+    }
+  } catch {}
   return false;
 };
 

@@ -572,6 +572,7 @@
       "socialPrevious": "Prev"
     },
     "label": {
+      "contactInfo": "Contact Info",
       "currentPassword": "Current password",
       "name": "Name",
       "newPassword": "New password",
