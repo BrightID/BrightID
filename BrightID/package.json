@@ -73,6 +73,7 @@
     "react-native-barcode-mask": "1.2.4",
     "react-native-camera": "^4.2.1",
     "react-native-code-push": "7.0.4",
+    "react-native-contacts": "^7.0.4",
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-dropdownalert": "4.3.0",
     "react-native-gesture-handler": "1.10.3",

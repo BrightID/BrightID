@@ -22,3 +22,15 @@ type UpdateSocialMediaRequest = {
 type UpdateSocialMediaResponse = {
   profile: string;
 };
+
+type QuerySocialMediaRequest = {
+  network: BrightIdNetwork;
+  profiles: string[];
+};
+
+type SocialMediaFriendRaw = {
+  profile: string;
+  variation: string;
+};
+
+type QuerySocialMediaResponse = SocialMediaFriendRaw[];

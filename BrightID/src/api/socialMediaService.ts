@@ -2,6 +2,9 @@ import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import {
   CreateSocialMediaRequest,
   CreateSocialMediaResponse,
+  QuerySocialMediaRequest,
+  QuerySocialMediaResponse,
+  SocialMediaFriendRaw,
   UpdateSocialMediaRequest,
   UpdateSocialMediaResponse,
 } from '@/api/socialMediaService_types.d';
@@ -74,6 +77,15 @@ class SocialMediaService {
       },
     );
     SocialMediaService.throwOnError(res);
+  }
+
+  async querySocialMedia(payload: QuerySocialMediaRequest) {
+    const res = await this.socialMediaApi.post<QuerySocialMediaResponse>(
+      '/v1/social-media/query/',
+      payload,
+    );
+    SocialMediaService.throwOnError(res);
+    return res.data;
   }
 }
 
