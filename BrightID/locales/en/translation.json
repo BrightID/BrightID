@@ -177,8 +177,8 @@
       "mutualConnections": "Mutual Connections",
       "mutualGroups": "Mutual Groups",
       "possibleDuplicates": "Possible Duplicates",
-      "socialMedia": "Social Media",
-      "recoveryConnections": "Recovery Connections"
+      "recoveryConnections": "Recovery Connections",
+      "socialMedia": "Social Media"
     },
     "tags": {
       "connectedAt": "Connected {{date}}",
@@ -420,6 +420,11 @@
     }
   },
   "import": {
+    "alert": {
+      "text": "Open this link with the BrightID app that should be imported.",
+      "title": "Import BrightID link"
+    },
+    "clipboardmessage": "Export your BrightID to another device: {{link}}",
     "header": {
       "title": "Import Account"
     },
@@ -637,10 +642,10 @@
   },
   "recovery": {
     "alert": {
-      "clipboardmessage": "Help me recover my BrightID: {{link}}",
       "text": "Share this link with your recovery connections.",
       "title": "Recovery link"
     },
+    "clipboardmessage": "Help me recover my BrightID: {{link}}",
     "error": {
       "mismatchId": "Your recovery connections selected different accounts",
       "title": "Account recovery failed",
@@ -744,6 +749,11 @@
     }
   },
   "sync": {
+    "alert": {
+      "text": "Open this link with the BrightID app that should be synced.",
+      "title": "Sync user data"
+    },
+    "clipboardmessage": "Sync your BrightID data with another device: {{link}}",
     "text": {
       "additionalInfo": "This QR code should be scanned using your other device to sync data between them",
       "askScanning": "Please scan this QR code using your other device"
