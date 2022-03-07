@@ -119,10 +119,10 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       name: connection.name,
     },
   );
-  const reportConnectionDetailsText = t('connectionDetails.text.reportImpact', {
-    name: connection.name,
-    reportReason: connection.reportReason,
-  });
+  const reportConnectionDetailsText = t(
+    'connectionDetails.text.whyremove',
+    'Please tell us why you want to remove this connection',
+  );
   const unReportConnectionDetailsText = t(
     'connectionDetails.text.unReportImpact',
     {
