@@ -208,12 +208,9 @@
       "levelJustMet": "这是我刚添加的陌生人",
       "levelRecovery": "我信任此人，可帮助恢复我的BrightID",
       "levelSuspicious": "我不认识这个人",
-      "reportConnection": "举报 {{name}}",
       "reportDuplicate": "此人创建了多个账号",
-      "reportImpact": "标记{{name}}会对他们的BrightID产生负面影响，并且该标记可能会显示给其他用户。",
       "reportOther": "其他原因",
       "reportSpammer": "此人向我发送了不需要的连接请求",
-      "unReportConnection": "撤销举报",
       "unReportImpact": "您已经将 {{name}}报告为{{reportReason}}.您想删除此标志并恢复您的连接吗？"
     }
   },

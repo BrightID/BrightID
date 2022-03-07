@@ -187,12 +187,9 @@
       "levelJustMet": "剛認識的陌生人",
       "levelRecovery": "我相信此人能幫我找回我的BrightID",
       "levelSuspicious": "我根本不認識此人",
-      "reportConnection": "舉報{{name}}",
       "reportDuplicate": "此人創建了多個賬戶",
-      "reportImpact": "標記 {{name}} 會對他們的 BrightID 分數產生負面影響，並且此標記可能會顯示給其他用戶。",
       "reportOther": "其他原因",
       "reportSpammer": "此人向我發送了不需要的連接請求",
-      "unReportConnection": "撤銷舉報",
       "unReportImpact": "您已經將 {{name}} 舉報原因是 {{reportReason}}。您想刪除此標誌並恢復您的連接嗎？"
     }
   },

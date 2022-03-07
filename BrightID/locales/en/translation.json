@@ -164,7 +164,7 @@
     "button": {
       "levelSave": "Save",
       "ok": "OK",
-      "report": "Report this person",
+      "report": "Remove this connection",
       "reportCancel": "Cancel",
       "reportSubmit": "Submit",
       "undoReport": "Undo Report"
@@ -191,14 +191,14 @@
       "levelJustMet": "This person is a stranger I just met",
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
-      "reportConnection": "Report {{name}}",
-      "reportDuplicate": "This person created multiple accounts",
-      "reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
+      "reportConnection": "Disconnect from {{name}}",
+      "reportDuplicate": "This connection is old or a duplicate",
       "reportOther": "Other reason",
       "reportSpammer": "This person sent me an unwanted connection request",
       "unkownRecoveryConnection": "Unknown",
-      "unReportConnection": "Undo Report",
-      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?"
+      "unReportConnection": "Restore connection",
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
+      "whyremove": "Please tell us why you want to remove this connection"
     }
   },
   "connections": {
