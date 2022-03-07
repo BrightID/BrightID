@@ -197,19 +197,55 @@ const RecoveryCodeScreen = ({ route }) => {
     const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
-    const clipboardMsg = __DEV__
-      ? universalLink
-      : t('recovery.alert.clipboardmessage', {
+
+    let alertTitle: string;
+    let alertText: string;
+    let clipboardMsg: string;
+    switch (action) {
+      case 'recovery':
+        alertTitle = t('recovery.alert.title', 'Recovery link');
+        alertText = t(
+          'recovery.alert.text',
+          'Share this link with your recovery connections.',
+        );
+        clipboardMsg = t('recovery.clipboardmessage', {
           defaultValue: 'Help me recover my BrightID: {{link}}',
           link: universalLink,
         });
+        break;
+      case 'import':
+        alertTitle = t('import.alert.title', 'Import BrightID link');
+        alertText = t(
+          'import.alert.text',
+          'Open this link with the BrightID app that should be imported.',
+        );
+        clipboardMsg = t('import.clipboardmessage', {
+          defaultValue: 'Export your BrightID to another device: {{link}}',
+          link: universalLink,
+        });
+        break;
+      case 'sync':
+        alertTitle = t('sync.alert.title', 'Sync user data');
+        alertText = t(
+          'sync.alert.text',
+          'Open this link with the BrightID app that should be synced.',
+        );
+        clipboardMsg = t('sync.clipboardmessage', {
+          defaultValue: 'Sync your BrightID data with another device: {{link}}',
+          link: universalLink,
+        });
+        break;
+      default:
+        break;
+    }
+
+    if (__DEV__) {
+      clipboardMsg = universalLink;
+    }
 
     Alert.alert(
-      t('recovery.alert.title', 'Recovery link'),
-      t(
-        'recovery.alert.text',
-        'Share this link with your recovery connections.',
-      ),
+      alertTitle,
+      alertText,
       [
         {
           text: t('common.button.copy'),
