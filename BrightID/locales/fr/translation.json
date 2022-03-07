@@ -199,7 +199,6 @@
     "button": {
       "levelSave": "Valider",
       "ok": "OK",
-      "report": "Signaler cette personne",
       "reportCancel": "Annuler",
       "reportSubmit": "Signaler",
       "undoReport": "Annuler le signalement"

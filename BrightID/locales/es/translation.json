@@ -183,7 +183,6 @@
     "button": {
       "levelSave": "Guardar",
       "ok": "OK",
-      "report": "Reportar a esta persona",
       "reportCancel": "Cancelar",
       "reportSubmit": "Enviar",
       "undoReport": "Deshacer Reporte"
