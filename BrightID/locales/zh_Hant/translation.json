@@ -161,7 +161,6 @@
     "button": {
       "levelSave": "保存",
       "ok": "好",
-      "report": "舉報這個人",
       "reportCancel": "取消",
       "reportSubmit": "提交",
       "undoReport": "撤銷舉報"

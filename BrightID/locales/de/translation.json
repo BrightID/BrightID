@@ -194,7 +194,6 @@
     "button": {
       "levelSave": "Speichern",
       "ok": "OK",
-      "report": "Diese Person melden",
       "reportCancel": "Abbrechen",
       "reportSubmit": "Einreichen",
       "undoReport": "Meldung rückgängig machen"

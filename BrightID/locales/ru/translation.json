@@ -194,7 +194,6 @@
     "button": {
       "levelSave": "Сохранить",
       "ok": "Хорошо",
-      "report": "Пожаловаться на этого человека",
       "reportCancel": "Отмена",
       "reportSubmit": "Отправить",
       "undoReport": "Отозвать жалобу"
