@@ -2,14 +2,14 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import i18next from 'i18next';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch, useSelector } from '@/store';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
+import { StackScreenProps } from '@react-navigation/stack';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { useDispatch, useSelector } from '@/store';
 import { connection_levels, report_reasons } from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { StackScreenProps } from '@react-navigation/stack';
 import {
   selectConnectionById,
   setReportReason,
@@ -61,6 +61,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       }
       // inside undo report module
     } else {
+      // close modal
+      navigation.goBack();
+      // open TrustLevel modal
       navigation.navigate('SetTrustlevel', {
         connectionId,
       });
