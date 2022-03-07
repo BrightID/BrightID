@@ -209,12 +209,9 @@
       "levelJustMet": "Esta persona es un extraño que acabo de conocer",
       "levelRecovery": "Confío en esta persona como para recuperar mi BrightID",
       "levelSuspicious": "No conozco a esta persona en absoluto",
-      "reportConnection": "Reportar{{name}}",
       "reportDuplicate": "Esta persona creó varias cuentas",
-      "reportImpact": "Marcar {{name}} afectará negativamente su puntuación en BrightID, y esta marca podría mostrarse a otros usuarios.",
       "reportOther": "Otra razon",
       "reportSpammer": "Esta persona me envió una solicitud de conexión no deseada",
-      "unReportConnection": "Deshacer Reporte",
       "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?"
     }
   },

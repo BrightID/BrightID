@@ -190,9 +190,7 @@
       "levelJustMet": "این شخص غریبه ایست که تازه ملاقاتش کردم",
       "levelRecovery": "به این شخص برای بازیابی BrightID خودم اعتماد دارم",
       "levelSuspicious": "اصلا این شخص رو نمی شناسم",
-      "reportConnection": "{{name}} رو ریپورت کن",
       "reportDuplicate": "این شخص اکانت های دیگری هم ساخته است",
-      "reportImpact": "؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟",
       "reportOther": "دلایل دیگر",
       "reportSpammer": "این شخص درخواست کانکشن ناخواسته ای به من داشته"
     }
