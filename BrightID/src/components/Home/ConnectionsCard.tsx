@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { PieChart } from 'react-native-svg-charts';
-import { Circle, G, Image } from 'react-native-svg';
 import { ORANGE } from '@/theme/colors';
 import { connection_levels } from '@/utils/constants';
 
@@ -44,26 +43,6 @@ export default function ConnectionsCard(props) {
       svg: { fill: '#ED1B24' },
     },
   ];
-
-  const Labels = ({ slices, height, width }) => {
-    return slices.map((slice, index) => {
-      const { labelCentroid, pieCentroid, data } = slice;
-      return (
-        <G key={index} x={labelCentroid[0]} y={labelCentroid[1]}>
-          <Circle r={18} fill={'white'} />
-          <Image
-            x={-10}
-            y={10}
-            width={20}
-            height={20}
-            preserveAspectRatio="xMidYMid slice"
-            opacity="1"
-            // href={Images.memes[index + 1]}
-          />
-        </G>
-      );
-    });
-  };
 
   return (
     <View style={styles.container}>

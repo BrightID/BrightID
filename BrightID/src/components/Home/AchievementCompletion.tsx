@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { ProgressCircle } from 'react-native-svg-charts';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE } from '@/theme/colors';
@@ -10,13 +10,11 @@ export default function ConnectionsCard(props) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.rowHeader} onPress={onPress}>
-        <Text style={{ fontFamily: 'Poppins-Bold' }}>
-          Achievement Completion
-        </Text>
+        <Text style={styles.header}>Achievement Completion</Text>
         <Material name="arrow-right" size={25} color={ORANGE} />
       </TouchableOpacity>
 
-      <Text style={{ fontFamily: 'Poppins-Meidium', fontSize: 15 }}>
+      <Text style={styles.taskRemaining}>
         {taskIDs - completedTaskIDs} Task Remaining
       </Text>
 
@@ -30,15 +28,7 @@ export default function ConnectionsCard(props) {
           endAngle={Math.PI * 0.5}
         />
 
-        <Text
-          style={{
-            position: 'absolute',
-            top: '30%',
-            alignSelf: 'center',
-            fontFamily: 'Poppins-Bold',
-            fontSize: 20,
-          }}
-        >
+        <Text style={styles.percentage}>
           {Math.round((completedTaskIDs / taskIDs) * 100)}%
         </Text>
       </View>
@@ -59,6 +49,9 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
+  header: {
+    fontFamily: 'Poppins-Bold',
+  },
   rowHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -71,5 +64,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
+  },
+  percentage: {
+    position: 'absolute',
+    top: '30%',
+    alignSelf: 'center',
+    fontFamily: 'Poppins-Bold',
+    fontSize: 20,
+  },
+  taskRemaining: {
+    fontFamily: 'Poppins-Meidium',
+    fontSize: 15,
   },
 });

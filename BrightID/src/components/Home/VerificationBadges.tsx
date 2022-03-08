@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE } from '@/theme/colors';
 
