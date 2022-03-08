@@ -1,1 +1,8 @@
-{}
+{
+  "achievements": {
+    "bituVerification": {
+      "description": "Meer inforrmatie",
+      "title": "Bitu-verificatie"
+    }
+  }
+}
