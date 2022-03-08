@@ -44,6 +44,7 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
+import AnimatedLinearGradient from './AnimatedLinearGradient';
 import { handleAppContext, handleBlindSigApp } from './model';
 
 export const AppsScreen = () => {
@@ -200,6 +201,7 @@ export const AppsScreen = () => {
 
   // Animation
   const scrollY = useRef(new Animated.Value(0)).current;
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
   const fadeBackgroundSearch = scrollY.interpolate({
     inputRange: [0, 230],
     outputRange: [0, 1],
@@ -216,7 +218,9 @@ export const AppsScreen = () => {
         },
       },
     ],
-    { useNativeDriver: true },
+    {
+      useNativeDriver: true,
+    },
   );
 
   return (
@@ -224,24 +228,40 @@ export const AppsScreen = () => {
       <View style={styles.container} testID="appsScreen">
         {/* <AppStatus /> */}
 
-        <Animated.View
-          style={{
+        <AnimatedLinearGradient
+          containerStyle={{
             position: 'absolute',
             top: 0,
-            backgroundColor: 'red',
             width: '100%',
             height: headerHeight,
             zIndex: 100,
+            opacity: fadeBackgroundSearch,
           }}
+          colors={['#3E4481', '#999ECD']}
         />
-        <Animated.View
-          style={[
+
+        <AnimatedLinearGradient
+          containerStyle={[
             styles.headerContainer,
             {
-              paddingTop: headerHeight,
               opacity: fadeBackgroundHeader,
+              transform: [
+                {
+                  translateY: scrollY.interpolate({
+                    inputRange: [0, 150],
+                    outputRange: [0, -150],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
             },
           ]}
+          style={{
+            paddingHorizontal: 20,
+            paddingBottom: 80,
+            paddingTop: headerHeight,
+          }}
+          colors={['#3E4481', '#999ECD', '#ED7A5D']}
         >
           <View style={styles.rowContainer}>
             <View style={styles.appDetailContainer}>
@@ -267,7 +287,7 @@ export const AppsScreen = () => {
               12 <Text style={styles.detailLabel}>apps</Text>
             </Text>
           </View>
-        </Animated.View>
+        </AnimatedLinearGradient>
 
         <Animated.View
           testID="searchBarBackground"
@@ -393,10 +413,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // borderTopLeftRadius: 58,
-    // marginTop: -58,
-    // zIndex: 10,
-    // overflow: 'hidden',
   },
   shadow: {
     shadowColor: 'rgba(0,0,0,1)',
@@ -432,10 +448,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 310,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     width: '100%',
-    paddingHorizontal: 20,
-    paddingBottom: 80,
   },
   rowContainer: {
     flex: 1,
