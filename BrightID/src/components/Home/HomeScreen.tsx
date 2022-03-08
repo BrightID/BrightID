@@ -31,7 +31,8 @@ import VerificationBadges from './VerificationBadges';
 import AchivementCompletion from './AchievementCompletion';
 import ConnectionsCard from './ConnectionsCard';
 import ApplicationLinkedCard from './ApplicationLinkedCard';
-import { button, bottomNav } from './BottomNavigation';
+import AddButton from '@/static/add-button.svg';
+import ButtonNav from '@/static/button-nav.svg';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
@@ -341,10 +342,10 @@ export const HomeScreen = (props) => {
         }}
         style={styles.scanButton}
       >
-        <SvgXml xml={button} width={100} height={100} />
+        <SvgXml xml={AddButton} width={100} height={100} />
       </TouchableOpacity>
       <View style={styles.bottomNav}>
-        <SvgXml xml={bottomNav} width="100%" height={100} />
+        <SvgXml xml={ButtonNav} width="100%" height={100} />
       </View>
     </View>
   );
