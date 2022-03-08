@@ -47,9 +47,25 @@
       "description": "Définissez un mot de passe pour activer la sauvegarde chiffrée de vos données",
       "title": "Définir le mot de passe de sauvegarde"
     },
+    "setupRecoveryConnections": {
+      "description": "Configurer vos connexions de récupération pour permettre la récupération des comptes sociaux",
+      "title": "Configurer la récupération sociale"
+    },
     "setupTrustedConnections": {
       "description": "Configurez vos connexions de récupération pour activer la récupération de compte social",
       "title": "Configurer la récupération sociale"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Ajouter des infos sur l'appareil"
+    },
+    "info": "Autoriser le nouveau dispositif à utiliser votre BrightID",
+    "steps": {
+      "adding": "Ajout de la clé de signature…",
+      "complete": "Clé de signature ajoutée",
+      "downloading": "Téléchargement des données du nouvel appareil…",
+      "error": "L'ajout de la clé de signature a échoué"
     }
   },
   "apps": {
@@ -152,6 +168,7 @@
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
         "passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
         "passwordShort": "Votre motre de passe doit comporter au moins 8 caractères.",
+        "recoverySigned": "Une de vos connexions de récupération a signé votre demande",
         "trustedSigned": "Une de vos connexions de récupération a signé votre requête"
       },
       "title": {
@@ -199,6 +216,7 @@
     "button": {
       "levelSave": "Valider",
       "ok": "OK",
+      "report": "Retirer cette connexion",
       "reportCancel": "Annuler",
       "reportSubmit": "Signaler",
       "undoReport": "Annuler le signalement"
@@ -210,8 +228,8 @@
       "connectionLevel": "Niveau de Connexion",
       "mutualConnections": "Connexions en Commun",
       "mutualGroups": "Groupes en Commun",
-      "recoveryConnections": "Connexions de récupération",
       "possibleDuplicates": "Doublons Possibles",
+      "recoveryConnections": "Connexions de récupération",
       "socialMedia": "Média social"
     },
     "tags": {
@@ -225,11 +243,14 @@
       "levelJustMet": "Je viens de rencontrer cette personne",
       "levelRecovery": "Je fais confiance à cette personne pour m'aider si je perds mon BrightID",
       "levelSuspicious": "Je ne connais pas du tout cette personne",
-      "reportDuplicate": "Cette personne utilise plusieurs comptes",
+      "reportConnection": "Se déconnecter de {{name}}",
+      "reportDuplicate": "Cette connexion est ancienne ou un doublon",
       "reportOther": "Autre raison",
       "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
+      "unReportConnection": "Rétablir la connexion",
       "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
-      "unkownRecoveryConnection": "Inconnu"
+      "unkownRecoveryConnection": "Inconnu",
+      "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion"
     }
   },
   "connections": {
@@ -315,6 +336,27 @@
       "noConnections": "Vous n'avez pas de connexions"
     }
   },
+  "devices": {
+    "alert": {
+      "bothPrimary": "Les deux appareils sont configurés comme appareils primaires. Vous ne pouvez avoir qu'un seul appareil primaire. Configurez l'un des appareils comme secondaire pour pouvoir les synchroniser.",
+      "confirmAdd": "Êtes-vous sûr(e) de vouloir exporter votre BrightID vers un autre appareil ?",
+      "confirmRemove": "Êtes-vous sûr(e) de vouloir supprimer votre BrightID de « {{name}} » ?",
+      "confirmSync": "Êtes-vous sûr(e) de vouloir partager et synchroniser vos données BrightID avec cet appareil ?",
+      "noPrimary": "Vos appareils ne peuvent être synchronisés que par l'appareil principal."
+    },
+    "button": {
+      "submit": "Soumettre"
+    },
+    "placeholder": {
+      "deviceName": "Nom de l'appareil"
+    },
+    "text": {
+      "listDescription": "Votre BrightID est disponible sur les appareils suivants :",
+      "syncCompleted": "Votre appareil s'est synchronisé avec succès.",
+      "waitSyncing": "Synchronisation des appareils, veuillez patienter…",
+      "whatsDeviceName": "Veuillez choisir un nom pour le nouvel appareil"
+    }
+  },
   "drawer": {
     "alert": {
       "text": {
@@ -329,6 +371,7 @@
       "checkForUpdates": "Rechercher des mises à jour",
       "contactUs": "Nous contacter",
       "copyExplorerCode": "Copier le Code Explorer",
+      "devices": "Appareils",
       "editProfile": "Modifier le profil",
       "groups": "Groupes",
       "home": "Accueil"
@@ -434,6 +477,21 @@
       "community": "Rejoindre la Communauté"
     }
   },
+  "import": {
+    "alert": {
+      "text": "Ouvrez ce lien avec l'application BrightID qui doit être importée.",
+      "title": "Importer un lien BrightID"
+    },
+    "clipboardmessage": "Exporter votre BrightID vers un autre appareil : {{link}}",
+    "header": {
+      "title": "Importer un compte"
+    },
+    "text": {
+      "additionalInfo": "Ce code QR doit être scanné avec votre autre appareil pour importer votre BrightID dans celui-ci",
+      "askScanning": "Veuillez scanner ce code QR en utilisant votre autre appareil",
+      "waitImporting": "Importation des connexions, veuillez patienter…"
+    }
+  },
   "nodeApiGate": {
     "reset": {
       "button": "Restaurer la liste de nœuds par défaut",
@@ -510,7 +568,8 @@
     "button": {
       "create": "Créer mon BrightID",
       "getStarted": "Démarrer",
-      "recover": "Récupérer le BrightID"
+      "import": "Importer",
+      "recover": "Récupérer"
     },
     "label": {
       "maintainPrivacy": "Préservez votre vie privée"
@@ -656,6 +715,7 @@
       "text": "Partagez ce lien avec vos connexions de récupération.",
       "title": "Lien de récupération"
     },
+    "clipboardmessage": "Aidez-moi à récupérer mon BrightID : {{link}}",
     "error": {
       "mismatchId": "Vos connexions de récupération ont sélectionné différents comptes",
       "title": "La récupération du compte a échoué",
@@ -675,6 +735,7 @@
     },
     "text": {
       "additionalInfo": "Vos connexions de récupération devront scanner ceci afin de vous aider à récupérer votre BrightID",
+      "askScanning": "Veuillez montrer ce code QR à vos connexions de récupération",
       "askTrustedConnections": "Veuillez montrer ce code QR à vos connexions de récupération",
       "signatures": "{{count}} / 2 signatures",
       "signatures_plural": ""
@@ -738,6 +799,7 @@
       "complete": "Restauration terminée",
       "error": "La restauration a échoué. Mauvais mot de passe ?",
       "restoring": "Restauration des données…",
+      "restoringProgress": "Restauration de l'élément {{currentItem}} de {{totalItems}}",
       "skipped": "Restauration ignorée",
       "waitingAccount": "En attente de la récupération du compte",
       "waitingPassword": "Entrez le mot de passe ou ignorez"
@@ -784,6 +846,29 @@
       "photoNotShared": "Votre photo ne sera jamais partagée avec des applications ou\nstockés sur notre chaîne de blocs.",
       "pleaseAddPhoto": "Veuillez ajouter une photo",
       "whatsYouName": "Comment vous appellez-vous ?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Ouvrez ce lien avec l'application BrightID qui doit être synchronisée.",
+      "title": "Synchroniser les données des utilisateurs"
+    },
+    "clipboardmessage": "Synchronisez vos données BrightID avec un autre appareil : {{link}}",
+    "text": {
+      "additionalInfo": "Ce code QR doit être scanné à l'aide de votre autre appareil pour synchroniser les données entre eux",
+      "askScanning": "Veuillez scanner ce code QR en utilisant votre autre appareil"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Téléverser les données de l'utilisateur"
+    },
+    "info": "Téléverser les données de l'utilisateur (connexions, applications liées…) vers le nouvel appareil",
+    "steps": {
+      "complete": "Téléversement terminé.",
+      "downloading": "Téléversement des données utilisateur…",
+      "error": "Échec du téléversement des données",
+      "waiting": "En attente des clés de signature…"
     }
   },
   "walkthroughs": {
