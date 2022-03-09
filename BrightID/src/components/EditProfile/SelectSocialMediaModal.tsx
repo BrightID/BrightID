@@ -40,7 +40,7 @@ import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSl
 import {
   SocialMediaShareType,
   SocialMediaType,
-  SocialMediaVariationName,
+  SocialMediaVariationIds,
 } from './socialMediaVariations';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
 import { updateBlindSigs, selectAllApps } from '@/actions';
@@ -160,7 +160,7 @@ const SelectMediaModal = ({ route }: props) => {
   const nodeApi = useContext(NodeApiContext);
 
   const saveProfile = () => {
-    if (socialMediaVariation.name === SocialMediaVariationName.PHONE_NUMBER) {
+    if (socialMediaVariation.id === SocialMediaVariationIds.PHONE_NUMBER) {
       if (!isPhoneNumberValid(profile)) {
         setInvalidPhoneNumber(true);
         return;
@@ -202,8 +202,8 @@ const SelectMediaModal = ({ route }: props) => {
             <Text style={styles.label}>
               {socialMediaVariation.shareTypeDisplay}
             </Text>
-            {socialMediaVariation.name ===
-            SocialMediaVariationName.PHONE_NUMBER ? (
+            {socialMediaVariation.id ===
+            SocialMediaVariationIds.PHONE_NUMBER ? (
               <>
                 <PhoneInput
                   defaultCode={phoneNumberObject.country}
