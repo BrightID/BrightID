@@ -13,6 +13,7 @@ import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
+import { parseLinkAppParams } from '@/utils/deeplink';
 
 /**
  * Central part of the application
@@ -42,30 +43,7 @@ export const App = () => {
     },
     getStateFromPath: (path: string, options) => {
       // handle link-app paths
-      let linkAppParams = null;
-      if (!path.startsWith('/')) {
-        path = `/${path}`;
-      }
-      if (path.startsWith('/link-app/')) {
-        let paramsString = path.substring(10);
-
-        const version = paramsString.split('/')[0];
-        paramsString = paramsString.substring(paramsString.indexOf('/') + 1);
-
-        if (version === 'v1') {
-          const [context, contextId, callbackUrl] = paramsString.split('/');
-          if (context && contextId) {
-            linkAppParams = {
-              context,
-              contextId,
-              callbackUrl: callbackUrl
-                ? decodeURIComponent(callbackUrl)
-                : undefined,
-            };
-          }
-        }
-      }
-      console.log(linkAppParams);
+      const linkAppParams = parseLinkAppParams(path);
       if (linkAppParams) {
         return {
           routes: [
