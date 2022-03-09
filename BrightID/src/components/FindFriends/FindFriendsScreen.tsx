@@ -144,8 +144,12 @@ export const FindFriendsScreen = function () {
           </View>
         </View>
         <View style={styles.contactDat}>
-          <Text style={styles.name}>{item.profile.name}</Text>
-          <Text style={styles.phoneNumber}>{item.profile.profile}</Text>
+          <Text style={styles.name} numberOfLines={1}>
+            {item.profile.name}
+          </Text>
+          <Text style={styles.profile} numberOfLines={1}>
+            {item.profile.profile}
+          </Text>
         </View>
         <View style={styles.contactAction}>
           <TouchableOpacity
@@ -272,7 +276,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
-  phoneNumber: {
+  profile: {
     color: '#888',
   },
 });
