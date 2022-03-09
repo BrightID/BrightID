@@ -192,7 +192,12 @@ const SocialMediaLink = (props: {
   };
 
   const innerTextStyle = profileDisplayWidth
-    ? { width: profileDisplayWidth }
+    ? {
+        width:
+          typeof profileDisplayWidth === 'number'
+            ? profileDisplayWidth - 10
+            : profileDisplayWidth,
+      }
     : { flexGrow: 1 };
 
   return (
