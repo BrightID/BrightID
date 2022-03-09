@@ -3,6 +3,37 @@
     "bituVerification": {
       "description": "Meer inforrmatie",
       "title": "Bitu-verificatie"
+    },
+    "getSponsored": {
+      "description": "Verkrijg sponsoring door een app met sponsoring te koppelen",
+      "title": "Verkrijg sponsoring"
+    },
+    "joinMeet": {
+      "description": "Neem deel aan een BrightID-bijeenkomst",
+      "title": "BrightID-bijeenkomst"
+    },
+    "linkApp": {
+      "description": "Koppel je BrightID met een app",
+      "title": "Koppel met een app"
+    },
+    "makeFirstConnection": {
+      "description": "Leg contact met een andere BrightID-gebruiker",
+      "title": "Eerste contact"
+    },
+    "makeThreeConnection": {
+      "description": "Leg contact met 3 BrightID-gebruikers",
+      "title": "Drie contacten"
+    },
+    "makeTwoConnection": {
+      "description": "Leg contact met 2 BrightID-gebruikers",
+      "title": "Twee contacten"
+    },
+    "notification": {
+      "message": "Je hebt de taak ‘{{title}}’ volbracht.",
+      "title": "Prestatie ontgrendeld!"
+    },
+    "progress": {
+      "title": "Volbracht:"
     }
   }
 }
