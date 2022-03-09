@@ -24,7 +24,7 @@ import socialMediaService from '@/api/socialMediaService';
 import { BrightIdNetwork } from '@/components/Apps/model';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
-import { SocialMediaVariationName } from '@/components/EditProfile/socialMediaVariations';
+import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 
 const FlatListItemSeparator = () => {
   return (
@@ -133,13 +133,13 @@ export const FindFriendsScreen = function () {
     // TODO: generate connection link
     const connectionLink = 'https://app.brightid.org/connection-code/xxx';
     const body = `Hi\nLet's connect on BrightID!\n${connectionLink}`;
-    if (item.variation.name === SocialMediaVariationName.PHONE_NUMBER) {
+    if (item.variation.id === SocialMediaVariationIds.PHONE_NUMBER) {
       const smsDivider = Platform.OS === 'ios' ? '&' : '?';
       const phone = item.profile.profile;
       Linking.openURL(`sms:${phone}${smsDivider}body=${body}`);
       return;
     }
-    if (item.variation.name === SocialMediaVariationName.EMAIL) {
+    if (item.variation.id === SocialMediaVariationIds.EMAIL) {
       const email = item.profile.profile;
       Linking.openURL(`mailto:${email}?subject=${subject}&body=${body}`);
       return;
