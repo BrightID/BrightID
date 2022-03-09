@@ -36,24 +36,25 @@ export enum SocialMediaShareTypeDisplay {
   USERNAME_OR_TELEPHONE = 'username or telephone',
 }
 
-export enum SocialMediaVariationName {
-  DISCORD = 'Discord',
-  INSTAGRAM = 'Instagram',
-  KEYBASE = 'Keybase',
-  LINKEDIN = 'LinkedIn',
-  MEDIUM = 'Medium',
-  SIGNAL = 'Signal',
-  TELEGRAM = 'Telegram',
-  TWITTER = 'Twitter',
-  WHATSAPP = 'Whatsapp',
-  PHONE_NUMBER = 'Phone Number',
-  EMAIL = 'Email',
+export enum SocialMediaVariationIds {
+  DISCORD = 'fab9a32f-e968-495e-807f-7f1b27642506',
+  INSTAGRAM = 'efc5e269-195b-47e8-8634-b1899c00df9b',
+  KEYBASE = '607223cc-7fbc-4b44-a595-e84d62146f30',
+  LINKEDIN = 'd750bd42-e2d3-465f-a3fd-40fde0080022',
+  MEDIUM = '50ea1e56-f53b-4fa9-bbcb-846a3f3ac7b6',
+  REDDIT = '65a174ff-b823-4abd-9dbb-ae0f46f7bc53',
+  SIGNAL = '0e92b39b-e1b5-4236-be40-7377aadca4db',
+  TELEGRAM = '4fc96842-0d3d-40ba-bb39-1aaf59a48a59',
+  TWITTER = 'a8b188b1-f9f9-416d-b002-7b7faf6e2d41',
+  WHATSAPP = '283ade8a-6ef1-4d38-a744-70ee2f478ba4',
+  PHONE_NUMBER = '9d79c2ec-632c-4a5f-a04f-73d8e06024ec',
+  EMAIL = 'c01bee17-6f89-477f-8cd4-fe5505691a9a',
 }
 
 export const socialMediaVariations: SocialMediaVariations = [
   {
-    id: 'fab9a32f-e968-495e-807f-7f1b27642506',
-    name: SocialMediaVariationName.DISCORD,
+    id: SocialMediaVariationIds.DISCORD,
+    name: 'Discord',
     icon: DiscordIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -63,8 +64,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: 'efc5e269-195b-47e8-8634-b1899c00df9b',
-    name: SocialMediaVariationName.INSTAGRAM,
+    id: SocialMediaVariationIds.INSTAGRAM,
+    name: 'Instagram',
     icon: InstagramIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -74,8 +75,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '607223cc-7fbc-4b44-a595-e84d62146f30',
-    name: SocialMediaVariationName.KEYBASE,
+    id: SocialMediaVariationIds.KEYBASE,
+    name: 'Keybase',
     icon: KeybaseIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -85,8 +86,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: 'd750bd42-e2d3-465f-a3fd-40fde0080022',
-    name: SocialMediaVariationName.LINKEDIN,
+    id: SocialMediaVariationIds.LINKEDIN,
+    name: 'LinkedIn',
     icon: LinkedinIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.URL,
@@ -96,8 +97,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '50ea1e56-f53b-4fa9-bbcb-846a3f3ac7b6',
-    name: SocialMediaVariationName.MEDIUM,
+    id: SocialMediaVariationIds.MEDIUM,
+    name: 'Medium',
     icon: MediumIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.URL,
@@ -107,7 +108,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '65a174ff-b823-4abd-9dbb-ae0f46f7bc53',
+    id: SocialMediaVariationIds.REDDIT,
     name: 'Reddit',
     icon: RedditIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
@@ -118,8 +119,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '0e92b39b-e1b5-4236-be40-7377aadca4db',
-    name: SocialMediaVariationName.SIGNAL,
+    id: SocialMediaVariationIds.SIGNAL,
+    name: 'Signal',
     icon: SignalIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.TELEPHONE,
@@ -129,8 +130,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '4fc96842-0d3d-40ba-bb39-1aaf59a48a59',
-    name: SocialMediaVariationName.TELEGRAM,
+    id: SocialMediaVariationIds.TELEGRAM,
+    name: 'Telegram',
     icon: TelegramIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -140,8 +141,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: 'a8b188b1-f9f9-416d-b002-7b7faf6e2d41',
-    name: SocialMediaVariationName.TWITTER,
+    id: SocialMediaVariationIds.TWITTER,
+    name: 'Twitter',
     icon: TwitterIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.USERNAME,
@@ -151,8 +152,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '283ade8a-6ef1-4d38-a744-70ee2f478ba4',
-    name: SocialMediaVariationName.WHATSAPP,
+    id: SocialMediaVariationIds.WHATSAPP,
+    name: 'Whatsapp',
     icon: WhatsappIcon,
     type: SocialMediaType.SOCIAL_PROFILE,
     shareType: SocialMediaShareType.TELEPHONE,
@@ -162,8 +163,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: null,
   },
   {
-    id: '9d79c2ec-632c-4a5f-a04f-73d8e06024ec',
-    name: SocialMediaVariationName.PHONE_NUMBER,
+    id: SocialMediaVariationIds.PHONE_NUMBER,
+    name: 'Phone Number',
     icon: null,
     type: SocialMediaType.CONTACT_INFO,
     shareType: SocialMediaShareType.TELEPHONE,
@@ -173,8 +174,8 @@ export const socialMediaVariations: SocialMediaVariations = [
     brightIdAppName: 'phoneRegistry',
   },
   {
-    id: 'c01bee17-6f89-477f-8cd4-fe5505691a9a',
-    name: SocialMediaVariationName.EMAIL,
+    id: SocialMediaVariationIds.EMAIL,
+    name: 'Email',
     icon: null,
     type: SocialMediaType.CONTACT_INFO,
     shareType: SocialMediaShareType.EMAIL,
