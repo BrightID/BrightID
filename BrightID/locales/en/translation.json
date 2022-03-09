@@ -783,5 +783,13 @@
       "setPassword": "You can always set your\nBrightID password in here",
       "viewPassword": "You can always see your\nBrightID password in here"
     }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "invite"
+    },
+    "text": {
+      "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app."
+    }
   }
 }

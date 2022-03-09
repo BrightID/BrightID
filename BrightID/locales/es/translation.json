@@ -312,6 +312,7 @@
       "contactUs": "Contactanos",
       "copyExplorerCode": "Copiar Código de Explorer",
       "editProfile": "Editar Perfil",
+      "findFriends": "invitación",
       "home": "Inicio"
     }
   },
@@ -751,6 +752,14 @@
       "gotIt": "¡Entendido!",
       "setPassword": "Siempre puede establecer su\ncontraseña de BrightID aquí",
       "viewPassword": "Siempre podrá ver su\ncontraseña de BrightID aquí"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "invitación"
+    },
+    "text": {
+      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
     }
   }
 }

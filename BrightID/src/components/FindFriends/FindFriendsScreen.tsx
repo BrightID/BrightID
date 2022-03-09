@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
+  Linking,
   PermissionsAndroid,
+  Platform,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,19 +16,15 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import Contacts from 'react-native-contacts';
-import { useFocusEffect } from '@react-navigation/native';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
-import { useDispatch, useSelector } from '@/store';
-import {
-  selectCompletedTaskIds,
-  selectTaskIds,
-} from '@/components/Tasks/TasksSlice';
+import { useSelector } from '@/store';
 import { SocialMediaFriendRaw } from '@/api/socialMediaService_types';
 import socialMediaService from '@/api/socialMediaService';
 import { BrightIdNetwork } from '@/components/Apps/model';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
+import { SocialMediaVariationName } from '@/components/EditProfile/socialMediaVariations';
 
 const FlatListItemSeparator = () => {
   return (
@@ -51,10 +51,8 @@ const parsePhoneNumber = (phoneNumber: string) =>
   parseInt(phoneNumber.match(/\d/g).join(''), 10).toString();
 
 export const FindFriendsScreen = function () {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const taskIds = useSelector(selectTaskIds);
-  const completedTaskIds = useSelector(selectCompletedTaskIds);
+
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -130,9 +128,36 @@ export const FindFriendsScreen = function () {
     }
   }, [socialMediaVariations, friendsRaw, friendProfiles]);
 
+  function sendInvitation(item: SocialMediaFriend) {
+    const subject = "Let's connect on BrightID";
+    // TODO: generate connection link
+    const connectionLink = 'https://app.brightid.org/connection-code/xxx';
+    const body = `Hi\nLet's connect on BrightID!\n${connectionLink}`;
+    if (item.variation.name === SocialMediaVariationName.PHONE_NUMBER) {
+      const smsDivider = Platform.OS === 'ios' ? '&' : '?';
+      const phone = item.profile.profile;
+      Linking.openURL(`sms:${phone}${smsDivider}body=${body}`);
+      return;
+    }
+    if (item.variation.name === SocialMediaVariationName.EMAIL) {
+      const email = item.profile.profile;
+      Linking.openURL(`mailto:${email}?subject=${subject}&body=${body}`);
+      return;
+    }
+    const invitationNotAvailableText = t(
+      'findFriends.text.invitationNotAvailable',
+    );
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(invitationNotAvailableText, ToastAndroid.LONG);
+    } else {
+      Alert.alert(invitationNotAvailableText);
+    }
+  }
+
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
   };
+
   const renderItem = ({ item }: { item: SocialMediaFriend }) => {
     return (
       <View style={styles.contactCon}>
@@ -148,6 +173,9 @@ export const FindFriendsScreen = function () {
             {item.profile.name}
           </Text>
           <Text style={styles.profile} numberOfLines={1}>
+            {item.variation.name}
+          </Text>
+          <Text style={styles.profile} numberOfLines={1}>
             {item.profile.profile}
           </Text>
         </View>
@@ -155,11 +183,11 @@ export const FindFriendsScreen = function () {
           <TouchableOpacity
             testID="InviteBtn"
             style={styles.inviteBtn}
-            onPress={() => {
-              console.log('Press');
-            }}
+            onPress={() => sendInvitation(item)}
           >
-            <Text style={styles.inviteBtnText}>{t('invite')}</Text>
+            <Text style={styles.inviteBtnText}>
+              {t('findFriends.button.invite')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

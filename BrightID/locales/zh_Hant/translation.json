@@ -289,6 +289,7 @@
       "contactUs": "聯係我們",
       "copyExplorerCode": "複製窗口信息",
       "editProfile": "編輯個人資料",
+      "findFriends": "邀請",
       "home": "主頁"
     }
   },
@@ -687,6 +688,14 @@
       "gotIt": "知道了！",
       "setPassword": "您可以隨時設置您的\nBrightID 密碼在這裡",
       "viewPassword": "你總能看到你的\nBrightID 密碼在這裡"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "邀請"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此應用目前無法發送邀請。"
     }
   }
 }

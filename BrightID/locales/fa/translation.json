@@ -288,6 +288,7 @@
       "contactUs": "ارتباط با ما",
       "copyExplorerCode": "کپی کردن کد Explorer",
       "editProfile": "ویرایش پروفایل",
+      "findFriends": "دعوت",
       "home": "خانه"
     }
   },
@@ -535,6 +536,14 @@
         "shareLinkGroup": "اشتراک گذاری لینک",
         "shareLinkSingle": "اشتراک گذاری لینک با دوستان"
       }
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "دعوت"
+    },
+    "text": {
+      "invitationNotAvailable": "با عرض پوزش، ارسال دعوت نامه در حال حاضر برای این برنامه در دسترس نیست."
     }
   }
 }

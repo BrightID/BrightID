@@ -29,6 +29,11 @@
       }
     }
   },
+  "drawer": {
+    "label": {
+      "findFriends": "convidar"
+    }
+  },
   "contact": {
     "label": {
       "email": "Correu-e"
@@ -39,6 +44,14 @@
       "text": {
         "invalidPhoneNumber": "Enter a valid phone number"
       }
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "convidar"
+    },
+    "text": {
+      "invitationNotAvailable": "Ho sentim, l'enviament de la invitació no està disponible actualment per a aquesta aplicació."
     }
   }
 }

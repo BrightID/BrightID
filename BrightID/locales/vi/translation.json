@@ -1,1 +1,15 @@
-{}
+{
+  "drawer": {
+    "label": {
+      "findFriends": "mời gọi"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "mời gọi"
+    },
+    "text": {
+      "invitationNotAvailable": "Xin lỗi, gửi lời mời hiện không khả dụng cho ứng dụng này."
+    }
+  }
+}

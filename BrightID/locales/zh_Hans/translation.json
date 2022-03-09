@@ -311,6 +311,7 @@
       "contactUs": "联系我们",
       "copyExplorerCode": "复制资源管理器代码",
       "editProfile": "编辑简介",
+      "findFriends": "邀请",
       "home": "主页"
     }
   },
@@ -733,6 +734,14 @@
       "gotIt": "知道了!",
       "setPassword": "您可以随时在此处设置\n您的BrightID密码",
       "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "邀请"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此应用目前无法发送邀请。"
     }
   }
 }

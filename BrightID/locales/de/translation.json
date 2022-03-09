@@ -337,6 +337,7 @@
       "contactUs": "Kontaktiere uns",
       "copyExplorerCode": "Explorer Code kopieren",
       "editProfile": "Profil bearbeiten",
+      "findFriends": "einladen",
       "home": "Startseite"
     }
   },
@@ -782,6 +783,14 @@
       "gotIt": "Verstanden!",
       "setPassword": "Du kannst jederzeit dein\nBrightID-Passwort hier festlegen",
       "viewPassword": "Du kannst immer dein\nBrightID-Passwort hier sehen"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "einladen"
+    },
+    "text": {
+      "invitationNotAvailable": "Tut mir leid, das Senden von Einladungen ist derzeit für diese App nicht verfügbar."
     }
   }
 }

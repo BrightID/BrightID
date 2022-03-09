@@ -373,6 +373,7 @@
       "copyExplorerCode": "Copier le Code Explorer",
       "devices": "Appareils",
       "editProfile": "Modifier le profil",
+      "findFriends": "inviter",
       "groups": "Groupes",
       "home": "Accueil"
     }
@@ -878,6 +879,14 @@
       "gotIt": "Compris !",
       "setPassword": "Vous pouvez toujours définir votre\nmot de passe BrightID ici",
       "viewPassword": "Vous pouvez toujours voir votre\nmot de passe BrightID ici"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "inviter"
+    },
+    "text": {
+      "invitationNotAvailable": "Désolé, l'envoi d'invitation n'est actuellement pas disponible pour cette application."
     }
   }
 }
