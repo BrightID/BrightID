@@ -147,7 +147,9 @@ export const HomeScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const listLinkedApp = useMemo(() => {
-    const linkedContextTemp = linkedContext.map((context) => context.context);
+    const linkedContextTemp = linkedContext
+      .filter((context) => context.state === 'applied')
+      .map((context) => context.context);
     const linked = apps.filter((app) => linkedContextTemp.includes(app.id));
     return linked;
   }, [apps, linkedContext]);
@@ -238,9 +240,7 @@ export const HomeScreen = (props) => {
       >
         <Image
           style={[styles.headerBackground, { height: headerHeight * 1.5 }]}
-          source={{
-            uri: 'https://s3-alpha-sig.figma.com/img/027c/21bf/7261527b75760d1cb81708b853209880?Expires=1644796800&Signature=e6qBOzYop-QY5Df9Boyo2RDwOSoUulAI1b4QiIwWrzU15Teoz1v8NKY5x4ScbJfOlO6TK7lolfm1lj2ii4wTuHXJREXjB-99U2uvJqRtklCJaHcRjBRT67WWUsnFhj5R5FQCkdNrrifZa4-bf4pWnYIPi7iRMjIg9LI8EccU301S-MCU7wEbNPLm~ifH3-3w~SsfIO1JoyNo0~~HTxfDzxWVwiRl8tlDQLU~ysADHhTgJa3rFczZoRhAdOhgSCLSnZMLPbbu-nwRhFYKyePEviY710NbsUy6r4UBDJGtftM9pxjB85gW4A91dwDnReqIehaVHjcbhDn4PCvbsCJ9cQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-          }}
+          source={require('@/static/home-background.png')}
         />
       </LinearGradient>
 
