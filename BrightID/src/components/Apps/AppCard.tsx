@@ -65,6 +65,42 @@ const AppCard = (props: AppInfo) => {
     linkedContextSelector(state, context),
   );
 
+  const appColorTheme = useMemo(() => {
+    switch (name) {
+      case 'Gitcoin':
+        return '#8F37FF';
+      case '1Hive':
+        return '#FFD037';
+      case 'RabbitHole':
+        return '#0FCE7C';
+      case 'IDChain':
+        return '#2C227E';
+      case 'Rare Coin Claims':
+        return '#1DA1F2';
+      case 'MultiverseDAO':
+        return '#F21DDD';
+      case 'clr.fund':
+        return '#261A4B';
+      case 'Burn Signal':
+        return '#ED411B';
+      case 'The Ether':
+        return '#7CE0D6';
+      case 'Top-up Gifter':
+        return '#F38621';
+      case 'Discord Unique Bot':
+        return '#9EA1E0';
+      case 'Snapshot':
+        return '#FFAF37';
+      case '13Votes':
+        return '#B337FF';
+      case '$Bright':
+        return '#FFC918';
+      case 'Lumos':
+        return '#FFD337';
+      default:
+        return '';
+    }
+  }, [name]);
   const selectLinkedSigs = useMemo(
     () => createSelectLinkedSigsForApp(id),
     [id],
@@ -249,7 +285,9 @@ const AppCard = (props: AppInfo) => {
       testID={`app-${id}`}
       onPress={openApp}
     >
-      <View style={styles.logoBackground} />
+      <View
+        style={[styles.logoBackground, { backgroundColor: appColorTheme }]}
+      />
       <View style={[styles.logoContainer, !notSponsored && styles.shadow]}>
         <Image
           source={{
