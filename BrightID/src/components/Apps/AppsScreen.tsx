@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import { any, propEq, find } from 'ramda';
@@ -44,6 +45,7 @@ import {
 } from '@/actions';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { isVerified } from '@/utils/verifications';
 import AppCard from './AppCard';
 import AnimatedLinearGradient from './AnimatedLinearGradient';
 import { handleAppContext, handleBlindSigApp } from './model';
@@ -66,6 +68,9 @@ export const AppsScreen = () => {
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
+  const userVerifications = useSelector(
+    (state: State) => state.user.verifications,
+  );
 
   // filter state
   const [search, setSearch] = useState('');
@@ -175,16 +180,35 @@ export const AppsScreen = () => {
         (link) => link.context === app.context,
       );
 
-      // linked app
+      // filter linked app
       const isLinkedTemp = isLinked && isLinked.state === 'applied';
       const appSig = selectLinkedSigs.filter((sig) => sig.app === app.id);
 
+      // 0 - all apps filtered
+      // 1 - only linked app
+      // 2 - only verified app
       if (activefilter === 0) {
         return !app.testing || isLinkedTemp;
       } else if (activefilter === 1) {
         return (
           !app.testing &&
           ((app.usingBlindSig && appSig.length > 0) || isLinkedTemp)
+        );
+      } else if (activefilter === 2) {
+        /* eslint no-var: 0 */
+        var count = 0;
+        for (const verification of app.verifications) {
+          const verified = isVerified(
+            _.keyBy(userVerifications, (v) => v.name),
+            verification,
+          );
+          if (verified) {
+            count++;
+          }
+        }
+
+        return (
+          (!app.testing || isLinkedTemp) && count === app.verifications.length
         );
       }
     });
@@ -198,11 +222,17 @@ export const AppsScreen = () => {
     } else {
       setFilteredApp(allApps);
     }
-  }, [search, activefilter, apps, selectLinkedSigs, linkedContext]);
+  }, [
+    search,
+    activefilter,
+    apps,
+    selectLinkedSigs,
+    linkedContext,
+    userVerifications,
+  ]);
 
   // Animation
   const scrollY = useRef(new Animated.Value(0)).current;
-  const fadeAnimation = useRef(new Animated.Value(0)).current;
   const fadeBackgroundSearch = scrollY.interpolate({
     inputRange: [0, 230],
     outputRange: [0, 1],
