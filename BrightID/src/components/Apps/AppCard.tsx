@@ -235,7 +235,6 @@ const AppCard = (props: AppInfo) => {
 
   // If app is testing and user is not linked, do not display card
   if (testing && !isLinked) {
-    console.log(appVerifications);
     return null;
   }
 
