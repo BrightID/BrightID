@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { PieChart } from 'react-native-svg-charts';
 import { ORANGE } from '@/theme/colors';
@@ -101,7 +107,10 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: 'white',
     borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 1, 10)',
+    ...Platform.select({
+      android: { shadowColor: 'rgba(0, 0, 0, 1)' },
+      ios: { shadowColor: 'rgba(0, 0, 0, 0.2)' },
+    }),
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 10,

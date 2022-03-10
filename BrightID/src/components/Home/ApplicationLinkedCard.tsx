@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  Platform,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE } from '@/theme/colors';
@@ -85,7 +86,10 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: 'white',
     borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 1, 10)',
+    ...Platform.select({
+      android: { shadowColor: 'rgba(0, 0, 0, 1)' },
+      ios: { shadowColor: 'rgba(0, 0, 0, 0.2)' },
+    }),
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 10,
