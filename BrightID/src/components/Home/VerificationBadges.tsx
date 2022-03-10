@@ -4,20 +4,19 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE } from '@/theme/colors';
 
 export default function VerificationBadges(props) {
-  let color = 'grey';
-  let icon = '';
-
-  switch (props.label) {
-    case 'Meets':
-    case 'Bitu':
-    case 'Seeds':
-      color = ORANGE;
-      icon = 'check-circle';
-      break;
-    default:
-      color = 'grey';
-      icon = 'close-circle';
-  }
+  const color = props.active ? ORANGE : 'grey';
+  const icon = props.active ? 'check-circle' : 'close-circle';
+  // switch (props.status) {
+  //   case 'Meets':
+  //   case 'Bitu':
+  //   case 'Seeds':
+  //     color = ORANGE;
+  //     icon = 'check-circle';
+  //     break;
+  //   default:
+  //     color = 'grey';
+  //     icon = 'close-circle';
+  // }
 
   return (
     <TouchableOpacity

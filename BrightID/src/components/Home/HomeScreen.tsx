@@ -23,6 +23,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel from 'react-native-snap-carousel';
@@ -81,13 +82,13 @@ export const verificationPatchesSelector = createSelector(
 export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
   const apps = useSelector(selectAllApps);
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
-  // const verificationPatches = useSelector(verificationPatchesSelector);
-  const verificationPatches = [{ text: 'Meets' }, { text: 'Bitu' }];
+  const verificationPatches = useSelector(verificationPatchesSelector);
 
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
@@ -230,7 +231,10 @@ export const HomeScreen = (props) => {
     <View style={styles.container}>
       <LinearGradient
         colors={['#ED7A5D', '#999ECD', '#3E4481']}
-        style={[styles.headerBackground, { height: headerHeight * 1.5 }]}
+        style={[
+          styles.headerBackground,
+          { height: headerHeight * 1.5 + insets.top },
+        ]}
       >
         <Image
           style={[styles.headerBackground, { height: headerHeight * 1.5 }]}
@@ -243,10 +247,10 @@ export const HomeScreen = (props) => {
       <Image
         source={{ uri: profilePhoto }}
         style={{
-          marginTop: headerHeight * 0.875,
+          marginTop: headerHeight * 0.875 + insets.top,
           height: headerHeight * 1.25,
-          aspectRatio: 1,
           borderRadius: headerHeight * 0.75,
+          aspectRatio: 1,
           backgroundColor: WHITE,
           zIndex: 3,
         }}
