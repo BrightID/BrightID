@@ -7,6 +7,7 @@ import {
   Platform,
   View,
   Linking,
+  TouchableOpacity,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
@@ -239,13 +240,14 @@ const AppCard = (props: AppInfo) => {
   }
 
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.container,
         styles.shadow,
         { opacity: notSponsored ? 0.5 : 1 },
       ]}
       testID={`app-${id}`}
+      onPress={openApp}
     >
       <View style={styles.logoBackground} />
       <View style={[styles.logoContainer, !notSponsored && styles.shadow]}>
@@ -281,7 +283,7 @@ const AppCard = (props: AppInfo) => {
         </View>
         <Labels />
       </View> */}
-    </View>
+    </TouchableOpacity>
   );
 };
 
