@@ -78,6 +78,9 @@ export const AppsScreen = () => {
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
     undefined,
   );
+  const [totalApps, setTotalApps] = useState(0);
+  const [totalVerifiedApp, setTotalVerifiedApp] = useState(0);
+
   // filter state
   const [search, setSearch] = useState('');
   const [activefilter, SetFilter] = useState(0);
@@ -169,48 +172,55 @@ export const AppsScreen = () => {
       const isLinked = linkedContext.find(
         (link) => link.context === app.context,
       );
-
-      // filter linked app
       const isLinkedTemp = isLinked && isLinked.state === 'applied';
-      const appSig = selectLinkedSigs.filter((sig) => sig.app === app.id);
-
-      // 0 - all apps filtered
-      // 1 - only linked app
-      // 2 - only verified app
-      if (activefilter === 0) {
-        return !app.testing || isLinkedTemp;
-      } else if (activefilter === 1) {
-        return (
-          !app.testing &&
-          ((app.usingBlindSig && appSig.length > 0) || isLinkedTemp)
-        );
-      } else if (activefilter === 2) {
-        /* eslint no-var: 0 */
-        var count = 0;
-        for (const verification of app.verifications) {
-          const verified = isVerified(
-            _.keyBy(userVerifications, (v) => v.name),
-            verification,
-          );
-          if (verified) {
-            count++;
-          }
-        }
-
-        return (
-          (!app.testing || isLinkedTemp) && count === app.verifications.length
-        );
-      }
+      return !app.testing || isLinkedTemp;
     });
+
+    const linkedApps = allApps.filter((app) => {
+      const appSig = selectLinkedSigs.filter((sig) => sig.app === app.id);
+      const isLinked = linkedContext.find(
+        (link) => link.context === app.context,
+      );
+      const isLinkedTemp = isLinked && isLinked.state === 'applied';
+      return (app.usingBlindSig && appSig.length > 0) || isLinkedTemp;
+    });
+
+    const verifiedApps = allApps.filter((app) => {
+      /* eslint no-var: 0 */
+      var count = 0;
+      for (const verification of app.verifications) {
+        const verified = isVerified(
+          _.keyBy(userVerifications, (v) => v.name),
+          verification,
+        );
+        if (verified) {
+          count++;
+        }
+      }
+
+      return count === app.verifications.length;
+    });
+
+    setTotalApps(allApps.length);
+    setTotalVerifiedApp(verifiedApps.length);
+
+    var filteredApp: AppInfo[] = [];
+    if (activefilter === 0) {
+      filteredApp = allApps;
+    } else if (activefilter === 1) {
+      filteredApp = linkedApps;
+    } else if (activefilter === 2) {
+      filteredApp = verifiedApps;
+    }
 
     // filter using search bar
     if (search !== '') {
-      const filterResult = allApps.filter(
+      const filterResult = filteredApp.filter(
         (app) => app.name.toLowerCase().indexOf(search.toLowerCase()) !== -1,
       );
       setFilteredApp(filterResult);
     } else {
-      setFilteredApp(allApps);
+      setFilteredApp(filteredApp);
     }
   }, [
     search,
@@ -293,7 +303,7 @@ export const AppsScreen = () => {
             <View style={styles.appDetailContainer}>
               <Text style={styles.detailLabel}>Total</Text>
               <Text style={styles.detail}>
-                12 <Text style={styles.detailLabel}>apps</Text>
+                {totalApps} <Text style={styles.detailLabel}>apps</Text>
               </Text>
             </View>
             <View style={{ width: 10 }} />
@@ -310,7 +320,7 @@ export const AppsScreen = () => {
               You meet the verification criteria of
             </Text>
             <Text style={[styles.detail, { textAlign: 'right' }]}>
-              12 <Text style={styles.detailLabel}>apps</Text>
+              {totalVerifiedApp} <Text style={styles.detailLabel}>apps</Text>
             </Text>
           </View>
         </AnimatedLinearGradient>
