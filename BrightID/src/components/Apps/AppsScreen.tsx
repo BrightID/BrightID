@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
   useRef,
-  useMemo,
 } from 'react';
 import {
   Alert,
@@ -18,10 +17,9 @@ import {
   Animated,
   TouchableOpacity,
   Platform,
+  SafeAreaView,
 } from 'react-native';
-import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import Spinner from 'react-native-spinkit';
 import { any, propEq, find } from 'ramda';
 import {
   useFocusEffect,
@@ -29,6 +27,8 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
+import _ from 'lodash';
+import Spinner from 'react-native-spinkit';
 import {
   linkedContextTotal,
   selectAllLinkedContexts,
@@ -61,6 +61,8 @@ export const AppsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
+  const headerHeight = useHeaderHeight();
+  const { t } = useTranslation();
 
   const apps = useSelector(selectAllApps);
   const linkedContext = useSelector(selectAllLinkedContexts);
@@ -72,17 +74,37 @@ export const AppsScreen = () => {
     (state: State) => state.user.verifications,
   );
 
+  const [refreshing, setRefreshing] = useState(false);
+  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
+    undefined,
+  );
   // filter state
   const [search, setSearch] = useState('');
   const [activefilter, SetFilter] = useState(0);
   const [filteredApp, setFilteredApp] = useState(apps);
 
-  const [refreshing, setRefreshing] = useState(false);
-  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
-    undefined,
+  // Animation
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const fadeBackgroundSearch = scrollY.interpolate({
+    inputRange: [0, 230],
+    outputRange: [0, 1],
+  });
+  const fadeBackgroundHeader = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+  });
+  const handleScroll = Animated.event(
+    [
+      {
+        nativeEvent: {
+          contentOffset: { y: scrollY },
+        },
+      },
+    ],
+    {
+      useNativeDriver: true,
+    },
   );
-  const { t } = useTranslation();
-  const headerHeight = useHeaderHeight();
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -95,8 +117,6 @@ export const AppsScreen = () => {
         setRefreshing(false);
       });
   }, [api, dispatch]);
-
-  useFocusEffect(refreshApps);
 
   const handleDeepLink = useCallback(() => {
     const context = route.params?.context;
@@ -142,36 +162,6 @@ export const AppsScreen = () => {
       handleAppDeepLink();
     }
   }, [apps, handleDeepLink, handleAppDeepLink, route.params]);
-
-  const AppStatus = () => {
-    let msg: string, waiting: boolean;
-    if (sponsoringApp) {
-      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
-      waiting = true;
-    } else if (pendingLink) {
-      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
-      waiting = true;
-    } else if (!isSponsored) {
-      msg = t('apps.text.notSponsored');
-      waiting = false;
-    } else {
-      msg = '';
-      waiting = false;
-    }
-    return msg ? (
-      <View style={styles.statusContainer}>
-        <Text style={styles.statusMessage}>{msg}</Text>
-        <Spinner
-          isVisible={waiting}
-          size={DEVICE_LARGE ? 48 : 42}
-          type="Wave"
-          color={BLUE}
-        />
-      </View>
-    ) : (
-      <View style={{ height: DEVICE_LARGE ? 12 : 10 }} />
-    );
-  };
 
   // handle filter
   useEffect(() => {
@@ -231,28 +221,37 @@ export const AppsScreen = () => {
     userVerifications,
   ]);
 
-  // Animation
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const fadeBackgroundSearch = scrollY.interpolate({
-    inputRange: [0, 230],
-    outputRange: [0, 1],
-  });
-  const fadeBackgroundHeader = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0],
-  });
-  const handleScroll = Animated.event(
-    [
-      {
-        nativeEvent: {
-          contentOffset: { y: scrollY },
-        },
-      },
-    ],
-    {
-      useNativeDriver: true,
-    },
-  );
+  useFocusEffect(refreshApps);
+
+  const AppStatus = () => {
+    let msg: string, waiting: boolean;
+    if (sponsoringApp) {
+      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
+      waiting = true;
+    } else if (pendingLink) {
+      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
+      waiting = true;
+    } else if (!isSponsored) {
+      msg = t('apps.text.notSponsored');
+      waiting = false;
+    } else {
+      msg = '';
+      waiting = false;
+    }
+    return msg ? (
+      <View style={styles.statusContainer}>
+        <Text style={styles.statusMessage}>{msg}</Text>
+        <Spinner
+          isVisible={waiting}
+          size={DEVICE_LARGE ? 48 : 42}
+          type="Wave"
+          color={BLUE}
+        />
+      </View>
+    ) : (
+      <View style={{ height: DEVICE_LARGE ? 12 : 10 }} />
+    );
+  };
 
   return (
     <>
@@ -287,11 +286,7 @@ export const AppsScreen = () => {
               ],
             },
           ]}
-          style={{
-            paddingHorizontal: 20,
-            paddingBottom: 80,
-            paddingTop: headerHeight,
-          }}
+          style={{ paddingHorizontal: 20, paddingTop: headerHeight }}
           colors={['#3E4481', '#999ECD', '#ED7A5D']}
         >
           <View style={styles.rowContainer}>
@@ -348,42 +343,28 @@ export const AppsScreen = () => {
             transform: [
               {
                 translateY: scrollY.interpolate({
-                  inputRange: [0, 150],
-                  outputRange: [150, 0],
+                  inputRange: [-500, 0, 150],
+                  outputRange: [650, 150, 0],
                   extrapolate: 'clamp',
                 }),
               },
             ],
           }}
         >
-          {/* <View /> */}
-
           <TextInput
-            style={[
-              styles.shadow,
-              {
-                backgroundColor: 'white',
-                width: '90%',
-                height: 50,
-                borderRadius: 5,
-              },
-            ]}
+            style={[styles.shadow, styles.textInput]}
             onChangeText={(value) => setSearch(value)}
             placeholder="App name"
           />
 
-          <View style={{ width: '90%', flexDirection: 'row', marginTop: 10 }}>
+          <View style={styles.filterContainer}>
             {filters.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                style={{
-                  backgroundColor: index === activefilter ? ORANGE : WHITE,
-                  borderWidth: 1,
-                  borderColor: ORANGE,
-                  padding: 5,
-                  borderRadius: 5,
-                  marginRight: 5,
-                }}
+                style={[
+                  styles.filterItemContainer,
+                  { backgroundColor: index === activefilter ? ORANGE : WHITE },
+                ]}
                 onPress={() => SetFilter(index)}
               >
                 <Text
@@ -406,19 +387,11 @@ export const AppsScreen = () => {
           onScroll={handleScroll}
           scrollEventThrottle={16}
           numColumns={2}
-          columnWrapperStyle={{
-            justifyContent: 'space-between',
-            marginBottom: 20,
-          }}
-          contentContainerStyle={{
-            marginTop: headerHeight + 190,
-            paddingTop: 100,
-            paddingBottom: 500,
-            paddingHorizontal: 20,
-            backgroundColor: 'white',
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-          }}
+          columnWrapperStyle={styles.wrapperColumn}
+          contentContainerStyle={[
+            styles.contentContainer,
+            { marginTop: headerHeight + 190 },
+          ]}
           keyExtractor={({ name }, index) => name + index}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -448,7 +421,7 @@ const styles = StyleSheet.create({
   shadow: {
     ...Platform.select({
       android: { shadowColor: 'rgba(0,0,0,1)' },
-      ios: { shadowColor: 'rgba(0,0,0,0.3)' },
+      ios: { shadowColor: 'rgba(0,0,0,0.2)' },
     }),
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
@@ -482,11 +455,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 310,
-    // backgroundColor: 'red',
     width: '100%',
   },
   rowContainer: {
-    flex: 1,
+    flexGrow: 0.4,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -516,6 +488,37 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: 20,
     color: WHITE,
+  },
+  textInput: {
+    backgroundColor: 'white',
+    width: '90%',
+    height: 50,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  wrapperColumn: {
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  contentContainer: {
+    paddingTop: 100,
+    paddingBottom: 500,
+    paddingHorizontal: 20,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  filterContainer: {
+    width: '90%',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  filterItemContainer: {
+    borderWidth: 1,
+    borderColor: ORANGE,
+    padding: 5,
+    borderRadius: 5,
+    marginRight: 5,
   },
 });
 
