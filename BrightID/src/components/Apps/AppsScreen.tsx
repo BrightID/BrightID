@@ -96,6 +96,16 @@ export const AppsScreen = () => {
     inputRange: [0, 100],
     outputRange: [1, 0],
   });
+  const translateYHeader = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -150],
+    extrapolate: 'clamp',
+  });
+  const translateYSearch = scrollY.interpolate({
+    inputRange: [-500, 0, 150],
+    outputRange: [650, 150, 0],
+    extrapolate: 'clamp',
+  });
   const handleScroll = Animated.event(
     [
       {
@@ -176,6 +186,7 @@ export const AppsScreen = () => {
       return !app.testing || isLinkedTemp;
     });
 
+    // filter linked app
     const linkedApps = allApps.filter((app) => {
       const appSig = selectLinkedSigs.filter((sig) => sig.app === app.id);
       const isLinked = linkedContext.find(
@@ -185,6 +196,7 @@ export const AppsScreen = () => {
       return (app.usingBlindSig && appSig.length > 0) || isLinkedTemp;
     });
 
+    // filter verified app
     const verifiedApps = allApps.filter((app) => {
       /* eslint no-var: 0 */
       var count = 0;
@@ -263,103 +275,66 @@ export const AppsScreen = () => {
     );
   };
 
-  return (
-    <>
-      <View style={styles.container} testID="appsScreen">
-        {/* <AppStatus /> */}
-
-        <AnimatedLinearGradient
-          containerStyle={{
-            position: 'absolute',
-            top: 0,
-            width: '100%',
-            height: headerHeight,
-            zIndex: 100,
-            opacity: fadeBackgroundSearch,
-          }}
-          colors={['#3E4481', '#999ECD']}
-        />
-
-        <AnimatedLinearGradient
-          containerStyle={[
-            styles.headerContainer,
-            {
-              opacity: fadeBackgroundHeader,
-              transform: [
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [0, 150],
-                    outputRange: [0, -150],
-                    extrapolate: 'clamp',
-                  }),
-                },
-              ],
-            },
-          ]}
-          style={{ paddingHorizontal: 20, paddingTop: headerHeight }}
-          colors={['#3E4481', '#999ECD', '#ED7A5D']}
-        >
-          <View style={styles.rowContainer}>
-            <View style={styles.appDetailContainer}>
-              <Text style={styles.detailLabel}>Total</Text>
-              <Text style={styles.detail}>
-                {totalApps} <Text style={styles.detailLabel}>apps</Text>
-              </Text>
-            </View>
-            <View style={{ width: 10 }} />
-            <View style={styles.appDetailContainer}>
-              <Text style={styles.detailLabel}>You're linked to</Text>
-              <Text style={styles.detail}>
-                {linkedContextsCount}
-                <Text style={styles.detailLabel}> apps</Text>
-              </Text>
-            </View>
-          </View>
-          <View style={styles.criteriaContainer}>
-            <Text style={styles.detailLabel}>
-              You meet the verification criteria of
-            </Text>
-            <Text style={[styles.detail, { textAlign: 'right' }]}>
-              {totalVerifiedApp} <Text style={styles.detailLabel}>apps</Text>
+  const OverallDescription = () => {
+    return (
+      <AnimatedLinearGradient
+        containerStyle={[
+          styles.headerContainer,
+          {
+            opacity: fadeBackgroundHeader,
+            transform: [{ translateY: translateYHeader }],
+          },
+        ]}
+        style={{ paddingHorizontal: 20, paddingTop: headerHeight }}
+        colors={['#3E4481', '#999ECD', '#ED7A5D']}
+      >
+        <View style={styles.rowContainer}>
+          <View style={styles.appDetailContainer}>
+            <Text style={styles.detailLabel}>Total</Text>
+            <Text style={styles.detail}>
+              {totalApps} <Text style={styles.detailLabel}>apps</Text>
             </Text>
           </View>
-        </AnimatedLinearGradient>
+          <View style={{ width: 10 }} />
+          <View style={styles.appDetailContainer}>
+            <Text style={styles.detailLabel}>You're linked to</Text>
+            <Text style={styles.detail}>
+              {linkedContextsCount}
+              <Text style={styles.detailLabel}> apps</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={styles.criteriaContainer}>
+          <Text style={styles.detailLabel}>
+            You meet the verification criteria of
+          </Text>
+          <Text style={[styles.detail, { textAlign: 'right' }]}>
+            {totalVerifiedApp} <Text style={styles.detailLabel}>apps</Text>
+          </Text>
+        </View>
+      </AnimatedLinearGradient>
+    );
+  };
 
+  const Filter = () => {
+    return (
+      <>
         <Animated.View
           testID="searchBarBackground"
-          style={{
-            position: 'absolute',
-            top: headerHeight,
-            width: '100%',
-            height: 120,
-            backgroundColor: `white`,
-            opacity: fadeBackgroundSearch,
-            zIndex: 5,
-          }}
+          style={[
+            styles.searchBackground,
+            { top: headerHeight, opacity: fadeBackgroundSearch },
+          ]}
         />
 
         <Animated.View
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: headerHeight + 10,
-            alignSelf: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: 100,
-            zIndex: 6,
-            overflow: 'visible',
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [-500, 0, 150],
-                  outputRange: [650, 150, 0],
-                  extrapolate: 'clamp',
-                }),
-              },
-            ],
-          }}
+          style={[
+            styles.searchContainer,
+            {
+              top: headerHeight + 10,
+              transform: [{ translateY: translateYSearch }],
+            },
+          ]}
         >
           <TextInput
             style={[styles.shadow, styles.textInput]}
@@ -390,6 +365,26 @@ export const AppsScreen = () => {
             ))}
           </View>
         </Animated.View>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <View style={styles.container} testID="appsScreen">
+        {/* <AppStatus /> */}
+
+        <AnimatedLinearGradient
+          containerStyle={[
+            styles.headerTitleContainer,
+            { height: headerHeight, opacity: fadeBackgroundSearch },
+          ]}
+          colors={['#3E4481', '#999ECD']}
+        />
+
+        <OverallDescription />
+
+        <Filter />
 
         <Animated.FlatList
           testID="appsList"
@@ -458,6 +453,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
+  },
+  headerTitleContainer: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 100,
   },
   headerContainer: {
     position: 'absolute',
@@ -529,6 +530,24 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     marginRight: 5,
+  },
+  searchContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignSelf: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 100,
+    zIndex: 6,
+    overflow: 'visible',
+  },
+  searchBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: 120,
+    backgroundColor: `white`,
+    zIndex: 5,
   },
 });
 
