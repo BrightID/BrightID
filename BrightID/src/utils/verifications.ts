@@ -22,20 +22,30 @@ export const isVerified = (
 
 export const getVerificationPatches = (verifications: Verification[]) => {
   const patches = [];
+
   let v = verifications.find((v) => v.name === 'SeedConnected');
   if (v && (v as SeedConnectedVerification).rank > 0) {
-    patches.push({ text: 'Meets' });
+    patches.push({ text: 'Meets', active: true });
+  } else {
+    patches.push({ text: 'Meets', active: false });
   }
+
   v = verifications.find((v) => v.name === 'Bitu');
   if (v && (v as BituVerification).score > 0) {
     patches.push({
       text: `Bitu ${(v as BituVerification).score}`,
       task: UserTasks.bitu_verification,
+      active: true,
     });
+  } else {
+    patches.push({ text: 'Bitu', active: false });
   }
+
   v = verifications.find((v) => v.name === 'Seed');
   if (v) {
-    patches.push({ text: 'Seed' });
+    patches.push({ text: 'Seed', active: true });
+  } else {
+    patches.push({ text: 'Seed', active: false });
   }
   return patches;
 };
