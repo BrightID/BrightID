@@ -1,5 +1,4 @@
-/* global device:false, element:false, by:false, waitFor:false */
-
+import { by, element, expect } from 'detox';
 import { report_reasons } from '@/utils/constants';
 import {
   createBrightID,

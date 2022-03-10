@@ -39,6 +39,8 @@ export const CHANNEL_INFO_VERSION_2 = 2; // Adds STAR channel type
 export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
 // the newest channel info format the client understands.
 export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
+// TODO: Set dedicated prefix for importing once node backends are updated
+export const IMPORT_PREFIX = 'sig_';
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
@@ -58,8 +60,7 @@ export const MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION = 3;
 export const MIN_RECOVERY_CONNECTIONS = 3;
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
-type connection_levels =
-  typeof connection_levels[keyof typeof connection_levels];
+
 export const connection_levels = {
   REPORTED: 'reported',
   SUSPICIOUS: 'suspicious',
@@ -79,4 +80,6 @@ export const report_reasons = {
 export enum qrCodeURL_types {
   CONNECTION = '1', // qrcode url is for connection channel
   RECOVERY = '2', // qrcode url is for recovery channel
+  IMPORT = '3', // qrcode url is for import channel
+  SYNC = '4', // qrcode url is for syncing devices channel
 }

@@ -1,6 +1,9 @@
 /**
  * Response Types
  */
+type OperationState = {
+  state: typeof operation_states[keyof typeof operation_states];
+};
 
 type NodeApiRes =
   | AppRes

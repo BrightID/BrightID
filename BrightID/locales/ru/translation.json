@@ -194,7 +194,6 @@
     "button": {
       "levelSave": "Сохранить",
       "ok": "Хорошо",
-      "report": "Пожаловаться на этого человека",
       "reportCancel": "Отмена",
       "reportSubmit": "Отправить",
       "undoReport": "Отозвать жалобу"
@@ -207,24 +206,23 @@
       "mutualConnections": "Общие подключения",
       "mutualGroups": "Общие группы",
       "recoveryConnections": "Связи для восстановления",
-      "possibleDuplicates": "Возможные дубликаты"
+      "possibleDuplicates": "Возможные дубликаты",
+      "socialMedia": "Социальные медиа"
     },
     "tags": {
       "connectedAt": "Подключено {{date}}",
       "loading": "Загрузка…"
     },
     "text": {
+      "copied": "Скопировано в буфер обмена!",
       "level": "Насколько хорошо ты знаешь {{name}}?",
       "levelAlreadyKnown": "Я знаю этого человека",
       "levelJustMet": "Этот человек - незнакомец, которого я только что встретил",
       "levelRecovery": "Я доверяю этому человеку восстановить мой BrightID для меня",
       "levelSuspicious": "Я совсем не знаю этого человека",
-      "reportConnection": "Жалоба {{name}}",
       "reportDuplicate": "Этот человек создал несколько учетных записей",
-      "reportImpact": "Помечание {{name}} отрицательно повлияет на их оценку BrightID, и эта пометка может быть показана другим пользователям.",
       "reportOther": "Другая причина",
       "reportSpammer": "Этот человек прислал мне нежелательный запрос на подключение",
-      "unReportConnection": "Отозвать жалобу",
       "unReportImpact": "Вы уже пожаловались на {{name}} за {{reportReason}}. Хотите отозвать жалобу и восстановить подключение?",
       "unkownRecoveryConnection": "Неизвестно"
     }

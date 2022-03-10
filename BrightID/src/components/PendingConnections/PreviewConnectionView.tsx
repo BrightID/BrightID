@@ -90,6 +90,14 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
   const date = moment(pendingConnection.createdAt || Date.now()).fromNow();
 
+  const connectionBrightId = __DEV__ ? (
+    <View>
+      <Text testID="connectionBrightId" style={{ fontSize: 6, color: BLACK }}>
+        {pendingConnection.brightId}
+      </Text>
+    </View>
+  ) : null;
+
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.userContainer}>
@@ -140,6 +148,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         </Text>
       )}
       <View style={styles.ratingView}>{ratingView}</View>
+      {connectionBrightId}
     </>
   );
 };

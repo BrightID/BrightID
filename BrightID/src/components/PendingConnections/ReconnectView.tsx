@@ -168,7 +168,9 @@ export const ReconnectView = ({
       <>
         <View style={styles.header} testID="ReconnectScreen">
           <Text style={styles.subheaderText}>
-            {t('connections.text.alreadyConnectedWith')}
+            {t('connections.text.alreadyConnectedWith', {
+              name: pendingConnection.name,
+            })}
           </Text>
           <Text style={styles.lastConnectedText}>
             {t('connections.tag.lastConnected', {

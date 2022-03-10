@@ -182,7 +182,6 @@
     "button": {
       "levelSave": "सेव",
       "ok": "ठीक है",
-      "report": "यह व्यक्ति को रिपोर्ट करें",
       "reportCancel": "रद्द करें",
       "reportSubmit": "जमा करे",
       "undoReport": "रिपोर्ट वापस करना"
@@ -194,24 +193,23 @@
       "connectionLevel": "कनेक्शन की लेवल",
       "mutualConnections": "आपसी कनेक्शन",
       "mutualGroups": "आपसी ग्रुप",
-      "possibleDuplicates": "संभावित डुप्लिकेट"
+      "possibleDuplicates": "संभावित डुप्लिकेट",
+      "socialMedia": "सामाजिक मीडिया"
     },
     "tags": {
       "connectedAt": "कनेक्ट {{date}}",
       "loading": "लोड हो रहा है…"
     },
     "text": {
+      "copied": "क्लिपबोर्ड से कॉपी करे!",
       "level": "आप {{name}} को कितनी अच्छी तरह से जानते हो?",
       "levelAlreadyKnown": "मैं इस व्यक्ति को पहले से जानता हूं",
       "levelJustMet": "यह व्यक्ति एक अजनबी है जो मुझे अभी मिला है",
       "levelRecovery": "मुझे इस व्यक्ति पर भरोसा है कि वह मेरी BrightID पुनर्प्राप्त कर सकता है",
       "levelSuspicious": "मैं इस व्यक्ति को बिल्कुल नहीं जानता",
-      "reportConnection": "रिपोर्ट {{name}}",
       "reportDuplicate": "इस व्यक्ति ने कई अकाउंट बनाए",
-      "reportImpact": "{{name}} को फ़्लैग करें क्योंकि यह BrightID स्कोर को नकारात्मक रूप से प्रभावित करेगा, और यह ध्वज अन्य उपयोगकर्ताओं को दिखाया जा सकता है।",
       "reportOther": "अन्य कारण",
       "reportSpammer": "इस व्यक्ति ने मुझे अवांछित कनेक्शन का अनुरोध भेजा",
-      "unReportConnection": "रिपोर्ट वापस करना",
       "unReportImpact": "आप पहले ही रिपोर्ट कर चुके हैं {{name}} को{{reportReason}}. क्या आप इस रिपोर्ट को हटाना चाहते और आप अपना कनेक्शन बहाल करना चाहते हो?"
     }
   },

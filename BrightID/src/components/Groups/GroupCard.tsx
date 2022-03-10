@@ -3,7 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
-import { DARK_ORANGE, WHITE, DARK_GREEN, DARK_GREY } from '@/theme/colors';
+import {
+  DARK_ORANGE,
+  WHITE,
+  DARK_GREEN,
+  DARK_GREY,
+  BLACK,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import { GroupPhoto } from '@/components/Groups/GroupPhoto';
@@ -27,6 +33,17 @@ export const GroupCard = ({ group, index }: GroupCardProps) => {
       ).length,
     );
   }, [group.members]);
+
+  const groupInfo = __DEV__ ? (
+    <View>
+      <Text testID="groupID" style={{ fontSize: 6, color: BLACK }}>
+        {group.id}
+      </Text>
+      <Text testID="groupAESKey" style={{ fontSize: 6, color: BLACK }}>
+        {group.aesKey}
+      </Text>
+    </View>
+  ) : null;
 
   return (
     <View style={styles.container}>
@@ -58,6 +75,7 @@ export const GroupCard = ({ group, index }: GroupCardProps) => {
             </Text>
             <Text style={styles.membersUnknown}>{unknownsCount}</Text>
           </View>
+          {groupInfo}
         </View>
       </View>
     </View>

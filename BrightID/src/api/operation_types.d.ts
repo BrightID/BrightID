@@ -6,6 +6,7 @@ type NodeOps =
   | AddAdminOp
   | AddGroupOp
   | AddMembershipOp
+  | AddSigningKeyOp
   | ConnectOp
   | DismissOp
   | InviteOp
@@ -57,7 +58,7 @@ type ConnectOp = BaseOp & {
 };
 
 type DismissOp = BaseOp & {
-  name: string;
+  name: 'Dismiss';
   dismisser: string;
   dismissee: string;
   group: string;
@@ -90,7 +91,7 @@ type RemoveGroupOp = BaseOp & {
 };
 
 type RemoveMembershipOp = BaseOp & {
-  name: string;
+  name: 'Remove Membership';
   id: string;
   group: string;
   sig?: string;
@@ -110,4 +111,18 @@ type SpendSponsorshipOp = BaseOp & {
   name: 'Spend Sponsorship';
   app: string;
   appId: string;
+};
+
+type AddSigningKeyOp = BaseOp & {
+  name: 'Add Signing Key';
+  id: string;
+  signingKey: string;
+  sig?: string;
+};
+
+type RemoveSigningKeyOp = BaseOp & {
+  name: 'Remove Signing Key';
+  id: string;
+  signingKey: string;
+  sig?: string;
 };

@@ -1,12 +1,13 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import { randomKey } from '@/utils/encoding';
+import { hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
   setUserData,
   setConnections,
   setGroups,
   setKeypair,
   addOperation,
+  upsertSig,
 } from '@/actions';
 import BrightidError, { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
@@ -29,13 +30,13 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 
 export const setupRecovery =
   () => async (dispatch: dispatch, getState: getState) => {
+    console.log(`Setting up recovery...`);
     const { recoveryData } = getState();
     await createImageDirectory();
     // setup recovery data
     if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
       const { publicKey, secretKey } = await nacl.sign.keyPair();
-      const aesKey = await randomKey(16);
-
+      const aesKey = await urlSafeRandomKey(16);
       // setup recovery data slice with new keypair
       dispatch(init({ publicKey, secretKey, aesKey }));
     }
@@ -128,7 +129,9 @@ export const recoverData =
     const { userData } = restoredData;
     const { connections } = restoredData;
     const { groups } = restoredData;
-    setTotalItems(connections.length + groups.length);
+    const apps = await api.getApps();
+    const blindSigApps = apps.filter((app) => app.usingBlindSig);
+    setTotalItems(connections.length + groups.length + blindSigApps.length);
     dispatch(setConnections(connections));
     dispatch(setGroups(groups));
     dispatch(updateNamePhoto({ name: userData.name, photo: userData.photo }));
@@ -178,15 +181,32 @@ export const recoverData =
         }
       }
     }
+
+    // fetch blind sigs
+    for (const app of blindSigApps) {
+      setCurrentItem(currentItem++);
+      for (const verification of app.verifications) {
+        const vel = app.verificationExpirationLength;
+        const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+        const key = hash(`${app.id} ${verification} ${roundedTimestamp}`);
+        try {
+          const decrypted = await fetchBackupData(key, id, pass);
+          await dispatch(upsertSig(JSON.parse(decrypted)));
+        } catch (err) {
+          console.log(`blind sig not found for ${key}`, err.message);
+        }
+      }
+    }
+
     dispatch(fetchUserInfo(api));
   };
 
 export const finishRecovery =
   () => async (dispatch: dispatch, getState: getState) => {
     // collect user data that was populated either by uploads from recovery connections or by restoring backup
-    const { id, secretKey, name, photo } = getState().recoveryData;
+    const { id, name, photo } = getState().recoveryData;
     // clear recovery data from state
     dispatch(resetRecoveryData());
     // finally set the user data
-    dispatch(setUserData({ id, name, photo, secretKey }));
+    dispatch(setUserData({ id, name, photo }));
   };

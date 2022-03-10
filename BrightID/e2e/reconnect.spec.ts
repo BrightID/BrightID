@@ -1,5 +1,4 @@
-/* global  element:false, by:false, waitFor:false */
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { by, element, expect } from 'detox';import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 import {
   createBrightID,
   createFakeConnection,
@@ -7,7 +6,7 @@ import {
   navigateHome,
   reconnect,
 } from './testUtils';
-import { connection_levels, report_reasons } from '../src/utils/constants';
+import { connection_levels, report_reasons } from '@/utils/constants';
 
 describe('Reconnect existing connection', () => {
   beforeAll(async () => {

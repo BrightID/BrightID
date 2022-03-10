@@ -4,7 +4,6 @@
 	Date   : September 2016
 * */
 import modPow from 'react-native-modpow';
-
 import CryptoJS from 'crypto-js';
 import { BigInteger } from 'jsbn';
 
@@ -53,7 +52,7 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function (
   params,
   info,
   msg,
-) {
+): WISchnorrChallenge {
   const t1: BigInteger = this.GenerateRandomNumber();
   const t2: BigInteger = this.GenerateRandomNumber();
   const t3: BigInteger = this.GenerateRandomNumber();
@@ -93,7 +92,7 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function (
 WISchnorrClient.prototype.GenerateWISchnorrBlindSignature = function (
   challenge,
   response,
-) {
+): WISchnorrBlindSignature {
   // rho = r + t1 mod q
   const r = new BigInteger(response.r);
   const rho = r.add(challenge.t1).mod(this.q);
