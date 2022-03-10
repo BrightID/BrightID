@@ -4,7 +4,7 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Platform,
   View,
   Linking,
 } from 'react-native';
@@ -296,7 +296,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   shadow: {
-    shadowColor: 'rgba(0,0,0,1)',
+    ...Platform.select({
+      android: { shadowColor: 'rgba(0,0,0,1)' },
+      ios: { shadowColor: 'rgba(0,0,0,0.3)' },
+    }),
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 4,
