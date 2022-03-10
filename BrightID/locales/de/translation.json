@@ -194,7 +194,6 @@
     "button": {
       "levelSave": "Speichern",
       "ok": "OK",
-      "report": "Diese Person melden",
       "reportCancel": "Abbrechen",
       "reportSubmit": "Einreichen",
       "undoReport": "Meldung rückgängig machen"
@@ -206,24 +205,22 @@
       "connectionLevel": "Verbindungsstufe",
       "mutualConnections": "Gemeinsame Verbindungen",
       "mutualGroups": "Gemeinsame Gruppen",
-      "possibleDuplicates": "Mögliche Duplikate"
+      "socialMedia": "Sozialen Medien"
     },
     "tags": {
       "connectedAt": "Verbunden {{date}}",
       "loading": "Wird geladen …"
     },
     "text": {
+      "copied": "In die Zwischenablage kopiert!",
       "level": "Wie gut kennst du {{name}}?",
       "levelAlreadyKnown": "Ich kenne diese Person bereits",
       "levelJustMet": "Diese Person ist ein Fremder, den ich gerade getroffen habe",
       "levelRecovery": "Ich vertraue dieser Person, um meine BrightID für mich wiederherzustellen",
       "levelSuspicious": "Ich kenne diese Person überhaupt nicht",
-      "reportConnection": "{{name}} melden",
       "reportDuplicate": "Diese Person hat mehrere Konten erstellt",
-      "reportImpact": "Das Markieren von {{name}} wirkt sich negativ auf die BrightID-Bewertung aus, und diese Markierung wird möglicherweise anderen Benutzern angezeigt.",
       "reportOther": "Anderer Grund",
       "reportSpammer": "Diese Person hat mir eine unerwünschte Verbindungsanfrage gesendet",
-      "unReportConnection": "Meldung rückgängig machen",
       "unReportImpact": "Du hast bereits {{name}} als {{reportReason}} gemeldet. Möchtest du diese Meldung entfernen und deine Verbindung wiederherstellen?"
     }
   },

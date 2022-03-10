@@ -10,14 +10,15 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { createKeypair } from './SignUpFlow/thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
+import { qrCodeURL_types } from '@/utils/constants';
 import { version as app_version } from '../../../package.json';
 
 /* Description */
@@ -96,17 +97,42 @@ export const Onboard = () => {
               {t('onboarding.button.create')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.recoverBtn}
-            onPress={() => {
-              navigation.navigate('Restore');
-            }}
-            accessibilityLabel={t('onboarding.button.recover')}
-          >
-            <Text style={styles.recoverBtnText}>
-              {t('onboarding.button.recover')}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.recoverImportContainer}>
+            <TouchableOpacity
+              style={styles.recoverBtn}
+              onPress={() => {
+                navigation.navigate('Restore', {
+                  screen: 'RecoveryCode',
+                  params: {
+                    urlType: qrCodeURL_types.RECOVERY,
+                    action: 'recovery',
+                  },
+                });
+              }}
+              accessibilityLabel={t('onboarding.button.recover')}
+              testID="recoverBrightID"
+            >
+              <Text style={styles.recoverBtnText}>
+                {t('onboarding.button.recover')}
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.space} />
+            <TouchableOpacity
+              style={styles.recoverBtn}
+              onPress={() => {
+                navigation.navigate('Import', {
+                  screen: 'ImportCode',
+                  params: { urlType: qrCodeURL_types.IMPORT, action: 'import' },
+                });
+              }}
+              accessibilityLabel={t('onboarding.button.import')}
+              testID="importBrightID"
+            >
+              <Text style={styles.recoverBtnText}>
+                {t('onboarding.button.import')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.versionInfoContainer}>
           <Text style={styles.versionInfo}>
@@ -192,10 +218,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     color: WHITE,
   },
+  space: {
+    width: 10,
+  },
   recoverBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    flex: 1,
     height: DEVICE_LARGE ? 50 : 45,
     backgroundColor: WHITE,
     borderWidth: 1,
@@ -207,6 +236,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: ORANGE,
+  },
+  recoverImportContainer: {
+    flexDirection: 'row',
   },
   versionInfoContainer: {
     display: 'flex',

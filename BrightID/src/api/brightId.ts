@@ -373,6 +373,64 @@ export class NodeApi {
     return op;
   }
 
+  async addSigningKey(signingKey: string) {
+    this.requiresCredentials();
+    const name = 'Add Signing Key';
+    const timestamp = Date.now();
+
+    const op: AddSigningKeyOp = {
+      name,
+      id: this.id,
+      signingKey,
+      timestamp,
+      v,
+    };
+
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
+    );
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
+    return op;
+  }
+
+  async removeSigningKey(signingKey: string) {
+    this.requiresCredentials();
+    const name = 'Remove Signing Key';
+    const timestamp = Date.now();
+
+    const op: RemoveSigningKeyOp = {
+      name,
+      id: this.id,
+      signingKey,
+      timestamp,
+      v,
+    };
+
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
+    );
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
+    return op;
+  }
+
   async linkContextId(context: string, contextId: string) {
     this.requiresCredentials();
     const name = 'Link ContextId';
@@ -411,11 +469,9 @@ export class NodeApi {
   }
 
   async getProfile(id: string) {
-    this.requiresCredentials();
     const requester = this.id;
-    const res = await this.api.get<UserProfileRes, ErrRes>(
-      `/users/${id}/profile/${requester}`,
-    );
+    const url = `/users/${id}/profile/${requester || ''}`;
+    const res = await this.api.get<UserProfileRes, ErrRes>(url);
     NodeApi.throwOnError(res);
     return (res.data as UserProfileRes).data;
   }

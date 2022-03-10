@@ -28,6 +28,16 @@ const groupsSlice = createSlice({
       );
       Object.assign(group, action.payload);
     },
+    upsertGroup(state, action: PayloadAction<GroupInfo>) {
+      const group = state.groups.find(
+        (group) => group.id === action.payload.id,
+      );
+      if (group) {
+        Object.assign(group, action.payload);
+      } else {
+        state.groups.push(action.payload);
+      }
+    },
     deleteGroup(state, action: PayloadAction<Group>) {
       state.groups = state.groups.filter(
         (group) => group.id !== action.payload.id,
@@ -50,6 +60,14 @@ const groupsSlice = createSlice({
         if (group) {
           group.state = 'verified';
           group.joined = membership.timestamp;
+        } else {
+          state.groups.push({
+            id: membership.id,
+            state: 'verified',
+            joined: membership.timestamp,
+            members: [],
+            admins: [],
+          });
         }
       });
     },
@@ -185,6 +203,7 @@ export const filteredGroupsSelector = createSelector(
 export const {
   createGroup,
   updateGroup,
+  upsertGroup,
   deleteGroup,
   setGroups,
   updateMemberships,

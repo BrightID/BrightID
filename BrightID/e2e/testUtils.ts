@@ -1,8 +1,9 @@
-/* global element, by, waitFor */
-
+import './i18n_for_tests';
 import i18next from 'i18next';
+import { by, element, expect } from 'detox';
 import { connection_levels } from '@/utils/constants';
 import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { b64ToUint8Array } from '@/utils/encoding';
 
 const testUserName = 'Vincent Vega';
 
@@ -21,7 +22,7 @@ const createKeypair = async () => {
   await element(by.id('createBrightID')).tap();
 };
 
-const addName = async (name) => {
+const addName = async (name: string) => {
   await expect(element(by.id('NameScreen'))).toBeVisible();
   await expect(element(by.id('editName'))).toExist();
   await element(by.id('editName')).tap();
@@ -48,7 +49,7 @@ const addPhoto = async () => {
     .toBeVisible()
     .withTimeout(15000);
 
-  const submitPhoto = element(by.id('submitPhoto'))
+  const submitPhoto = element(by.id('submitPhoto'));
   await expect(submitPhoto).toExist();
   // wait for the button to be enabled after setting the photo
   await new Promise((r) => setTimeout(r, 2000));
@@ -88,7 +89,10 @@ const skipWalkthrough = async () => {
   await element(by.id('BrightIdLogo')).tap();
 };
 
-const createBrightID = async (name = testUserName, withPassword = false) => {
+const createBrightID = async (
+  name = testUserName,
+  withPassword = false,
+): Promise<{ brightId: string; secretKey: Uint8Array; publicKey: string }> => {
   await acceptEula();
   await createKeypair();
   await addName(name);
@@ -101,13 +105,32 @@ const createBrightID = async (name = testUserName, withPassword = false) => {
   // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
-  return name;
+
+  // get brightID of user
+  const brightIDAttributes = await element(
+    by.id('userBrightId'),
+  ).getAttributes(); // as ElementAttributes;
+  // get secretKey of user
+  const secretKeyAttributes = await element(
+    by.id('userSecretKey'),
+  ).getAttributes(); // as ElementAttributes;
+  // get publicKey of user
+  const publicKeyAttributes = await element(
+    by.id('userPublicKey'),
+  ).getAttributes(); // as ElementAttributes;
+
+  // convert to 'any' type because 'text' is not defined in detox iOSElementAttributes which it should be
+  return {
+    brightId: (brightIDAttributes as any).text,
+    secretKey: b64ToUint8Array((secretKeyAttributes as any).text),
+    publicKey: (publicKeyAttributes as any).text,
+  };
 };
 
 const createFakeConnection = async (
   doConfirm = true,
-  connectionLevel = connection_levels.JUST_MET,
-) => {
+  connectionLevel: ConnectionLevel = connection_levels.JUST_MET,
+): Promise<string> => {
   // need to be on Homescreen to continue
   await expectHomescreen();
   // open MyCode screen
@@ -120,6 +143,11 @@ const createFakeConnection = async (
     .toBeVisible()
     .withTimeout(40000);
 
+  // get brightID of connection
+  const brightIDAttributes = await element(
+    by.id('connectionBrightId'),
+  ).getAttributes(); // as ElementAttributes;
+
   if (doConfirm) {
     // confirm connection and navigate back to home screen
     await expect(element(by.id(`${connectionLevel}Btn`))).toBeVisible();
@@ -128,6 +156,7 @@ const createFakeConnection = async (
     await expectConnectionsScreen();
     await navigateHome();
   }
+  return (brightIDAttributes as any).text;
 };
 
 const expectHomescreen = async () => {
@@ -155,6 +184,7 @@ const navigateHome = async () => {
       } catch (err) {
         try {
           await element(by.id('NavHomeBtn')).atIndex(3).tap();
+          // eslint-disable-next-line no-empty
         } catch (err) {}
       }
     }
@@ -191,7 +221,7 @@ const expectAppsScreen = async (bool = true) => {
         .withTimeout(5000);
 };
 
-const inviteConnectionToGroup = async (groupName) => {
+const inviteConnectionToGroup = async (groupName: string) => {
   const inviteUserText = 'Invite user';
 
   // should start on home screen
@@ -231,7 +261,7 @@ const inviteConnectionToGroup = async (groupName) => {
   await expectHomescreen();
 };
 
-const joinAllGroups = async (connectionIndex) => {
+const joinAllGroups = async (connectionIndex: number) => {
   await expectHomescreen();
   // navigate to connections screen to make invited user join the group
   await element(by.id('connectionsBtn')).tap();
@@ -259,8 +289,8 @@ const joinAllGroups = async (connectionIndex) => {
 
 /* Connect a fake connection with all other fake connections */
 const interConnect = async (
-  connectionIndex,
-  connectionLevel = connection_levels.JUST_MET,
+  connectionIndex: number,
+  connectionLevel: ConnectionLevel = connection_levels.JUST_MET,
 ) => {
   await expectHomescreen();
   await element(by.id('connectionsBtn')).tap();
@@ -293,7 +323,7 @@ const interConnect = async (
   opens connection screen and triggers reconnect,
   ends at preview connection screen
  */
-const reconnect = async (connectionIndex, changeProfile) => {
+const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   const action = changeProfile
     ? 'Reconnect with changed profile'
     : 'Reconnect with identical profile';
@@ -333,20 +363,91 @@ const reconnect = async (connectionIndex, changeProfile) => {
     .withTimeout(30000);
 };
 
+const clearData = async () => {
+  await expectHomescreen();
+  await element(by.id('JoinCommunityBtn')).tap();
+  // Alert should be open
+  await expect(element(by.text('WARNING'))).toBeVisible();
+  // Confirm clearing data
+  await element(by.text('SURE')).tap();
+  // EULA screen should open
+  await expect(element(by.id('EulaScreen'))).toBeVisible();
+};
+
+const navigateGroupsScreen = async () => {
+  await expectHomescreen();
+  await element(by.id('toggleDrawer')).tap();
+  await expect(element(by.id('groupsBtn'))).toBeVisible();
+  await element(by.id('groupsBtn')).tap();
+  await expectGroupsScreen();
+};
+
+const createGroup = async (name: string, invitees: Array<number>) => {
+  await expectHomescreen();
+  await navigateGroupsScreen();
+  // create group
+  await element(by.id('addGroupBtn')).tap();
+  await expect(element(by.id('groupInfoScreen'))).toBeVisible();
+  await element(by.id('editGroupName')).tap();
+  await element(by.id('editGroupName')).typeText(name);
+  await element(by.id('editGroupName')).tapReturnKey();
+  await expect(element(by.id('editGroupName'))).toHaveText(name);
+  await element(by.id('editGroupPhoto')).tap();
+  // proceed to next screen to invite connections
+  await expect(element(by.id('nextBtn'))).toBeVisible();
+  await element(by.id('nextBtn')).tap();
+  await expect(element(by.id('newGroupScreen'))).toBeVisible();
+  for (const inviteeIndex of invitees) {
+    await element(by.id('checkInviteeBtn')).atIndex(inviteeIndex).tap();
+  }
+  await element(by.id('createNewGroupBtn')).tap();
+  // we should be back at the Groups screen
+  await expectGroupsScreen();
+
+  await navigateHome();
+};
+
+// extract group ID and AESKey of groups
+const getGroupKeys = async (
+  numGroups: number,
+): Promise<Array<{ id: string; aesKey: string }>> => {
+  await expectHomescreen();
+  await navigateGroupsScreen();
+  const groupKeys: Array<{ id: string; aesKey: string }> = [];
+  for (let index = 0; index < numGroups; index++) {
+    const groupIDAttributs = await element(
+      by.id('groupID').withAncestor(by.id(`groupItem-${index}`)),
+    ).getAttributes(); // as ElementAttributes;
+    const groupAESKeyAttributs = await element(
+      by.id('groupAESKey').withAncestor(by.id(`groupItem-${index}`)),
+    ).getAttributes(); // as ElementAttributes;
+    groupKeys.push({
+      id: (groupIDAttributs as any).text,
+      aesKey: (groupAESKeyAttributs as any).text,
+    });
+  }
+  await navigateHome();
+  return groupKeys;
+};
+
 export {
   testUserName,
   acceptEula,
+  clearData,
   createBrightID,
   createFakeConnection,
+  createGroup,
   expectHomescreen,
   expectNotificationsScreen,
   expectConnectionsScreen,
   expectConnectionScreen,
   expectGroupsScreen,
   expectAppsScreen,
+  getGroupKeys,
   interConnect,
   inviteConnectionToGroup,
   joinAllGroups,
   navigateHome,
+  navigateGroupsScreen,
   reconnect,
 };

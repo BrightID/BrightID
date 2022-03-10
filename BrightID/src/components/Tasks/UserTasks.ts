@@ -72,11 +72,11 @@ export const UserTasks = {
       return !!state.user.password;
     },
   },
-  setup_trusted_connections: {
-    id: 'setup_trusted_connections',
+  setup_recovery_connections: {
+    id: 'setup_recovery_connections',
     sortValue: 70,
-    title: i18next.t(`achievements.setupTrustedConnections.title`),
-    description: i18next.t(`achievements.setupTrustedConnections.description`),
+    title: i18next.t(`achievements.setupRecoveryConnections.title`),
+    description: i18next.t(`achievements.setupRecoveryConnections.description`),
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state: State) {
       return (

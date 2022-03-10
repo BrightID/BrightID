@@ -1,5 +1,4 @@
-/* global element:false, by:false */
-
+import { by, element, expect } from 'detox';
 import i18next from 'i18next';
 import {
   createBrightID,

@@ -33,6 +33,7 @@ import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
 import Faq from '@/components/Icons/Faq';
 import Mail from '@/components/Icons/Mail';
+import Devices from '@/components/Icons/Devices';
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import BituVerificationScreen from '@/components/Tasks/BituVerificationScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
@@ -273,6 +274,32 @@ const CustomDrawerContent = (props) => {
           navigation.reset({
             index: 1,
             routes: [{ name: 'Home' }, { name: 'Groups' }],
+          });
+        }}
+      />
+
+      <CustomItem
+        focused={false}
+        testId="devicesBtn"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.devices')}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={({ focused }) => (
+          <Devices
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Devices' }, { name: 'Devices', params: { syncing: false, asScanner: false } }],
           });
         }}
       />

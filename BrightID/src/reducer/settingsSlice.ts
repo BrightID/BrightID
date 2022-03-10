@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RESET_STORE } from '@/actions/resetStore';
 
 const ProdCandidates = [
   'http://node.brightid.org',
@@ -16,11 +17,15 @@ const TestCandidates = ['http://test.brightid.org'];
 interface SettingsSlice {
   baseUrl: string | null;
   nodeUrls: Array<string>;
+  isPrimaryDevice: boolean;
+  lastSyncTime: number;
 }
 
 const initialState: SettingsSlice = {
   baseUrl: null,
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
+  isPrimaryDevice: true,
+  lastSyncTime: 0,
 };
 
 export const settingsSlice = createSlice({
@@ -69,6 +74,17 @@ export const settingsSlice = createSlice({
         state.baseUrl = initialState.baseUrl;
       }
     },
+    setPrimaryDevice: (state, action: PayloadAction<boolean>) => {
+      state.isPrimaryDevice = action.payload;
+    },
+    setLastSyncTime: (state, action: PayloadAction<number>) => {
+      state.lastSyncTime = action.payload;
+    },
+  },
+  extraReducers: {
+    [RESET_STORE]: () => {
+      return initialState;
+    },
   },
 });
 
@@ -80,10 +96,15 @@ export const {
   removeNodeUrl,
   removeCurrentNodeUrl,
   resetNodeUrls,
+  setPrimaryDevice,
+  setLastSyncTime,
 } = settingsSlice.actions;
 
 export const selectBaseUrl = (state: State) => state.settings.baseUrl;
 export const selectAllNodeUrls = (state: State) => state.settings.nodeUrls;
 export const selectDefaultNodeUrls = (_: State) => initialState.nodeUrls;
+export const selectIsPrimaryDevice = (state: State) =>
+  state.settings.isPrimaryDevice;
+export const selectLastSyncTime = (state: State) => state.settings.lastSyncTime;
 
 export default settingsSlice.reducer;

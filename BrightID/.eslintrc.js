@@ -30,7 +30,6 @@ module.exports = {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 2018,
         sourceType: 'module',
-        project: './tsconfig.json',
       },
       plugins: ['import', 'jsx-a11y', '@typescript-eslint'],
       env: { browser: true, es6: true, node: true },

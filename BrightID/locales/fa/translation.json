@@ -165,7 +165,6 @@
   "connectionDetails": {
     "button": {
       "levelSave": "ذخیره",
-      "report": "ریپورتش کن",
       "reportCancel": "لغو",
       "reportSubmit": "ارسال"
     },
@@ -176,21 +175,21 @@
       "connectionLevel": "سطح کانکشن",
       "mutualConnections": "کانکشن های مشترک",
       "mutualGroups": "گروه های مشترک",
-      "possibleDuplicates": "موارد تکراری احتمالی"
+      "possibleDuplicates": "موارد تکراری احتمالی",
+      "socialMedia": "شبکه های اجتماعی"
     },
     "tags": {
       "connectedAt": "{{date}} با هم کانکشن زدید",
       "loading": "درحال بارگیری…"
     },
     "text": {
+      "copied": "کپی شد!",
       "level": "چقدر {{name}} رو میشناسی؟",
       "levelAlreadyKnown": "از قبل میشناسم",
       "levelJustMet": "این شخص غریبه ایست که تازه ملاقاتش کردم",
       "levelRecovery": "به این شخص برای بازیابی BrightID خودم اعتماد دارم",
       "levelSuspicious": "اصلا این شخص رو نمی شناسم",
-      "reportConnection": "{{name}} رو ریپورت کن",
       "reportDuplicate": "این شخص اکانت های دیگری هم ساخته است",
-      "reportImpact": "؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟",
       "reportOther": "دلایل دیگر",
       "reportSpammer": "این شخص درخواست کانکشن ناخواسته ای به من داشته"
     }

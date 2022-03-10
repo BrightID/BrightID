@@ -182,7 +182,6 @@
     "button": {
       "levelSave": "保存",
       "ok": "好",
-      "report": "举报此人",
       "reportCancel": "取消",
       "reportSubmit": "提交",
       "undoReport": "撤销举报"
@@ -194,24 +193,23 @@
       "connectionLevel": "联系人熟悉程度",
       "mutualConnections": "共同联系人",
       "mutualGroups": "共同群组",
-      "possibleDuplicates": "可能的重复"
+      "possibleDuplicates": "可能的重复",
+      "socialMedia": "社交媒体"
     },
     "tags": {
       "connectedAt": "建立联系的 {{date}}",
       "loading": "加载中…"
     },
     "text": {
+      "copied": "复制到剪贴板！",
       "level": "你有多了解 {{name}}？",
       "levelAlreadyKnown": "我已经了解这个人",
       "levelJustMet": "这是我刚添加的陌生人",
       "levelRecovery": "我信任此人，可帮助恢复我的BrightID",
       "levelSuspicious": "我不认识这个人",
-      "reportConnection": "举报 {{name}}",
       "reportDuplicate": "此人创建了多个账号",
-      "reportImpact": "标记{{name}}会对他们的BrightID产生负面影响，并且该标记可能会显示给其他用户。",
       "reportOther": "其他原因",
       "reportSpammer": "此人向我发送了不需要的连接请求",
-      "unReportConnection": "撤销举报",
       "unReportImpact": "您已经将 {{name}}报告为{{reportReason}}.您想删除此标志并恢复您的连接吗？"
     }
   },

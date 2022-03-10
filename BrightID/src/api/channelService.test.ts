@@ -4,6 +4,9 @@ const generateRandomString = function (length = 6) {
   return Math.random().toString(20).substr(2, length);
 };
 
+// increase test timeout to 30 seconds (default is 5 seconds, which sometimes fails when running in CI env)
+jest.setTimeout(30000);
+
 describe('ChannelAPI', () => {
   let channelApi;
   const sharedChannelId = generateRandomString();
@@ -58,9 +61,6 @@ describe('ChannelAPI', () => {
     const channelId = generateRandomString();
 
     beforeAll(async () => {
-      // increase test timeout to 30 seconds (default is 5 seconds, which sometimes fails when running in CI env)
-      jest.setTimeout(30000);
-
       // fill channel up to limit
       for (let i = 0; i < channel_limit; i++) {
         await channelApi.upload({
