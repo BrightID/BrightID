@@ -9,7 +9,10 @@ import {
   saveSocialMedia,
   selectSocialMediaById,
 } from '@/reducer/socialMediaSlice';
-import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
+import {
+  selectSocialMediaVariationById,
+  upsertSocialMediaVariations,
+} from '@/reducer/socialMediaVariationSlice';
 
 export const saveAndLinkSocialMedia =
   (incomingSocialMedia: SocialMedia) =>
@@ -103,4 +106,11 @@ export const removeSocialMedia =
       profile: null,
     };
     dispatch(saveSocialMedia(socialMedia));
+  };
+
+export const updateSocialMediaVariations =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const socialMediaVariations =
+      await socialMediaService.retrieveSocialMediaVariations();
+    dispatch(upsertSocialMediaVariations(socialMediaVariations));
   };

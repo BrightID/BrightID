@@ -44,7 +44,10 @@ import {
   selectExistingSocialMedia,
   setProfileDisplayWidth,
 } from '../../reducer/socialMediaSlice';
-import { selectAllSocialMediaVariationsByType } from '@/reducer/socialMediaVariationSlice';
+import {
+  selectAllSocialMediaVariationsByType,
+  selectSocialMediaVariationById,
+} from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
 import { removeSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 
@@ -166,10 +169,12 @@ const SocialMediaLink = (props: {
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order, company } =
-    props.socialMedia;
+  const { id, profile, profileDisplayWidth, order } = props.socialMedia;
   const { t } = useTranslation();
 
+  const socialMediaVariation = useSelector((state) =>
+    selectSocialMediaVariationById(state, id),
+  );
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
@@ -213,7 +218,7 @@ const SocialMediaLink = (props: {
           });
         }}
       >
-        <Text style={styles.socialMediaType}>{company.name}</Text>
+        <Text style={styles.socialMediaType}>{socialMediaVariation.name}</Text>
         <Chevron
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}

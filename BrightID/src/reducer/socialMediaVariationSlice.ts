@@ -19,8 +19,13 @@ const initialState = socialMediaVariationAdapter.upsertMany(
 const socialMediaVariationSlice = createSlice({
   name: 'socialMediaVariation',
   initialState,
-  reducers: {},
+  reducers: {
+    upsertSocialMediaVariations: socialMediaVariationAdapter.upsertMany,
+  },
 });
+
+export const { upsertSocialMediaVariations } =
+  socialMediaVariationSlice.actions;
 
 export const {
   selectById: selectSocialMediaVariationById,

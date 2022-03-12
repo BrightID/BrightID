@@ -33,6 +33,14 @@ class SocialMediaService {
     throw new Error(response.problem);
   }
 
+  async retrieveSocialMediaVariations() {
+    const res = await this.socialMediaApi.get<SocialMediaVariation[]>(
+      '/v1/social-media-variation/list/',
+    );
+    SocialMediaService.throwOnError(res);
+    return res.data;
+  }
+
   async createSocialMedia({
     variation,
     profile,

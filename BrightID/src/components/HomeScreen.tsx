@@ -49,6 +49,7 @@ import {
 
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
+import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
 
 /**
  * Home screen of BrightID
@@ -93,6 +94,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
+      dispatch(updateSocialMediaVariations());
       if (isPrimaryDevice) {
         dispatch(updateBlindSigs());
       }
