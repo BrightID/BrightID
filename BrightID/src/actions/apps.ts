@@ -7,6 +7,7 @@ import { store } from '@/store';
 import {
   setApps,
   upsertSig,
+  removeSig,
   updateSig,
   selectAllSigs,
   selectExpireableBlindSigApps,
@@ -15,6 +16,7 @@ import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import backupApi from '@/api/backupService';
+import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -132,6 +134,15 @@ export const updateBlindSig =
           `error in getting sig for ${app.name} (${verification})`,
           err,
         );
+        if (
+          err.errorNum === CACHED_PARAMS_NOT_FOUND &&
+          sigInfo &&
+          sigInfo.uid
+        ) {
+          console.log('removing sig and retrying');
+          await dispatch(removeSig(sigInfo.uid));
+          dispatch(updateBlindSig(app));
+        }
       }
     }
   };

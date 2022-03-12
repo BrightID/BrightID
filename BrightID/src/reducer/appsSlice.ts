@@ -55,6 +55,9 @@ const appsSlice = createSlice({
     upsertSig(state, action: PayloadAction<SigInfo>) {
       state.sigs = sigsAdapter.upsertOne(state.sigs, action);
     },
+    removeSig(state, action: PayloadAction<string>) {
+      state.sigs = sigsAdapter.removeOne(state.sigs, action);
+    },
     removeAllSigs(state) {
       state.sigs = sigsAdapter.removeAll(state.sigs);
     },
@@ -76,6 +79,7 @@ export const {
   removeLinkedContext,
   updateLinkedContext,
   upsertSig,
+  removeSig,
   removeAllSigs,
   updateSig,
 } = appsSlice.actions;
