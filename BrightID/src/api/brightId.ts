@@ -370,6 +370,7 @@ export class NodeApi {
       res as ApiOkResponse<OperationPostRes>,
       message,
     );
+    op.postTimestamp = Date.now();
     return op;
   }
 

@@ -105,6 +105,7 @@ type SocialRecoveryOp = BaseOp & {
   id2?: string;
   sig1?: string;
   sig2?: string;
+  postTimestamp?: number;
 };
 
 type SpendSponsorshipOp = BaseOp & {
