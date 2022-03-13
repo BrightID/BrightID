@@ -11,6 +11,8 @@ import {
 
 export const socialMediaUrl = 'http://168.119.127.117:8090/api';
 
+export const SOCIAL_API_AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
+
 class SocialMediaService {
   socialMediaApi: ApisauceInstance;
 
@@ -26,6 +28,9 @@ class SocialMediaService {
     }
     if (response.data && response.data.errorMessage) {
       throw new Error(response.data.errorMessage);
+    }
+    if (response.status === 401) {
+      throw new Error(SOCIAL_API_AUTHENTICATION_ERROR);
     }
     console.log(
       `socialApi response error: ${response.status} - ${response.problem}`,

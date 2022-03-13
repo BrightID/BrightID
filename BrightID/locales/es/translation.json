@@ -132,6 +132,7 @@
       "success": "Éxito",
       "sure": "Por supuesto",
       "text": {
+        "commonError": "Lo sentimos, no pudimos completar su solicitud. Vuelva a intentarlo en un momento.",
         "failedOp": "¡{{name}} falló!\n{{message}}",
         "incorrectPassword": "¡Contraseña incorrecta!",
         "lostKeys": "Cree un nuevo BrightID o intente recuperar su BrightID anterior",

@@ -22,6 +22,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import {
@@ -49,7 +50,7 @@ import {
   selectSocialMediaVariationById,
 } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
-import { removeSocialMedia } from '@/components/EditProfile/socialMediaThunks';
+import { removeSocialMediaThunk } from '@/components/EditProfile/socialMediaThunks';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -196,6 +197,17 @@ const SocialMediaLink = (props: {
     }
   };
 
+  const removeSocialMedia = async (id: string) => {
+    try {
+      await dispatch(removeSocialMediaThunk(id));
+    } catch (e) {
+      Alert.alert(
+        i18next.t('common.alert.error'),
+        i18next.t('common.alert.text.commonError'),
+      );
+    }
+  };
+
   const innerTextStyle = profileDisplayWidth
     ? {
         width:
@@ -248,9 +260,7 @@ const SocialMediaLink = (props: {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.closeButton}
-        onPress={() => {
-          dispatch(removeSocialMedia(id));
-        }}
+        onPress={() => removeSocialMedia(id)}
       >
         <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
       </TouchableOpacity>

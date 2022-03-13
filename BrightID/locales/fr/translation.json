@@ -163,6 +163,7 @@
       "success": "Succès",
       "sure": "Oui",
       "text": {
+        "commonError": "Désolé, nous n'avons pas pu traiter votre demande. Veuillez réessayer dans un instant.",
         "failedOp": "{{name}} a échoué !\n{{message}}",
         "incorrectPassword": "Mot de passe incorrect !",
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",

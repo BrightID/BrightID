@@ -118,6 +118,7 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
+        "commonError": "Sorry, We Couldn't Complete Your Request. Please Try Again in a Moment.",
         "failedOp": "{{name}} failed!\n{{message}}",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",

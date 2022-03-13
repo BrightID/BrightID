@@ -155,6 +155,7 @@
       "success": "Erfolg",
       "sure": "Ja",
       "text": {
+        "commonError": "Entschuldigung, wir konnten Ihre Anfrage nicht abschließen. Bitte versuchen Sie es gleich noch einmal.",
         "failedOp": "{{name}} fehlgeschlagen!\n{{message}}",
         "incorrectPassword": "Falsches Passwort!",
         "lostKeys": "Bitte erstelle eine neue BrightID oder versuche, deine vorherige BrightID wiederherzustellen",

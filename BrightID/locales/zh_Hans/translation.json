@@ -132,6 +132,7 @@
       "success": "成功",
       "sure": "当然",
       "text": {
+        "commonError": "抱歉，我们无法完成您的请求。请稍后再试。",
         "failedOp": "{{name}} 失败!\n{{message}}",
         "incorrectPassword": "密码错误！",
         "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
