@@ -19,12 +19,17 @@ import Contacts from 'react-native-contacts';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
-import { SocialMediaFriendRaw } from '@/api/socialMediaService_types';
 import socialMediaService from '@/api/socialMediaService';
 import { BrightIdNetwork } from '@/components/Apps/model';
-import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
+import {
+  selectAllSocialMediaVariations,
+  selectSocialMediaVariationById,
+} from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
+import { extractDigits } from '@/utils/phoneUtils';
+import { generateSocialProfileHashes } from '@/utils/socialUtils';
+import { hashSocialProfile } from '@/utils/cryptoHelper';
 
 const FlatListItemSeparator = () => {
   return (
@@ -39,16 +44,26 @@ const FlatListItemSeparator = () => {
 
 type FriendProfile = {
   profile: string;
+  profileHash: string;
   name: string;
-};
-
-type SocialMediaFriend = {
-  profile: FriendProfile;
   variation: SocialMediaVariation;
 };
 
-const parsePhoneNumber = (phoneNumber: string) =>
-  parseInt(phoneNumber.match(/\d/g).join(''), 10).toString();
+function removeDuplicates(friendProfiles: FriendProfile[]) {
+  const uniques: FriendProfile[] = [];
+  friendProfiles.forEach((friendProfile) => {
+    if (
+      !uniques.find(
+        (item) =>
+          item.profile === friendProfile.profile &&
+          item.variation.id === friendProfile.variation.id,
+      )
+    ) {
+      uniques.push(friendProfile);
+    }
+  });
+  return uniques;
+}
 
 export const FindFriendsScreen = function () {
   const { t } = useTranslation();
@@ -59,12 +74,17 @@ export const FindFriendsScreen = function () {
   }
   const isDrawerOpen = useIsDrawerOpen();
 
-  const [friendProfiles, setFriendProfiles] = useState<FriendProfile[]>(null);
+  const emailSocialMediaVariation = useSelector((state) =>
+    selectSocialMediaVariationById(state, SocialMediaVariationIds.EMAIL),
+  );
+  const phoneNumberSocialMediaVariation = useSelector((state) =>
+    selectSocialMediaVariationById(state, SocialMediaVariationIds.PHONE_NUMBER),
+  );
 
-  const [friendsRaw, setFriendsRaw] = useState<SocialMediaFriendRaw[]>(null);
+  const [friends, setFriends] = useState<FriendProfile[]>(null);
 
   const fetchFriends = useCallback(async () => {
-    const _friendProfiles: FriendProfile[] = [];
+    let _friendProfiles: FriendProfile[] = [];
     const permissionStatus = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
       {
@@ -78,69 +98,58 @@ export const FindFriendsScreen = function () {
       const contacts = await Contacts.getAll();
       contacts.forEach((contact) => {
         const contactName = contact.displayName;
-        contact.emailAddresses.forEach((emailAddress) =>
+        contact.emailAddresses.forEach((emailAddress) => {
+          const _profile = emailAddress.email;
           _friendProfiles.push({
             name: contactName,
-            profile: emailAddress.email,
-          }),
-        );
-        contact.phoneNumbers.forEach((phoneNumber) =>
+            profile: _profile,
+            profileHash: hashSocialProfile(_profile),
+            variation: emailSocialMediaVariation,
+          });
+        });
+        contact.phoneNumbers.forEach((phoneNumber) => {
+          const _profile = extractDigits(phoneNumber.number);
           _friendProfiles.push({
             name: contactName,
-            profile: parsePhoneNumber(phoneNumber.number),
-          }),
-        );
+            profile: _profile,
+            profileHash: hashSocialProfile(_profile),
+            variation: phoneNumberSocialMediaVariation,
+          });
+        });
       });
     }
-    setFriendProfiles(_friendProfiles);
-    const _friendsRaw = await socialMediaService.querySocialMedia({
-      profiles: _friendProfiles.map((friendProfile) => friendProfile.profile),
+    _friendProfiles = removeDuplicates(_friendProfiles);
+    const _profileHashes = _friendProfiles.map(
+      (friendProfile) => friendProfile.profileHash,
+    );
+    const _filteredProfileHashes = await socialMediaService.querySocialMedia({
+      profileHashes: _profileHashes,
       network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
     });
-    setFriendsRaw(_friendsRaw);
-  }, []);
+    setFriends(
+      _friendProfiles.filter((friendProfile) =>
+        _filteredProfileHashes.includes(friendProfile.profileHash),
+      ),
+    );
+  }, [emailSocialMediaVariation, phoneNumberSocialMediaVariation]);
 
   useEffect(() => {
     fetchFriends().catch(console.error);
   }, [fetchFriends]);
 
-  const socialMediaVariations = useSelector(selectAllSocialMediaVariations);
-  const [friends, setFriends] = useState<SocialMediaFriend[]>(null);
-
-  useEffect(() => {
-    if (friendsRaw) {
-      setFriends(
-        friendsRaw.map((friendRaw) => {
-          const name = friendProfiles?.find((friendProfile) =>
-            friendRaw.profile.endsWith(friendProfile.profile),
-          )?.name;
-          return {
-            profile: {
-              name,
-              profile: friendRaw.profile,
-            },
-            variation: socialMediaVariations.find(
-              (variation) => variation.id === friendRaw.variation,
-            ),
-          };
-        }),
-      );
-    }
-  }, [socialMediaVariations, friendsRaw, friendProfiles]);
-
-  function sendInvitation(item: SocialMediaFriend) {
+  function sendInvitation(item: FriendProfile) {
     const subject = "Let's connect on BrightID";
     // TODO: generate connection link
     const connectionLink = 'https://app.brightid.org/connection-code/xxx';
     const body = `Hi\nLet's connect on BrightID!\n${connectionLink}`;
     if (item.variation.id === SocialMediaVariationIds.PHONE_NUMBER) {
       const smsDivider = Platform.OS === 'ios' ? '&' : '?';
-      const phone = item.profile.profile;
+      const phone = item.profile;
       Linking.openURL(`sms:${phone}${smsDivider}body=${body}`);
       return;
     }
     if (item.variation.id === SocialMediaVariationIds.EMAIL) {
-      const email = item.profile.profile;
+      const email = item.profile;
       Linking.openURL(`mailto:${email}?subject=${subject}&body=${body}`);
       return;
     }
@@ -158,37 +167,35 @@ export const FindFriendsScreen = function () {
     return item?.recordID?.toString() || idx.toString();
   };
 
-  const renderItem = ({ item }: { item: SocialMediaFriend }) => {
+  const renderItem = ({ item }: { item: FriendProfile }) => {
     return (
       <View style={styles.contactCon}>
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
-            <Text style={styles.txt}>
-              {item.profile.name ? item.profile.name[0] : ''}
-            </Text>
+            <Text style={styles.txt}>{item.name ? item.name[0] : ''}</Text>
           </View>
         </View>
         <View style={styles.contactDat}>
           <Text style={styles.name} numberOfLines={1}>
-            {item.profile.name}
+            {item.name}
           </Text>
           <Text style={styles.profile} numberOfLines={1}>
             {item.variation.name}
           </Text>
           <Text style={styles.profile} numberOfLines={1}>
-            {item.profile.profile}
+            {item.profile}
           </Text>
         </View>
         <View style={styles.contactAction}>
-          <TouchableOpacity
-            testID="InviteBtn"
-            style={styles.inviteBtn}
-            onPress={() => sendInvitation(item)}
-          >
-            <Text style={styles.inviteBtnText}>
-              {t('findFriends.button.invite')}
-            </Text>
-          </TouchableOpacity>
+          {/* <TouchableOpacity */}
+          {/*  testID="InviteBtn" */}
+          {/*  style={styles.inviteBtn} */}
+          {/*  onPress={() => sendInvitation(item)} */}
+          {/* > */}
+          {/*  <Text style={styles.inviteBtnText}> */}
+          {/*    {t('findFriends.button.invite')} */}
+          {/*  </Text> */}
+          {/* </TouchableOpacity> */}
         </View>
       </View>
     );
@@ -203,7 +210,7 @@ export const FindFriendsScreen = function () {
       ]}
       testID="tasksScreen"
     >
-      {friendsRaw ? (
+      {friends ? (
         <FlatList
           data={friends}
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}

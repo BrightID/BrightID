@@ -14,6 +14,10 @@ import {
   selectSocialMediaVariationById,
   upsertSocialMediaVariations,
 } from '@/reducer/socialMediaVariationSlice';
+import { hashSocialProfile } from '@/utils/cryptoHelper';
+import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
+import { extractDigits, parsePhoneNumber } from '@/utils/phoneUtils';
+import { generateSocialProfileHashes } from '@/utils/socialUtils';
 
 async function linkSocialMediaApp(appId: string, contextId: string) {
   let linked = false;
@@ -36,29 +40,33 @@ async function linkSocialMediaApp(appId: string, contextId: string) {
 
 async function syncSocialMedia(
   token: string,
-  profile: string,
-  socialMediaVariationId: string,
-  contextId: string,
+  incomingSocialMedia: SocialMedia,
+  socialMediaVariation: SocialMediaVariation,
 ) {
   let synced = false;
+  let contextId = incomingSocialMedia.brightIdSocialAppData?.contextId;
+  const profileHashes = generateSocialProfileHashes(
+    incomingSocialMedia.profile,
+    socialMediaVariation.id,
+  );
   if (token) {
     try {
       await socialMediaService.updateSocialMedia({
         token,
-        profile,
+        profileHashes,
       });
       synced = true;
     } catch (e) {
       if (e.message === SOCIAL_API_AUTHENTICATION_ERROR) {
-        return syncSocialMedia(null, profile, socialMediaVariationId, null);
+        return syncSocialMedia(null, incomingSocialMedia, socialMediaVariation);
       }
       console.log(e);
     }
   } else {
     try {
       const data = await socialMediaService.createSocialMedia({
-        profile,
-        variation: socialMediaVariationId,
+        profileHashes,
+        variation: socialMediaVariation.id,
         network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
       });
       token = data.token;
@@ -92,16 +100,15 @@ export const saveAndLinkSocialMedia =
       linked: false,
       contextId: null,
       token: null,
-      ...prevProfile?.brightIdSocialAppData,
+      ...incomingSocialMedia.brightIdSocialAppData,
     };
     let { synced, token, contextId, linked } = brightIdSocialAppData;
 
     if (!synced || prevProfile?.profile !== incomingSocialMedia.profile) {
       const __ret = await syncSocialMedia(
         token,
-        incomingSocialMedia.profile,
-        socialMediaVariation.id,
-        contextId,
+        incomingSocialMedia,
+        socialMediaVariation,
       );
       token = __ret.token;
       contextId = __ret.contextId;

@@ -26,4 +26,7 @@ const parsePhoneNumber = (phoneNumberString: string) => {
   } as PhoneNumberObject;
 };
 
-export { isPhoneNumberValid, parsePhoneNumber };
+const extractDigits = (phoneNumber: string) =>
+  parseInt(phoneNumber.match(/\d/g).join(''), 10).toString();
+
+export { isPhoneNumberValid, parsePhoneNumber, extractDigits };

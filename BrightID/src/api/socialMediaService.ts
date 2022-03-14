@@ -2,11 +2,9 @@ import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import {
   CreateSocialMediaRequest,
   CreateSocialMediaResponse,
-  QuerySocialMediaRequest,
-  QuerySocialMediaResponse,
-  SocialMediaFriendRaw,
+  SocialMediaQueryRequest,
+  SocialMediaQueryResponse,
   UpdateSocialMediaRequest,
-  UpdateSocialMediaResponse,
 } from '@/api/socialMediaService_types.d';
 
 export const socialMediaUrl = 'http://168.119.127.117:8090/api';
@@ -48,14 +46,14 @@ class SocialMediaService {
 
   async createSocialMedia({
     variation,
-    profile,
+    profileHashes,
     network,
   }: CreateSocialMediaRequest) {
     const res = await this.socialMediaApi.post<CreateSocialMediaResponse>(
       '/v1/social-media/create/',
       {
         variation,
-        profile,
+        profileHashes,
         network,
       },
     );
@@ -63,11 +61,11 @@ class SocialMediaService {
     return res.data;
   }
 
-  async updateSocialMedia({ token, profile }: UpdateSocialMediaRequest) {
-    const res = await this.socialMediaApi.put<UpdateSocialMediaResponse>(
+  async updateSocialMedia({ token, profileHashes }: UpdateSocialMediaRequest) {
+    const res = await this.socialMediaApi.put(
       '/v1/social-media/update/',
       {
-        profile,
+        profileHashes,
       },
       {
         headers: {
@@ -76,7 +74,6 @@ class SocialMediaService {
       },
     );
     SocialMediaService.throwOnError(res);
-    return res.data;
   }
 
   async deleteSocialMediaProfile(token: string) {
@@ -92,8 +89,8 @@ class SocialMediaService {
     SocialMediaService.throwOnError(res);
   }
 
-  async querySocialMedia(payload: QuerySocialMediaRequest) {
-    const res = await this.socialMediaApi.post<QuerySocialMediaResponse>(
+  async querySocialMedia(payload: SocialMediaQueryRequest) {
+    const res = await this.socialMediaApi.post<SocialMediaQueryResponse>(
       '/v1/social-media/query/',
       payload,
     );

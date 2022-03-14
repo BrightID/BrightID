@@ -1,8 +1,9 @@
 import { BrightIdNetwork } from '@/components/Apps/model';
+import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 
 type CreateSocialMediaRequest = {
   variation: string;
-  profile: string;
+  profileHashes: string[];
   network: BrightIdNetwork;
 };
 
@@ -10,27 +11,17 @@ type CreateSocialMediaResponse = {
   contextId: string;
   token: string;
   variation: string;
-  profile: string;
   network: BrightIdNetwork;
 };
 
 type UpdateSocialMediaRequest = {
   token: string;
-  profile: string;
+  profileHashes: string[];
 };
 
-type UpdateSocialMediaResponse = {
-  profile: string;
-};
-
-type QuerySocialMediaRequest = {
+type SocialMediaQueryRequest = {
   network: BrightIdNetwork;
-  profiles: string[];
+  profileHashes: string[];
 };
 
-type SocialMediaFriendRaw = {
-  profile: string;
-  variation: string;
-};
-
-type QuerySocialMediaResponse = SocialMediaFriendRaw[];
+type SocialMediaQueryResponse = string[];
