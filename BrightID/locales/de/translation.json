@@ -47,9 +47,21 @@
       "description": "Lege ein Passwort fest, um die verschlüsselte Sicherung deiner Daten zu ermöglichen",
       "title": "Sicherungspasswort festlegen"
     },
+    "setupRecoveryConnections": {
+      "description": "Richte deine Wiederherstellungsverbindungen ein, um die Wiederherstellung von Sozialkonten zu ermöglichen"
+    },
     "setupTrustedConnections": {
       "description": "Erstelle Wiederherstellungsverbindungen und sichere deine BrightID",
       "title": "Soziale Wiederherstellung einrichten"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Geräteinformationen hinzufügen"
+    },
+    "steps": {
+      "downloading": "Herunterladen von neuen Gerätedaten …",
+      "error": "Hinzufügen des Signierschlüssels fehlgeschlagen"
     }
   },
   "apps": {
