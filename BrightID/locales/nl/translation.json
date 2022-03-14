@@ -34,6 +34,36 @@
     },
     "progress": {
       "title": "Volbracht:"
+    },
+    "setupBackup": {
+      "description": "Stel een wachtwoord in om je gegevens veilig te bewaren",
+      "title": "Back-upwachtwoord instellen"
+    },
+    "setupRecoveryConnections": {
+      "description": "Stel herstelmogelijkheden in om je socialenetwerkaccounts te herstellen",
+      "title": "Sociaalaccountherstel instellen"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Apparaatinformatie toevoegen"
+    },
+    "info": "Hiermee kan je op het nieuwe apparaat gebruikmaken van je BrightID",
+    "steps": {
+      "adding": "Bezig met toevoegen van sleutel…",
+      "complete": "De sleutel is toegevoegd",
+      "downloading": "Bezig met ophalen van nieuwe apparaatgegevens…",
+      "error": "De sleutel kan niet worden toegevoegd"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Prima"
+      },
+      "text": {
+        "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}"
+      }
     }
   }
 }
