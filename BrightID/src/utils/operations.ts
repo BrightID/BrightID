@@ -135,9 +135,12 @@ export const pollOperations = async (api) => {
           shouldUpdateTasks = true;
         }
       } else {
-        // "postTimestamp" is set on "Social Recovery" operation because "timestamp"
-        // does not represent posting time.
-        const t = op.postTimestamp || op.timestamp;
+        let t = op.timestamp;
+        if (op.name === 'Social Recovery') {
+          // "postTimestamp" is set on "Social Recovery" operation because "timestamp"
+          // does not represent posting time.
+          t = op.postTimestamp || op.timestamp;
+        }
         // stop polling for op if trace time is expired
         if (t + OPERATION_TRACE_TIME < Date.now()) {
           store.dispatch(
