@@ -42,6 +42,7 @@ import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 import RecoveryConnectionsScreen from '@/components/RecoveryConnections/RecoveryConnectionsScreen';
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
+import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 
 const CustomItem = ({
   onPress,
@@ -291,7 +292,7 @@ const CustomDrawerContent = (props) => {
         // labelStyle={styles.labelStyle}
         icon={() => (
           <SvgXml
-            xml={GroupsDrawerIcon}
+            xml={FindFriendsIcon}
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
           />
