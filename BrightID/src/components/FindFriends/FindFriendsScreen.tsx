@@ -6,6 +6,7 @@ import {
   Linking,
   PermissionsAndroid,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -17,7 +18,7 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import Contacts from 'react-native-contacts';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
-import { DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
+import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
 import socialMediaService from '@/api/socialMediaService';
 import { BrightIdNetwork } from '@/components/Apps/model';
@@ -81,11 +82,12 @@ export const FindFriendsScreen = function () {
   const phoneNumberSocialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, SocialMediaVariationIds.PHONE_NUMBER),
   );
-
+  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>(null);
+  const [apiError, setApiError] = useState<string>(null);
   const [friends, setFriends] = useState<FriendProfile[]>(null);
 
-  const fetchFriends = useCallback(async () => {
-    let _friendProfiles: FriendProfile[] = [];
+  const getContacts = useCallback(async () => {
+    let _friendsRaw: FriendProfile[] = [];
     const permissionStatus = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
       {
@@ -101,7 +103,7 @@ export const FindFriendsScreen = function () {
         const contactName = contact.displayName;
         contact.emailAddresses.forEach((emailAddress) => {
           const _profile = emailAddress.email;
-          _friendProfiles.push({
+          _friendsRaw.push({
             name: contactName,
             profile: _profile,
             profileHash: hashSocialProfile(_profile),
@@ -110,7 +112,7 @@ export const FindFriendsScreen = function () {
         });
         contact.phoneNumbers.forEach((phoneNumber) => {
           const _profile = extractDigits(phoneNumber.number);
-          _friendProfiles.push({
+          _friendsRaw.push({
             name: contactName,
             profile: _profile,
             profileHash: hashSocialProfile(_profile),
@@ -119,24 +121,40 @@ export const FindFriendsScreen = function () {
         });
       });
     }
-    _friendProfiles = removeDuplicates(_friendProfiles);
-    const _profileHashes = _friendProfiles.map(
-      (friendProfile) => friendProfile.profileHash,
-    );
-    const _filteredProfileHashes = await socialMediaService.querySocialMedia({
-      profileHashes: _profileHashes,
-      network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
-    });
-    setFriends(
-      _friendProfiles.filter((friendProfile) =>
-        _filteredProfileHashes.includes(friendProfile.profileHash),
-      ),
-    );
+    _friendsRaw = removeDuplicates(_friendsRaw);
+    setFriendsRaw(_friendsRaw);
   }, [emailSocialMediaVariation, phoneNumberSocialMediaVariation]);
 
   useEffect(() => {
+    getContacts().catch(console.error);
+  }, [getContacts]);
+
+  const fetchFriends = useCallback(async () => {
+    if (!friendsRaw) {
+      return;
+    }
+    setApiError(null);
+    const _profileHashes = friendsRaw.map(
+      (friendProfile) => friendProfile.profileHash,
+    );
+    try {
+      const _filteredProfileHashes = await socialMediaService.querySocialMedia({
+        profileHashes: _profileHashes,
+        network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
+      });
+      setFriends(
+        friendsRaw.filter((friendProfile) =>
+          _filteredProfileHashes.includes(friendProfile.profileHash),
+        ),
+      );
+    } catch (_e) {
+      setApiError(t('common.text.noConnection'));
+    }
+  }, [friendsRaw, t]);
+
+  useEffect(() => {
     fetchFriends().catch(console.error);
-  }, [fetchFriends]);
+  }, [fetchFriends, friendsRaw]);
 
   function sendInvitation(item: FriendProfile) {
     const subject = "Let's connect on BrightID";
@@ -218,7 +236,29 @@ export const FindFriendsScreen = function () {
             title={t('findFriends.text.noFriends')}
           />
         }
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={fetchFriends} />
+        }
       />
+    );
+  }
+
+  function renderStatus() {
+    return (
+      <View style={styles.statusContainer}>
+        {apiError ? (
+          <>
+            <Text style={styles.apiErrorText}>{apiError}</Text>
+            <TouchableOpacity style={styles.retryBtn} onPress={fetchFriends}>
+              <Text style={styles.retryBtnText}>
+                {t('common.button.retry')}
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <ActivityIndicator size="large" color={DARKER_GREY} animating />
+        )}
+      </View>
     );
   }
 
@@ -231,21 +271,36 @@ export const FindFriendsScreen = function () {
       ]}
       testID="tasksScreen"
     >
-      {friends ? (
-        renderFriendsList()
-      ) : (
-        <ActivityIndicator
-          style={styles.loading}
-          size="large"
-          color={DARKER_GREY}
-          animating
-        />
-      )}
+      {friends ? renderFriendsList() : renderStatus()}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  apiErrorText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    textAlign: 'center',
+    lineHeight: 26,
+    marginBottom: 12,
+  },
+  retryBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: DEVICE_LARGE ? 160 : 140,
+    height: DEVICE_LARGE ? 50 : 45,
+    backgroundColor: ORANGE,
+    borderRadius: 100,
+    elevation: 1,
+    shadowColor: BLACK,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
+  },
+  retryBtnText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    color: WHITE,
+  },
   inviteBtn: {
     width: '100%',
     height: 40,
@@ -262,11 +317,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     color: ORANGE,
   },
-  loading: {
+  statusContainer: {
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 0,
+    top: -20,
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
@@ -274,7 +329,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE,
-    borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
     paddingLeft: 10,
     paddingRight: 18,
   },

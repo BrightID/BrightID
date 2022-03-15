@@ -160,6 +160,7 @@
       "reportReason": " as {{reportReason}}"
     },
     "text": {
+      "noConnection": "Couldn't connect to server",
       "uploadingData": "Uploading encrypted data to backup server…"
     }
   },
