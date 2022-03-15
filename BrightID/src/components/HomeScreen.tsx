@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  Alert,
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
@@ -22,6 +23,7 @@ import {
   selectAllApps,
   setActiveNotification,
   updateBlindSigs,
+  selectActiveDevices,
 } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
@@ -34,7 +36,11 @@ import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-import { selectBaseUrl, selectIsPrimaryDevice } from '@/reducer/settingsSlice';
+import {
+  selectBaseUrl,
+  selectIsPrimaryDevice,
+  removeCurrentNodeUrl,
+} from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -70,6 +76,7 @@ export const HomeScreen = (props) => {
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
   const isPrimaryDevice = useSelector(selectIsPrimaryDevice);
+  const activeDevices = useSelector(selectActiveDevices);
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
@@ -103,18 +110,31 @@ export const HomeScreen = (props) => {
     }, [api, dispatch, isPrimaryDevice, photoFilename]),
   );
 
-  /* Update list of apps from server if
-     - apps are empty (first startup?)
-     - apps are from previous api version (app object in store
-      is missing 'usingBlindSig' key)
-   */
   useEffect(() => {
-    if (api) {
-      console.log(`updating apps...`);
-      dispatch(fetchApps(api));
-    }
-  }, [api, apps, dispatch]);
+    console.log(`updating apps...`);
+    dispatch(fetchApps(api));
+  }, [api, dispatch]);
 
+  useEffect(() => {
+    console.log(`checking signing key...`);
+    const invalidSigingKey = !activeDevices.find(
+      (d) => d.signingKey == publicKey,
+    );
+    if (invalidSigingKey) {
+      return Alert.alert(
+        t('common.alert.title.invalidSigningKey'),
+        t('common.alert.text.invalidSigningKey'),
+        [
+          {
+            text: 'Switch to different node',
+            onPress: () => {
+              dispatch(removeCurrentNodeUrl());
+            },
+          },
+        ],
+      );
+    }
+  }, [activeDevices]);
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
   }, [dispatch, headerHeight]);
