@@ -103,17 +103,10 @@ export const HomeScreen = (props) => {
     }, [api, dispatch, isPrimaryDevice, photoFilename]),
   );
 
-  /* Update list of apps from server if
-     - apps are empty (first startup?)
-     - apps are from previous api version (app object in store
-      is missing 'usingBlindSig' key)
-   */
   useEffect(() => {
-    if (api) {
-      console.log(`updating apps...`);
-      dispatch(fetchApps(api));
-    }
-  }, [api, apps, dispatch]);
+    console.log(`updating apps...`);
+    dispatch(fetchApps(api));
+  }, [api, dispatch]);
 
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
