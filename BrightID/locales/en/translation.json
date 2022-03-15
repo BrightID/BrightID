@@ -123,7 +123,7 @@
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
         "recoverySigned": "One of your recovery connections signed your request",
-        "invalidSigningKey": "Your signing key is not valid. This might be because:\n- You recovered your BrightID on another device.\n- You removed this device from your active devices list.\n- You had a failing recoveery.\n- The node you are connected to has a problem."
+        "invalidSigningKey": "Your signing key is not valid. This might be because:\n- You recovered your BrightID on another device.\n- You removed this device from your active devices list.\n- You had a failed recovery.\n- The node that you are connected to has a problem."
       },
       "title": {
         "lostKeys": "We've lost the BrightID keypair from the device",
