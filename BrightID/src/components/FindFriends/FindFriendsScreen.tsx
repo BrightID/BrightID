@@ -30,6 +30,7 @@ import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVar
 import { extractDigits } from '@/utils/phoneUtils';
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
+import EmptyList from '@/components/Helpers/EmptyList';
 
 const FlatListItemSeparator = () => {
   return (
@@ -201,6 +202,26 @@ export const FindFriendsScreen = function () {
     );
   };
 
+  function renderFriendsList() {
+    return (
+      <FlatList
+        data={friends}
+        contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+        keyExtractor={keyExtractor}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={FlatListItemSeparator}
+        renderItem={renderItem}
+        ListEmptyComponent={
+          <EmptyList
+            iconType="account-off-outline"
+            title={t('findFriends.text.noFriends')}
+          />
+        }
+      />
+    );
+  }
+
   return (
     <View
       style={[
@@ -211,15 +232,7 @@ export const FindFriendsScreen = function () {
       testID="tasksScreen"
     >
       {friends ? (
-        <FlatList
-          data={friends}
-          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-          keyExtractor={keyExtractor}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={FlatListItemSeparator}
-          renderItem={renderItem}
-        />
+        renderFriendsList()
       ) : (
         <ActivityIndicator
           style={styles.loading}

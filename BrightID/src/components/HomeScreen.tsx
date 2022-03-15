@@ -94,13 +94,13 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(updateSocialMediaVariations());
       if (isPrimaryDevice) {
         dispatch(updateBlindSigs());
       }
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
+      dispatch(updateSocialMediaVariations());
       const timeoutId = setTimeout(() => {
         setLoading(false);
       }, 3000);

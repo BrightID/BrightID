@@ -790,6 +790,7 @@
       "invite": "invite"
     },
     "text": {
+      "noFriends": "No friends",
       "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app."
     }
   }
