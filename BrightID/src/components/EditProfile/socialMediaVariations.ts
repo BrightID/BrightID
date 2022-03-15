@@ -149,7 +149,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://twitter.com/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppName: 'twitterRegistry',
   },
   {
     id: SocialMediaVariationIds.WHATSAPP,
