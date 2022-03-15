@@ -58,8 +58,6 @@ export const AppsScreen = () => {
       });
   }, [api, dispatch]);
 
-  useFocusEffect(refreshApps);
-
   const handleDeepLink = useCallback(() => {
     const context = route.params?.context;
     const isValidContext = any(propEq('context', context))(apps);

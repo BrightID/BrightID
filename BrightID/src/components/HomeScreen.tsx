@@ -110,13 +110,8 @@ export const HomeScreen = (props) => {
    */
   useEffect(() => {
     if (api) {
-      if (
-        apps.length === 0 ||
-        !Object.keys(apps[0]).includes('usingBlindSig')
-      ) {
-        console.log(`updating apps...`);
-        dispatch(fetchApps(api));
-      }
+      console.log(`updating apps...`);
+      dispatch(fetchApps(api));
     }
   }, [api, apps, dispatch]);
 
