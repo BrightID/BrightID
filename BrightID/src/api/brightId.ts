@@ -583,7 +583,7 @@ export class NodeApi {
     const op: SpendSponsorshipOp = {
       name,
       app: appId,
-      appId: appUserId,
+      appUserId,
       timestamp,
       v,
     };

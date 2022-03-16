@@ -111,7 +111,7 @@ type SocialRecoveryOp = BaseOp & {
 type SpendSponsorshipOp = BaseOp & {
   name: 'Spend Sponsorship';
   app: string;
-  appId: string;
+  appUserId: string;
 };
 
 type AddSigningKeyOp = BaseOp & {
