@@ -3,36 +3,46 @@ import socialMediaService, {
   SOCIAL_API_AUTHENTICATION_ERROR,
   socialMediaUrl,
 } from '@/api/socialMediaService';
-import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
+import {
+  BrightIdNetwork,
+  getSignedTimestamp,
+  linkAppId,
+} from '@/components/Apps/model';
 import store from '@/store';
 import { selectAllApps } from '@/reducer/appsSlice';
 import {
   saveSocialMedia,
+  selectAllSocialMedia,
   selectSocialMediaById,
 } from '@/reducer/socialMediaSlice';
 import {
   selectSocialMediaVariationById,
   upsertSocialMediaVariations,
 } from '@/reducer/socialMediaVariationSlice';
-import { hashSocialProfile } from '@/utils/cryptoHelper';
-import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
-import { extractDigits, parsePhoneNumber } from '@/utils/phoneUtils';
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
+import { SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
 
 async function linkSocialMediaApp(appId: string, contextId: string) {
   let linked = false;
   const apps = selectAllApps(store.getState());
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   if (appInfo && appInfo.usingBlindSig) {
-    try {
-      linked = await linkAppId(
-        appId,
-        contextId,
-        `${socialMediaUrl}/v1/social-media/check-verification/`,
-        true,
-      );
-    } catch (e) {
-      console.log(e);
+    const signedTimestamp = getSignedTimestamp(appInfo);
+    if (
+      signedTimestamp &&
+      Date.now() - signedTimestamp > SOCIAL_MEDIA_SIG_WAIT_TIME
+    ) {
+      console.log(`true fucking linking ${appInfo.name}`);
+      try {
+        linked = await linkAppId(
+          appId,
+          contextId,
+          `${socialMediaUrl}/v1/social-media/check-verification/`,
+          true,
+        );
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
   return linked;
@@ -160,4 +170,15 @@ export const updateSocialMediaVariations =
     const socialMediaVariations =
       await socialMediaService.retrieveSocialMediaVariations();
     dispatch(upsertSocialMediaVariations(socialMediaVariations));
+  };
+
+export const syncAndLinkSocialApps =
+  () => async (dispatch: dispatch, getState: getState) => {
+    await dispatch(updateSocialMediaVariations());
+    const socialMedias = selectAllSocialMedia(getState());
+    socialMedias.forEach((socialMedia) => {
+      if (socialMedia.profile) {
+        dispatch(saveAndLinkSocialMedia(socialMedia));
+      }
+    });
   };

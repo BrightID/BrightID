@@ -2,6 +2,7 @@ import { Alert } from 'react-native';
 import { propEq, find } from 'ramda';
 import i18next from 'i18next';
 import { create } from 'apisauce';
+import _ from 'lodash';
 import {
   addLinkedContext,
   addOperation,
@@ -23,6 +24,24 @@ export enum BrightIdNetwork {
   TEST = 'test',
   NODE = 'node',
 }
+
+export const getSignedTimestamp = (app: AppInfo) => {
+  const sigs = selectAllSigs(store.getState());
+  const vel = app.verificationExpirationLength;
+  const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+  for (const verification of app.verifications) {
+    const sigInfo = sigs.find(
+      (sig) =>
+        sig.app === app.id &&
+        sig.verification === verification &&
+        sig.roundedTimestamp === roundedTimestamp,
+    );
+    if (sigInfo && sigInfo.sig) {
+      return sigInfo.signedTimestamp;
+    }
+  }
+  return null;
+};
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link

@@ -49,7 +49,7 @@ import {
 
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
-import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
+import { syncAndLinkSocialApps } from '@/components/EditProfile/socialMediaThunks';
 
 /**
  * Home screen of BrightID
@@ -100,7 +100,7 @@ export const HomeScreen = (props) => {
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
-      dispatch(updateSocialMediaVariations());
+      dispatch(syncAndLinkSocialApps());
       const timeoutId = setTimeout(() => {
         setLoading(false);
       }, 3000);
