@@ -90,7 +90,7 @@ export const updateBlindSig =
             linkedTimestamp: 0,
             signedTimestamp: Date.now(),
           };
-          dispatch(upsertSig(sigInfo));
+          await dispatch(upsertSig(sigInfo));
         } else if (sigInfo && !sigInfo.sig) {
           pub = sigInfo.pub;
           uid = sigInfo.uid;
@@ -123,7 +123,7 @@ export const updateBlindSig =
         const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
         await encryptAndBackup(backupKey, backupData);
 
-        dispatch(
+        await dispatch(
           updateSig({
             id: uid,
             changes: { sig: blindSig },
@@ -141,7 +141,7 @@ export const updateBlindSig =
         ) {
           console.log('removing sig and retrying');
           await dispatch(removeSig(sigInfo.uid));
-          dispatch(updateBlindSig(app));
+          await dispatch(updateBlindSig(app));
         }
       }
     }
@@ -153,7 +153,7 @@ export const updateBlindSigs =
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
         for (const app of expireableBlindSigApps) {
-          dispatch(updateBlindSig(app));
+          await dispatch(updateBlindSig(app));
         }
       });
     });
@@ -175,7 +175,7 @@ const encryptAndBackup = async (key: string, data: string) => {
 export const fetchApps = (api) => async (dispatch: dispatch, _) => {
   try {
     const apps = await api.getApps();
-    dispatch(setApps(apps));
+    await dispatch(setApps(apps));
   } catch (err) {
     console.log(err);
   }
