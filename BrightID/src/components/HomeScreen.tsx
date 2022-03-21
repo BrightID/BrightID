@@ -116,23 +116,25 @@ export const HomeScreen = (props) => {
   }, [api, dispatch]);
 
   useEffect(() => {
-    console.log(`checking signing key...`);
-    const invalidSigingKey = !activeDevices.find(
-      (d) => d.signingKey === publicKey,
-    );
-    if (invalidSigingKey) {
-      return Alert.alert(
-        t('common.alert.title.invalidSigningKey'),
-        t('common.alert.text.invalidSigningKey'),
-        [
-          {
-            text: 'Switch to different node',
-            onPress: () => {
-              dispatch(removeCurrentNodeUrl());
-            },
-          },
-        ],
+    if (activeDevices.length) {
+      console.log(`checking signing key...`);
+      const invalidSigingKey = !activeDevices.find(
+        (d) => d.signingKey === publicKey,
       );
+      if (invalidSigingKey) {
+        return Alert.alert(
+          t('common.alert.title.invalidSigningKey'),
+          t('common.alert.text.invalidSigningKey'),
+          [
+            {
+              text: 'Switch to different node',
+              onPress: () => {
+                dispatch(removeCurrentNodeUrl());
+              },
+            },
+          ],
+        );
+      }
     }
   }, [activeDevices, dispatch, publicKey, t]);
 
