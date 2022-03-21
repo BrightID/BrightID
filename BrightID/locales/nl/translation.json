@@ -110,8 +110,172 @@
       "success": "Voltooid",
       "sure": "Prima",
       "text": {
-        "failedOp": "{{name}} mislukt:\n{{message}}"
+        "failedOp": "{{name}} mislukt:\n{{message}}",
+        "lostKeys": "Maak een nieuwe BrightID aan of herstel je vorige BrightID",
+        "passwordMatch": "De wachtwoorden komen niet overeen.",
+        "passwordShort": "Je wachtwoord dient uit minimaal 8 tekens te bestaan.",
+        "recoverySigned": "Een van je herstelmethoden is goedgekeurd"
+      },
+      "title": {
+        "lostKeys": "De BrightID-sleutel van je apparaat ontbreekt",
+        "pleaseConfirm": "Bevestig je keuze"
+      },
+      "yes": "Ja"
+    },
+    "button": {
+      "cancel": "Annuleren",
+      "copy": "Kopiëren",
+      "retry": "Opnieuw",
+      "save": "Opslaan"
+    },
+    "camera": {
+      "cancel": "Annuleren",
+      "message": "We hebben toestemming nodig om je camera te gebruiken",
+      "ok": "Oké",
+      "title": "Toestemming om camera te gebruiken"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Kiezen uit galerij",
+      "takePhoto": "Foto maken",
+      "title": "Foto kiezen"
+    },
+    "placeholder": {
+      "searchConnections": "Gekoppelde diensten doorzoeken"
+    },
+    "tag": {
+      "connectionDate": "Gekoppeld op {{date}}",
+      "reportReason": " als ‘{{reportReason}}’",
+      "reported": "(gemeld)",
+      "reportedByUser": "door jou gemeld"
+    },
+    "text": {
+      "uploadingData": "Bezig met uploaden naar back-upserver…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Opslaan",
+      "ok": "Oké",
+      "report": "Loskoppelen",
+      "reportCancel": "Annuleren",
+      "reportSubmit": "Versturen",
+      "undoReport": "Melding intrekken"
+    },
+    "header": {
+      "connectionDetails": "Koppelingsinformatie"
+    },
+    "label": {
+      "connectionLevel": "Koppelingsniveau",
+      "mutualConnections": "Gemeenschappelijke koppelingen",
+      "mutualGroups": "Gemeenschappelijke groepen",
+      "possibleDuplicates": "Mogelijke duplicaten",
+      "recoveryConnections": "Herstelmethoden",
+      "socialMedia": "Sociale media"
+    },
+    "tags": {
+      "connectedAt": "Gekoppeld op {{date}}",
+      "loading": "Bezig met laden…"
+    },
+    "text": {
+      "copied": "Gekopieerd naar het klembord!",
+      "level": "Hoe goed ken je {{name}}?",
+      "levelAlreadyKnown": "Ik ken deze persoon goed",
+      "levelJustMet": "Ik heb deze persoon zojuist ontmoet",
+      "levelRecovery": "Ik vertrouw op deze persoon om mijn BrightID te herstellen",
+      "levelSuspicious": "Ik ken deze persoon niet",
+      "reportConnection": "Loskoppelen van {{name}}",
+      "reportDuplicate": "Deze koppeling is verouderd of een duplicaat",
+      "reportOther": "Andere reden",
+      "reportSpammer": "Deze persoon stuurde me een ongewenst verzoek",
+      "unReportConnection": "Herstellen",
+      "unReportImpact": "Je hebt {{name}} gemeld als ‘{{reportReason}}’. Weet je zeker dat je dit wilt intrekken en de koppeling wilt herstellen?",
+      "unkownRecoveryConnection": "Onbekend",
+      "whyremove": "Vertel ons waarom je deze koppeling wilt verwijderen"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Koppelingsfoto",
+      "viewConnectionDetails": "Koppelingsinformatie tonen",
+      "viewPhoto": "Foto beeldvullend bekijken"
+    },
+    "button": {
+      "reconnect": "Opnieuw koppelen",
+      "reportConnection": "Melding maken",
+      "updateConnection": "Bijwerken"
+    },
+    "header": {
+      "connections": "Koppelingen"
+    },
+    "label": {
+      "currentConnectionLevel": "Koppelingsniveau",
+      "newProfile": "Nieuw profiel",
+      "oldProfile": "Oud profiel"
+    },
+    "removeActionSheet": {
+      "info": "Weet je zeker dat je de koppeling met {{name}} wilt verwijderen? Je kunt te allen tijde opnieuw koppelen.",
+      "remove": "Verwijderen",
+      "title": "Koppeling verwijderen"
+    },
+    "tag": {
+      "deleted": "Verwijderd",
+      "failed": "Het koppelen is mislukt;\nprobeer het opnieuw.",
+      "lastConnected": "Gekoppeld op {{date}}",
+      "reported": "Gemeld",
+      "reportedAs": "Gemeld als ‘{{flag}}’",
+      "waiting": "Aan het wachten…"
+    },
+    "text": {
+      "alreadyConnectedWith": "Je bent al gekoppeld aan {{name}}",
+      "noConnections": "Geen kopppelingen"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "E-mailadres",
+      "meet": "Kom in contact",
+      "socialMedia": "Sociale media",
+      "website": "Website"
+    },
+    "text": {
+      "meet": "Neem deel aan een BrightID-bijeenkomst!",
+      "openSource": "open source!",
+      "weAre": "Wij zijn "
+    },
+    "title": {
+      "contactUs": "Contact opnemen"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Geef de groep een naam",
+        "nameTooShort": "De groepsnaam dient uit minimaal 2 tekens te bestaan"
+      },
+      "title": {
+        "createFailed": "De groep kan niet worden aangemaakt",
+        "formIncomplete": "Niet alles is ingevuld"
       }
+    },
+    "button": {
+      "createGroup": "Groep aanmaken",
+      "next": "Volgende",
+      "skip": "Overslaan"
+    },
+    "label": {
+      "invitees": "GENODIGDEN"
+    },
+    "placeholder": {
+      "groupName": "Wat is de naam van deze groep?"
+    },
+    "text": {
+      "invitees": "Nodig mensen uit",
+      "noConnections": "Geen koppelingen"
+    }
+  },
+  "devices": {
+    "alert": {
+      "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren."
     }
   }
 }
