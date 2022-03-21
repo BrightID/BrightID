@@ -20,7 +20,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
-  selectAllApps,
   setActiveNotification,
   updateBlindSigs,
   selectActiveDevices,
@@ -71,7 +70,6 @@ export const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
-  const apps = useSelector(selectAllApps);
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
@@ -111,14 +109,16 @@ export const HomeScreen = (props) => {
   );
 
   useEffect(() => {
-    console.log(`updating apps...`);
-    dispatch(fetchApps(api));
+    if (api) {
+      console.log(`updating apps...`);
+      dispatch(fetchApps(api));
+    }
   }, [api, dispatch]);
 
   useEffect(() => {
     console.log(`checking signing key...`);
     const invalidSigingKey = !activeDevices.find(
-      (d) => d.signingKey == publicKey,
+      (d) => d.signingKey === publicKey,
     );
     if (invalidSigingKey) {
       return Alert.alert(
@@ -134,7 +134,8 @@ export const HomeScreen = (props) => {
         ],
       );
     }
-  }, [activeDevices]);
+  }, [activeDevices, dispatch, publicKey, t]);
+
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
   }, [dispatch, headerHeight]);
