@@ -11,7 +11,7 @@ jobs:
         defaults:
           run:
             shell: bash
-            working-directory: BrightID/BrightID
+            working-directory: BrightID
 
         steps:
             - name: Checkout Repo
