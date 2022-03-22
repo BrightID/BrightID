@@ -26,8 +26,8 @@ jobs:
               id: yarn-cache-debug # needed below to check for cache hit or miss
               uses: actions/cache@v2
               with:
-                path: './node_modules'
-                key: ${{ runner.os }}-modules-${{ hashFiles('./yarn.lock') }}
+                path: './BrightID/node_modules'
+                key: ${{ runner.os }}-modules-${{ hashFiles('./BrightID/yarn.lock') }}
 
             - name: Install Dependencies
               if: steps.yarn-cache-debug.outputs.cache-hit != 'true'  # only install when no cache found
