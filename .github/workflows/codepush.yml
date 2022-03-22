@@ -8,10 +8,6 @@ jobs:
         if: github.repository_owner == 'BrightID'
         name: Deploy Staging
         runs-on: ubuntu-latest
-        defaults:
-          run:
-            shell: bash
-            working-directory: BrightID
 
         steps:
             - name: Checkout Repo
@@ -31,20 +27,4 @@ jobs:
 
             - name: Install Dependencies
               if: steps.yarn-cache-debug.outputs.cache-hit != 'true'  # only install when no cache found
-              run: yarn --frozen-lockfile
-
-            - name: Deploy to Codepush - Android
-              uses: FreeplayApp/codepush-action@v1
-              with:
-                directory: BrightID/BrightID/BrightID
-                args: release-react -a BrightID/BrightID-android -d Staging
-              env:
-                APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}
-
-            - name: Deploy to Codepush - iOS
-              uses: FreeplayApp/codepush-action@v1
-              with:
-                directory: BrightID/BrightID
-                args: release-react -a BrightID/BrightID-ios -d Staging
-              env:
-                APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}
+              run: cd BrightID && yarn --frozen-lockfile
