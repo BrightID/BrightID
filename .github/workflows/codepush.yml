@@ -33,7 +33,7 @@ jobs:
               run: yarn --frozen-lockfile
 
             - name: Deploy to Codepush - Android
-              uses: FreeplayApp/codepush-action@master
+              uses: TripleSpeeder/codepush-action@master
               with:
                 directory: BrightID
                 args: release-react -a BrightID/BrightID-android -d Staging
@@ -41,7 +41,7 @@ jobs:
                 APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN_ANDROID }}
 
             - name: Deploy to Codepush - iOS
-              uses: FreeplayApp/codepush-action@master
+              uses: TripleSpeeder/codepush-action@master
               with:
                 directory: BrightID
                 args: release-react -a BrightID/BrightID-ios -d Staging
