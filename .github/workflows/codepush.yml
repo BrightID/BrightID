@@ -36,7 +36,7 @@ jobs:
             - name: Deploy to Codepush - Android
               uses: FreeplayApp/codepush-action@v1
               with:
-                directory: BrightID/BrightID
+                directory: BrightID/BrightID/BrightID
                 args: release-react -a BrightID/BrightID-android -d Staging
               env:
                 APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}
