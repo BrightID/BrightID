@@ -2,7 +2,7 @@ name: Appcenter codepush
 on:
   push:
     branches:
-      - automate_staging_deploy
+      - master
 jobs:
     deploy:
         if: github.repository_owner == 'BrightID'
