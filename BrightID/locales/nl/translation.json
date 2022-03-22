@@ -275,7 +275,245 @@
   },
   "devices": {
     "alert": {
-      "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren."
+      "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren.",
+      "confirmAdd": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat?",
+      "confirmRemove": "Weet je zeker dat je je BrightID wilt verwijderen van ‘{{name}}’?",
+      "confirmSync": "Weet je zeker dat je je BrightID-gegevens wilt delen en synchroniseren met dit apparaat?",
+      "noPrimary": "Je apparaten kunnen alleen worden gesynchroniseerd door det primaire apparaat."
+    },
+    "button": {
+      "submit": "Versturen"
+    },
+    "placeholder": {
+      "deviceName": "Apparaatnaam"
+    },
+    "text": {
+      "listDescription": "Je BrightID is beschikbaar op de volgende apparaten:",
+      "syncCompleted": "Je apparaat is gesynchroniseerd.",
+      "waitSyncing": "Bezig met synchroniseren…",
+      "whatsDeviceName": "Geef het nieuwe apparaat een naam"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "Je beschikt over de nieuwse versie."
+      },
+      "title": {
+        "upToDate": "Controleren op updates"
+      }
+    },
+    "label": {
+      "achievements": "Prestaties",
+      "checkForUpdates": "Controleren op updates",
+      "contactUs": "Contact opnemen",
+      "copyExplorerCode": "Verkennercode kopiëren",
+      "devices": "Apparaten",
+      "editProfile": "Profiel bewerken",
+      "groups": "Groepen",
+      "home": "Startpagina"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Licentie-overeenkomst"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "Gekopieerd naar het klembord!"
+      }
+    },
+    "button": {
+      "copyCode": "Code kopiëren"
+    },
+    "text": {
+      "backupRequired": "Het instellen van back-up en herstel is vereist om toegang te krijgen tot je grafiekverkennercode. Controleer je meldingen of koppel meer gebruikers om back-up en herstel in te stellen.",
+      "explorerWebsiteDescription": "is een website die speciaal ontworpen is om de sociale BrightID-grafiek te bekijken. Gebruik bovenstaande code om je netwerk te bekijken."
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "groepslogo"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "Weet je zeker dat je {{name}} wilt aanwijzen als groepsbeheerder?",
+        "dismissMember": "Weet je zeker dat je {{name}} wilt verwijderen uit deze groep?",
+        "inviteSuccess": "Je hebt {{name}} uitgenodigd",
+        "leaveGroup": "Weet je zeker dat je deze groep wilt verlaten?"
+      },
+      "title": {
+        "addAdmin": "Beheerder toevoegen",
+        "dismissMember": "Lid verwijderen",
+        "errorDismissMember": "Dit lid kan niet worden verwijderd",
+        "errorLeaveGroup": "De groep kan niet worden verlaten",
+        "inviteSuccess": "De uitnodiging is verstuurd",
+        "leaveGroup": "Groep verlaten"
+      }
+    },
+    "button": {
+      "createGroup": "Groep aanmaken",
+      "learnMore": "Meer informatie"
+    },
+    "groupActionSheet": {
+      "cancel": "Annuleren",
+      "inviteUser": "Gebruiker uitnodigen",
+      "leaveGroup": "Groep verlaten"
+    },
+    "header": {
+      "groups": "Groepen",
+      "inviteList": "Uitnodigingslijst",
+      "newGroup": "Nieuwe groep"
+    },
+    "label": {
+      "knownMembers": "Bekende leden:",
+      "unknownMembers": "Onbekende leden:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Beheerder toevoegen",
+      "cancel": "Annuleren",
+      "dismissMember": "Verwijderen uit groep"
+    },
+    "state": {
+      "creatingGroup": "Bezig met aanmaken…",
+      "uploadingGroupPhoto": "Bezig met uploaden…"
+    },
+    "tag": {
+      "primaryGroup": "Primaire groep"
+    },
+    "text": {
+      "noGroups": "<text>Verifieer sneller</text><text>door groepen te maken</text><text>en lid te worden</text>",
+      "noGroupsMatchSearch": "Er zijn geen zoekresultaten",
+      "noMembers": "Er zijn geen bekende leden - nodig mensen uit…"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "Koppelen"
+    },
+    "button": {
+      "achievements": "Prestaties",
+      "apps": "Apps",
+      "connections": "Koppelingen",
+      "myCode": "Mijn code",
+      "scanCode": "Scan een code"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID Discord-groep",
+      "title": "Wil je met ons kletsen?"
+    },
+    "label": {
+      "createNewConnection": "Maak een koppeling"
+    },
+    "link": {
+      "community": "Word lid van de gemeenschap"
+    }
+  },
+  "import": {
+    "alert": {
+      "text": "Open deze link in de te importeren BrightID-app.",
+      "title": "BrightID-link importeren"
+    },
+    "clipboardmessage": "Exporteer je BrightID naar een ander apparaat: {{link}}",
+    "header": {
+      "title": "Account importeren"
+    },
+    "text": {
+      "additionalInfo": "Scan deze QR-code met je andere apparaat om je BrightID te importeren",
+      "askScanning": "Scan deze QR-code met je andere apparaat",
+      "waitImporting": "Bezig met importeren van koppelingen…"
+    }
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Standaardlijst herstellen",
+      "text": "Je maakt geen gebruik van de standaardlijst"
+    },
+    "state": {
+      "connecting": "Bezig met koppelen…",
+      "noConnection": "Er kan geen verbinding worden gemaakt - controleer je internetverbinding.",
+      "noNode": "De lijst is blanco."
+    },
+    "timer": {
+      "text": "Resterend: {{secondsLeft}} seconden"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Huidige instantie:"
+    },
+    "switchNodeButtonLabel": "Andere instantie gebruiken"
+  },
+  "notificationBar": {
+    "text": {
+      "backupPassword": "Stel een wachtwoord in om je gegevens veilig te back-uppen",
+      "pendingConnections": "Er is {{count}} koppelingsverzoek",
+      "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+      "socialRecovery": "Kies herstelmethoden om je BrightID met behulp van je socialemedia-accounts te herstellen"
+    },
+    "title": {
+      "backupPassword": "Back-upwachtwoord instellen",
+      "pendingConnection": "Koppelingen bevestigen",
+      "socialRecovery": "Sociale herstelmethoden instellen"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "Je kunt geen lid worden van deze groep",
+        "rejectGroupInvite": "Weet je zeker dat je deze uitnodiging wilt afwijzen?",
+        "successGroupInvite": "Je bent lid geworden van {{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "De uitnodiging kan niet worden afgewezen",
+        "rejectGroupInvite": "Afwijzen"
+      }
+    },
+    "item": {
+      "msg": {
+        "backupBrightId": "Stel een wachtwoord in om je gegevens veilig te back-uppen",
+        "socialRecovery": "Kies herstelmethoden om je BrightID met behulp van je socialemedia-accounts te herstellen"
+      },
+      "text": {
+        "pendingConnections": "Er is {{count}} koppelingsverzoek",
+        "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+        "pendingGroupInvite": "{{name}} heeft je uitgenodigd voor deze groep"
+      },
+      "title": {
+        "backupBrightId": "Back-upwachtwoord instellen",
+        "socialRecovery": "Sociale herstelmethoden instellen"
+      }
+    },
+    "tab": {
+      "connections": "Koppelingen",
+      "groups": "Groepen",
+      "miscellaneous": "Overig"
+    },
+    "text": {
+      "noGroupInvites": "Je hebt geen groepsuitnodigingen…",
+      "noMiscellaneous": "Er valt hier niks te zien…",
+      "noPendingConnections": "Er zijn geen koppelingsverzoeken…"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "BrightID aanmaken",
+      "import": "Importeren",
+      "recover": "Herstellen"
+    },
+    "text": {
+      "congratulations": "Gefeliciteerd!\nJe BrightID is aangemaakt.\nNu wordt het tijd om je te koppelen.",
+      "register": "Registreer om je eigen digitale\nidentiteit aan te maken"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "Het koppelingskanaal kan niet worden aangemaakt. Foutmelding: {{message}}",
+        "errorJoinChannel": "Er kaan geen verbinding worden gemaakt met het koppelingskanaal. Foutmelding: {{message}}"
+      }
     }
   }
 }
