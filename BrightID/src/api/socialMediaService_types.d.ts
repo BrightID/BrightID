@@ -2,7 +2,7 @@ import { BrightIdNetwork } from '@/components/Apps/model';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 
 type CreateSocialMediaRequest = {
-  variation: string;
+  variation: string | SocialMediaVariationIds;
   profileHashes: string[];
   network: BrightIdNetwork;
 };
@@ -10,7 +10,7 @@ type CreateSocialMediaRequest = {
 type CreateSocialMediaResponse = {
   contextId: string;
   token: string;
-  variation: string;
+  variation: string | SocialMediaVariationIds;
   network: BrightIdNetwork;
 };
 
