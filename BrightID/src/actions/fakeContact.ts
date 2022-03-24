@@ -62,7 +62,7 @@ export const addFakeConnection =
         ],
       );
 
-      const dataObj = {
+      const dataObj: SharedProfile = {
         id: connectId,
         photo,
         name,
