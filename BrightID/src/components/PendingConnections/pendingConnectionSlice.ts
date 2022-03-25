@@ -106,25 +106,34 @@ export const newPendingConnection = createAsyncThunk<
       );
     }
 
+    // Is this a known connection reconnecting?
+    const existingConnection = selectConnectionById(
+      getState(),
+      sharedProfile.id,
+    );
+    if (existingConnection) {
+      console.log(`${sharedProfile.id} exists.`);
+    }
+
     let profileInfo: ProfileInfo;
     try {
       profileInfo = await api.getProfile(sharedProfile.id);
     } catch (err) {
       if (err instanceof BrightidError && err.errorNum === USER_NOT_FOUND) {
         // this must be a new user not yet existing on backend.
+        if (existingConnection) {
+          // handle edge case:
+          // The other user is not known in the backend, but already connected with us. This should never happen :/
+          // Since profileInfo is required for reconnecting we can not start the reconnect flow.
+          throw new Error(
+            `PendingConnection ${profileId}: User already connected, but unknown in node api.`,
+          );
+        }
       } else {
         throw err;
       }
     }
-    // Is this a known connection reconnecting?
-    const existingConnection = selectConnectionById(
-      getState(),
-      sharedProfile.id,
-    );
 
-    if (existingConnection) {
-      console.log(`${sharedProfile.id} exists.`);
-    }
     const pendingConnectionData: PendingConnectionData = {
       sharedProfile,
       profileInfo,
