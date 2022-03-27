@@ -512,8 +512,139 @@
     "alert": {
       "text": {
         "errorCreateChannel": "Het koppelingskanaal kan niet worden aangemaakt. Foutmelding: {{message}}",
-        "errorJoinChannel": "Er kaan geen verbinding worden gemaakt met het koppelingskanaal. Foutmelding: {{message}}"
+        "errorJoinChannel": "Er kaan geen verbinding worden gemaakt met het koppelingskanaal. Foutmelding: {{message}}",
+        "localOutdated": "De koppeling met {{name}} is mislukt wegens een incompatibele clientversie. Update de BrightID-app en herstart.",
+        "otherOutdated": "De koppeling met {{name}} is mislukt wegens een incompatibele clientversie. Vraag {{name}} om zijn/haar BrightID-app te updaten en herstart."
+      },
+      "title": {
+        "connectionImpossible": "Koppelen mislukt"
       }
+    },
+    "text": {
+      "alreadyRated": "Je hebt deze koppeling al beoordeeld",
+      "errorExpired": "De koppeling is verlopen - probeer het opnieuw.",
+      "errorMyself": "Je kunt niet aan jezelf worden gekoppeld.",
+      "errorUnhandled": "Onbehandelde koppelingsstatus"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "Reeds bekend",
+      "connections": "Koppelingen",
+      "created": "Lid geworden van BrightID op {{date}}",
+      "groups": "Groepen",
+      "justMet": "Zojuist ontmoet",
+      "mutualConnections": "Gemeenschappelijke koppelingen",
+      "rating": "Hoe goed ken je hem/haar?",
+      "recovery": "Herstel",
+      "reported": "Gemeld",
+      "suspicious": "Verdacht"
+    },
+    "text": {
+      "errorGeneric": "Er is een fout opgetreden - probeer het opnieuw.",
+      "rating": "Met jouw antwoord kunnen we aanvallen voorkomen"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}}/{{total}} bevestigd"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "Negeren",
+        "dontLeave": "Niet verlaten"
+      },
+      "text": {
+        "discardChanges": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je het scherm wilt verlaten?",
+        "passwordMatch": "Het huidige wachtwoord is onjuist."
+      },
+      "title": {
+        "discardChanges": "Wijzigingen negeren?",
+        "passwordMatch": "Probeer het opnieuw"
+      }
+    },
+    "button": {
+      "socialNext": "Volgende",
+      "socialPrevious": "Vorige"
+    },
+    "label": {
+      "currentPassword": "Huidig wachtwoord",
+      "name": "Naam",
+      "newPassword": "Nieuw wachtwoord",
+      "newPasswordAgain": "Wachtwoord herhalen",
+      "password": "Wachtwoord",
+      "socialMediaLink": "Socialemedialink"
+    },
+    "placeholder": {
+      "name": "Voer een naam in",
+      "newPassword": "Nieuw wachtwoord",
+      "newPasswordAgain": "Wachtwoord herhalen",
+      "password": "Wachtwoord"
+    },
+    "text": {
+      "backupPasswordTitle": "Wachtwoord bewaren",
+      "changePassword": "Wachtwoord wijzigen",
+      "changeProfilePicture": "Profielfoto wijzigen",
+      "setPassword": "Wachtwoord instellen",
+      "viewPassword": "Wachtwoord tonen"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "Word lid van een groep met {{name}} op BrightID: {{link}}",
+      "connectSingle": "Leg contact met {{name}} op BrightID: {{link}}",
+      "text": {
+        "codeGroup": "Deze QR-code is ontworpen om contact te leggen met meerdere personen tegelijk.",
+        "codeSingle": "Deze QR-code is ontworpen om contact te leggen met één gebruiker.",
+        "codeStar": "Deze QR-code is ontworpen om meerdere personen te koppelen aan één persoon.",
+        "shareLinkGroup": "Link delen",
+        "shareLinkSingle": "Link delen met één vriend(in)",
+        "universalLink": "Universele link"
+      },
+      "title": {
+        "codeGroup": "Groepscode",
+        "codeSingle": "Eenmalige code",
+        "codeStar": "Stercode"
+      }
+    },
+    "button": {
+      "copyLink": "Link kopiëren",
+      "scanCode": "Scan een code",
+      "showCode": "Toon je QR-code"
+    },
+    "header": {
+      "connections": "{{count}}/30 koppelingen",
+      "connections_plural": "{{count}}/30 koppelingen"
+    },
+    "label": {
+      "connectionType": "Soort koppeling:"
+    },
+    "text": {
+      "canAlso": "Of je kunt…",
+      "codeGroup": "Groepscode",
+      "codeSingle": "Eenmalige code",
+      "codeStar": "Stercode",
+      "confirmConnections": "Koppelingen bevestigen",
+      "downloadingConnectionData": "Bezig met ophalen van koppelingsinformatie…",
+      "expiresIn": "Vervalt over",
+      "pendingConnections": "Er is {{count}} koppelingsverzoek",
+      "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+      "scanCode": "<text>Hoi {{name}}, scan een code en</text><text>leg vandaag nog een nieuwe vriendschap</text>"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "text": "Deel deze link met al je herstelconnecties.",
+      "title": "Herstellink"
+    },
+    "clipboardmessage": "Help me om mijn BrightID te herstellen: {{link}}",
+    "error": {
+      "mismatchId": "Je herstelconnecties hebben andere accounts gekozen",
+      "title": "Accountherstel mislukt",
+      "unknown": "Er is een onbekende fout opgetreden"
+    },
+    "header": {
+      "text": "Stap 1: herstel je account"
     }
   }
 }
