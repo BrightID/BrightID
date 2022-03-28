@@ -3,21 +3,24 @@ import {
   createEntityAdapter,
   createAsyncThunk,
   createSelector,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import i18next from 'i18next';
+import { Alert } from 'react-native';
 import {
   removeChannel,
   selectChannelById,
 } from '@/components/PendingConnections/channelSlice';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { decryptData } from '@/utils/cryptoHelper';
-import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
 
-const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>();
+const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>({
+  selectId: (pendingConnection) => pendingConnection.profileId,
+});
 
 /*
   PendingConnection slice contains all pending connections and their profile info
@@ -42,12 +45,9 @@ export enum pendingConnection_states {
 }
 
 export const newPendingConnection = createAsyncThunk<
-  PendingConnection,
+  PendingConnectionData,
   { channelId: string; profileId: string; api: NodeApi },
-  {
-    dispatch: Dispatch;
-    state: State;
-  }
+  { state: State }
 >(
   'pendingConnections/newPendingConnection',
   async ({ channelId, profileId, api }, { getState }) => {
@@ -65,26 +65,29 @@ export const newPendingConnection = createAsyncThunk<
       dataId: profileId,
     });
 
-    const decryptedObj = decryptData(profileData, channel.aesKey);
+    const sharedProfile = decryptData(
+      profileData,
+      channel.aesKey,
+    ) as SharedProfile;
 
     // compare profile version
     if (
-      decryptedObj.version === undefined || // very old client version
-      decryptedObj.version < PROFILE_VERSION // old client version
+      sharedProfile.version === undefined || // very old client version
+      sharedProfile.version < PROFILE_VERSION // old client version
     ) {
       // other user needs to update his client
       const msg = i18next.t('pendingConnection.alert.text.otherOutdated', {
-        name: `${decryptedObj.name}`,
+        name: `${sharedProfile.name}`,
       });
       Alert.alert(
         i18next.t('pendingConnection.alert.title.connectionImpossible'),
         msg,
       );
       throw new Error(msg);
-    } else if (decryptedObj.version > PROFILE_VERSION) {
+    } else if (sharedProfile.version > PROFILE_VERSION) {
       // I need to update my client
       const msg = i18next.t('pendingConnection.alert.text.localOutdated', {
-        name: `${decryptedObj.name}`,
+        name: `${sharedProfile.name}`,
       });
       Alert.alert(
         i18next.t('pendingConnection.alert.title.connectionImpossible'),
@@ -95,48 +98,49 @@ export const newPendingConnection = createAsyncThunk<
     // Is this brightID already in the list of unconfirmed pending connections? Can happen if the same user joins a
     // channel multiple times (e.g. if users app crashed)
     const alreadyPending = selectAllUnconfirmedConnections(getState()).find(
-      (pc) => decryptedObj.id === pc.brightId,
+      (pc) => sharedProfile.id === pc.pendingConnectionData.sharedProfile.id,
     );
     if (alreadyPending) {
       throw new Error(
-        `PendingConnection ${profileId}: BrightId ${decryptedObj.id} is already existing.`,
+        `PendingConnection ${profileId}: BrightId ${sharedProfile.id} is already existing.`,
       );
     }
 
-    decryptedObj.myself = decryptedObj.id === getState().user.id;
-    let connectionInfo: Partial<UserProfileRes['data']> & {
-      existingConnection?: Connection;
-    } = {};
+    // Is this a known connection reconnecting?
+    const existingConnection = selectConnectionById(
+      getState(),
+      sharedProfile.id,
+    );
+    if (existingConnection) {
+      console.log(`${sharedProfile.id} exists.`);
+    }
+
+    let profileInfo: ProfileInfo;
     try {
-      connectionInfo = await api.getProfile(decryptedObj.id);
+      profileInfo = await api.getProfile(sharedProfile.id);
     } catch (err) {
       if (err instanceof BrightidError && err.errorNum === USER_NOT_FOUND) {
-        // this must be a new user not yet existing on backend. Return empty object.
-        connectionInfo = {
-          connectionsNum: 0,
-          groupsNum: 0,
-          mutualConnections: [],
-          mutualGroups: [],
-          createdAt: 0,
-          connectedAt: 0,
-          verifications: [],
-          reports: [],
-          existingConnection: undefined,
-        };
+        // this must be a new user not yet existing on backend.
+        if (existingConnection) {
+          // handle edge case:
+          // The other user is not known in the backend, but already connected with us. This should never happen :/
+          // Since profileInfo is required for reconnecting we can not start the reconnect flow.
+          throw new Error(
+            `PendingConnection ${profileId}: User already connected, but unknown in node api.`,
+          );
+        }
       } else {
         throw err;
       }
     }
-    // Is this a known connection reconnecting?
-    connectionInfo.existingConnection = selectConnectionById(
-      getState(),
-      decryptedObj.id,
-    );
 
-    if (connectionInfo.existingConnection) {
-      console.log(`${decryptedObj.id} exists.`);
-    }
-    return { ...connectionInfo, ...decryptedObj };
+    const pendingConnectionData: PendingConnectionData = {
+      sharedProfile,
+      profileInfo,
+      existingConnection,
+      myself: sharedProfile.id === getState().user.id,
+    };
+    return pendingConnectionData;
   },
 );
 
@@ -153,7 +157,7 @@ const pendingConnectionsSlice = createSlice({
     removePendingConnection: pendingConnectionsAdapter.removeOne,
     updatePendingConnection: pendingConnectionsAdapter.updateOne,
     removeAllPendingConnections: pendingConnectionsAdapter.removeAll,
-    confirmPendingConnection(state, action) {
+    confirmPendingConnection(state, action: PayloadAction<string>) {
       const id = action.payload;
       state = pendingConnectionsAdapter.updateOne(state, {
         id,
@@ -171,7 +175,7 @@ const pendingConnectionsSlice = createSlice({
 
         // Add pending connection in DOWNLOADING state.
         state = pendingConnectionsAdapter.addOne(state, {
-          id: action.meta.arg.profileId,
+          profileId: action.meta.arg.profileId,
           channelId: action.meta.arg.channelId,
           state: pendingConnection_states.DOWNLOADING,
         });
@@ -188,57 +192,17 @@ const pendingConnectionsSlice = createSlice({
           },
         });
       })
-      .addCase(newPendingConnection.fulfilled, (state, action) => {
-        // thunk argument is available via action.meta.arg:
-        const { profileId } = action.meta.arg;
+      .addCase(newPendingConnection.fulfilled, (state, { meta, payload }) => {
+        // thunk arguments are available via action.meta.arg:
+        const { profileId } = meta.arg;
 
         // data returned by thunk is available via action.payload:
-        const {
-          id: brightId,
-          name,
-          photo,
-          profileTimestamp,
-          initiator,
-          connectionsNum,
-          groupsNum,
-          mutualConnections = [],
-          mutualGroups = [],
-          createdAt,
-          connectedAt,
-          reports = [],
-          verifications = [],
-          notificationToken,
-          socialMedia = [],
-          existingConnection,
-        } = action.payload;
-
-        const changes: PendingConnection = {
-          state: action.payload.myself
+        const changes: Partial<PendingConnection> = {
+          state: payload.myself
             ? pendingConnection_states.MYSELF
             : pendingConnection_states.UNCONFIRMED,
-          brightId,
-          name,
-          photo,
-          profileTimestamp,
-          initiator,
-          connectionsNum,
-          groupsNum,
-          mutualConnections,
-          mutualGroups,
-          createdAt,
-          connectedAt,
-          reports,
-          verifications,
-          notificationToken,
-          socialMedia,
-          existingConnection,
+          pendingConnectionData: payload,
         };
-
-        // add secret key if dev
-        if (__DEV__) {
-          const { secretKey } = action.payload;
-          changes.secretKey = secretKey;
-        }
 
         // Perform the update in redux
         state = pendingConnectionsAdapter.updateOne(state, {
@@ -294,22 +258,30 @@ export const selectPendingConnectionByBrightId = createSelector(
     This array is created dynamically and will be a new object with each invocation. Therefore
     we have to use deep equality check
  */
-export const selectAllPendingConnectionsByChannelIds = createDeepEqualStringArraySelector(
-  selectAllPendingConnections,
-  (_, channelIds: string[]) => channelIds,
-  (pendingConnections, channelIds) => {
-    console.log(`selectAllPendingConnectionsByChannelIds ${channelIds}...`);
-    return pendingConnections.filter((pc) => channelIds.includes(pc.channelId));
-  },
-);
-export const selectAllUnconfirmedConnectionsByChannelIds = createDeepEqualStringArraySelector(
-  selectAllUnconfirmedConnections,
-  (_, channelIds: string[]) => channelIds,
-  (pendingConnections, channelIds) => {
-    console.log(`selectAllUnconfirmedConnectionsByChannelIds ${channelIds}...`);
-    return pendingConnections.filter((pc) => channelIds.includes(pc.channelId));
-  },
-);
+export const selectAllPendingConnectionsByChannelIds =
+  createDeepEqualStringArraySelector(
+    selectAllPendingConnections,
+    (_, channelIds: string[]) => channelIds,
+    (pendingConnections, channelIds) => {
+      console.log(`selectAllPendingConnectionsByChannelIds ${channelIds}...`);
+      return pendingConnections.filter((pc) =>
+        channelIds.includes(pc.channelId),
+      );
+    },
+  );
+export const selectAllUnconfirmedConnectionsByChannelIds =
+  createDeepEqualStringArraySelector(
+    selectAllUnconfirmedConnections,
+    (_, channelIds: string[]) => channelIds,
+    (pendingConnections, channelIds) => {
+      console.log(
+        `selectAllUnconfirmedConnectionsByChannelIds ${channelIds}...`,
+      );
+      return pendingConnections.filter((pc) =>
+        channelIds.includes(pc.channelId),
+      );
+    },
+  );
 
 // export actions
 

@@ -13,12 +13,25 @@ import {
 import { fontSize } from '@/theme/fonts';
 import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
-export const PendingConnectionCard = ({ pendingConnections }) => {
+type PendingConnectionCardProps = {
+  pendingConnections: Array<PendingConnection>;
+};
+export const PendingConnectionCard = ({
+  pendingConnections,
+}: PendingConnectionCardProps) => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
-  const circlePhotos = pendingConnections.map(({ photo }) => ({ uri: photo }));
+  const circlePhotos = pendingConnections.map((pc) => ({
+    uri: pc.pendingConnectionData.sharedProfile.photo,
+  }));
   const firstNames = pendingConnections
-    .map(({ name }) => name.split(' ')[0])
+    .map(
+      ({
+        pendingConnectionData: {
+          sharedProfile: { name },
+        },
+      }) => name.split(' ')[0],
+    )
     .join(', ');
   const navToPending = () => {
     navigate('PendingConnections');

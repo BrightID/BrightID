@@ -53,14 +53,12 @@ export const uploadAllInfoAfter = async (after) => {
     (conn) => conn.timestamp > after,
   );
   for (const conn of connections) {
-    if (conn.timestamp > after) {
-      await uploadConnection({
-        conn,
-        channelApi,
-        aesKey,
-        signingKey,
-      });
-    }
+    await uploadConnection({
+      conn,
+      channelApi,
+      aesKey,
+      signingKey,
+    });
   }
 
   console.log('uploading groups');

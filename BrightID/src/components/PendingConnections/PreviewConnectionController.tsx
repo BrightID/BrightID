@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { useDispatch, useSelector } from '@/store';
 import { InteractionManager, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { WHITE } from '@/theme/colors';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
@@ -34,7 +34,8 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     return null;
   }
 
-  let isReconnect = !!pendingConnection.existingConnection;
+  let isReconnect =
+    !!pendingConnection.pendingConnectionData.existingConnection;
   if (pendingConnection.state !== pendingConnection_states.UNCONFIRMED) {
     // Don't display reconnect screen for connections that have just been confirmed
     isReconnect = false;
@@ -45,20 +46,23 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     moveToNext();
     // wait until after finishes navigation before dispatching confirm action
     InteractionManager.runAfterInteractions(() => {
-      dispatch(confirmPendingConnectionThunk(pendingConnection.id, level, api));
+      dispatch(
+        confirmPendingConnectionThunk(pendingConnection.profileId, level, api),
+      );
     });
   };
 
   const abuseHandler = () => {
     if (isReconnect) {
       navigation.navigate('ReportReason', {
-        connectionId: pendingConnection.existingConnection.id,
+        connectionId:
+          pendingConnection.pendingConnectionData.existingConnection.id,
         reporting: true,
         successCallback: () => {
           // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
           dispatch(
             updatePendingConnection({
-              id: pendingConnection.id,
+              id: pendingConnection.profileId,
               changes: {
                 state: pendingConnection_states.CONFIRMED,
               },
@@ -71,18 +75,22 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
 
   const photoTouchHandler = () => {
     navigation.navigate('FullScreenPhoto', {
-      photo: pendingConnection.photo,
+      photo: pendingConnection.pendingConnectionData.sharedProfile.photo,
       base64: true,
     });
   };
 
-  console.log(`rendering ${pendingConnection.name}`);
+  console.log(
+    `rendering ${pendingConnection.pendingConnectionData.sharedProfile.name}`,
+  );
   return (
     <View style={styles.previewContainer}>
       {isReconnect ? (
         <ReconnectView
           pendingConnection={pendingConnection}
-          existingConnection={pendingConnection.existingConnection}
+          existingConnection={
+            pendingConnection.pendingConnectionData.existingConnection
+          }
           setLevelHandler={setLevelHandler}
           abuseHandler={abuseHandler}
         />

@@ -342,7 +342,7 @@ export const encryptAndUploadProfileToChannel =
     const photo = await retrieveImage(filename);
     const profileTimestamp = Date.now();
 
-    const dataObj = {
+    const dataObj: SharedProfile = {
       id,
       photo,
       name,
