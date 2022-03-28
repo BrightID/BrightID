@@ -256,3 +256,33 @@ export const uploadBlindSig = async ({
     console.error(`uploadBlindSig: ${err.message}`);
   }
 };
+
+export const uploadContextInfo = async ({
+  contextInfo,
+  channelApi,
+  aesKey,
+  signingKey,
+  prefix,
+}: {
+  contextInfo: ContextInfo;
+  channelApi: ChannelAPI;
+  aesKey: string;
+  signingKey: string;
+  prefix: string;
+}) => {
+  try {
+    const encrypted = encryptData(contextInfo, aesKey);
+    console.log(
+      `Posting ContextInfo: ${contextInfo.context} - ${contextInfo.contextId}...`,
+    );
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      dataId: `${prefix}contextInfo_${hash(
+        contextInfo.context,
+      )}:${b64ToUrlSafeB64(signingKey)}`,
+    });
+  } catch (err) {
+    console.error(`uploadContextInfo: ${err.message}`);
+  }
+};
