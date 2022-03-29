@@ -133,7 +133,7 @@ export const ReconnectView = ({
           <ConnectionStats
             connectionsNum={profileInfo.connectionsNum}
             groupsNum={profileInfo.groupsNum}
-            mutualConnectionsNum={profileInfo.mutualConnections.length}
+            mutualConnectionsNum={profileInfo.mutualConnections?.length || 0}
           />
         </View>
         <View style={styles.connectionLevel}>
@@ -223,7 +223,7 @@ export const ReconnectView = ({
           <ConnectionStats
             connectionsNum={profileInfo.connectionsNum}
             groupsNum={profileInfo.groupsNum}
-            mutualConnectionsNum={profileInfo.mutualConnections.length}
+            mutualConnectionsNum={profileInfo.mutualConnections?.length || 0}
           />
         </View>
         <View style={styles.connectionLevel}>

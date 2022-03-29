@@ -138,7 +138,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         <ConnectionStats
           connectionsNum={profileInfo?.connectionsNum || 0}
           groupsNum={profileInfo?.groupsNum || 0}
-          mutualConnectionsNum={profileInfo?.mutualConnections.length || 0}
+          mutualConnectionsNum={profileInfo?.mutualConnections?.length || 0}
         />
       </View>
       {userReported && (
