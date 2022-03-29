@@ -89,6 +89,7 @@ declare global {
     initiatorProfileId: string;
   };
 
+  /* Profile information shared P2P via channel when making connections */
   type SharedProfile = {
     id: string;
     photo: string;
@@ -171,7 +172,7 @@ declare global {
     secretKey: Uint8Array;
     id: string;
     name: string;
-    photo: string;
+    photo: Photo;
     aesKey: string;
     timestamp: number;
     recoveredConnections: number;
@@ -229,6 +230,18 @@ declare global {
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
+
+  /*
+    Connection information synced via channel when using multiple
+    devices or performing recovery.
+  */
+  type SyncConnection = {
+    id: string;
+    name: string;
+    photo: string; // base64-encoded photo data
+    timestamp: number;
+    socialMedia?: SocialMedia[];
+  };
 
   type TasksState = { [taskId: string]: TasksStateEntry };
 
