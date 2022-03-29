@@ -177,8 +177,8 @@ type ProfileInfo = {
   id: string;
   connectionsNum: number;
   groupsNum: number;
-  mutualConnections: string[];
-  mutualGroups: string[];
+  mutualConnections?: string[];
+  mutualGroups?: string[];
   recoveryConnections: RecoveryConnection[];
   connectedAt: number;
   createdAt: number;
