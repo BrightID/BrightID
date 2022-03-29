@@ -133,18 +133,13 @@ export const uploadConnection = async ({
   aesKey,
   signingKey,
 }: {
-  conn: {
-    id?: string;
-    name?: string;
-    photo?: Photo;
-    timestamp?: number;
-  };
+  conn: Connection;
   channelApi: ChannelAPI;
   aesKey: string;
   signingKey: string;
 }) => {
   try {
-    const { id, name, photo, timestamp } = conn;
+    const { id, name, photo, timestamp, socialMedia } = conn;
     let photoString = '';
 
     if (!name) {
@@ -156,11 +151,12 @@ export const uploadConnection = async ({
       photoString = await retrieveImage(photo.filename);
     }
 
-    const dataObj = {
+    const dataObj: SyncConnection = {
       id,
       photo: photoString,
       name,
       timestamp,
+      socialMedia,
     };
 
     const encrypted = encryptData(dataObj, aesKey);

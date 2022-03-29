@@ -13,7 +13,9 @@ export const initialState: RecoveryData = {
   errorType: RecoveryErrorType.NONE,
   id: '',
   name: '',
-  photo: '',
+  photo: {
+    filename: '',
+  },
   timestamp: 0,
   sigs: {},
   uploadCompletedBy: {},
@@ -49,7 +51,9 @@ const recoveryData = createSlice({
       state.errorType = RecoveryErrorType.NONE;
       state.id = '';
       state.name = '';
-      state.photo = '';
+      state.photo = {
+        filename: '',
+      };
       state.recoveredConnections = 0;
       state.recoveredGroups = 0;
       state.recoveredBlindSigs = 0;
@@ -81,14 +85,16 @@ const recoveryData = createSlice({
         state.id = sig.id;
         // clear name and photo in case id changes
         state.name = '';
-        state.photo = '';
+        state.photo = {
+          filename: '',
+        };
       } else {
         state.sigs[signer] = sig;
       }
     },
     updateNamePhoto(
       state,
-      action: PayloadAction<{ name: string; photo: string }>,
+      action: PayloadAction<{ name: string; photo: Photo }>,
     ) {
       const { name, photo } = action.payload;
       state.name = name;

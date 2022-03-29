@@ -18,10 +18,12 @@ const fetchUserInfo =
           user: { id },
         } = getState();
 
-        console.log('refreshing user info', id);
         if (!id) {
-          throw new Error('id missing');
+          console.log(`Can't fetch user info - id missing`);
+          return;
         }
+
+        console.log('refreshing user info', id);
         try {
           const verifications = await api.getVerifications(id);
           dispatch(setVerifications(verifications));
@@ -44,6 +46,6 @@ const fetchUserInfo =
         }
       });
     });
-  }
+  };
 
 export default fetchUserInfo;
