@@ -34,6 +34,10 @@ export const ReconnectView = ({
   setLevelHandler,
   abuseHandler,
 }: ReconnectViewProps) => {
+  const {
+    pendingConnectionData: { sharedProfile, profileInfo },
+  } = pendingConnection;
+
   const navigation = useNavigation();
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const [connectionLevel, setConnectionLevel] = useState(
@@ -43,26 +47,23 @@ export const ReconnectView = ({
   const { id } = useSelector((state) => state.user);
   const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
 
-  const userReported = pendingConnection.reports.find(
-    (report) => report.id === id,
-  );
+  const userReported = profileInfo.reports.find((report) => report.id === id);
 
   const reported =
     !userReported &&
-    pendingConnection.reports.length /
-      (pendingConnection.connectionsNum || 1) >=
+    profileInfo.reports.length / (profileInfo.connectionsNum || 1) >=
       REPORTED_PERCENTAGE;
 
   useEffect(() => {
     const compareProfiles = async () => {
-      if (pendingConnection.name !== existingConnection.name) {
+      if (sharedProfile.name !== existingConnection.name) {
         setIdenticalProfile(false);
         return;
       }
       const existingPhoto = await retrieveImage(
         existingConnection.photo.filename,
       );
-      if (existingPhoto !== pendingConnection.photo) {
+      if (existingPhoto !== sharedProfile.photo) {
         setIdenticalProfile(false);
         return;
       }
@@ -70,7 +71,7 @@ export const ReconnectView = ({
       setIdenticalProfile(true);
     };
     compareProfiles();
-  }, [pendingConnection, existingConnection]);
+  }, [existingConnection, sharedProfile.name, sharedProfile.photo]);
 
   const photoTouchHandler = (photo: string, type: 'base64' | 'file') => {
     navigation.navigate('FullScreenPhoto', {
@@ -104,13 +105,13 @@ export const ReconnectView = ({
         <View style={styles.header} testID="ReconnectScreen">
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith', {
-              name: pendingConnection.name,
+              name: sharedProfile.name,
             })}
           </Text>
           <Text style={styles.lastConnectedText}>
             {t('connections.tag.lastConnected', {
               date: moment(
-                parseInt(String(pendingConnection.connectedAt), 10),
+                parseInt(String(profileInfo.connectedAt), 10),
               ).fromNow(),
             })}
           </Text>
@@ -118,8 +119,8 @@ export const ReconnectView = ({
         <View style={styles.profiles}>
           <View testID="identicalProfileView" style={styles.profile}>
             <ProfileCard
-              name={pendingConnection.name}
-              photo={pendingConnection.photo}
+              name={sharedProfile.name}
+              photo={sharedProfile.photo}
               photoSize="large"
               photoType="base64"
               photoTouchHandler={photoTouchHandler}
@@ -130,9 +131,9 @@ export const ReconnectView = ({
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            connectionsNum={pendingConnection.connectionsNum}
-            groupsNum={pendingConnection.groupsNum}
-            mutualConnectionsNum={pendingConnection.mutualConnections.length}
+            connectionsNum={profileInfo.connectionsNum}
+            groupsNum={profileInfo.groupsNum}
+            mutualConnectionsNum={profileInfo.mutualConnections?.length || 0}
           />
         </View>
         <View style={styles.connectionLevel}>
@@ -169,7 +170,7 @@ export const ReconnectView = ({
         <View style={styles.header} testID="ReconnectScreen">
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith', {
-              name: pendingConnection.name,
+              name: sharedProfile.name,
             })}
           </Text>
           <Text style={styles.lastConnectedText}>
@@ -208,8 +209,8 @@ export const ReconnectView = ({
               </Text>
             </View>
             <ProfileCard
-              name={pendingConnection.name}
-              photo={pendingConnection.photo}
+              name={sharedProfile.name}
+              photo={sharedProfile.photo}
               photoSize="small"
               photoType="base64"
               photoTouchHandler={photoTouchHandler}
@@ -220,9 +221,9 @@ export const ReconnectView = ({
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            connectionsNum={pendingConnection.connectionsNum}
-            groupsNum={pendingConnection.groupsNum}
-            mutualConnectionsNum={pendingConnection.mutualConnections.length}
+            connectionsNum={profileInfo.connectionsNum}
+            groupsNum={profileInfo.groupsNum}
+            mutualConnectionsNum={profileInfo.mutualConnections?.length || 0}
           />
         </View>
         <View style={styles.connectionLevel}>

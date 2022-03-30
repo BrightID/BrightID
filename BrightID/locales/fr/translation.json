@@ -165,6 +165,7 @@
       "text": {
         "failedOp": "{{name}} a échoué !\n{{message}}",
         "incorrectPassword": "Mot de passe incorrect !",
+        "invalidSigningKey": "Votre clé de signature n'est pas valide. Ceci peut être dû au fait que :\n- Vous avez récupéré votre BrightID sur un autre périphérique.\n- Vous avez supprimé ce dispositif de votre liste de dispositifs actifs.\n- Votre récupération a échoué.\n- Le nœud auquel vous êtes connecté·e a un problème.",
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
         "passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
         "passwordShort": "Votre motre de passe doit comporter au moins 8 caractères.",
@@ -172,6 +173,7 @@
         "trustedSigned": "Une de vos connexions de récupération a signé votre requête"
       },
       "title": {
+        "invalidSigningKey": "Clé de signature invalide",
         "lostKeys": "Impossible de trouver vos clés BrightID sur cet appareil",
         "pleaseConfirm": "Veuillez confirmer"
       },
