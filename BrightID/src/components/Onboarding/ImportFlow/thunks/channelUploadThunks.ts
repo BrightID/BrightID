@@ -3,11 +3,12 @@ import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { retrieveImage } from '@/utils/filesystem';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { selectAllSigs } from '@/reducer/appsSlice';
+import { selectAllLinkedContexts, selectAllSigs } from '@/reducer/appsSlice';
 import ChannelAPI from '@/api/channelService';
 import {
   uploadBlindSig,
   uploadConnection,
+  uploadContextInfo,
   uploadGroup,
 } from '@/utils/channels';
 import { IMPORT_PREFIX } from '@/utils/constants';
@@ -71,6 +72,21 @@ export const uploadAllInfoAfter = async (after) => {
         signingKey,
       });
     }
+  }
+
+  console.log('uploading linked contexts');
+  const linkedContexts = selectAllLinkedContexts(store.getState()).filter(
+    (linkedContext) =>
+      linkedContext.dateAdded > after && linkedContext.state === 'applied',
+  );
+  for (const contextInfo of linkedContexts) {
+    await uploadContextInfo({
+      contextInfo,
+      channelApi,
+      aesKey,
+      signingKey,
+      prefix: IMPORT_PREFIX,
+    });
   }
 
   console.log('uploading blind sigs');

@@ -34,7 +34,7 @@ declare global {
     context: string;
     contextId: string;
     dateAdded: number;
-    state: string;
+    state: 'pending' | 'applied' | 'failed';
   };
 
   type SigInfo = {

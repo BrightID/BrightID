@@ -11,6 +11,7 @@ import {
 import {
   checkCompletedFlags,
   downloadBlindSigs,
+  downloadContextInfo,
   downloadUserInfo,
 } from './channelDownloadThunks';
 import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
@@ -132,6 +133,7 @@ export const checkImportChannel =
     await dispatch(downloadUserInfo({ channelApi, dataIds }));
     await dispatch(downloadConnections({ channelApi, dataIds }));
     await dispatch(downloadGroups({ channelApi, dataIds }));
+    await dispatch(downloadContextInfo({ channelApi, dataIds }));
     if (!isPrimaryDevice) {
       await dispatch(downloadBlindSigs({ channelApi, dataIds }));
     }
