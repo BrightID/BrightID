@@ -49,7 +49,7 @@ export const downloadContextInfo =
       }
       return contextInfoDataIds.length;
     } catch (err) {
-      console.error(`downloadingBlindSigs: ${err.message}`);
+      console.error(`downloadContextInfo error: ${err.message}`);
     }
   };
 
