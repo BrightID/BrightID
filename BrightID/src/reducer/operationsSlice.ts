@@ -81,11 +81,14 @@ export const selectOutdatedOperations = createSelector(
   (operations) => {
     const now = Date.now();
     return operations
-      .filter(
-        (op) =>
+      .filter((op) => {
+        // prefer postTimestamp for calculation but use timestamp as fallback solution
+        const timestamp = op.postTimestamp || op.timestamp;
+        return (
           outdatedStates.includes(op.state) &&
-          now - op.timestamp > LOCAL_OPERATION_KEEP_THRESHOLD,
-      )
+          now - timestamp > LOCAL_OPERATION_KEEP_THRESHOLD
+        );
+      })
       .map((op) => op.hash);
   },
 );
