@@ -9,7 +9,7 @@ import {
   operation_states,
 } from '@/utils/constants';
 
-export type Operation = NodeOps & {
+export type Operation = SubmittedOp & {
   state: typeof operation_states[keyof typeof operation_states];
 };
 
@@ -23,7 +23,7 @@ const operationsSlice = createSlice({
   reducers: {
     addOperation: {
       reducer: operationsAdapter.addOne,
-      prepare: (operation: NodeOps) => {
+      prepare: (operation: SubmittedOp) => {
         return {
           payload: {
             ...operation,
