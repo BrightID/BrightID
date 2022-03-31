@@ -349,6 +349,10 @@ export class NodeApi {
     return this.submitOp(op, message);
   }
 
+  /*
+    The "Link Context" operation is only available on api version 5.
+    -> create local ApiSauceInstance with baseUrl .../v5 instead of default .../v6
+   */
   async linkContextId(context: string, contextId: string) {
     this.requiresCredentials();
     const name = 'Link ContextId';
@@ -367,7 +371,18 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    return this.submitOp(op, message);
+    const api = create({
+      baseURL: `${this.baseUrl}/brightid/v5`,
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+    const res = await api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    NodeApi.throwOnError(res);
+    const submittedOp = op as SubmittedOp;
+    submittedOp.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
+    return submittedOp;
   }
 
   async getGroup(id: string) {
