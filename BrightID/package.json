@@ -60,7 +60,7 @@
     "js-sha256": "0.9.0",
     "jsbn": "1.1.0",
     "libphonenumber-js": "^1.9.49",
-    "lodash": "4.17.20",
+    "lodash": "4.17.21",
     "moment": "2.29.1",
     "promise.any": "^2.0.2",
     "prop-types": "15.8.1",
