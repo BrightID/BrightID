@@ -24,7 +24,7 @@ import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
-  selectAllPendingConnections,
+  selectAllUnconfirmedConnections,
   selectPendingConnectionById,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 
@@ -46,7 +46,7 @@ const calcY = (a: number) =>
 /** SELECTORS */
 
 const selectGroupConnections = createSelector(
-  selectAllPendingConnections,
+  selectAllUnconfirmedConnections,
   (_: State, channel: Channel) => channel,
   (pendingConnections, channel) => {
     console.log('calcing pending connections');
