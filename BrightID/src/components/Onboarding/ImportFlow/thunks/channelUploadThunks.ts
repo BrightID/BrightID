@@ -34,6 +34,7 @@ export const uploadAllInfoAfter = async (after) => {
     name: user.name,
     photo,
     isSponsored: user.isSponsored,
+    isSponsoredv6: user.isSponsoredv6,
     backupCompleted: user.backupCompleted,
     password: user.password,
     updateTimestamps: user.updateTimestamps,

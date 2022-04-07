@@ -12,6 +12,7 @@ import {
   setIsSponsored,
   setBackupCompleted,
   setPassword,
+  setIsSponsoredv6,
 } from '@/reducer/userSlice';
 import ChannelAPI from '@/api/channelService';
 import { IMPORT_PREFIX } from '@/utils/constants';
@@ -144,6 +145,12 @@ export const downloadUserInfo =
         info.updateTimestamps.isSponsored > updateTimestamps.isSponsored
       ) {
         dispatch(setIsSponsored(info.isSponsored));
+      }
+      if (
+        !updateTimestamps.isSponsoredv6 ||
+        info.updateTimestamps.isSponsoredv6 > updateTimestamps.isSponsoredv6
+      ) {
+        dispatch(setIsSponsoredv6(info.isSponsoredv6));
       }
       if (
         !updateTimestamps.password ||
