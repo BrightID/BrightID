@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
 const initialState: UserState = {
-  isSponsored: false,
+  isSponsored: false, // server-side sponsored flag, used by v5 apps
+  isSponsoredv6: false, // client-side sponsored flag, used by v6 apps
   name: '',
   photo: { filename: '' },
   searchParam: '',
@@ -15,6 +16,7 @@ const initialState: UserState = {
   updateTimestamps: {
     backupCompleted: 0,
     isSponsored: 0,
+    isSponsoredv6: 0,
     photo: 0,
     name: 0,
     password: 0,
@@ -28,6 +30,10 @@ const userSlice = createSlice({
     setIsSponsored(state, action) {
       state.isSponsored = action.payload;
       state.updateTimestamps.isSponsored = Date.now();
+    },
+    setIsSponsoredv6(state, action) {
+      state.isSponsoredv6 = action.payload;
+      state.updateTimestamps.isSponsoredv6 = Date.now();
     },
     setPhoto(state, action) {
       state.photo = action.payload;
@@ -86,6 +92,7 @@ const userSlice = createSlice({
 
 export const {
   setIsSponsored,
+  setIsSponsoredv6,
   setPhoto,
   setSearchParam,
   setUserData,
