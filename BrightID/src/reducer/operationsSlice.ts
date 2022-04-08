@@ -9,7 +9,7 @@ import {
   operation_states,
 } from '@/utils/constants';
 
-export type Operation = NodeOps & {
+export type Operation = SubmittedOp & {
   state: typeof operation_states[keyof typeof operation_states];
 };
 
@@ -23,7 +23,7 @@ const operationsSlice = createSlice({
   reducers: {
     addOperation: {
       reducer: operationsAdapter.addOne,
-      prepare: (operation: NodeOps) => {
+      prepare: (operation: SubmittedOp) => {
         return {
           payload: {
             ...operation,
@@ -81,11 +81,14 @@ export const selectOutdatedOperations = createSelector(
   (operations) => {
     const now = Date.now();
     return operations
-      .filter(
-        (op) =>
+      .filter((op) => {
+        // prefer postTimestamp for calculation but use timestamp as fallback solution
+        const timestamp = op.postTimestamp || op.timestamp;
+        return (
           outdatedStates.includes(op.state) &&
-          now - op.timestamp > LOCAL_OPERATION_KEEP_THRESHOLD,
-      )
+          now - timestamp > LOCAL_OPERATION_KEEP_THRESHOLD
+        );
+      })
       .map((op) => op.hash);
   },
 );
