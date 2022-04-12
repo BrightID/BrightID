@@ -11,12 +11,15 @@ import {
   Alert,
   FlatList,
   TouchableOpacity,
+  Platform,
+  ToastAndroid,
 } from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Clipboard from '@react-native-community/clipboard';
 import { useDispatch, useSelector } from '@/store';
 import {
   leaveGroup,
@@ -56,8 +59,11 @@ export const MembersScreen = () => {
   const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
   // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
   const ACTION_CANCEL = t('groups.groupActionSheet.cancel');
+  const ACTION_COPY_GROUPID = t(
+    'groups.groupActionSheet.copyGroupId',
+    'Copy group ID to clipboard',
+  );
 
-  // set up top right button in header
   useLayoutEffect(() => {
     if (contextActions.length > 0) {
       // action sheet actions
@@ -101,6 +107,19 @@ export const MembersScreen = () => {
         });
       };
 
+      const handleCopyGroupId = () => {
+        Clipboard.setString(groupID);
+        const msg = t(
+          'groups.alert.text.groupIdCopied',
+          'Group ID copied to clipboard',
+        );
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(msg, ToastAndroid.LONG);
+        } else {
+          Alert.alert(msg);
+        }
+      };
+
       const performAction = (index) => {
         const action = contextActions[index];
         console.log(`Performing action ${action}`);
@@ -111,12 +130,16 @@ export const MembersScreen = () => {
           case ACTION_LEAVE:
             handleLeaveGroup();
             break;
+          case ACTION_COPY_GROUPID:
+            handleCopyGroupId();
+            break;
           case ACTION_CANCEL:
           default:
           // do nothing
         }
       };
 
+      // set up top right button in header
       navigation.setOptions({
         headerRight: () => (
           <TouchableOpacity
@@ -161,6 +184,7 @@ export const MembersScreen = () => {
     ACTION_CANCEL,
     ACTION_INVITE,
     api,
+    ACTION_COPY_GROUPID,
   ]);
 
   // set available actions for group
@@ -174,11 +198,19 @@ export const MembersScreen = () => {
       // existing member can leave group
       actions.push(ACTION_LEAVE);
     }
-    if (actions.length > 0) {
-      actions.push(ACTION_CANCEL);
-    }
+    // copy groupId to clipboard
+    actions.push(ACTION_COPY_GROUPID);
+    actions.push(ACTION_CANCEL);
     setContextActions(actions);
-  }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
+  }, [
+    user.id,
+    admins,
+    members,
+    ACTION_INVITE,
+    ACTION_LEAVE,
+    ACTION_CANCEL,
+    ACTION_COPY_GROUPID,
+  ]);
 
   useEffect(() => {
     console.log(`updating group info ${groupID}`);
