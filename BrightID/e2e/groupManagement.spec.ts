@@ -115,6 +115,31 @@ describe('Group Management', () => {
     });
   });
 
+  describe('Copy groupID', () => {
+    it('should copy groupID to clipboard', async () => {
+      await expectHomescreen();
+      // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // select first group
+      await element(by.id('groupItem-0')).tap();
+      // open group action sheet
+      await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
+      await element(by.id('groupOptionsBtn')).tap();
+      // copy groupId
+      await expect(
+        element(by.text(i18next.t('groups.groupActionSheet.copyGroupId'))),
+      ).toBeVisible();
+      await element(
+        by.text(i18next.t('groups.groupActionSheet.copyGroupId')),
+      ).tap();
+      // Currently there is no way to test actual clipboard contents :-/
+      await navigateHome();
+    });
+  });
+
   describe('dismiss user from group', () => {
     const actionSheetTitle = i18next.t('common.actionSheet.title');
     const actionTitle = 'Dismiss from group';
