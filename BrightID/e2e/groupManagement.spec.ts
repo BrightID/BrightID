@@ -15,7 +15,7 @@ const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
   // let hasBackButton = true;
-  const leaveGroupText = 'Leave group';
+  const leaveGroupText = i18next.t('groups.groupActionSheet.leaveGroup');
   const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
@@ -112,6 +112,33 @@ describe('Group Management', () => {
       await element(by.id('groupsFlatList')).swipe('down');
       // there should be 3 known members in the first group
       await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
+    });
+  });
+
+  describe('Copy groupID', () => {
+    it('should copy groupID to clipboard', async () => {
+      await expectHomescreen();
+      // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // select first group
+      await element(by.id('groupItem-0')).tap();
+      // open group action sheet
+      await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
+      await element(by.id('groupOptionsBtn')).tap();
+      // copy groupId
+      await expect(
+        element(by.text(i18next.t('groups.groupActionSheet.copyGroupId'))),
+      ).toBeVisible();
+      await element(
+        by.text(i18next.t('groups.groupActionSheet.copyGroupId')),
+      ).tap();
+      // Currently there is no way to test actual clipboard contents :-/
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await element(by.id('header-back')).tap();
+      await navigateHome();
     });
   });
 
@@ -271,14 +298,36 @@ describe('Group Management', () => {
   });
 
   describe('Leave group', () => {
-    // Skipping, as this test hangs forever after clicking OK :-(
-    xit('should leave group', async () => {
-      await expectHomescreen();
+    // need to have another admin in group, otherwise i can not leave it
+    beforeAll(async () => {
+      const actionSheetTitle = 'What do you want to do?';
+      const actionTitle = 'Add Admin';
+
       // navigate to groups screen
       await element(by.id('toggleDrawer')).tap();
       await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
+      // open first group
+      await element(by.id('groupItem-0')).tap();
+
+      // Open context menu of first member that is not admin
+      await element(by.id('memberContextBtn').withAncestor(by.id('regular')))
+        .atIndex(0)
+        .tap();
+
+      // ActionSheet does not support testID, so match based on text.
+      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+      await element(by.text(actionTitle)).tap();
+      // dismiss confirmation screen
+      await element(by.text(actionOK)).tap();
+      // admin member should exist
+      await expect(
+        element(by.id('memberContextBtn').withAncestor(by.id('admin'))),
+      ).toExist();
+    });
+
+    it('should leave group', async () => {
       // select first group
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
@@ -287,9 +336,6 @@ describe('Group Management', () => {
       await element(by.text(leaveGroupText)).tap();
       // confirm with OK button
       await expect(element(by.text(actionOK))).toBeVisible();
-
-      // following tap action fails in detox with error
-      // "Test Failed: Error performing 'com.wix.detox.espresso.action.detoxsingletap@c26e546 click - At Coordinates: 1192, 1573 and precision: 16, 16' on view '(with text: is "OK" and view has effective visibility=VISIBLE)'."
       await element(by.text(actionOK)).tap();
 
       // should be back at groups screen

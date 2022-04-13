@@ -87,14 +87,24 @@ jobs:
         env:
           ENCRYPT_PASSWORD: ${{ secrets.ENCRYPT_PASSWORD }}
 
-      - name: staging build
+      - name: build staging apk
         run: cd android && ./gradlew assembleStaging && cd ..
 
-      - name: Upload Artifact
+      - name: build staging aab
+        run: cd android && ./gradlew bundleStaging && cd ..
+
+      - name: Upload apk
         uses: actions/upload-artifact@v2
         with:
           name: brightId-staging.apk
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/staging/app-staging.apk
+
+      - name: Upload aab
+        uses: actions/upload-artifact@v2
+        with:
+          name: brightId-staging.aab
+          path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/staging/app-staging.aab
+
 
   build_release_apk:
     if: github.repository_owner == 'BrightID'
@@ -134,11 +144,20 @@ jobs:
         env:
           ENCRYPT_PASSWORD: ${{ secrets.ENCRYPT_PASSWORD }}
 
-      - name: release build
+      - name: build release apk
         run: cd android && ./gradlew assembleRelease && cd ..
 
-      - name: Upload Artifact
+      - name: build release aab
+        run: cd android && ./gradlew bundleRelease && cd ..
+
+      - name: Upload apk
         uses: actions/upload-artifact@v2
         with:
           name: brightId-release.apk
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Upload aab
+        uses: actions/upload-artifact@v2
+        with:
+          name: brightId-release.aab
+          path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/release/app-release.aab

@@ -199,11 +199,13 @@ describe('Import BrightID', () => {
         name: 'Quentin',
         photo: photoData,
         isSponsored: false,
+        isSponsoredv6: false,
         backupCompleted: false,
         password: '',
         updateTimestamps: {
           backupCompleted: 0,
           isSponsored: 0,
+          isSponsoredv6: 0,
           photo: 0,
           name: 0,
           password: 0,

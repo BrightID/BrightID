@@ -13,13 +13,19 @@ type NodeOps =
   | LinkContextIdOp
   | RemoveGroupOp
   | RemoveMembershipOp
-  | SocialRecoveryOp;
+  | RemoveSigningKeyOp
+  | SocialRecoveryOp
+  | SpendSponsorshipOp;
+
+type SubmittedOp = NodeOps & {
+  hash: string;
+  postTimestamp: number; // when was op submitted to node API
+};
 
 type BaseOp = {
   apiUrl?: string;
   v: number;
-  hash?: string;
-  timestamp: number;
+  timestamp: number; // when was op created and signed
 };
 
 type AddAdminOp = BaseOp & {
@@ -105,7 +111,6 @@ type SocialRecoveryOp = BaseOp & {
   id2?: string;
   sig1?: string;
   sig2?: string;
-  postTimestamp?: number;
 };
 
 type SpendSponsorshipOp = BaseOp & {
