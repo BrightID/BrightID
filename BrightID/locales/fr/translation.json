@@ -406,6 +406,7 @@
       "text": {
         "addAdmin": "Êtes-vous sûr·e de vouloir définir {{name}} comme administrateur de ce groupe ?",
         "dismissMember": "Êtes-vous sûr·e de vouloir retirer {{name}} de ce groupe ?",
+        "groupIdCopied": "Identifiant du groupe copié dans le presse-papiers",
         "inviteSuccess": "Vous avez invité {{name}} avec succès",
         "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
       },
@@ -424,6 +425,7 @@
     },
     "groupActionSheet": {
       "cancel": "Annuler",
+      "copyGroupId": "Copier l'identifiant du groupe dans le presse-papiers",
       "inviteUser": "Inviter un utilisateur",
       "leaveGroup": "Quitter le groupe"
     },
