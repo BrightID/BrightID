@@ -645,6 +645,37 @@
     },
     "header": {
       "text": "Stap 1: herstel je account"
+    },
+    "info": "Met deze stap herstel je je BrightID op dit apparaat. De namen en foto's van connecties die overeenkomen met je herstelconnecties worden hersteld.",
+    "state": "Hersteld: {{recoveredConnections}} connecties; {{recoveredGroups}} groepen",
+    "steps": {
+      "complete": "Je account is hersteld",
+      "downloading": "Bezig met ophalen van gegevens van herstelconnecties…",
+      "error": "Je account kan niet worden hersteld",
+      "recovering": "Bezig met herstellen…"
+    },
+    "text": {
+      "additionalInfo": "Je herstelconnecties moeten dit scannen zodat je je BrightID kunt herstellen",
+      "askScanning": "Toon deze QR-code aan je herstelconnecties",
+      "signatures": "{{count}} / 2 handtekeningen",
+      "signatures_plural": ""
     }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "Toevoegen",
+      "addMoreRecovery": "Voeg meer herstelconnecties toe +",
+      "addRecoveryConnections": "Herstelconnecties toevoegen",
+      "chooseThreeConnections": "Kies drie of meer reeds bekende connecties om je BrightID te back-uppen",
+      "completed": "De herstelconnecties zijn toegevoegd",
+      "connectionsAlreadyKnown": "De connecties dienen reeds bekend te zijn voordat ze kunnen worden ingesteld.",
+      "currentRecoveryConnections": "Mijn herstelconnecties",
+      "emptyList": "Voeg herstelconnecties toe om sociaal herstel mogelijk te maken",
+      "pleaseMakeSomeConnections": "Verbind met wat mensen. :)",
+      "threeMore": "Je hebt nog {{amount}} reeds bekende connecties nodig voordat je kunt doorgaan"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Ik begrijp het"
   }
 }
