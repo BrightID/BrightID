@@ -89,6 +89,14 @@
       "sponsoring": "{{app}} sponsort je…"
     }
   },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "De clientversie is verouderd. Werk de client bij en probeer het opnieuw.",
+        "otherOutdated": "De andere client is verouderd. De QR-code-aanmaker dient de client bij te werken."
+      }
+    }
+  },
   "common": {
     "accessibilityLabel": {
       "addPhoto": "Foto toevoegen",
@@ -111,12 +119,14 @@
       "sure": "Prima",
       "text": {
         "failedOp": "{{name}} mislukt:\n{{message}}",
+        "invalidSigningKey": "Je sleutel is ongeldig. Dit kan een van de volgende oorzaken hebben:\n-Je hebt je BrightID op een ander apparaat hersteld;\n-Je hebt dit apparaat verwijderd van de lijst met actieve apparaten;\n-Er is een mislukte herstelpoging geweest;\n-Er is een probleem met de gekoppelde server.",
         "lostKeys": "Maak een nieuwe BrightID aan of herstel je vorige BrightID",
         "passwordMatch": "De wachtwoorden komen niet overeen.",
         "passwordShort": "Je wachtwoord dient uit minimaal 8 tekens te bestaan.",
         "recoverySigned": "Een van je herstelmethoden is goedgekeurd"
       },
       "title": {
+        "invalidSigningKey": "Ongeldige sleutel",
         "lostKeys": "De BrightID-sleutel van je apparaat ontbreekt",
         "pleaseConfirm": "Bevestig je keuze"
       },
@@ -223,7 +233,7 @@
       "lastConnected": "Gekoppeld op {{date}}",
       "reported": "Gemeld",
       "reportedAs": "Gemeld als ‘{{flag}}’",
-      "waiting": "Aan het wachten…"
+      "waiting": "Bezig met wachten…"
     },
     "text": {
       "alreadyConnectedWith": "Je bent al gekoppeld aan {{name}}",
@@ -341,6 +351,7 @@
       "text": {
         "addAdmin": "Weet je zeker dat je {{name}} wilt aanwijzen als groepsbeheerder?",
         "dismissMember": "Weet je zeker dat je {{name}} wilt verwijderen uit deze groep?",
+        "groupIdCopied": "De groepsid is gekopieerd naar het klembord",
         "inviteSuccess": "Je hebt {{name}} uitgenodigd",
         "leaveGroup": "Weet je zeker dat je deze groep wilt verlaten?"
       },
@@ -359,6 +370,7 @@
     },
     "groupActionSheet": {
       "cancel": "Annuleren",
+      "copyGroupId": "Groepsid kopiëren naar klembord",
       "inviteUser": "Gebruiker uitnodigen",
       "leaveGroup": "Groep verlaten"
     },
@@ -676,6 +688,98 @@
     }
   },
   "recoveryCooldownModal": {
-    "dismissButtonLabel": "Ik begrijp het"
+    "dismissButtonLabel": "Ik begrijp het",
+    "text": {
+      "cooldownGeneric": "Let op: de gewijzigde herstelconnecties worden omwille van beveiligingsredenen pas doorgevoerd na een periode van <period>{{ cooldownPeriod }}</period>."
+    },
+    "title": "Periode alvorens wijzigingen door te voeren"
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "requestRecovering": "Je herstelverzoek is ingediend!",
+        "restoreConfirm": "Is {{name}} de naam van het account dat je wilt helpen?",
+        "restoreSuccess": "Je account is hersteld!"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "nobodyHasChosen": "Het herstellen is mislukt.\nJe bent niet ingesteld als herstelconnectie."
+      }
+    },
+    "header": {
+      "accountRecovery": "Accountherstel",
+      "text": "Stap 2: herstel een back-up (optioneel)"
+    },
+    "info": "Met je back-upwachtwoord kun je namen en foto's van al je connecties en groepen herstellen.",
+    "password": {
+      "placeholder": "Voer je wachtwoord in",
+      "skip": "Overslaan",
+      "submit": "Herstellen"
+    },
+    "steps": {
+      "complete": "Alles is hersteld",
+      "error": "Het herstellen is mislukt. Klopt je wachtwoord?",
+      "restoring": "Bezig met herstellen…",
+      "restoringProgress": "Bezig met herstellen van {{currentItem}} van {{totalItems}}",
+      "skipped": "Het herstellen is overgeslagen",
+      "waitingAccount": "In afwachting van accountherstel",
+      "waitingPassword": "Voer je wachtwoord in of sla over"
+    },
+    "text": {
+      "chooseConnectionToHelp": "Kies de connectie die je wilt helpen."
+    }
+  },
+  "signup": {
+    "button": {
+      "skip": "Overslaan en later doen",
+      "submit": "Versturen"
+    },
+    "header": {
+      "title": "Registreren"
+    },
+    "placeholder": {
+      "confirmPassword": "Bevestig je wachtwoord",
+      "name": "Naam",
+      "password": "Wachtwoord"
+    },
+    "text": {
+      "createPassword": "BrightID-wachwoord aanmaken",
+      "nameNotShared": "Je naam wordt nooit en te nimmer gedeeld met andere apps of\nopgeslagen op ons netwerk.",
+      "passwordInfo": "Met dit wachtwoord versleutel je de namen en foto's van je connecties. Niemand kan met dit wachtwoord je account overnemen.",
+      "photoNotShared": "Je foto wordt nooit en te nimmer gedeeld met andere apps of\nopgeslagen op ons netwerk.",
+      "pleaseAddPhoto": "Voeg een foto toe",
+      "whatsYouName": "Hoe noemen je vrienden je?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Open deze link in de te synchroniseren BrightID-app.",
+      "title": "Gegevens synchroniseren"
+    },
+    "clipboardmessage": "Synchroniseer je BrightID-gegevens met een andere apparaat: {{link}}",
+    "text": {
+      "additionalInfo": "Scan deze QR-code met je andere apparaat om de synchronisatie te starten",
+      "askScanning": "Scan deze QR-code met je andere apparaat"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Gegevens uploaden"
+    },
+    "info": "Bezig met uploaden van gegevens (connecties, gekoppelde apps, …) naar het nieuwe apparaat",
+    "steps": {
+      "complete": "Het uploaden is voltooid.",
+      "downloading": "Bezig met uploaden van gegevens…",
+      "error": "Het uploaden is mislukt",
+      "waiting": "Bezig met wachten op sleutels…"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "Ik begrijp het!",
+      "setPassword": "Je kunt hier te allen tijde je\nBrightID-wachtwoord instellen",
+      "viewPassword": "Je kunt hier te allen tijde je\nBrightID-wachtwoord bekijken"
+    }
   }
 }
