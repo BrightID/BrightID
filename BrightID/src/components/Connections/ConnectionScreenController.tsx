@@ -52,7 +52,7 @@ function ConnectionScreenController() {
     [],
   );
   const [connectedAt, setConnectedAt] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [connectionProfile, setConnectionProfile] = useState<
     ProfileInfo | undefined
   >(undefined);
@@ -77,7 +77,7 @@ function ConnectionScreenController() {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
       const texts = getVerificationPatches(connectionProfile.verifications).map(
-        (patch) => patch.text
+        (patch) => patch.text,
       );
       setVerificationsTexts(texts);
       dispatch(
