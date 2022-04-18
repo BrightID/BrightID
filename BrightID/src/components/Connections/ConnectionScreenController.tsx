@@ -62,8 +62,12 @@ function ConnectionScreenController() {
       const fetchData = async (connectionId) => {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
-        const profile: ProfileInfo = await api.getProfile(connectionId);
-        setConnectionProfile(profile);
+        try {
+          const profile: ProfileInfo = await api.getProfile(connectionId);
+          setConnectionProfile(profile);
+        } catch (e) {
+          console.log(`Error getting profile for ${connectionId}: ${e}`);
+        }
         setLoading(false);
       };
       if (connectionId !== undefined) {
