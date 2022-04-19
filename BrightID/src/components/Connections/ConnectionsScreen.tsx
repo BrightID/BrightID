@@ -64,7 +64,7 @@ export const ConnectionsScreen = () => {
         for (const conn of conns) {
           conn.incomingLevel = incomingConnsById[conn.id]?.level;
         }
-        await dispatch(updateConnections(conns));
+        dispatch(updateConnections(conns));
       } catch (err) {
         console.log(err.message);
       }
