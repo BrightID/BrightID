@@ -133,18 +133,21 @@ export const FindFriendsScreen = function () {
     const _profileHashes = friendsRaw.map(
       (friendProfile) => friendProfile.profileHash,
     );
-    try {
-      const _filteredProfileHashes = await socialMediaService.querySocialMedia({
-        profileHashes: _profileHashes,
-        network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
-      });
-      setFriends(
-        friendsRaw.filter((friendProfile) =>
-          _filteredProfileHashes.includes(friendProfile.profileHash),
-        ),
-      );
-    } catch (_e) {
-      setApiError(t('common.text.noConnection'));
+    if (_profileHashes.length) {
+      try {
+        const _filteredProfileHashes =
+          await socialMediaService.querySocialMedia({
+            profileHashes: _profileHashes,
+            network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
+          });
+        setFriends(
+          friendsRaw.filter((friendProfile) =>
+            _filteredProfileHashes.includes(friendProfile.profileHash),
+          ),
+        );
+      } catch (_e) {
+        setApiError(t('common.text.noConnection'));
+      }
     }
   }, [friendsRaw, t]);
 
