@@ -33,6 +33,7 @@ import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
 import Faq from '@/components/Icons/Faq';
 import Mail from '@/components/Icons/Mail';
+import FindFriendsScreen from '@/components/FindFriends/FindFriendsScreen';
 import Devices from '@/components/Icons/Devices';
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import BituVerificationScreen from '@/components/Tasks/BituVerificationScreen';
@@ -41,6 +42,7 @@ import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 import RecoveryConnectionsScreen from '@/components/RecoveryConnections/RecoveryConnectionsScreen';
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
+import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 
 const CustomItem = ({
   onPress,
@@ -280,6 +282,31 @@ const CustomDrawerContent = (props) => {
 
       <CustomItem
         focused={false}
+        testId="findFriendsBtn"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.findFriends')}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={() => (
+          <SvgXml
+            xml={FindFriendsIcon}
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
+          });
+        }}
+      />
+
+      <CustomItem
+        focused={false}
         testId="devicesBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -299,7 +326,10 @@ const CustomDrawerContent = (props) => {
         onPress={() => {
           navigation.reset({
             index: 1,
-            routes: [{ name: 'Devices' }, { name: 'Devices', params: { syncing: false, asScanner: false } }],
+            routes: [
+              { name: 'Devices' },
+              { name: 'Devices', params: { syncing: false, asScanner: false } },
+            ],
           });
         }}
       />
@@ -419,6 +449,7 @@ export const HomeDrawer = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
+      <Drawer.Screen name="FindFriendsScreen" component={FindFriendsScreen} />
       <Drawer.Screen
         name="BituVerification"
         component={BituVerificationScreen}

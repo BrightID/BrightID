@@ -1,1 +1,22 @@
-{}
+{
+  "drawer": {
+    "label": {
+      "findFriends": "mời gọi"
+    }
+  },
+  "common": {
+    "alert": {
+      "text": {
+        "commonError": "Xin lỗi, chúng tôi không thể hoàn thành yêu cầu của bạn. Vui lòng thử lại sau giây lát."
+      }
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "mời gọi"
+    },
+    "text": {
+      "invitationNotAvailable": "Xin lỗi, gửi lời mời hiện không khả dụng cho ứng dụng này."
+    }
+  }
+}
