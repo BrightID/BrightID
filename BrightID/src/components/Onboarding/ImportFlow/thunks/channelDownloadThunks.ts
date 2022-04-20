@@ -1,6 +1,6 @@
 import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import { saveImage } from '@/utils/filesystem';
-import { upsertSig } from '@/reducer/appsSlice';
+import { addLinkedContext, upsertSig } from '@/reducer/appsSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import {
   setUploadCompletedBy,
@@ -12,9 +12,47 @@ import {
   setIsSponsored,
   setBackupCompleted,
   setPassword,
+  setIsSponsoredv6,
 } from '@/reducer/userSlice';
 import ChannelAPI from '@/api/channelService';
 import { IMPORT_PREFIX } from '@/utils/constants';
+
+export const downloadContextInfo =
+  ({
+    channelApi,
+    dataIds,
+  }: {
+    channelApi: ChannelAPI;
+    dataIds: Array<string>;
+  }) =>
+  async (dispatch: dispatch, getState: getState) => {
+    try {
+      const {
+        recoveryData: {
+          aesKey,
+          channel: { channelId },
+        },
+      } = getState();
+
+      const isContextInfo = (id: string) =>
+        id.startsWith(`${IMPORT_PREFIX}contextInfo_`);
+
+      const contextInfoDataIds = dataIds.filter((dataId) =>
+        isContextInfo(dataId),
+      );
+
+      for (const dataId of contextInfoDataIds) {
+        const encrypted = await channelApi.download({ channelId, dataId });
+        const contextInfo = decryptData(encrypted, aesKey) as ContextInfo;
+        console.log(`ContextInfo:`);
+        console.log(contextInfo);
+        dispatch(addLinkedContext(contextInfo));
+      }
+      return contextInfoDataIds.length;
+    } catch (err) {
+      console.error(`downloadContextInfo error: ${err.message}`);
+    }
+  };
 
 export const downloadBlindSigs =
   ({
@@ -107,6 +145,12 @@ export const downloadUserInfo =
         info.updateTimestamps.isSponsored > updateTimestamps.isSponsored
       ) {
         dispatch(setIsSponsored(info.isSponsored));
+      }
+      if (
+        !updateTimestamps.isSponsoredv6 ||
+        info.updateTimestamps.isSponsoredv6 > updateTimestamps.isSponsoredv6
+      ) {
+        dispatch(setIsSponsoredv6(info.isSponsoredv6));
       }
       if (
         !updateTimestamps.password ||

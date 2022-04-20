@@ -48,7 +48,8 @@
       "title": "Sicherungspasswort festlegen"
     },
     "setupRecoveryConnections": {
-      "description": "Richte deine Wiederherstellungsverbindungen ein, um die Wiederherstellung von Sozialkonten zu ermöglichen"
+      "description": "Richte deine Wiederherstellungsverbindungen ein, um die Wiederherstellung von Sozialkonten zu ermöglichen",
+      "title": "Soziale Erholung einrichten"
     },
     "setupTrustedConnections": {
       "description": "Erstelle Wiederherstellungsverbindungen und sichere deine BrightID",

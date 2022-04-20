@@ -5,7 +5,7 @@ import ChannelAPI from '@/api/channelService';
 import { hash, uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { setupRecovery } from './recoveryThunks';
 import { createChannel, checkChannel } from './channelThunks';
-import { uploadSig, uploadConnection } from './channelUploadThunks';
+import { uploadSig } from './channelUploadThunks';
 import { initialState } from '../recoveryDataSlice';
 
 const FIFTEEN_MINUTES = 900000;

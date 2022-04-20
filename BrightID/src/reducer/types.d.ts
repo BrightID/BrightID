@@ -90,10 +90,12 @@ type UserState = User & {
   backupCompleted: boolean;
   verifications: Array<Verification>;
   isSponsored: boolean;
+  isSponsoredv6: boolean;
   eula: boolean;
   migrated?: boolean;
   updateTimestamps: {
     isSponsored: number;
+    isSponsoredv6: number;
     photo: number;
     name: number;
     backupCompleted: number;

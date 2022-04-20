@@ -46,9 +46,9 @@ export const PendingConnectionsScreen = () => {
     return selectAllUnconfirmedConnections(state);
   });
   // pending connections to display
-  const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
-    [],
-  );
+  const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState<
+    Array<PendingConnection>
+  >([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [onLastIndex, setOnLastIndex] = useState(false);
@@ -141,7 +141,7 @@ export const PendingConnectionsScreen = () => {
     the list should only re render sparingly for performance and continuity
   */
   const PendingConnectionList = useMemo(() => {
-    const renderView = (item, index) => {
+    const renderView = (item: PendingConnection, index: number) => {
       const last = index === pendingConnectionsToDisplay.length - 1;
       const moveToNext = () => {
         /**
@@ -160,7 +160,7 @@ export const PendingConnectionsScreen = () => {
           key={index}
         >
           <PreviewConnectionController
-            pendingConnectionId={item.id}
+            pendingConnectionId={item.profileId}
             moveToNext={moveToNext}
           />
         </View>

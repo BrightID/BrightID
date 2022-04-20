@@ -11,11 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import { any, propEq, find } from 'ramda';
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
@@ -37,7 +33,9 @@ export const AppsScreen = () => {
   const api = useContext(NodeApiContext);
 
   const apps = useSelector(selectAllApps);
-  const isSponsored = useSelector((state: State) => state.user.isSponsored);
+  const isSponsored = useSelector(
+    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+  );
   const pendingLink = useSelector(selectPendingLinkedContext);
 
   const [refreshing, setRefreshing] = useState(false);

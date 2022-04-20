@@ -27,21 +27,26 @@ type PreviewConnectionProps = {
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const { t } = useTranslation();
-  const { pendingConnection, setLevelHandler, photoTouchHandler } = props;
+  const {
+    pendingConnection: {
+      state,
+      pendingConnectionData: { sharedProfile, profileInfo },
+    },
+    setLevelHandler,
+    photoTouchHandler,
+  } = props;
   const id = useSelector((state) => state.user.id);
 
-  const userReported = pendingConnection.reports.find(
-    (report) => report.id === id,
-  );
+  const reports = profileInfo?.reports || [];
+
+  const userReported = reports.find((report) => report.id === id);
 
   const reported =
     !userReported &&
-    pendingConnection.reports.length /
-      (pendingConnection.connectionsNum || 1) >=
-      REPORTED_PERCENTAGE;
+    reports.length / (profileInfo?.connectionsNum || 1) >= REPORTED_PERCENTAGE;
 
   let ratingView;
-  switch (pendingConnection.state) {
+  switch (state) {
     case pendingConnection_states.UNCONFIRMED: {
       ratingView = <RatingView setLevelHandler={setLevelHandler} />;
       break;
@@ -88,12 +93,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       );
   }
 
-  const date = moment(pendingConnection.createdAt || Date.now()).fromNow();
+  const date = moment(profileInfo?.createdAt || Date.now()).fromNow();
 
   const connectionBrightId = __DEV__ ? (
     <View>
       <Text testID="connectionBrightId" style={{ fontSize: 6, color: BLACK }}>
-        {pendingConnection.brightId}
+        {sharedProfile.id}
       </Text>
     </View>
   ) : null;
@@ -110,7 +115,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         )}
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
-            source={{ uri: pendingConnection.photo }}
+            source={{ uri: sharedProfile.photo }}
             style={styles.photo}
             resizeMode="cover"
             onError={(e) => {
@@ -121,7 +126,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           />
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
-          <Text style={styles.connectName}>{pendingConnection.name}</Text>
+          <Text style={styles.connectName}>{sharedProfile.name}</Text>
           <View style={styles.createdContainer}>
             <Text style={styles.createdText}>
               {t('pendingConnections.label.created', { date })}
@@ -131,9 +136,9 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       </View>
       <View style={styles.countsContainer}>
         <ConnectionStats
-          connectionsNum={pendingConnection.connectionsNum}
-          groupsNum={pendingConnection.groupsNum}
-          mutualConnectionsNum={pendingConnection.mutualConnections.length}
+          connectionsNum={profileInfo?.connectionsNum || 0}
+          groupsNum={profileInfo?.groupsNum || 0}
+          mutualConnectionsNum={profileInfo?.mutualConnections?.length || 0}
         />
       </View>
       {userReported && (

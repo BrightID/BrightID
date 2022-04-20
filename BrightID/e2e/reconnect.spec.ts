@@ -1,4 +1,5 @@
-import { by, element, expect } from 'detox';import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { by, element, expect } from 'detox';
+import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 import {
   createBrightID,
   createFakeConnection,
@@ -18,6 +19,13 @@ describe('Reconnect existing connection', () => {
     beforeAll(async () => {
       // create a fake connection
       await createFakeConnection();
+      // make sure all connections are established
+      await element(by.id('connectionsBtn')).tap();
+      await expectConnectionsScreen();
+      await waitFor(element(by.id('connection-0')))
+        .toExist()
+        .withTimeout(20000);
+      await navigateHome();
     });
 
     beforeEach(async () => {
@@ -94,6 +102,13 @@ describe('Reconnect existing connection', () => {
     beforeAll(async () => {
       // create a fake connection
       await createFakeConnection();
+      // make sure all connections are established
+      await element(by.id('connectionsBtn')).tap();
+      await expectConnectionsScreen();
+      await waitFor(element(by.id('connection-0')))
+        .toExist()
+        .withTimeout(20000);
+      await navigateHome();
       await reconnect(0, false);
     });
 

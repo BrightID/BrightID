@@ -41,7 +41,7 @@ declare global {
     context: string;
     contextId: string;
     dateAdded: number;
-    state: string;
+    state: 'pending' | 'applied' | 'failed';
   };
 
   type SigInfo = {
@@ -96,6 +96,18 @@ declare global {
     initiatorProfileId: string;
   };
 
+  /* Profile information shared P2P via channel when making connections */
+  type SharedProfile = {
+    id: string;
+    photo: string;
+    name: string;
+    socialMedia?: Array<SocialMedia>;
+    profileTimestamp: number;
+    secretKey?: string;
+    notificationToken?: string;
+    version: number;
+  };
+
   type Photo = {
     filename: string;
   };
@@ -135,39 +147,39 @@ declare global {
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 
-  type PendingConnection = Partial<{
-    id: string;
-    channelId: string;
-    brightId: string;
-    name: string;
-    photo: string;
-    notificationToken: string;
-    score: number;
-    state: PendingConnectionState;
-    verifications: Verification[];
-    connectionsNum: number;
-    reports: Array<{ id: string; reportReason: string }>;
-    connectedAt: number;
-    groupsNum: number;
-    mutualConnections: string[];
-    existingConnection: Connection;
-    socialMedia: SocialMedia[];
-    mutualGroups: string[];
-    createdAt: number;
-    profileTimestamp: number;
-    initiator: string;
-    myself?: boolean;
-    secretKey?: string;
-  }>;
+  /**
+   * PendingConnectionData contains all available info about a pending connection
+   * - existingConnection, if there already is a connection to this user
+   * - sharedProfile: The connection data that was shared via channel
+   * - profileInfo: The connection data that was obtained via brightID node API
+   */
+  type PendingConnectionData = {
+    existingConnection?: Connection;
+    sharedProfile: SharedProfile;
+    profileInfo?: ProfileInfo;
+    notificationToken?: string;
+    myself: boolean;
+  };
 
-  type PendingConnectionsState = EntityState<PendingConnection>;
+  /**
+   * Pending connection is made of
+   * - identifier (channelId, profileId)
+   * - state
+   * The actual connection data is downloaded from a channel and stored in pendingConnectionData.
+   */
+  type PendingConnection = {
+    profileId: string;
+    channelId: string;
+    state: PendingConnectionState;
+    pendingConnectionData?: PendingConnectionData;
+  };
 
   type RecoveryData = {
     publicKey: string;
     secretKey: Uint8Array;
     id: string;
     name: string;
-    photo: string;
+    photo: Photo;
     aesKey: string;
     timestamp: number;
     recoveredConnections: number;
@@ -240,6 +252,18 @@ declare global {
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
+
+  /*
+    Connection information synced via channel when using multiple
+    devices or performing recovery.
+  */
+  type SyncConnection = {
+    id: string;
+    name: string;
+    photo: string; // base64-encoded photo data
+    timestamp: number;
+    socialMedia?: SocialMedia[];
+  };
 
   type TasksState = { [taskId: string]: TasksStateEntry };
 

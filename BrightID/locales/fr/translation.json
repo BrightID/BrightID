@@ -166,6 +166,7 @@
         "commonError": "Désolé, nous n'avons pas pu traiter votre demande. Veuillez réessayer dans un instant.",
         "failedOp": "{{name}} a échoué !\n{{message}}",
         "incorrectPassword": "Mot de passe incorrect !",
+        "invalidSigningKey": "Votre clé de signature n'est pas valide. Ceci peut être dû au fait que :\n- Vous avez récupéré votre BrightID sur un autre périphérique.\n- Vous avez supprimé ce dispositif de votre liste de dispositifs actifs.\n- Votre récupération a échoué.\n- Le nœud auquel vous êtes connecté·e a un problème.",
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
         "passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
         "passwordShort": "Votre motre de passe doit comporter au moins 8 caractères.",
@@ -173,6 +174,7 @@
         "trustedSigned": "Une de vos connexions de récupération a signé votre requête"
       },
       "title": {
+        "invalidSigningKey": "Clé de signature invalide",
         "lostKeys": "Impossible de trouver vos clés BrightID sur cet appareil",
         "pleaseConfirm": "Veuillez confirmer"
       },
@@ -406,6 +408,7 @@
       "text": {
         "addAdmin": "Êtes-vous sûr·e de vouloir définir {{name}} comme administrateur de ce groupe ?",
         "dismissMember": "Êtes-vous sûr·e de vouloir retirer {{name}} de ce groupe ?",
+        "groupIdCopied": "Identifiant du groupe copié dans le presse-papiers",
         "inviteSuccess": "Vous avez invité {{name}} avec succès",
         "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
       },
@@ -424,6 +427,7 @@
     },
     "groupActionSheet": {
       "cancel": "Annuler",
+      "copyGroupId": "Copier l'identifiant du groupe dans le presse-papiers",
       "inviteUser": "Inviter un utilisateur",
       "leaveGroup": "Quitter le groupe"
     },

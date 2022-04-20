@@ -6,9 +6,9 @@ import _ from 'lodash';
 import {
   addLinkedContext,
   addOperation,
-  setIsSponsored,
   updateSig,
   updateBlindSig,
+  setIsSponsoredv6,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
@@ -342,9 +342,9 @@ const sponsorAndlinkAppId = async (
 ) => {
   const {
     apps: { apps },
-    user: { isSponsored },
+    user: { isSponsored, isSponsoredv6 },
   } = store.getState();
-  if (isSponsored) {
+  if (isSponsored || isSponsoredv6) {
     await linkAppId(appId, appUserId, callbackUrl);
   } else {
     /*
@@ -397,7 +397,7 @@ const sponsorAndlinkAppId = async (
         }, sponsorPollInterval);
       });
       // sponsoring complete
-      store.dispatch(setIsSponsored(true));
+      store.dispatch(setIsSponsoredv6(true));
       // now link app.
       await linkAppId(appId, appUserId, callbackUrl);
     } catch (err) {
