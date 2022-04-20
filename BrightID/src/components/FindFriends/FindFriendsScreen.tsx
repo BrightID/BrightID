@@ -22,14 +22,10 @@ import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
 import socialMediaService from '@/api/socialMediaService';
 import { BrightIdNetwork } from '@/components/Apps/model';
-import {
-  selectAllSocialMediaVariations,
-  selectSocialMediaVariationById,
-} from '@/reducer/socialMediaVariationSlice';
+import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 import { extractDigits } from '@/utils/phoneUtils';
-import { generateSocialProfileHashes } from '@/utils/socialUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
 

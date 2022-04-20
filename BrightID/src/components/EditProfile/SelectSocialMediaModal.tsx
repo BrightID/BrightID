@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   TextInput,
   View,
@@ -21,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import PhoneInput from 'react-native-phone-number-input';
-import { any, propEq, find } from 'ramda';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -32,21 +25,15 @@ import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import {
-  saveSocialMedia,
   selectExistingSocialMediaIds,
   selectSocialMediaById,
 } from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import {
   SocialMediaShareType,
-  SocialMediaType,
   SocialMediaVariationIds,
 } from './socialMediaVariations';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
-import { updateBlindSigs, selectAllApps } from '@/actions';
-import { NodeApiContext } from '@/components/NodeApiGate';
-import { BrightIdNetwork, linkAppId } from '@/components/Apps/model';
-import socialMediaService, { socialMediaUrl } from '@/api/socialMediaService';
 import { saveAndLinkSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 
 /** Helper functions */
@@ -157,7 +144,6 @@ const SelectMediaModal = ({ route }: props) => {
       setSelectedId(firstItem);
     }, [firstItem]),
   );
-  const nodeApi = useContext(NodeApiContext);
 
   const saveProfile = () => {
     if (socialMediaVariation.id === SocialMediaVariationIds.PHONE_NUMBER) {
