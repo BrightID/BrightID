@@ -32,7 +32,7 @@ async function linkSocialMediaApp(appId: string, contextId: string) {
       signedTimestamp &&
       Date.now() - signedTimestamp > SOCIAL_MEDIA_SIG_WAIT_TIME
     ) {
-      console.log(`true fucking linking ${appInfo.name}`);
+      console.log(`linking ${appInfo.name}`);
       try {
         linked = await linkAppId(
           appId,
