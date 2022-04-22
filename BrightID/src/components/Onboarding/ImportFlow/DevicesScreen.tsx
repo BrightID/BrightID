@@ -50,8 +50,10 @@ export const DevicesScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const devices = useSelector(selectActiveDevices);
   const signingKey = useSelector((state) => state.keypair.publicKey);
+  const devices = useSelector(selectActiveDevices).sort((a, _b) =>
+    a.signingKey === signingKey ? -1 : 1,
+  );
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
 
