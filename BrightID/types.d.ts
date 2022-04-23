@@ -220,7 +220,7 @@ declare global {
     shareActionType: SocialMediaShareActionType;
     shareActionDataFormat: string;
     icon: any;
-    brightIdAppName: string;
+    brightIdAppId: string;
   };
 
   type SocialMediaVariationState = EntityState<SocialMediaVariation>;
