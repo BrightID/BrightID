@@ -13,6 +13,7 @@ import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { updateConnections } from '@/actions';
 import ConnectionCard from './ConnectionCard';
+import { MAX_DISPLAY_CONNECTIONS } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -44,7 +45,7 @@ export const ConnectionsScreen = () => {
   const excludeGroup = route.params?.group;
   const connections = useSelector((state) =>
     connectionsSelector(state, excludeGroup?.members),
-  );
+  ).slice(0, MAX_DISPLAY_CONNECTIONS);
   const { t } = useTranslation();
 
   const handleNewConnection = () => {
@@ -64,7 +65,7 @@ export const ConnectionsScreen = () => {
         for (const conn of conns) {
           conn.incomingLevel = incomingConnsById[conn.id]?.level;
         }
-        await dispatch(updateConnections(conns));
+        dispatch(updateConnections(conns));
       } catch (err) {
         console.log(err.message);
       }
