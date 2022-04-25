@@ -27,7 +27,6 @@ import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
-import Groups from '@/components/Icons/Groups';
 import RecoveryAccount from '@/components/Icons/RecoveryAccount';
 import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
@@ -280,30 +279,32 @@ const CustomDrawerContent = (props) => {
         }}
       />
 
-      <CustomItem
-        focused={false}
-        testId="findFriendsBtn"
-        inactiveTintColor={BLACK}
-        inactiveBackgroundColor={WHITE}
-        activeTintColor={WHITE}
-        activeBackgroundColor={ORANGE}
-        label={t('drawer.label.findFriends')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
-        icon={() => (
-          <SvgXml
-            xml={FindFriendsIcon}
-            width={DEVICE_LARGE ? 28 : 24}
-            height={DEVICE_LARGE ? 28 : 24}
-          />
-        )}
-        onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
-          });
-        }}
-      />
+      {__DEV__ && (
+        <CustomItem
+          focused={false}
+          testId="findFriendsBtn"
+          inactiveTintColor={BLACK}
+          inactiveBackgroundColor={WHITE}
+          activeTintColor={WHITE}
+          activeBackgroundColor={ORANGE}
+          label={t('drawer.label.findFriends')}
+          // style={styles.drawerItem}
+          // labelStyle={styles.labelStyle}
+          icon={() => (
+            <SvgXml
+              xml={FindFriendsIcon}
+              width={DEVICE_LARGE ? 28 : 24}
+              height={DEVICE_LARGE ? 28 : 24}
+            />
+          )}
+          onPress={() => {
+            navigation.reset({
+              index: 1,
+              routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
+            });
+          }}
+        />
+      )}
 
       <CustomItem
         focused={false}
