@@ -52,7 +52,7 @@ function ConnectionScreenController() {
     [],
   );
   const [connectedAt, setConnectedAt] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [connectionProfile, setConnectionProfile] = useState<
     ProfileInfo | undefined
   >(undefined);
@@ -62,8 +62,12 @@ function ConnectionScreenController() {
       const fetchData = async (connectionId) => {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
-        const profile: ProfileInfo = await api.getProfile(connectionId);
-        setConnectionProfile(profile);
+        try {
+          const profile: ProfileInfo = await api.getProfile(connectionId);
+          setConnectionProfile(profile);
+        } catch (e) {
+          console.log(`Error getting profile for ${connectionId}: ${e}`);
+        }
         setLoading(false);
       };
       if (connectionId !== undefined) {
@@ -77,7 +81,7 @@ function ConnectionScreenController() {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
       const texts = getVerificationPatches(connectionProfile.verifications).map(
-        (patch) => patch.text
+        (patch) => patch.text,
       );
       setVerificationsTexts(texts);
       dispatch(
