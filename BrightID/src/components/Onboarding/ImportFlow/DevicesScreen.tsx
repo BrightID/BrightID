@@ -50,15 +50,17 @@ export const DevicesScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const devices = useSelector(selectActiveDevices);
   const signingKey = useSelector((state) => state.keypair.publicKey);
+  const devices = useSelector(selectActiveDevices).sort((a, _b) =>
+    a.signingKey === signingKey ? -1 : 1,
+  );
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
 
   const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const isCurrentDevice = (d) => d.signingKey === signingKey;
   const getName = (d) =>
-    isCurrentDevice(d) ? 'Current device' : d.name || 'Unknown';
+    isCurrentDevice(d) ? 'Current device' : d.name || 'Unknown name';
   const [waiting, setWaiting] = useState(!!route.params?.syncing);
 
   useEffect(() => {
@@ -166,21 +168,35 @@ export const DevicesScreen = ({ route }) => {
 
   const renderItem = ({ item: device, index }) => (
     <View testID={`device-${index}`} style={styles.deviceContainer}>
-      <View testID={getName(device)} style={styles.deviceLabel}>
-        <Text style={styles.deviceName}>{getName(device)}</Text>
-        <Text style={styles.deviceSigningKey}>
-          {shortenSigningKey(device.signingKey)}
-        </Text>
+      <View testID={getName(device)} style={styles.deviceLabelContainer}>
+        <View style={styles.deviceNameContainer}>
+          <Text style={styles.deviceNameText}>{getName(device)}</Text>
+          {isCurrentDevice(device) && (
+            <Text style={styles.devicePrimaryText}>
+              &nbsp;({settings.isPrimaryDevice ? 'Primary' : 'Secondary'})
+            </Text>
+          )}
+        </View>
+        <View style={styles.deviceSigningKeyContainer}>
+          <Text style={styles.deviceSigningKeyText}>
+            {shortenSigningKey(device.signingKey)}
+          </Text>
+        </View>
       </View>
-      <View style={{ flex: 1 }} />
       {!isCurrentDevice(device) && (
-        <TouchableOpacity
-          style={styles.removeBtn}
-          testID={`RemoveDeviceBtn-${index}`}
-          onPress={() => remove(device)}
-        >
-          <Material name="delete" size={DEVICE_LARGE ? 22 : 20} color={BLUE} />
-        </TouchableOpacity>
+        <View style={styles.removeBtnContainer}>
+          <TouchableOpacity
+            style={styles.removeBtn}
+            testID={`RemoveDeviceBtn-${index}`}
+            onPress={() => remove(device)}
+          >
+            <Material
+              name="delete"
+              size={DEVICE_LARGE ? 22 : 20}
+              color={BLUE}
+            />
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -257,15 +273,36 @@ const styles = StyleSheet.create({
   },
   deviceContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-evenly',
     padding: 10,
   },
-  deviceName: {
+  deviceLabelContainer: {
+    flexDirection: 'column',
+    flex: 10,
+    alignItems: 'flex-start',
+  },
+  deviceNameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  deviceSigningKeyContainer: {},
+  removeBtnContainer: {
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  deviceNameText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: BLACK,
   },
-  deviceSigningKey: {
+  devicePrimaryText: {
+    fontFamily: 'Poppins-Medium',
+    fontWeight: 'bold',
+    fontSize: fontSize[16],
+    color: BLACK,
+  },
+  deviceSigningKeyText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
     color: BLUE,
@@ -308,7 +345,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: BLUE,
   },
-  deviceLabel: {},
 });
 
 export default DevicesScreen;

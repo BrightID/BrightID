@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js'
+import CryptoJS from 'crypto-js';
 
 export const encryptData = (dataObj: any, aesKey: string) => {
   const dataStr = JSON.stringify(dataObj);
@@ -11,3 +11,6 @@ export const decryptData = (data: string, aesKey: string) => {
   );
   return JSON.parse(decrypted);
 };
+
+export const hashSocialProfile = (data: string) =>
+  CryptoJS.MD5(data).toString();

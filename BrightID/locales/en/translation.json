@@ -71,7 +71,8 @@
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
         "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
         "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
-        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}"
+        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}",
+        "notPrimary": "You are currently using a secondary device. Linking app \"{{app}}\" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device."
       },
       "title": {
         "invalidApp": "Failed",
@@ -79,7 +80,8 @@
         "linkApp": "Link App?",
         "linkFailure": "Failed",
         "linkingFailed": "App linking failed",
-        "linkSuccess": "Success"
+        "linkSuccess": "Success",
+        "notPrimary": "Linking not possible"
       }
     },
     "text": {
@@ -118,6 +120,7 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
+        "commonError": "Sorry, We Couldn't Complete Your Request. Please Try Again in a Moment.",
         "failedOp": "{{name}} failed!\n{{message}}",
         "invalidSigningKey": "Your signing key is not valid. This might be because:\n- You recovered your BrightID on another device.\n- You removed this device from your active devices list.\n- You had a failed recovery.\n- The node that you are connected to has a problem.",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
@@ -159,6 +162,7 @@
       "reportReason": " as {{reportReason}}"
     },
     "text": {
+      "noConnection": "Couldn't connect to server",
       "uploadingData": "Uploading encrypted data to backup server…"
     }
   },
@@ -320,6 +324,7 @@
       "copyExplorerCode": "Copy Explorer Code",
       "devices": "Devices",
       "editProfile": "Edit Profile",
+      "findFriends": "Find Friends",
       "groups": "Groups",
       "home": "Home"
     }
@@ -327,6 +332,12 @@
   "eula": {
     "header": {
       "title": "License Agreement"
+    }
+  },
+  "findFriends": {
+    "text": {
+      "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app.",
+      "noFriends": "No friends"
     }
   },
   "graphExplorer": {
@@ -568,6 +579,7 @@
       },
       "text": {
         "discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
+        "invalidPhoneNumber": "Enter a valid phone number",
         "passwordMatch": "Current password does not match."
       },
       "title": {
@@ -580,6 +592,7 @@
       "socialPrevious": "Prev"
     },
     "label": {
+      "contactInfo": "Contact Info",
       "currentPassword": "Current password",
       "name": "Name",
       "newPassword": "New password",

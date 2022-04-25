@@ -132,6 +132,7 @@
       "success": "Éxito",
       "sure": "Por supuesto",
       "text": {
+        "commonError": "Lo sentimos, no pudimos completar su solicitud. Vuelva a intentarlo en un momento.",
         "failedOp": "¡{{name}} falló!\n{{message}}",
         "incorrectPassword": "¡Contraseña incorrecta!",
         "lostKeys": "Cree un nuevo BrightID o intente recuperar su BrightID anterior",
@@ -312,6 +313,7 @@
       "contactUs": "Contactanos",
       "copyExplorerCode": "Copiar Código de Explorer",
       "editProfile": "Editar Perfil",
+      "findFriends": "invitación",
       "home": "Inicio"
     }
   },
@@ -531,7 +533,8 @@
       },
       "text": {
         "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
-        "passwordMatch": "La contraseña actual no coincide."
+        "passwordMatch": "La contraseña actual no coincide.",
+        "invalidPhoneNumber": "Introduce un número de teléfono válido"
       },
       "title": {
         "discardChanges": "¿Descartar los cambios?",
@@ -549,7 +552,8 @@
       "newPasswordAgain": "Repita la contraseña",
       "password": "Contraseña",
       "passwordAgain": "Repita la contraseña",
-      "socialMediaLink": "Enlace de redes sociales"
+      "socialMediaLink": "Enlace de redes sociales",
+      "phoneNumber": "Número de teléfono"
     },
     "placeholder": {
       "name": "Ingrese su Nombre",
@@ -749,6 +753,14 @@
       "gotIt": "¡Entendido!",
       "setPassword": "Siempre puede establecer su\ncontraseña de BrightID aquí",
       "viewPassword": "Siempre podrá ver su\ncontraseña de BrightID aquí"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "invitación"
+    },
+    "text": {
+      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
     }
   }
 }

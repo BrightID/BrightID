@@ -17,6 +17,7 @@ import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import backupApi from '@/api/backupService';
 import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
+import { BrightIdNetwork } from '@/components/Apps/model';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -49,7 +50,7 @@ export const updateBlindSig =
       }
 
       try {
-        const network = __DEV__ ? 'test' : 'node';
+        const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
         // TODO: Don't fallback to node.brightid.org. 'app.nodeUrl' should be mandatory.
         // noinspection HttpUrlsUsage
         const url = app.nodeUrl || `http://${network}.brightid.org`;

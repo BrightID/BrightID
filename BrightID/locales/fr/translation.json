@@ -163,6 +163,7 @@
       "success": "Succès",
       "sure": "Oui",
       "text": {
+        "commonError": "Désolé, nous n'avons pas pu traiter votre demande. Veuillez réessayer dans un instant.",
         "failedOp": "{{name}} a échoué !\n{{message}}",
         "incorrectPassword": "Mot de passe incorrect !",
         "invalidSigningKey": "Votre clé de signature n'est pas valide. Ceci peut être dû au fait que :\n- Vous avez récupéré votre BrightID sur un autre périphérique.\n- Vous avez supprimé ce dispositif de votre liste de dispositifs actifs.\n- Votre récupération a échoué.\n- Le nœud auquel vous êtes connecté·e a un problème.",
@@ -375,6 +376,7 @@
       "copyExplorerCode": "Copier le Code Explorer",
       "devices": "Appareils",
       "editProfile": "Modifier le profil",
+      "findFriends": "inviter",
       "groups": "Groupes",
       "home": "Accueil"
     }
@@ -406,6 +408,7 @@
       "text": {
         "addAdmin": "Êtes-vous sûr·e de vouloir définir {{name}} comme administrateur de ce groupe ?",
         "dismissMember": "Êtes-vous sûr·e de vouloir retirer {{name}} de ce groupe ?",
+        "groupIdCopied": "Identifiant du groupe copié dans le presse-papiers",
         "inviteSuccess": "Vous avez invité {{name}} avec succès",
         "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
       },
@@ -424,6 +427,7 @@
     },
     "groupActionSheet": {
       "cancel": "Annuler",
+      "copyGroupId": "Copier l'identifiant du groupe dans le presse-papiers",
       "inviteUser": "Inviter un utilisateur",
       "leaveGroup": "Quitter le groupe"
     },
@@ -632,7 +636,8 @@
       },
       "text": {
         "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr·e de vouloir les annuler en quittant l'écran ?",
-        "passwordMatch": "Le mot de passe actuel est incorrect."
+        "passwordMatch": "Le mot de passe actuel est incorrect.",
+        "invalidPhoneNumber": "Entrez un numéro de téléphone valide"
       },
       "title": {
         "discardChanges": "Annuler les changements ?",
@@ -650,7 +655,8 @@
       "newPasswordAgain": "Répétez le mot de passe",
       "password": "Mot de passe",
       "passwordAgain": "Répétez le mot de passe",
-      "socialMediaLink": "Liens de réseaux sociaux"
+      "socialMediaLink": "Liens de réseaux sociaux",
+      "phoneNumber": "Numéro de téléphone"
     },
     "placeholder": {
       "name": "Entrez un nom",
@@ -878,6 +884,14 @@
       "gotIt": "Compris !",
       "setPassword": "Vous pouvez toujours définir votre\nmot de passe BrightID ici",
       "viewPassword": "Vous pouvez toujours voir votre\nmot de passe BrightID ici"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "inviter"
+    },
+    "text": {
+      "invitationNotAvailable": "Désolé, l'envoi d'invitation n'est actuellement pas disponible pour cette application."
     }
   }
 }

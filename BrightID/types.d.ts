@@ -1,5 +1,6 @@
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
+import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
 import {
   channel_states,
@@ -9,7 +10,13 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
-import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
+import {
+  SocialMediaType,
+  SocialMediaShareActionType,
+  SocialMediaShareType,
+  SocialMediaShareTypeDisplay,
+  SocialMediaVariationIds,
+} from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -199,34 +206,49 @@ declare global {
 
   // We are sure that these properties are
   // shared in old or new versions of app
-  interface SocialMediaCompanyShared {
+  interface SocialMediaVariationShared {
     name: string;
-    shareType: string;
+    shareType: SocialMediaShareType;
   }
 
-  type SocialMediaCompany = SocialMediaCompanyShared & {
-    shareTypeDisplay: string;
-    icon: any;
-    getShareAction: (profile: string) => SocialMediaShareAction;
-  };
+  type SocialMediaId = string | SocialMediaVariationIds;
 
-  type SocialMediaId = string;
-
-  type SocialMediaList = {
-    [key: SocialMediaId]: SocialMediaCompany;
-  };
-
-  type SocialMedia = {
+  type SocialMediaVariation = SocialMediaVariationShared & {
     id: SocialMediaId;
-    company: SocialMediaCompanyShared;
+    type: SocialMediaType;
+    shareTypeDisplay: SocialMediaShareTypeDisplay;
+    shareActionType: SocialMediaShareActionType;
+    shareActionDataFormat: string;
+    icon: any;
+    brightIdAppName: string;
+  };
+
+  type SocialMediaVariationState = EntityState<SocialMediaVariation>;
+
+  type SocialMediaVariations = SocialMediaVariation[];
+
+  type SocialMediaShared = {
+    id: SocialMediaId;
+    company: SocialMediaVariationShared;
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
   };
 
-  type SocialMediaShareAction = {
-    actionType: SocialMediaShareActionType;
-    data: string;
+  type BrightIdSocialAppData = {
+    linked: boolean;
+    contextId: string;
+    token: string;
+    synced: boolean;
+  };
+
+  type SocialMedia = SocialMediaShared & {
+    brightIdSocialAppData?: BrightIdSocialAppData;
+  };
+
+  type PhoneNumberObject = {
+    country: CountryCode;
+    number: string;
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
@@ -301,6 +323,7 @@ declare global {
     };
     ChangePassword: undefined;
     SelectSocialMedia: {
+      type: SocialMediaType;
       order: number;
       page: number;
       prevId: SocialMediaId;

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   Text,
@@ -10,9 +16,14 @@ import {
   Alert,
   LayoutChangeEvent,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useIsDrawerOpen } from '@react-navigation/drawer';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import i18next from 'i18next';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -25,19 +36,21 @@ import {
   BLUE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   selectAllSocialMedia,
-  removeSocialMedia,
+  selectExistingSocialMedia,
   setProfileDisplayWidth,
-} from './socialMediaSlice';
+} from '../../reducer/socialMediaSlice';
+import {
+  selectAllSocialMediaVariationsByType,
+  selectSocialMediaVariationById,
+} from '@/reducer/socialMediaVariationSlice';
+import { SocialMediaType } from './socialMediaVariations';
+import { removeSocialMediaThunk } from '@/components/EditProfile/socialMediaThunks';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -151,11 +164,18 @@ const EditName = ({ nextName, setNextName }) => {
   );
 };
 
-const SocialMediaLink = (props: SocialMedia) => {
+const SocialMediaLink = (props: {
+  socialMedia: SocialMedia;
+  type: SocialMediaType;
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order, company } = props;
+  const { id, profile, profileDisplayWidth, order } = props.socialMedia;
+  const { t } = useTranslation();
 
+  const socialMediaVariation = useSelector((state) =>
+    selectSocialMediaVariationById(state, id),
+  );
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
@@ -177,8 +197,24 @@ const SocialMediaLink = (props: SocialMedia) => {
     }
   };
 
+  const removeSocialMedia = async (id: string) => {
+    try {
+      await dispatch(removeSocialMediaThunk(id));
+    } catch (e) {
+      Alert.alert(
+        i18next.t('common.alert.error'),
+        i18next.t('common.alert.text.commonError'),
+      );
+    }
+  };
+
   const innerTextStyle = profileDisplayWidth
-    ? { width: profileDisplayWidth }
+    ? {
+        width:
+          typeof profileDisplayWidth === 'number'
+            ? profileDisplayWidth - 10
+            : profileDisplayWidth,
+      }
     : { flexGrow: 1 };
 
   return (
@@ -187,13 +223,14 @@ const SocialMediaLink = (props: SocialMedia) => {
         style={styles.socialMediaSelect}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
+            type: props.type,
             order,
             prevId: id,
             page: 0,
           });
         }}
       >
-        <Text style={styles.socialMediaType}>{company.name}</Text>
+        <Text style={styles.socialMediaType}>{socialMediaVariation.name}</Text>
         <Chevron
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}
@@ -206,6 +243,7 @@ const SocialMediaLink = (props: SocialMedia) => {
         onLayout={updateInnerTextLayout}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
+            type: props.type,
             order,
             prevId: id,
             page: 1,
@@ -222,9 +260,7 @@ const SocialMediaLink = (props: SocialMedia) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.closeButton}
-        onPress={() => {
-          dispatch(removeSocialMedia(id));
-        }}
+        onPress={() => removeSocialMedia(id)}
       >
         <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
       </TouchableOpacity>
@@ -232,40 +268,63 @@ const SocialMediaLink = (props: SocialMedia) => {
   );
 };
 
-const SocialMediaLinks = () => {
+const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const navigation = useNavigation();
-  const socialMediaItems = useSelector(selectAllSocialMedia);
+  const socialMediaItems = useSelector(selectExistingSocialMedia);
+  const selectSocialMediaVariations = useMemo(
+    selectAllSocialMediaVariationsByType,
+    [],
+  );
+  const socialMediaVariations = useSelector((state) =>
+    selectSocialMediaVariations(state, props.type),
+  );
+  const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
-  console.log('socialMedia', socialMediaItems);
+  // console.log('socialMedia', socialMediaItems);
 
-  const SocialMediaList = socialMediaItems.map((item) => (
-    <SocialMediaLink key={item.id} {...item} />
-  ));
+  const SocialMediaVariations = socialMediaItems
+    .filter((item) => socialMediaVariationIds.includes(item.id))
+    .map((item) => (
+      <SocialMediaLink key={item.id} socialMedia={item} type={props.type} />
+    ));
+
+  // disable adding new item if we are entering phone number and
+  // phone number is already entered
+  const disableAdd =
+    socialMediaVariations.length === SocialMediaVariations.length;
 
   return (
     <View style={styles.socialMediaContainer}>
       <View style={styles.socialMediaLinkLabel}>
-        <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SelectSocialMedia', {
-              order: socialMediaItems.length,
-              prevId: null,
-              page: 0,
-            });
-          }}
-          style={styles.addSocialMediaBtn}
-        >
-          <Material
-            name="plus-thick"
-            size={DEVICE_LARGE ? 18 : 16}
-            color={DARK_BLUE}
-          />
-        </TouchableOpacity>
+        {props.type === SocialMediaType.CONTACT_INFO ? (
+          <Text style={styles.label}>{t('profile.label.contactInfo')}</Text>
+        ) : (
+          <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
+        )}
+
+        {!disableAdd ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SelectSocialMedia', {
+                order: socialMediaItems.length,
+                type: props.type,
+                prevId: null,
+                page: 0,
+              });
+            }}
+            style={styles.addSocialMediaBtn}
+          >
+            <Material
+              name="plus-thick"
+              size={DEVICE_LARGE ? 18 : 16}
+              color={DARK_BLUE}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
-      {SocialMediaList}
+      {SocialMediaVariations}
 
       <View style={styles.bottomDivider} />
     </View>
@@ -453,7 +512,8 @@ export const EditProfileScreen = ({ navigation }) => {
           setProfilePhoto={setProfilePhoto}
         />
         <EditName nextName={nextName} setNextName={setNextName} />
-        <SocialMediaLinks />
+        <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
+        <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <ShowEditPassword />
         <View style={styles.saveContainer}>
           <TouchableOpacity
