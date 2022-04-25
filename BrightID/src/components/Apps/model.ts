@@ -9,6 +9,7 @@ import {
   updateSig,
   updateBlindSig,
   setIsSponsoredv6,
+  selectIsPrimaryDevice,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
@@ -276,6 +277,25 @@ export const linkAppId = async (
       );
     }
     return false;
+  }
+
+  // check if blind sigs are existing if this is a secondary device
+  const isPrimary = selectIsPrimaryDevice(store.getState());
+  if (!isPrimary) {
+    const missingSigs = sigs.filter((sig) => sig.sig === undefined);
+    if (missingSigs.length) {
+      if (!silent) {
+        Alert.alert(
+          i18next.t('apps.alert.title.notPrimary', 'Linking not possible'),
+          i18next.t(
+            'apps.alert.text.notPrimary',
+            'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
+            { app: `${appId}` },
+          ),
+        );
+      }
+      return false;
+    }
   }
 
   // Create temporary NodeAPI object, since the node at the specified nodeUrl will
