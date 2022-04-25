@@ -118,6 +118,7 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
+        "commonError": "Sorry, We Couldn't Complete Your Request. Please Try Again in a Moment.",
         "failedOp": "{{name}} failed!\n{{message}}",
         "invalidSigningKey": "Your signing key is not valid. This might be because:\n- You recovered your BrightID on another device.\n- You removed this device from your active devices list.\n- You had a failed recovery.\n- The node that you are connected to has a problem.",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
@@ -159,6 +160,7 @@
       "reportReason": " as {{reportReason}}"
     },
     "text": {
+      "noConnection": "Couldn't connect to server",
       "uploadingData": "Uploading encrypted data to backup server…"
     }
   },
@@ -320,6 +322,7 @@
       "copyExplorerCode": "Copy Explorer Code",
       "devices": "Devices",
       "editProfile": "Edit Profile",
+      "findFriends": "Find Friends",
       "groups": "Groups",
       "home": "Home"
     }
@@ -568,7 +571,8 @@
       },
       "text": {
         "discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
-        "passwordMatch": "Current password does not match."
+        "passwordMatch": "Current password does not match.",
+        "invalidPhoneNumber": "Enter a valid phone number"
       },
       "title": {
         "discardChanges": "Discard changes?",
@@ -580,12 +584,14 @@
       "socialPrevious": "Prev"
     },
     "label": {
+      "contactInfo": "Contact Info",
       "currentPassword": "Current password",
       "name": "Name",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
       "password": "Password",
-      "socialMediaLink": "Social Media Link"
+      "socialMediaLink": "Social Media Link",
+      "phoneNumber": "Phone Number"
     },
     "placeholder": {
       "name": "Enter Name",
@@ -780,6 +786,15 @@
       "gotIt": "Got it!",
       "setPassword": "You can always set your\nBrightID password in here",
       "viewPassword": "You can always see your\nBrightID password in here"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "invite"
+    },
+    "text": {
+      "noFriends": "No friends",
+      "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app."
     }
   }
 }

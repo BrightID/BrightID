@@ -83,3 +83,5 @@ export enum qrCodeURL_types {
   IMPORT = '3', // qrcode url is for import channel
   SYNC = '4', // qrcode url is for syncing devices channel
 }
+
+export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;
