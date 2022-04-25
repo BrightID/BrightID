@@ -71,7 +71,8 @@
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
         "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
         "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
-        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}"
+        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}",
+        "notPrimary": "You are currently using a secondary device. Linking app \"{{app}}\" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device."
       },
       "title": {
         "invalidApp": "Failed",
@@ -79,7 +80,8 @@
         "linkApp": "Link App?",
         "linkFailure": "Failed",
         "linkingFailed": "App linking failed",
-        "linkSuccess": "Success"
+        "linkSuccess": "Success",
+        "notPrimary": "Linking not possible"
       }
     },
     "text": {
@@ -332,6 +334,12 @@
       "title": "License Agreement"
     }
   },
+  "findFriends": {
+    "text": {
+      "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app.",
+      "noFriends": "No friends"
+    }
+  },
   "graphExplorer": {
     "alert": {
       "text": {
@@ -571,8 +579,8 @@
       },
       "text": {
         "discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
-        "passwordMatch": "Current password does not match.",
-        "invalidPhoneNumber": "Enter a valid phone number"
+        "invalidPhoneNumber": "Enter a valid phone number",
+        "passwordMatch": "Current password does not match."
       },
       "title": {
         "discardChanges": "Discard changes?",
@@ -590,8 +598,7 @@
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
       "password": "Password",
-      "socialMediaLink": "Social Media Link",
-      "phoneNumber": "Phone Number"
+      "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
       "name": "Enter Name",
@@ -786,15 +793,6 @@
       "gotIt": "Got it!",
       "setPassword": "You can always set your\nBrightID password in here",
       "viewPassword": "You can always see your\nBrightID password in here"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "invite"
-    },
-    "text": {
-      "noFriends": "No friends",
-      "invitationNotAvailable": "Sorry, sending invitation is currently unavailable for this app."
     }
   }
 }
