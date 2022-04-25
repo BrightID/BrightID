@@ -100,7 +100,9 @@ export const HomeScreen = (props) => {
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
-      dispatch(syncAndLinkSocialApps());
+      if (__DEV__) {
+        dispatch(syncAndLinkSocialApps());
+      }
       const timeoutId = setTimeout(() => {
         setLoading(false);
       }, 3000);
