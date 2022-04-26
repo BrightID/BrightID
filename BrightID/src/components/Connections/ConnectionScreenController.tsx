@@ -21,6 +21,11 @@ import {
 } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionScreen from './ConnectionScreen';
+import stringSimilarity from '@/utils/stringSimilarity';
+import {
+  MAX_CONNECTIONS_DUPLICATE_SEARCH,
+  POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE,
+} from '@/utils/constants';
 
 type ConnectionRoute = RouteProp<
   { Connection: { connectionId: string } },
@@ -51,6 +56,9 @@ function ConnectionScreenController() {
   const [verificationsTexts, setVerificationsTexts] = useState<Array<string>>(
     [],
   );
+  const [possibleDuplicates, setPossibleDuplicates] = useState<
+    Array<Connection>
+  >([]);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(true);
   const [connectionProfile, setConnectionProfile] = useState<
@@ -65,6 +73,19 @@ function ConnectionScreenController() {
         try {
           const profile: ProfileInfo = await api.getProfile(connectionId);
           setConnectionProfile(profile);
+          console.log(`Updating verifications for ${profile.id}`);
+          const texts = getVerificationPatches(profile.verifications).map(
+            (patch) => patch.text,
+          );
+          setVerificationsTexts(texts);
+          // TODO: This causes unnecessary rerender by replacing the verifications array in redux
+          //  store, although contents are most likely identical
+          dispatch(
+            setConnectionVerifications({
+              id: connectionId,
+              verifications: profile.verifications,
+            }),
+          );
         } catch (e) {
           console.log(`Error getting profile for ${connectionId}: ${e}`);
         }
@@ -73,25 +94,8 @@ function ConnectionScreenController() {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-    }, [api, connectionId]),
+    }, [api, connectionId, dispatch]),
   );
-
-  // Update connection verifications
-  useEffect(() => {
-    if (connectionProfile) {
-      console.log(`Updating verifications for ${connectionProfile.id}`);
-      const texts = getVerificationPatches(connectionProfile.verifications).map(
-        (patch) => patch.text,
-      );
-      setVerificationsTexts(texts);
-      dispatch(
-        setConnectionVerifications({
-          id: connectionProfile.id,
-          verifications: connectionProfile.verifications,
-        }),
-      );
-    }
-  }, [connectionProfile, dispatch]);
 
   // Update mutual groups etc. in local state
   useEffect(() => {
@@ -123,6 +127,27 @@ function ConnectionScreenController() {
     }
   }, [connectionProfile, me, myConnections, myGroups]);
 
+  // get possible duplicates
+  useEffect(() => {
+    console.log(`Searching possible duplicates for ${connection?.id}`);
+    // Prevent high system load: Don't try to search duplicates if we have too many connections
+    if (
+      connection &&
+      myConnections.length <= MAX_CONNECTIONS_DUPLICATE_SEARCH
+    ) {
+      setPossibleDuplicates(
+        myConnections.filter(
+          (conn) =>
+            stringSimilarity(conn.name, connection.name) >=
+              POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE &&
+            conn.id !== connection.id,
+        ),
+      );
+    } else {
+      setPossibleDuplicates([]);
+    }
+  }, [connection, myConnections]);
+
   useEffect(() => {
     if (!connection) {
       // connection not there anymore.
@@ -152,6 +177,7 @@ function ConnectionScreenController() {
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
       recoveryConnections={recoveryConnections}
+      possibleDuplicates={possibleDuplicates}
     />
   );
 }

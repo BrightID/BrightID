@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { SvgXml } from 'react-native-svg';
 import Clipboard from '@react-native-community/clipboard';
-import { selectAllConnections } from '@/reducer/connectionsSlice';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
@@ -35,14 +34,10 @@ import {
   DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  connection_levels,
-  POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE,
-} from '@/utils/constants';
+import { connection_levels } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
-import stringSimilarity from '@/utils/stringSimilarity';
 import {
   SocialMediaShareActionType,
   SocialMediaType,
@@ -62,6 +57,7 @@ type Props = {
   mutualGroups: Array<Group>;
   mutualConnections: Array<Connection>;
   recoveryConnections: Array<RecoveryConnection>;
+  possibleDuplicates: Array<Connection>;
   loading: boolean;
 };
 
@@ -101,9 +97,9 @@ function ConnectionScreen(props: Props) {
     mutualConnections,
     recoveryConnections,
     loading,
+    possibleDuplicates,
   } = props;
   const navigation = useNavigation();
-  const myConnections = useSelector(selectAllConnections);
 
   const selectSocialMediaVariations = useMemo(
     selectAllSocialMediaVariationsByType,
@@ -120,21 +116,9 @@ function ConnectionScreen(props: Props) {
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] =
     useState(true);
   const [socialMediaCollapsed, setSocialMediaCollapsed] = useState(true);
-  const [possibleDuplicates, setPossibleDuplicates] = useState([]);
   const [connectionSocialMedia, setConnectionSocialMedia] = useState<
     SocialMediaOnConnectionPage[]
   >([]);
-
-  useEffect(() => {
-    setPossibleDuplicates(
-      myConnections.filter(
-        (conn) =>
-          stringSimilarity(conn.name, connection.name) >=
-            POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE &&
-          conn.id !== connection.id,
-      ),
-    );
-  }, [connection.id, connection.name, myConnections]);
 
   useEffect(() => {
     const socialMediaOnConnectionPage: SocialMediaOnConnectionPage[] = [];
