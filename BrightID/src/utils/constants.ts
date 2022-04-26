@@ -31,6 +31,7 @@ export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 export const PROFILE_VERSION = 1;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
+export const MAX_CONNECTIONS_DUPLICATE_SEARCH = 1000;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
