@@ -8,7 +8,7 @@ type CreateSocialMediaRequest = {
 };
 
 type CreateSocialMediaResponse = {
-  contextId: string;
+  appUserId: string;
   token: string;
   variation: string | SocialMediaVariationIds;
   network: BrightIdNetwork;

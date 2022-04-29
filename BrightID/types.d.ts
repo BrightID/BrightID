@@ -237,7 +237,7 @@ declare global {
 
   type BrightIdSocialAppData = {
     linked: boolean;
-    contextId: string;
+    appUserId: string;
     token: string;
     synced: boolean;
   };

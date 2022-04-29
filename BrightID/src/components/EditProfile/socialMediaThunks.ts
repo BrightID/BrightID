@@ -22,7 +22,7 @@ import {
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
 import { SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
 
-async function linkSocialMediaApp(appId: string, contextId: string) {
+async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;
   const apps = selectAllApps(store.getState());
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
@@ -36,7 +36,7 @@ async function linkSocialMediaApp(appId: string, contextId: string) {
       try {
         linked = await linkAppId(
           appId,
-          contextId,
+          appUserId,
           `${socialMediaUrl}/v1/social-media/check-verification/`,
           true,
         );
@@ -54,7 +54,7 @@ async function syncSocialMedia(
   socialMediaVariation: SocialMediaVariation,
 ) {
   let synced = false;
-  let contextId = incomingSocialMedia.brightIdSocialAppData?.contextId;
+  let appUserId = incomingSocialMedia.brightIdSocialAppData?.appUserId;
   const profileHashes = generateSocialProfileHashes(
     incomingSocialMedia.profile,
     socialMediaVariation.id,
@@ -80,13 +80,13 @@ async function syncSocialMedia(
         network: __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE,
       });
       token = data.token;
-      contextId = data.contextId;
+      appUserId = data.appUserId;
       synced = true;
     } catch (e) {
       console.log(e);
     }
   }
-  return { token, contextId, synced };
+  return { token, appUserId, synced };
 }
 
 export const saveAndLinkSocialMedia =
@@ -108,11 +108,11 @@ export const saveAndLinkSocialMedia =
     const brightIdSocialAppData: BrightIdSocialAppData = {
       synced: false,
       linked: false,
-      contextId: null,
+      appUserId: null,
       token: null,
       ...incomingSocialMedia.brightIdSocialAppData,
     };
-    let { synced, token, contextId, linked } = brightIdSocialAppData;
+    let { synced, token, appUserId, linked } = brightIdSocialAppData;
 
     if (!synced || prevProfile?.profile !== incomingSocialMedia.profile) {
       const __ret = await syncSocialMedia(
@@ -121,20 +121,20 @@ export const saveAndLinkSocialMedia =
         socialMediaVariation,
       );
       token = __ret.token;
-      contextId = __ret.contextId;
+      appUserId = __ret.appUserId;
       synced = __ret.synced;
     }
 
     if (synced && !linked) {
       const appId = socialMediaVariation.brightIdAppId;
       if (appId) {
-        linked = await linkSocialMediaApp(appId, contextId);
+        linked = await linkSocialMediaApp(appId, appUserId);
       }
     }
 
     const socialMedia: SocialMedia = {
       ...incomingSocialMedia,
-      brightIdSocialAppData: { synced, token, contextId, linked },
+      brightIdSocialAppData: { synced, token, appUserId, linked },
     };
     dispatch(saveSocialMedia(socialMedia));
     return socialMedia;
