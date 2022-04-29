@@ -69,7 +69,6 @@ export const handleBlindSigApp = async (
   params: Params,
   setSponsoringApp,
   api: NodeApi,
-  callbackUrl: string,
 ) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
@@ -79,13 +78,7 @@ export const handleBlindSigApp = async (
       {
         text: i18next.t('common.alert.yes'),
         onPress: () =>
-          sponsorAndlinkAppId(
-            appId,
-            appUserId,
-            setSponsoringApp,
-            api,
-            callbackUrl,
-          ),
+          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
         // linkAppId(appId, appUserId),
       },
       {
@@ -136,7 +129,6 @@ const linkContextId = async (
 export const linkAppId = async (
   appId: string,
   appUserId: string,
-  callbackUrl: string,
   silent = false,
 ) => {
   const {
@@ -150,13 +142,15 @@ export const linkAppId = async (
   const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
 
   const onSuccess = async () => {
-    const api = create({
-      baseURL: callbackUrl,
-    });
-    const res = await api.post('/', {
-      network,
-      contextId: appUserId,
-    });
+    if (appInfo.callbackUrl) {
+      const api = create({
+        baseURL: appInfo.callbackUrl,
+      });
+      const res = await api.post('/', {
+        network,
+        contextId: appUserId,
+      });
+    }
   };
 
   // generate blind sig for apps with no verification expiration at linking time
@@ -358,14 +352,13 @@ const sponsorAndlinkAppId = async (
   appUserId: string,
   setSponsoringApp,
   api: NodeApi,
-  callbackUrl: string,
 ) => {
   const {
     apps: { apps },
     user: { isSponsored, isSponsoredv6 },
   } = store.getState();
   if (isSponsored || isSponsoredv6) {
-    await linkAppId(appId, appUserId, callbackUrl);
+    await linkAppId(appId, appUserId);
   } else {
     /*
     1. get appId from deep link
@@ -419,7 +412,7 @@ const sponsorAndlinkAppId = async (
       // sponsoring complete
       store.dispatch(setIsSponsoredv6(true));
       // now link app.
-      await linkAppId(appId, appUserId, callbackUrl);
+      await linkAppId(appId, appUserId);
     } catch (err) {
       const msg = err instanceof Error ? err.message : err;
       console.log(`Error getting sponsored: ${msg}`);

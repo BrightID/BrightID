@@ -30,6 +30,7 @@ async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;
   const apps = selectAllApps(store.getState());
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
+  console.log(appInfo.callbackUrl);
   if (appInfo && appInfo.usingBlindSig) {
     const signedTimestamp = getSignedTimestamp(appInfo);
     if (
@@ -38,12 +39,7 @@ async function linkSocialMediaApp(appId: string, appUserId: string) {
     ) {
       console.log(`linking ${appInfo.name}`);
       try {
-        linked = await linkAppId(
-          appId,
-          appUserId,
-          `${socialMediaUrl}/v1/social-media/check-verification/`,
-          true,
-        );
+        linked = await linkAppId(appId, appUserId, true);
       } catch (e) {
         console.log(e);
       }
