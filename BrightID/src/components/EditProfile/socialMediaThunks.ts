@@ -8,7 +8,7 @@ import {
   getSignedTimestamp,
   linkAppId,
 } from '@/components/Apps/model';
-import store from '@/store';
+import store, { useSelector } from '@/store';
 import { selectAllApps } from '@/reducer/appsSlice';
 import {
   saveSocialMedia,
@@ -21,6 +21,10 @@ import {
 } from '@/reducer/socialMediaVariationSlice';
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
 import { SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
+import {
+  selectSyncSocialMediaEnabled,
+  setSyncSocialMediaEnabled,
+} from '@/reducer/settingsSlice';
 
 async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;
@@ -100,7 +104,10 @@ export const saveAndLinkSocialMedia =
     // First, update locally, so the user doesn't need to wait for
     // the server to complete the request to see his new profile in the UI.
     dispatch(saveSocialMedia(incomingSocialMedia));
-
+    const syncSocialMediaEnabled = selectSyncSocialMediaEnabled(getState());
+    if (!syncSocialMediaEnabled) {
+      return incomingSocialMedia;
+    }
     const socialMediaVariation = selectSocialMediaVariationById(
       getState(),
       incomingSocialMedia.id,
@@ -140,23 +147,27 @@ export const saveAndLinkSocialMedia =
     return socialMedia;
   };
 
+export const removeSocialFromServer = async (socialMedia: SocialMedia) => {
+  if (socialMedia.brightIdSocialAppData?.token) {
+    try {
+      await socialMediaService.deleteSocialMediaProfile(
+        socialMedia.brightIdSocialAppData.token,
+      );
+    } catch (e) {
+      // if the token by some reason doesn't exist on the server, so
+      // there is nothing to delete, so ignore the error.
+      if (e.message !== SOCIAL_API_AUTHENTICATION_ERROR) {
+        throw e;
+      }
+    }
+  }
+};
+
 export const removeSocialMediaThunk =
   (id: string) => async (dispatch: dispatch, getState: getState) => {
     const prevProfile = selectSocialMediaById(getState(), id);
     if (prevProfile) {
-      if (prevProfile.brightIdSocialAppData?.token) {
-        try {
-          await socialMediaService.deleteSocialMediaProfile(
-            prevProfile.brightIdSocialAppData.token,
-          );
-        } catch (e) {
-          // if the token by some reason doesn't exist on the server, so
-          // there is nothing to delete, so ignore the error.
-          if (e.message !== SOCIAL_API_AUTHENTICATION_ERROR) {
-            throw e;
-          }
-        }
-      }
+      await removeSocialFromServer(prevProfile);
       const socialMedia: SocialMedia = {
         ...prevProfile,
         profile: null,
@@ -172,13 +183,49 @@ export const updateSocialMediaVariations =
     dispatch(upsertSocialMediaVariations(socialMediaVariations));
   };
 
-export const syncAndLinkSocialApps =
+export const syncAndLinkSocialMedias =
   () => async (dispatch: dispatch, getState: getState) => {
-    await dispatch(updateSocialMediaVariations());
     const socialMedias = selectAllSocialMedia(getState());
     socialMedias.forEach((socialMedia) => {
       if (socialMedia.profile) {
         dispatch(saveAndLinkSocialMedia(socialMedia));
       }
     });
+  };
+
+export const removeAllSocialMedias =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const socialMedias = selectAllSocialMedia(getState());
+    for (let i = 0; i < socialMedias.length; i++) {
+      const socialMedia = socialMedias[i];
+      if (socialMedia.profile) {
+        await removeSocialFromServer(socialMedia);
+        const newSocialMedia: SocialMedia = {
+          ...socialMedia,
+          brightIdSocialAppData: {
+            ...socialMedia.brightIdSocialAppData,
+            synced: false,
+          },
+        };
+        console.log(newSocialMedia.brightIdSocialAppData.synced);
+        dispatch(saveSocialMedia(newSocialMedia));
+      }
+    }
+  };
+
+export const setSyncSocialMediaEnabledThunk =
+  (value: boolean) => async (dispatch: dispatch, getState: getState) => {
+    const prevState = selectSyncSocialMediaEnabled(getState());
+
+    dispatch(setSyncSocialMediaEnabled(value));
+    try {
+      if (value) {
+        await dispatch(syncAndLinkSocialMedias());
+      } else {
+        await dispatch(removeAllSocialMedias());
+      }
+    } catch (e) {
+      // rollback
+      dispatch(setSyncSocialMediaEnabled(prevState));
+    }
   };
