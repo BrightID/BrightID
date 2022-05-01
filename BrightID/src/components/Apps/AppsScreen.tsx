@@ -9,15 +9,13 @@ import {
   Alert,
   StyleSheet,
   View,
-  FlatList,
   Text,
   TextInput,
-  StatusBar,
   RefreshControl,
   Animated,
   TouchableOpacity,
   Platform,
-  SafeAreaView,
+  Easing,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { any, propEq, find } from 'ramda';
@@ -88,6 +86,7 @@ export const AppsScreen = () => {
 
   // Animation
   const scrollY = useRef(new Animated.Value(0)).current;
+  const notifHeight = useRef(new Animated.Value(0)).current;
   const fadeBackgroundSearch = scrollY.interpolate({
     inputRange: [0, 230],
     outputRange: [0, 1],
@@ -97,13 +96,13 @@ export const AppsScreen = () => {
     outputRange: [1, 0],
   });
   const translateYHeader = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [0, -150],
+    inputRange: [0, 290],
+    outputRange: [0, -290],
     extrapolate: 'clamp',
   });
   const translateYSearch = scrollY.interpolate({
-    inputRange: [-500, 0, 150],
-    outputRange: [650, 150, 0],
+    inputRange: [-640, 0, 290],
+    outputRange: [790, notifHeight._value + 160, 0],
     extrapolate: 'clamp',
   });
   const handleScroll = Animated.event(
@@ -118,6 +117,18 @@ export const AppsScreen = () => {
       useNativeDriver: true,
     },
   );
+  const showView = Animated.timing(notifHeight, {
+    toValue: 100,
+    duration: 500,
+    easing: Easing.linear,
+    useNativeDriver: false, // <-- neccessary
+  });
+  const closeView = Animated.timing(notifHeight, {
+    toValue: 0,
+    duration: 500,
+    easing: Easing.linear,
+    useNativeDriver: false, // <-- neccessary
+  });
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -264,9 +275,9 @@ export const AppsScreen = () => {
       <View style={styles.statusContainer}>
         <Text style={styles.statusMessage}>{msg}</Text>
         <Spinner
-          isVisible={waiting}
+          isVisible={true}
           size={DEVICE_LARGE ? 48 : 42}
-          type="Wave"
+          type="ThreeBounce"
           color={BLUE}
         />
       </View>
@@ -276,11 +287,31 @@ export const AppsScreen = () => {
   };
 
   const OverallDescription = () => {
+    let msg: string, waiting: boolean;
+
+    showView.start();
+
+    if (sponsoringApp) {
+      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
+      waiting = true;
+    } else if (pendingLink) {
+      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
+      waiting = true;
+    } else if (!isSponsored) {
+      msg = t('apps.text.notSponsored');
+      waiting = false;
+    } else {
+      msg = '';
+      waiting = false;
+      closeView.start();
+    }
+
     return (
       <AnimatedLinearGradient
         containerStyle={[
           styles.headerContainer,
           {
+            height: 310 + notifHeight._value,
             opacity: fadeBackgroundHeader,
             transform: [{ translateY: translateYHeader }],
           },
@@ -288,6 +319,22 @@ export const AppsScreen = () => {
         style={{ paddingHorizontal: 20, paddingTop: headerHeight }}
         colors={['#3E4481', '#999ECD', '#ED7A5D']}
       >
+        {msg ? (
+          <Animated.View
+            style={[styles.statusContainer, { maxHeight: notifHeight }]}
+          >
+            <Spinner
+              isVisible={waiting}
+              size={DEVICE_LARGE ? 48 : 42}
+              type="ThreeBounce"
+              color={WHITE}
+            />
+            <Text style={styles.statusMessage}>{msg}</Text>
+          </Animated.View>
+        ) : (
+          <View />
+        )}
+
         <View style={styles.rowContainer}>
           <View style={styles.appDetailContainer}>
             <Text style={styles.detailLabel}>Total</Text>
@@ -340,6 +387,7 @@ export const AppsScreen = () => {
             style={[styles.shadow, styles.textInput]}
             onChangeText={(value) => setSearch(value)}
             placeholder="App name"
+            value={search}
           />
 
           <View style={styles.filterContainer}>
@@ -372,8 +420,6 @@ export const AppsScreen = () => {
   return (
     <>
       <View style={styles.container} testID="appsScreen">
-        {/* <AppStatus /> */}
-
         <AnimatedLinearGradient
           containerStyle={[
             styles.headerTitleContainer,
@@ -395,7 +441,7 @@ export const AppsScreen = () => {
           columnWrapperStyle={styles.wrapperColumn}
           contentContainerStyle={[
             styles.contentContainer,
-            { marginTop: headerHeight + 190 },
+            { marginTop: headerHeight + 190 + notifHeight._value },
           ]}
           keyExtractor={({ name }, index) => name + index}
           showsHorizontalScrollIndicator={false}
@@ -440,14 +486,16 @@ const styles = StyleSheet.create({
   statusContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    paddingBottom: 20,
+    marginBottom: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    padding: 12,
+    borderRadius: 10,
   },
   statusMessage: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: fontSize[14],
-    color: BLUE,
+    color: WHITE,
   },
   linkingContainer: {
     flexDirection: 'row',
@@ -465,7 +513,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 310,
     width: '100%',
   },
   rowContainer: {
@@ -540,6 +587,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     zIndex: 6,
+    // marginTop: 40,
     overflow: 'visible',
   },
   searchBackground: {
