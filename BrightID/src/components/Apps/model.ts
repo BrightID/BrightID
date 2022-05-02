@@ -146,9 +146,9 @@ export const linkAppId = async (
       const api = create({
         baseURL: appInfo.callbackUrl,
       });
-      const res = await api.post('/', {
+      await api.post('/', {
         network,
-        contextId: appUserId,
+        appUserId,
       });
     }
   };
