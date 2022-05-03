@@ -29,6 +29,7 @@ type UploadParams = {
 type DownloadParams = {
   channelId: string;
   dataId: string;
+  deleteAfterDownload?: boolean;
 };
 
 class ChannelAPI {
@@ -93,11 +94,20 @@ class ChannelAPI {
   }
 
   async download(params: DownloadParams) {
-    const { channelId, dataId } = params;
+    const { channelId, dataId, deleteAfterDownload } = params;
     const result = await this.api.get<{ data: any }>(
       `/download/${channelId}/${dataId}`,
     );
     ChannelAPI.throwOnError(result);
+    if (deleteAfterDownload) {
+      try {
+        await this.api.delete(`/${channelId}/${dataId}`);
+      } catch (e) {
+        console.log(
+          `Ignoring error while deleting ${dataId} from channel ${channelId}: ${e}`,
+        );
+      }
+    }
     if (result.data && result.data.data) {
       return result.data.data;
     } else {
