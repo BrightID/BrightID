@@ -42,6 +42,8 @@ export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
 export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
 // TODO: Set dedicated prefix for importing once node backends are updated
 export const IMPORT_PREFIX = 'sig_';
+export const CHANNEL_FULL_RETRY_COUNT = 5; // max number of upload retries when channel is full
+export const CHANNEL_FULL_RETRY_INTERVAL = 5000; // ms to wait between retries
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';

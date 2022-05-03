@@ -14,11 +14,16 @@
     we can not use a global API instance. Instead it needs to be created per channel.
  */
 import { create, ApisauceInstance, ApiResponse } from 'apisauce';
+import {
+  CHANNEL_FULL_RETRY_COUNT,
+  CHANNEL_FULL_RETRY_INTERVAL,
+} from '@/utils/constants';
 
 type UploadParams = {
   channelId: string;
   data: any;
   dataId: string;
+  retryWhenFull?: boolean;
 };
 
 type DownloadParams = {
@@ -47,9 +52,29 @@ class ChannelAPI {
   }
 
   async upload(params: UploadParams) {
-    const { channelId, data, dataId } = params;
+    const { channelId, data, dataId, retryWhenFull } = params;
     const body = JSON.stringify({ data, uuid: dataId });
-    const result = await this.api.post(`/upload/${channelId}`, body);
+    let result = await this.api.post(`/upload/${channelId}`, body);
+    let numTries = 1;
+
+    // TODO - Should we make the retry code more generic, no matter what the actual error is? Currently this
+    //   only triggers when channel is full.
+    if (result.status === 440 && retryWhenFull) {
+      // status code 440 indicates channel is full. Wait to try again, give up after max attempts
+      while (result.status === 440 && numTries < CHANNEL_FULL_RETRY_COUNT) {
+        console.log(
+          `Channel ${channelId} full on try ${numTries}. Retry in ${CHANNEL_FULL_RETRY_INTERVAL}ms.`,
+        );
+        await new Promise((r) => setTimeout(r, CHANNEL_FULL_RETRY_INTERVAL));
+        numTries++;
+        result = await this.api.post(`/upload/${channelId}`, body);
+      }
+      if (result.status === 440) {
+        console.log(
+          `Channel ${channelId} still full after ${numTries} attempts. Giving up.`,
+        );
+      }
+    }
     ChannelAPI.throwOnError(result);
   }
 
