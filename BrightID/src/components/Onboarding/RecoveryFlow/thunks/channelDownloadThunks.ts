@@ -28,7 +28,11 @@ const downloadConnection = async ({
 }): Promise<SyncConnection> => {
   try {
     console.log(channelId, dataId);
-    const encrypted = await channelApi.download({ channelId, dataId });
+    const encrypted = await channelApi.download({
+      channelId,
+      dataId,
+      deleteAfterDownload: true,
+    });
     const connectionData = decryptData(encrypted, aesKey) as SyncConnection;
 
     // missing data
@@ -182,7 +186,11 @@ const downloadGroup = async ({
   channelId: string;
 }) => {
   try {
-    const encrypted = await channelApi.download({ channelId, dataId });
+    const encrypted = await channelApi.download({
+      channelId,
+      dataId,
+      deleteAfterDownload: true,
+    });
     const groupData = decryptData(encrypted, aesKey);
     // group data missing
     if (!groupData || !groupData?.id || !groupData?.aesKey) {

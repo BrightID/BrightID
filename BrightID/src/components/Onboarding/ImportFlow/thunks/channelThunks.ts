@@ -71,6 +71,7 @@ export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
     const dataString = await channelApi.download({
       channelId,
       dataId: `${IMPORT_PREFIX}data`,
+      deleteAfterDownload: true,
     });
     return JSON.parse(dataString) as SyncDeviceInfo;
   } catch (err) {

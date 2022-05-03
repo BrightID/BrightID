@@ -232,9 +232,6 @@ export const fetchChannelProfiles =
       case channel_types.STAR:
         if (channel.initiatorProfileId === channel.myProfileId) {
           // Channel creator: Load all profiles
-          console.log(
-            `STAR channel - Initiator (${channel.initiatorProfileId})`,
-          );
           for (const profileId of profileIds) {
             if (
               profileId !== channel.myProfileId &&
