@@ -24,6 +24,7 @@ type UploadParams = {
   data: any;
   dataId: string;
   retryWhenFull?: boolean;
+  requestedTtl?: number;
 };
 
 type DownloadParams = {
@@ -53,8 +54,8 @@ class ChannelAPI {
   }
 
   async upload(params: UploadParams) {
-    const { channelId, data, dataId, retryWhenFull } = params;
-    const body = JSON.stringify({ data, uuid: dataId });
+    const { channelId, data, dataId, retryWhenFull, requestedTtl } = params;
+    const body = JSON.stringify({ data, uuid: dataId, requestedTtl });
     let result = await this.api.post(`/upload/${channelId}`, body);
     let numTries = 1;
 

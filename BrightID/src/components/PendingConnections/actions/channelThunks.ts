@@ -55,6 +55,7 @@ export const createChannel =
         channelId: channel.id,
         data: channelInfo,
         dataId: CHANNEL_INFO_NAME,
+        requestedTtl: channel.ttl,
       });
 
       // upload my profile
