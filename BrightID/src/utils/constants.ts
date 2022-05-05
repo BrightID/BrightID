@@ -31,6 +31,7 @@ export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 export const PROFILE_VERSION = 1;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
+export const CONNECTION_STALE_AGE = 60 * 15 * 1000;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
@@ -44,6 +45,7 @@ export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
 export const IMPORT_PREFIX = 'sig_';
 export const CHANNEL_FULL_RETRY_COUNT = 5; // max number of upload retries when channel is full
 export const CHANNEL_FULL_RETRY_INTERVAL = 5000; // ms to wait between retries
+export const RECOVERY_CHANNEL_TTL = 60 * 60 * 24 * 1000; // 24 hours
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';

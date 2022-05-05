@@ -1,5 +1,6 @@
 import ChannelAPI from '@/api/channelService';
 import { hash } from '@/utils/encoding';
+import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 export const buildRecoveryChannelQrUrl = ({
   aesKey,
@@ -26,6 +27,7 @@ export const uploadRecoveryData = async (
     channelId,
     data,
     dataId: 'data',
+    requestedTtl: RECOVERY_CHANNEL_TTL,
   });
 };
 

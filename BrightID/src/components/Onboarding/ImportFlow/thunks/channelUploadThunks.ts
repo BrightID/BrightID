@@ -11,7 +11,7 @@ import {
   uploadContextInfo,
   uploadGroup,
 } from '@/utils/channels';
-import { IMPORT_PREFIX } from '@/utils/constants';
+import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 export const uploadAllInfoAfter = async (after) => {
   const {
@@ -132,5 +132,6 @@ export const uploadDeviceInfo = async () => {
     channelId,
     data,
     dataId: `${IMPORT_PREFIX}data`,
+    requestedTtl: RECOVERY_CHANNEL_TTL,
   });
 };
