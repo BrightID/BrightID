@@ -169,6 +169,12 @@ describe('Import BrightID', () => {
 
       // create channel instance to load import/recovery data
       const channelURL = new URL(qrUrl);
+      // Android emulator has well-known alias of 10.0.2.2 routing to localhost where emulator is running
+      if (channelURL.host === '10.0.2.2:3000') {
+        console.log(`Patching 10.0.2.2 to 127.0.0.1...`);
+        channelURL.host = '127.0.0.1:3000';
+        console.log(channelURL);
+      }
       // Pop 'type' parameter from url
       channelURL.searchParams.delete('t');
       // Pop 'aes' parameter from url
