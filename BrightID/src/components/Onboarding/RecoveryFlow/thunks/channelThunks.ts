@@ -8,10 +8,7 @@ import {
   downloadSigs,
   downloadNamePhoto,
 } from './channelDownloadThunks';
-import {
-  resetChannelExpiration,
-  setRecoveryChannel,
-} from '../recoveryDataSlice';
+import { setRecoveryChannel } from '../recoveryDataSlice';
 import { uploadRecoveryData } from '@/utils/recovery';
 
 // CONSTANTS
@@ -74,19 +71,10 @@ export const checkChannel =
       recoveryData: {
         id: recoveryId,
         name,
-        channel: { channelId, url, expires },
+        channel: { channelId, url },
       },
     } = getState();
-    const { recoveryData } = getState();
     const channelApi = new ChannelAPI(url.href);
-
-    // keep channel alive by re-uploading my data
-    const remainingTTL = expires - Date.now();
-    if (remainingTTL < RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD) {
-      await uploadRecoveryData(recoveryData, channelApi);
-      dispatch(resetChannelExpiration());
-    }
-
     const dataIds = await channelApi.list(channelId);
 
     if (recoveryId) {
