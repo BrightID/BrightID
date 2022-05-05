@@ -8,16 +8,12 @@ import {
   channel_types,
   selectAllChannels,
 } from '@/components/PendingConnections/channelSlice';
-import {
-  selectAllSocialMedia,
-  selectAllSocialMediaToShare,
-} from '@/reducer/socialMediaSlice';
+import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData, createChannelInfo } from '@/utils/channels';
 import {
   CHANNEL_CONNECTION_LIMIT,
-  CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
@@ -82,14 +78,6 @@ export const joinChannel =
     if (channelIds.includes(channel.id)) {
       console.log(`Channel ${channel.id} already joined`);
       return;
-    }
-
-    // limit too high channel Time-To-Live
-    if (channel.ttl > CHANNEL_TTL) {
-      console.log(
-        `WARNING - TTL ${channel.ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
-      );
-      channel.ttl = CHANNEL_TTL;
     }
 
     // calc remaining lifetime of channel
