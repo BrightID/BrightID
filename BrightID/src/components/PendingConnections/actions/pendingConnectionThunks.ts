@@ -14,11 +14,14 @@ import {
   selectPendingConnectionById,
   updatePendingConnection,
 } from '@/components/PendingConnections/pendingConnectionSlice';
-import { leaveChannel } from '@/components/PendingConnections/actions/channelThunks';
+import {
+  leaveChannel,
+  encryptAndUploadProfileToChannel,
+} from '@/components/PendingConnections/actions/channelThunks';
 import { NodeApi } from '@/api/brightId';
 
 export const confirmPendingConnectionThunk =
-  (id: string, level: ConnectionLevel, api: NodeApi) =>
+  (id: string, level: ConnectionLevel, api: NodeApi, reportReason?: string) =>
   async (dispatch: dispatch, getState: getState) => {
     const connection: PendingConnection = selectPendingConnectionById(
       getState(),
@@ -52,15 +55,14 @@ export const confirmPendingConnectionThunk =
       user: { id: brightId, backupCompleted },
     } = getState();
 
-    const connectionTimestamp = Date.now();
-    const reportReason = undefined;
-
+    const connectionTimestamp = sharedProfile.profileTimestamp;
     const op = await api.addConnection(
       brightId,
       sharedProfile.id,
       level,
       connectionTimestamp,
       reportReason,
+      sharedProfile.requestProof,
     );
     dispatch(addOperation(op));
 
@@ -73,6 +75,7 @@ export const confirmPendingConnectionThunk =
           level,
           connectionTimestamp,
           reportReason,
+          sharedProfile.requestProof,
           {
             id: sharedProfile.id,
             secretKey: sharedProfile.secretKey,
@@ -98,6 +101,7 @@ export const confirmPendingConnectionThunk =
       notificationToken: sharedProfile.notificationToken,
       secretKey: sharedProfile.secretKey,
       level,
+      reportReason,
       socialMedia: sharedProfile.socialMedia,
       verifications: profileInfo?.verifications || [],
     };
@@ -105,11 +109,23 @@ export const confirmPendingConnectionThunk =
     dispatch(addConnection(connectionData));
     dispatch(confirmPendingConnection(connection.profileId));
 
+    // upload profile to channel only after accepting the connection with creator
+    if (
+      connection.profileId == channel.initiatorProfileId &&
+      level != 'suspicious' &&
+      level != 'reported'
+    ) {
+      await dispatch(encryptAndUploadProfileToChannel(channel.id));
+    }
+
     // Leave channel if no additional connections are expected
     if (
       channel.type === channel_types.SINGLE ||
       (channel.type === channel_types.STAR &&
-        channel.initiatorProfileId !== channel.myProfileId)
+        channel.initiatorProfileId !== channel.myProfileId) ||
+      (channel.type === channel_types.GROUP &&
+        sharedProfile.id == channel.initiatorProfileId &&
+        (level == 'suspicious' || level == 'reported'))
     ) {
       dispatch(leaveChannel(channel.id));
     }

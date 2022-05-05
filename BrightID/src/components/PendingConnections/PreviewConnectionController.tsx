@@ -12,6 +12,7 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
+import { connection_levels, report_sources } from '@/utils/constants';
 
 type PreviewConnectionProps = {
   pendingConnectionId: string;
@@ -52,25 +53,24 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     });
   };
 
-  const abuseHandler = () => {
-    if (isReconnect) {
-      navigation.navigate('ReportReason', {
-        connectionId:
-          pendingConnection.pendingConnectionData.existingConnection.id,
-        reporting: true,
-        successCallback: () => {
-          // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
-          dispatch(
-            updatePendingConnection({
-              id: pendingConnection.profileId,
-              changes: {
-                state: pendingConnection_states.CONFIRMED,
-              },
-            }),
-          );
-        },
-      });
-    }
+  const abuseHandler = async () => {
+    const { sharedProfile } = pendingConnection.pendingConnectionData;
+    navigation.navigate('ReportReason', {
+      connectionId: sharedProfile.id,
+      connectionName: sharedProfile.name,
+      reporting: true,
+      source: isReconnect ? report_sources.RECONNECT : report_sources.PREVIEW,
+      successCallback: (reason) => {
+        dispatch(
+          confirmPendingConnectionThunk(
+            pendingConnection.profileId,
+            connection_levels.REPORTED,
+            api,
+            reason
+          ),
+        );
+      },
+    });
   };
 
   const photoTouchHandler = () => {
@@ -99,6 +99,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
           pendingConnection={pendingConnection}
           setLevelHandler={setLevelHandler}
           photoTouchHandler={photoTouchHandler}
+          abuseHandler={abuseHandler}
         />
       )}
     </View>

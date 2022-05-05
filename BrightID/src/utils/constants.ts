@@ -76,6 +76,7 @@ export const report_reasons = {
   DUPLICATE: 'duplicate',
   SPAMMER: 'spammer',
   DECEASED: 'deceased',
+  REPLACED: 'replaced',
   OTHER: 'other',
 };
 
@@ -84,6 +85,12 @@ export enum qrCodeURL_types {
   RECOVERY = '2', // qrcode url is for recovery channel
   IMPORT = '3', // qrcode url is for import channel
   SYNC = '4', // qrcode url is for syncing devices channel
+}
+
+export enum report_sources {
+  PREVIEW = 'preview',
+  RECONNECT = 'reconnect',
+  PROFILE = 'profile',
 }
 
 export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;

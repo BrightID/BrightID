@@ -13,9 +13,13 @@ import { RatingButton } from './RatingButton';
 
 type RatingViewProps = {
   setLevelHandler: (level: ConnectionLevel) => any;
+  abuseHandler: () => any;
 };
 
-export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
+export const RatingView = ({
+  setLevelHandler,
+  abuseHandler,
+}: RatingViewProps) => {
   const { t } = useTranslation();
   return (
     <View style={styles.container}>
@@ -26,7 +30,7 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
         <RatingButton
           color={connectionLevelColors[connection_levels.SUSPICIOUS]}
           label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
-          handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
+          handleClick={() => abuseHandler()}
           testID={`${connection_levels.SUSPICIOUS}Btn`}
         />
         <RatingButton

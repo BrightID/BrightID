@@ -102,6 +102,7 @@ export class NodeApi {
     level: string,
     timestamp: number,
     reportReason?: string,
+    requestProof?: string,
     fakeUser?: FakeUser,
   ) {
     this.requiresCredentials();
@@ -120,6 +121,9 @@ export class NodeApi {
 
     if (reportReason) {
       op.reportReason = reportReason;
+    }
+    if (requestProof) {
+      op.requestProof = requestProof;
     }
 
     const message = stringify(op);
