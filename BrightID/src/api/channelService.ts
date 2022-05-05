@@ -24,6 +24,8 @@ type UploadParams = {
   data: any;
   dataId: string;
   retryWhenFull?: boolean;
+  // Use requestedTtl to override default channel TTL on the backend. Only taken into account when
+  // creating a channel (upload of first entry).
   requestedTtl?: number;
 };
 
@@ -55,7 +57,17 @@ class ChannelAPI {
 
   async upload(params: UploadParams) {
     const { channelId, data, dataId, retryWhenFull, requestedTtl } = params;
-    const body = JSON.stringify({ data, uuid: dataId, requestedTtl });
+
+    // convert TTL from ms to seconds
+    const requestedTtlSecs = requestedTtl
+      ? Math.floor(requestedTtl / 1000)
+      : undefined;
+
+    const body = JSON.stringify({
+      data,
+      uuid: dataId,
+      requestedTtl: requestedTtlSecs,
+    });
     let result = await this.api.post(`/upload/${channelId}`, body);
     let numTries = 1;
 
