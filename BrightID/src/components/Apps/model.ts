@@ -1,30 +1,25 @@
 import { Alert } from 'react-native';
-import { propEq, find } from 'ramda';
+import { find, propEq } from 'ramda';
 import i18next from 'i18next';
 import { create } from 'apisauce';
-import _ from 'lodash';
 import {
   addLinkedContext,
   addOperation,
-  updateSig,
-  updateBlindSig,
-  setIsSponsoredv6,
   selectIsPrimaryDevice,
+  setIsSponsoredv6,
+  updateBlindSig,
+  updateSig,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
-
-export enum BrightIdNetwork {
-  TEST = 'test',
-  NODE = 'node',
-}
 
 export const getSignedTimestamp = (app: AppInfo) => {
   const sigs = selectAllSigs(store.getState());

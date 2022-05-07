@@ -3,11 +3,7 @@ import socialMediaService, {
   SOCIAL_API_AUTHENTICATION_ERROR,
   socialMediaUrl,
 } from '@/api/socialMediaService';
-import {
-  BrightIdNetwork,
-  getSignedTimestamp,
-  linkAppId,
-} from '@/components/Apps/model';
+import { getSignedTimestamp, linkAppId } from '@/components/Apps/model';
 import store, { useSelector } from '@/store';
 import { selectAllApps } from '@/reducer/appsSlice';
 import {
@@ -25,6 +21,7 @@ import {
   selectSyncSocialMediaEnabled,
   setSyncSocialMediaEnabled,
 } from '@/reducer/settingsSlice';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 export async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;
