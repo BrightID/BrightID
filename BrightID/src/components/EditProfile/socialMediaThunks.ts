@@ -26,18 +26,16 @@ import {
   setSyncSocialMediaEnabled,
 } from '@/reducer/settingsSlice';
 
-async function linkSocialMediaApp(appId: string, appUserId: string) {
+export async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;
   const apps = selectAllApps(store.getState());
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-  console.log(appInfo.callbackUrl);
   if (appInfo && appInfo.usingBlindSig) {
     const signedTimestamp = getSignedTimestamp(appInfo);
     if (
       signedTimestamp &&
       Date.now() - signedTimestamp > SOCIAL_MEDIA_SIG_WAIT_TIME
     ) {
-      console.log(`linking ${appInfo.name}`);
       try {
         linked = await linkAppId(appId, appUserId, true);
       } catch (e) {
@@ -48,7 +46,7 @@ async function linkSocialMediaApp(appId: string, appUserId: string) {
   return linked;
 }
 
-async function syncSocialMedia(
+export async function syncSocialMedia(
   token: string,
   incomingSocialMedia: SocialMedia,
   socialMediaVariation: SocialMediaVariation,
