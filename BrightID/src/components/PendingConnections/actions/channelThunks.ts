@@ -92,6 +92,19 @@ export const joinChannel =
         throw new Error('Channel expired');
       }
 
+      // don't join channel if it already has maximum allowed number of entries.
+      // Note that this is a client-side limitation in order to keep the UI usable.
+      const entries = await channel.api.list(channel.id);
+      // channel.api.list() will include the channelInfo.json file.
+      // Remove it from list as I don't want to download and interpret it as a profile.
+      const channelInfoIndex = entries.indexOf(CHANNEL_INFO_NAME);
+      if (channelInfoIndex > -1) {
+        entries.splice(channelInfoIndex, 1);
+      }
+      if (entries.length >= CHANNEL_CONNECTION_LIMIT) {
+        throw new Error(`Channel is full`);
+      }
+
       // Start timer to expire channel
       channel.timeoutId = setTimeout(() => {
         console.log(`timer expired for channel ${channel.id}`);
@@ -100,7 +113,7 @@ export const joinChannel =
 
       // add channel to store
       // we need channel to exist prior to uploadingProfileToChannel
-      await dispatch(addChannel(channel));
+      dispatch(addChannel(channel));
 
       // upload my profile to channel
       await dispatch(encryptAndUploadProfileToChannel(channel.id));
