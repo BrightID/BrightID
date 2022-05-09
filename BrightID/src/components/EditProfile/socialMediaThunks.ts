@@ -49,7 +49,7 @@ export async function syncSocialMedia(
   socialMediaVariation: SocialMediaVariation,
 ) {
   let synced = false;
-  let appUserId = incomingSocialMedia.brightIdSocialAppData?.appUserId;
+  let appUserId = incomingSocialMedia.brightIdSocialAppData?.appUserId || null;
   const profileHashes = generateSocialProfileHashes(
     incomingSocialMedia.profile,
     socialMediaVariation.id,
@@ -198,7 +198,6 @@ export const removeAllSocialMedias =
             synced: false,
           },
         };
-        console.log(newSocialMedia.brightIdSocialAppData.synced);
         dispatch(saveSocialMedia(newSocialMedia));
       }
     }

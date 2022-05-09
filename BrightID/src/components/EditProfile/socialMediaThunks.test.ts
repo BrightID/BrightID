@@ -1,17 +1,22 @@
 import {
   linkSocialMediaApp,
+  saveAndLinkSocialMedia,
   syncSocialMedia,
 } from '@/components/EditProfile/socialMediaThunks';
 import socialMediaService, {
   SOCIAL_API_AUTHENTICATION_ERROR,
 } from '@/api/socialMediaService';
 import * as AppModule from '@/components/Apps/model';
+import * as SocialMediaSlice from '@/reducer/socialMediaSlice';
+import * as SocialMediaVariationSlice from '@/reducer/socialMediaVariationSlice';
+import * as SettingsSlice from '@/reducer/settingsSlice';
 import {
   SocialMediaVariationIds,
   socialMediaVariations,
 } from '@/components/EditProfile/socialMediaVariations';
 import { CreateSocialMediaResponse } from '@/api/socialMediaService_types.d';
 import { BrightIdNetwork } from '@/components/Apps/types.d';
+import { saveSocialMedia } from '@/reducer/socialMediaSlice';
 
 const mockApp: AppInfo = {
   id: 'phoneRegistry',
@@ -53,6 +58,16 @@ const profileHashes = [
 const appUserId = 'db84185b-a204-424a-a58c-1424fec1bec3';
 const apiToken = 'SAMPLE_TOKEN';
 
+const socialMediaLinkedNotSynced: SocialMedia = {
+  ...socialMediaNotSyncedNotLinked,
+  brightIdSocialAppData: {
+    synced: false,
+    linked: true,
+    appUserId: null,
+    token: null,
+  },
+};
+
 const socialMediaSyncedNotLinked: SocialMedia = {
   ...socialMediaNotSyncedNotLinked,
   brightIdSocialAppData: {
@@ -60,6 +75,14 @@ const socialMediaSyncedNotLinked: SocialMedia = {
     linked: false,
     appUserId,
     token: apiToken,
+  },
+};
+
+const socialMediaSyncedAndLinked: SocialMedia = {
+  ...socialMediaSyncedNotLinked,
+  brightIdSocialAppData: {
+    ...socialMediaSyncedNotLinked.brightIdSocialAppData,
+    linked: true,
   },
 };
 
@@ -119,6 +142,37 @@ describe('linkSocialMediaApp', () => {
   });
 });
 
+const createSocialMediaResponse: CreateSocialMediaResponse = {
+  appUserId,
+  token: apiToken,
+  network: BrightIdNetwork.TEST,
+  variation: socialMediaVariation.id,
+};
+
+function mockCreateSocialMediaSuccess() {
+  return jest
+    .spyOn(socialMediaService, 'createSocialMedia')
+    .mockReturnValue(Promise.resolve(createSocialMediaResponse));
+}
+
+function mockCreateSocialMediaFailure() {
+  return jest
+    .spyOn(socialMediaService, 'createSocialMedia')
+    .mockReturnValue(Promise.reject(new Error('Sample Error')));
+}
+
+function mockUpdateSocialMediaSuccess() {
+  return jest
+    .spyOn(socialMediaService, 'updateSocialMedia')
+    .mockReturnValue(Promise.resolve());
+}
+
+function mockUpdateSocialMediaFailure() {
+  return jest
+    .spyOn(socialMediaService, 'updateSocialMedia')
+    .mockReturnValue(Promise.reject(new Error('Sample Error')));
+}
+
 describe('syncSocialMedia', () => {
   beforeAll(() => {
     mockRightLinkingTime();
@@ -128,27 +182,14 @@ describe('syncSocialMedia', () => {
     jest.clearAllMocks();
   });
 
-  const createSocialMediaResponse: CreateSocialMediaResponse = {
-    appUserId,
-    token: apiToken,
-    network: BrightIdNetwork.TEST,
-    variation: socialMediaVariation.id,
-  };
-
   const returnData = {
     token: apiToken,
     synced: true,
     appUserId,
   };
 
-  function makeCreateSocialMediaSpy() {
-    return jest
-      .spyOn(socialMediaService, 'createSocialMedia')
-      .mockReturnValue(Promise.resolve(createSocialMediaResponse));
-  }
-
   it('sends create social media request', async () => {
-    const spy = makeCreateSocialMediaSpy();
+    const spy = mockCreateSocialMediaSuccess();
 
     const ret = await syncSocialMedia(
       '',
@@ -164,9 +205,7 @@ describe('syncSocialMedia', () => {
   });
 
   it('sends update social media request', async () => {
-    const spy = jest
-      .spyOn(socialMediaService, 'updateSocialMedia')
-      .mockReturnValue(Promise.resolve());
+    const spy = mockUpdateSocialMediaSuccess();
 
     const ret = await syncSocialMedia(
       apiToken,
@@ -178,7 +217,7 @@ describe('syncSocialMedia', () => {
   });
 
   it('sends create social media request if update token is invalid', async () => {
-    const spy = makeCreateSocialMediaSpy();
+    const spy = mockCreateSocialMediaSuccess();
     jest
       .spyOn(socialMediaService, 'updateSocialMedia')
       .mockReturnValue(
@@ -192,5 +231,162 @@ describe('syncSocialMedia', () => {
     );
     expect(ret).toEqual(returnData);
     expect(spy).toHaveBeenCalled();
+  });
+});
+
+function mockSyncSocialMediaTrue() {
+  return jest
+    .spyOn(SettingsSlice, 'selectSyncSocialMediaEnabled')
+    .mockReturnValue(true);
+}
+
+function mockSyncSocialMediaFalse() {
+  return jest
+    .spyOn(SettingsSlice, 'selectSyncSocialMediaEnabled')
+    .mockReturnValue(false);
+}
+
+function mockSelectSocialMediaVariation() {
+  jest
+    .spyOn(SocialMediaVariationSlice, 'selectSocialMediaVariationById')
+    .mockReturnValue(socialMediaVariation);
+}
+
+describe('saveAndLinkSocialMedia', () => {
+  beforeAll(() => {
+    mockSelectSocialMediaVariation();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('creates and saves and links social media', async () => {
+    mockRightLinkingTime();
+    mockCreateSocialMediaSuccess();
+    jest.spyOn(SocialMediaSlice, 'selectSocialMediaById').mockReturnValue(null);
+    mockSyncSocialMediaTrue();
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const ret = await saveAndLinkSocialMedia(socialMediaNotSyncedNotLinked)(
+      dispatch,
+      getState,
+    );
+    expect(ret).toEqual(socialMediaSyncedAndLinked);
+    expect(dispatch).toHaveBeenCalledTimes(2);
+  });
+
+  it('updates and saves and links social media', async () => {
+    mockSyncSocialMediaTrue();
+    mockRightLinkingTime();
+    mockUpdateSocialMediaSuccess();
+    jest
+      .spyOn(SocialMediaSlice, 'selectSocialMediaById')
+      .mockReturnValue(socialMediaNotSyncedNotLinked);
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const newSocialMedia = {
+      ...socialMediaSyncedAndLinked,
+      profile: '+98991111111',
+    };
+    const ret = await saveAndLinkSocialMedia(newSocialMedia)(
+      dispatch,
+      getState,
+    );
+    expect(ret).toEqual(newSocialMedia);
+    expect(dispatch).toHaveBeenCalledTimes(2);
+  });
+
+  it('updates social media even if syncing is not available', async () => {
+    mockSyncSocialMediaTrue();
+    mockRightLinkingTime();
+    mockUpdateSocialMediaFailure();
+    const prevProfile = socialMediaSyncedAndLinked;
+    jest
+      .spyOn(SocialMediaSlice, 'selectSocialMediaById')
+      .mockReturnValue(prevProfile);
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const newSocialMedia = {
+      ...prevProfile,
+      profile: '+98991111111',
+    };
+    const ret = await saveAndLinkSocialMedia(newSocialMedia)(
+      dispatch,
+      getState,
+    );
+    expect(ret).toEqual({
+      ...newSocialMedia,
+      brightIdSocialAppData: {
+        ...newSocialMedia.brightIdSocialAppData,
+        synced: false,
+      },
+    });
+    expect(dispatch).toHaveBeenCalledTimes(2);
+  });
+
+  it('creates and syncs social media even if linking is not available', async () => {
+    mockSyncSocialMediaTrue();
+    mockWrongLinkingTime();
+    mockCreateSocialMediaSuccess();
+    jest.spyOn(SocialMediaSlice, 'selectSocialMediaById').mockReturnValue(null);
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const newSocialMedia = socialMediaNotSyncedNotLinked;
+    const ret = await saveAndLinkSocialMedia(newSocialMedia)(
+      dispatch,
+      getState,
+    );
+    expect(ret).toEqual(socialMediaSyncedNotLinked);
+    expect(dispatch).toHaveBeenCalledTimes(2);
+  });
+
+  it('creates social media even if syncing and linking is not available', async () => {
+    mockSyncSocialMediaTrue();
+    mockWrongLinkingTime();
+    mockCreateSocialMediaFailure();
+    jest.spyOn(SocialMediaSlice, 'selectSocialMediaById').mockReturnValue(null);
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const ret = await saveAndLinkSocialMedia(socialMediaNotSyncedNotLinked)(
+      dispatch,
+      getState,
+    );
+    const newSocialMedia = {
+      ...socialMediaNotSyncedNotLinked,
+      brightIdSocialAppData: {
+        appUserId: null,
+        linked: false,
+        synced: false,
+        token: null,
+      },
+    };
+    expect(ret).toEqual(newSocialMedia);
+    expect(dispatch).toHaveBeenNthCalledWith(
+      1,
+      saveSocialMedia(socialMediaNotSyncedNotLinked),
+    );
+    expect(dispatch).toHaveBeenNthCalledWith(
+      2,
+      saveSocialMedia(newSocialMedia),
+    );
+  });
+
+  it('does not sync or link when it is disabled', async () => {
+    mockSyncSocialMediaFalse();
+    mockRightLinkingTime();
+    mockCreateSocialMediaSuccess();
+    jest.spyOn(SocialMediaSlice, 'selectSocialMediaById').mockReturnValue(null);
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const ret = await saveAndLinkSocialMedia(socialMediaNotSyncedNotLinked)(
+      dispatch,
+      getState,
+    );
+    expect(ret).toEqual(socialMediaNotSyncedNotLinked);
+    expect(dispatch).toHaveBeenNthCalledWith(
+      1,
+      saveSocialMedia(socialMediaNotSyncedNotLinked),
+    );
+    expect(dispatch).toHaveBeenCalledTimes(1);
   });
 });
