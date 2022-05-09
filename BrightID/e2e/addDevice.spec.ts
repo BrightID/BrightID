@@ -29,6 +29,7 @@ import { NodeApi } from '@/api/brightId';
 
 describe('Add Device', () => {
   const profileServerUrl = 'http://test.brightid.org/profile';
+  // const profileServerUrl = 'http://127.0.0.1:3000';
   const apiUrl = 'http://test.brightid.org';
   let channelApi: ChannelAPI;
   let recoveryData: {

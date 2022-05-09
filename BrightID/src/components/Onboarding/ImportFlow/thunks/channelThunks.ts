@@ -35,6 +35,8 @@ export const createSyncChannel =
     } = getState();
     const baseUrl = selectBaseUrl(getState());
     const url = new URL(`${baseUrl}/profile`);
+    // use this for local running profile service
+    // const url = new URL(`http://10.0.2.2:3000/`);
     const channelId = hash(aesKey);
     console.log(`created channel ${channelId} for sync data`);
     dispatch(setRecoveryChannel({ channelId, url }));

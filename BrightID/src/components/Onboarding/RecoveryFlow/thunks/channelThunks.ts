@@ -22,6 +22,8 @@ export const createChannel =
       const { recoveryData } = getState();
       const baseUrl = selectBaseUrl(getState());
       const url = new URL(`${baseUrl}/profile`);
+      // use this for local running profile service
+      // const url = new URL(`http://10.0.2.2:3000/`);
       const channelApi = new ChannelAPI(url.href);
       const channelId = hash(recoveryData.aesKey);
       console.log(`created channel ${channelId} for recovery data`);
