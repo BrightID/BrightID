@@ -184,7 +184,7 @@ export const syncAndLinkSocialMedias =
     });
   };
 
-export const removeAllSocialMedias =
+export const removeAllSocialMediasFromServer =
   () => async (dispatch: dispatch, getState: getState) => {
     const socialMedias = selectAllSocialMedia(getState());
     for (let i = 0; i < socialMedias.length; i++) {
@@ -212,7 +212,7 @@ export const setSyncSocialMediaEnabledThunk =
       if (value) {
         await dispatch(syncAndLinkSocialMedias());
       } else {
-        await dispatch(removeAllSocialMedias());
+        await dispatch(removeAllSocialMediasFromServer());
       }
     } catch (e) {
       // rollback
