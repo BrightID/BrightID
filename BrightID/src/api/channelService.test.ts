@@ -5,7 +5,7 @@ const generateRandomString = function (length = 6) {
 };
 
 // increase test timeout (default is 5 seconds, which sometimes fails when running in CI env)
-jest.setTimeout(60000);
+jest.setTimeout(90000);
 
 describe('ChannelAPI', () => {
   let channelApi: ChannelAPI;
@@ -77,18 +77,6 @@ describe('ChannelAPI', () => {
       expect(error.message).toEqual('Channel full');
     });
 
-    test('upload should fail after retrying', async () => {
-      const upload = async () => {
-        await channelApi.upload({
-          channelId: sharedChannelId,
-          dataId: `extraData`,
-          data: myData,
-          retryWhenFull: true,
-        });
-      };
-      await expect(upload()).rejects.toThrow('Channel full');
-    });
-
     test('upload should succeed when deleting an item before', async () => {
       // download and delete one item from channel
       const data = await channelApi.download({
@@ -103,7 +91,6 @@ describe('ChannelAPI', () => {
           channelId: sharedChannelId,
           dataId: `extraData`,
           data: myData,
-          retryWhenFull: true,
         }),
       ).resolves.toBeUndefined();
     });
