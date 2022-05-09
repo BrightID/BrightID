@@ -1,6 +1,5 @@
 import { hash } from '@/utils/encoding';
 import ChannelAPI from '@/api/channelService';
-import { RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD } from '@/utils/constants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import {
   downloadConnections,
