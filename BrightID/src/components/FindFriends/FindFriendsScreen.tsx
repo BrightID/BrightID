@@ -78,9 +78,10 @@ export const FindFriendsScreen = function () {
   const phoneNumberSocialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, SocialMediaVariationIds.PHONE_NUMBER),
   );
-  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>(null);
-  const [apiError, setApiError] = useState<string>(null);
-  const [friends, setFriends] = useState<FriendProfile[]>(null);
+  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [friends, setFriends] = useState<FriendProfile[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getContacts = useCallback(async () => {
     let _friendsRaw: FriendProfile[] = [];
@@ -126,9 +127,10 @@ export const FindFriendsScreen = function () {
   }, [getContacts]);
 
   const fetchFriends = useCallback(async () => {
-    if (!friendsRaw) {
+    if (!friendsRaw.length) {
       return;
     }
+    setLoading(true);
     setApiError(null);
     const _profileHashes = friendsRaw.map(
       (friendProfile) => friendProfile.profileHash,
@@ -148,7 +150,10 @@ export const FindFriendsScreen = function () {
       } catch (_e) {
         setApiError(t('common.text.noConnection'));
       }
+    } else {
+      setFriends([]);
     }
+    setLoading(false);
   }, [friendsRaw, t]);
 
   useEffect(() => {
@@ -270,7 +275,7 @@ export const FindFriendsScreen = function () {
       ]}
       testID="tasksScreen"
     >
-      {friends ? renderFriendsList() : renderStatus()}
+      {loading || apiError ? renderStatus() : renderFriendsList()}
     </View>
   );
 };
