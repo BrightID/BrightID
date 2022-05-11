@@ -3,9 +3,7 @@ import {
   saveAndLinkSocialMedia,
   syncSocialMedia,
 } from '@/components/EditProfile/socialMediaThunks';
-import socialMediaService, {
-  SOCIAL_API_AUTHENTICATION_ERROR,
-} from '@/api/socialMediaService';
+import { SOCIAL_API_AUTHENTICATION_ERROR } from '@/api/socialMediaService';
 import * as AppModule from '@/components/Apps/model';
 import * as SocialMediaSlice from '@/reducer/socialMediaSlice';
 import * as SocialMediaVariationSlice from '@/reducer/socialMediaVariationSlice';
@@ -17,6 +15,7 @@ import {
 import { CreateSocialMediaResponse } from '@/api/socialMediaService_types.d';
 import { BrightIdNetwork } from '@/components/Apps/types.d';
 import { saveSocialMedia } from '@/reducer/socialMediaSlice';
+import socialMediaService from '../../utils/socialMediaServiceProvider';
 
 const mockApp: AppInfo = {
   id: 'phoneRegistry',

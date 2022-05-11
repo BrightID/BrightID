@@ -6,7 +6,6 @@ import {
 } from '@reduxjs/toolkit';
 
 import { original, Draft } from 'immer';
-import socialMediaService from '@/api/socialMediaService';
 
 const socialMediaAdapter = createEntityAdapter<SocialMedia>({
   sortComparer: (a, b) => a.order - b.order,

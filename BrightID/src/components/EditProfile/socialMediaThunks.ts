@@ -1,10 +1,7 @@
 import { find, propEq } from 'ramda';
-import socialMediaService, {
-  SOCIAL_API_AUTHENTICATION_ERROR,
-  socialMediaUrl,
-} from '@/api/socialMediaService';
+import { SOCIAL_API_AUTHENTICATION_ERROR } from '@/api/socialMediaService';
 import { getSignedTimestamp, linkAppId } from '@/components/Apps/model';
-import store, { useSelector } from '@/store';
+import store from '@/store';
 import { selectAllApps } from '@/reducer/appsSlice';
 import {
   saveSocialMedia,
@@ -22,6 +19,7 @@ import {
   setSyncSocialMediaEnabled,
 } from '@/reducer/settingsSlice';
 import { BrightIdNetwork } from '@/components/Apps/types.d';
+import socialMediaService from '@/utils/socialMediaServiceProvider';
 
 export async function linkSocialMediaApp(appId: string, appUserId: string) {
   let linked = false;

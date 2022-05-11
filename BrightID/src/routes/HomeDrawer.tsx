@@ -278,33 +278,30 @@ const CustomDrawerContent = (props) => {
           });
         }}
       />
-
-      {__DEV__ && (
-        <CustomItem
-          focused={false}
-          testId="findFriendsBtn"
-          inactiveTintColor={BLACK}
-          inactiveBackgroundColor={WHITE}
-          activeTintColor={WHITE}
-          activeBackgroundColor={ORANGE}
-          label={t('drawer.label.findFriends')}
-          // style={styles.drawerItem}
-          // labelStyle={styles.labelStyle}
-          icon={() => (
-            <SvgXml
-              xml={FindFriendsIcon}
-              width={DEVICE_LARGE ? 28 : 24}
-              height={DEVICE_LARGE ? 28 : 24}
-            />
-          )}
-          onPress={() => {
-            navigation.reset({
-              index: 1,
-              routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
-            });
-          }}
-        />
-      )}
+      <CustomItem
+        focused={false}
+        testId="findFriendsBtn"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.findFriends')}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={() => (
+          <SvgXml
+            xml={FindFriendsIcon}
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
+          });
+        }}
+      />
 
       <CustomItem
         focused={false}

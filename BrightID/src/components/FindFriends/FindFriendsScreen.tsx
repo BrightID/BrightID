@@ -16,11 +16,10 @@ import {
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
-import Contacts from 'react-native-contacts';
+import Contacts from '@/utils/ContactsProvider';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
-import socialMediaService from '@/api/socialMediaService';
 import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
@@ -28,6 +27,7 @@ import { extractDigits } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { BrightIdNetwork } from '@/components/Apps/types.d';
+import socialMediaService from '@/utils/socialMediaServiceProvider';
 
 const FlatListItemSeparator = () => {
   return (
@@ -192,7 +192,10 @@ export const FindFriendsScreen = function () {
 
   const renderItem = ({ item }: { item: FriendProfile }) => {
     return (
-      <View style={styles.contactCon}>
+      <View
+        style={styles.contactCon}
+        testID={`${item.name}-${item.variation.name}`}
+      >
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
             <Text style={styles.txt}>{item.name ? item.name[0] : ''}</Text>
@@ -205,7 +208,7 @@ export const FindFriendsScreen = function () {
           <Text style={styles.profile} numberOfLines={1}>
             {item.variation.name}
           </Text>
-          <Text style={styles.profile} numberOfLines={1}>
+          <Text style={styles.profile} numberOfLines={1} testID={item.profile}>
             {item.profile}
           </Text>
         </View>
@@ -273,7 +276,7 @@ export const FindFriendsScreen = function () {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="tasksScreen"
+      testID="findFriendsScreen"
     >
       {loading || apiError ? renderStatus() : renderFriendsList()}
     </View>
