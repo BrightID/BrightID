@@ -220,7 +220,7 @@ declare global {
     shareActionType: SocialMediaShareActionType;
     shareActionDataFormat: string;
     icon: any;
-    brightIdAppName: string;
+    brightIdAppId: string;
   };
 
   type SocialMediaVariationState = EntityState<SocialMediaVariation>;
@@ -237,7 +237,7 @@ declare global {
 
   type BrightIdSocialAppData = {
     linked: boolean;
-    contextId: string;
+    appUserId: string;
     token: string;
     synced: boolean;
   };

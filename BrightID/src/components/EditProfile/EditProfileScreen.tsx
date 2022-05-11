@@ -6,15 +6,16 @@ import React, {
   useState,
 } from 'react';
 import {
+  Alert,
   Image,
+  LayoutChangeEvent,
+  ScrollView,
+  StyleSheet,
+  Switch,
   Text,
   TextInput,
-  StyleSheet,
-  ScrollView,
-  View,
   TouchableOpacity,
-  Alert,
-  LayoutChangeEvent,
+  View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -24,24 +25,30 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store';
-import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
+import { DEVICE_IOS, DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
-  DARK_ORANGE,
-  LIGHT_GREY,
-  DARKER_GREY,
-  WHITE,
   BLACK,
-  GREEN,
-  DARK_BLUE,
   BLUE,
+  DARK_BLUE,
+  DARK_ORANGE,
+  DARKER_GREY,
+  GREEN,
+  GREY,
+  LIGHT_GREY,
+  ORANGE,
+  WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { chooseImage, takePhoto } from '@/utils/images';
-import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
-import { setPhoto, setName } from '@/actions';
+import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
+import {
+  selectSyncSocialMediaEnabled,
+  setName,
+  setPhoto,
+  setSyncSocialMediaEnabled,
+} from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
-  selectAllSocialMedia,
   selectExistingSocialMedia,
   setProfileDisplayWidth,
 } from '../../reducer/socialMediaSlice';
@@ -50,7 +57,10 @@ import {
   selectSocialMediaVariationById,
 } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
-import { removeSocialMediaThunk } from '@/components/EditProfile/socialMediaThunks';
+import {
+  removeSocialMediaThunk,
+  setSyncSocialMediaEnabledThunk,
+} from '@/components/EditProfile/socialMediaThunks';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -325,8 +335,6 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
       </View>
 
       {SocialMediaVariations}
-
-      <View style={styles.bottomDivider} />
     </View>
   );
 };
@@ -354,9 +362,7 @@ const ShowEditPassword = () => {
         {t('profile.text.backupPasswordTitle', 'Backup password')}
       </Text>
       <View style={styles.passwordInfoContainer}>
-        <Text style={styles.passwordInfoText}>
-          {t('signup.text.passwordInfo')}
-        </Text>
+        <Text style={styles.infoText}>{t('signup.text.passwordInfo')}</Text>
       </View>
       {password ? (
         <>
@@ -402,6 +408,34 @@ const ShowEditPassword = () => {
     </View>
   );
 };
+
+function SyncSocialMedia() {
+  const dispatch = useDispatch();
+  const syncSocialMediaEnabled = useSelector(selectSyncSocialMediaEnabled);
+  return (
+    <>
+      <View style={styles.syncSocialMediaSwitchContainer}>
+        <Text style={styles.label}>Sync </Text>
+        <Switch
+          style={styles.syncSocialMediaSwitch}
+          trackColor={{ false: GREY, true: DARK_ORANGE }}
+          thumbColor="#ffffff"
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={(value) => {
+            dispatch(setSyncSocialMediaEnabledThunk(value));
+          }}
+          value={syncSocialMediaEnabled}
+        />
+      </View>
+      <Text style={styles.infoText}>
+        Do you want to allow people who have your contact info and social media
+        links to know that you're a BrightID user so they can connect to you on
+        BrightID? This does not reveal your information to people who don't
+        already have it.
+      </Text>
+    </>
+  );
+}
 
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -512,8 +546,12 @@ export const EditProfileScreen = ({ navigation }) => {
           setProfilePhoto={setProfilePhoto}
         />
         <EditName nextName={nextName} setNextName={setNextName} />
+
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
+        <SyncSocialMedia />
+        <View style={styles.bottomDivider} />
+
         <ShowEditPassword />
         <View style={styles.saveContainer}>
           <TouchableOpacity
@@ -554,7 +592,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
-    paddingHorizontal: DEVICE_LARGE ? 40 : 30,
   },
   shadow: {
     shadowColor: 'rgba(196, 196, 196, 0.25)',
@@ -567,7 +604,7 @@ const styles = StyleSheet.create({
     },
   },
   contentContainer: {
-    flex: 1,
+    paddingHorizontal: DEVICE_LARGE ? 40 : 30,
     width: '100%',
   },
   profilePhotoContainer: {
@@ -606,6 +643,15 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
     color: BLACK,
+  },
+  syncSocialMediaSwitchContainer: {
+    alignItems: 'center',
+    paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  syncSocialMediaSwitch: {
+    flex: 1,
   },
   bottomDivider: {
     width: '100%',
@@ -684,7 +730,7 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   passwordInfoContainer: {},
-  passwordInfoText: {
+  infoText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[11],
     color: DARKER_GREY,

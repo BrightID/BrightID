@@ -13,7 +13,6 @@ import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
-import { parseLinkAppParams } from '@/utils/deeplink';
 
 /**
  * Central part of the application
@@ -40,28 +39,6 @@ export const App = () => {
           },
         },
       },
-    },
-    getStateFromPath: (path: string, options) => {
-      // handle link-app paths
-      const linkAppParams = parseLinkAppParams(path);
-      if (linkAppParams) {
-        return {
-          routes: [
-            {
-              name: 'App',
-              state: {
-                routes: [
-                  {
-                    name: 'Apps',
-                    params: linkAppParams,
-                  },
-                ],
-              },
-            },
-          ],
-        };
-      }
-      return getStateFromPath(path, options);
     },
     // Add custom subscribe method to prevent crashes when url is undefined
     subscribe(listener) {

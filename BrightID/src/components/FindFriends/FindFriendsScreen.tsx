@@ -21,13 +21,13 @@ import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
 import socialMediaService from '@/api/socialMediaService';
-import { BrightIdNetwork } from '@/components/Apps/model';
 import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 import { extractDigits } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 const FlatListItemSeparator = () => {
   return (
@@ -78,9 +78,10 @@ export const FindFriendsScreen = function () {
   const phoneNumberSocialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, SocialMediaVariationIds.PHONE_NUMBER),
   );
-  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>(null);
-  const [apiError, setApiError] = useState<string>(null);
-  const [friends, setFriends] = useState<FriendProfile[]>(null);
+  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [friends, setFriends] = useState<FriendProfile[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getContacts = useCallback(async () => {
     let _friendsRaw: FriendProfile[] = [];
@@ -126,9 +127,10 @@ export const FindFriendsScreen = function () {
   }, [getContacts]);
 
   const fetchFriends = useCallback(async () => {
-    if (!friendsRaw) {
+    if (!friendsRaw.length) {
       return;
     }
+    setLoading(true);
     setApiError(null);
     const _profileHashes = friendsRaw.map(
       (friendProfile) => friendProfile.profileHash,
@@ -148,7 +150,10 @@ export const FindFriendsScreen = function () {
       } catch (_e) {
         setApiError(t('common.text.noConnection'));
       }
+    } else {
+      setFriends([]);
     }
+    setLoading(false);
   }, [friendsRaw, t]);
 
   useEffect(() => {
@@ -270,7 +275,7 @@ export const FindFriendsScreen = function () {
       ]}
       testID="tasksScreen"
     >
-      {friends ? renderFriendsList() : renderStatus()}
+      {loading || apiError ? renderStatus() : renderFriendsList()}
     </View>
   );
 };

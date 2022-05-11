@@ -17,7 +17,7 @@ import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import backupApi from '@/api/backupService';
 import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
-import { BrightIdNetwork } from '@/components/Apps/model';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
