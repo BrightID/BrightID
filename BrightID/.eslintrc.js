@@ -20,6 +20,9 @@ module.exports = {
         map: [['@', './src']],
         extensions: ['.ts', '.tsx', '.js', '.json'],
       },
+      typescript: {
+        project: 'tsconfig.json',
+      },
     },
   },
   overrides: [
