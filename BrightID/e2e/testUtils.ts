@@ -211,6 +211,12 @@ const expectGroupsScreen = async () => {
     .withTimeout(20000);
 };
 
+const expectFindFriendsScreen = async () => {
+  await waitFor(element(by.id('findFriendsScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
+};
+
 const expectAppsScreen = async (bool = true) => {
   bool
     ? await waitFor(element(by.id('appsScreen')))
@@ -441,6 +447,7 @@ export {
   expectNotificationsScreen,
   expectConnectionsScreen,
   expectConnectionScreen,
+  expectFindFriendsScreen,
   expectGroupsScreen,
   expectAppsScreen,
   getGroupKeys,

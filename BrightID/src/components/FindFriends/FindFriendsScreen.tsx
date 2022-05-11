@@ -192,7 +192,10 @@ export const FindFriendsScreen = function () {
 
   const renderItem = ({ item }: { item: FriendProfile }) => {
     return (
-      <View style={styles.contactCon}>
+      <View
+        style={styles.contactCon}
+        testID={`${item.name}-${item.variation.name}`}
+      >
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
             <Text style={styles.txt}>{item.name ? item.name[0] : ''}</Text>
@@ -205,7 +208,7 @@ export const FindFriendsScreen = function () {
           <Text style={styles.profile} numberOfLines={1}>
             {item.variation.name}
           </Text>
-          <Text style={styles.profile} numberOfLines={1}>
+          <Text style={styles.profile} numberOfLines={1} testID={item.profile}>
             {item.profile}
           </Text>
         </View>
@@ -273,7 +276,7 @@ export const FindFriendsScreen = function () {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="tasksScreen"
+      testID="findFriendsScreen"
     >
       {loading || apiError ? renderStatus() : renderFriendsList()}
     </View>

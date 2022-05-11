@@ -6,7 +6,7 @@
 
 import { Contact } from 'react-native-contacts';
 
-const testContacts: Array<Partial<Contact>> = [
+export const testContacts: Array<Partial<Contact>> = [
   {
     displayName: 'Al Pacino',
     emailAddresses: [
