@@ -29,6 +29,7 @@ import { NodeApi } from '@/api/brightId';
 
 describe('Add Device', () => {
   const profileServerUrl = 'http://test.brightid.org/profile';
+  // const profileServerUrl = 'http://127.0.0.1:3000';
   const apiUrl = 'http://test.brightid.org';
   let channelApi: ChannelAPI;
   let recoveryData: {
@@ -99,7 +100,11 @@ describe('Add Device', () => {
     qrUrl = new URL(url.href);
     qrUrl.searchParams.append('aes', recoveryData.aesKey);
     qrUrl.searchParams.append('t', '3');
-    // console.log(`new qrCode url: ${qrUrl.href}`);
+    // Android emulator has well-known alias of 10.0.2.2 routing to localhost where emulator is running
+    if (qrUrl.host === '127.0.0.1:3000') {
+      console.log(`Patching localhost to 10.0.2.2...`);
+      qrUrl.host = '10.0.2.2:3000';
+    }
   });
 
   it('user should have one signingkey', async () => {
@@ -114,6 +119,7 @@ describe('Add Device', () => {
     const deepLink = `brightid://connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
+    console.log(`Deeplink: ${deepLink}`);
     await device.launchApp({
       newInstance: false,
       url: deepLink,

@@ -1,30 +1,25 @@
 import { Alert } from 'react-native';
-import { propEq, find } from 'ramda';
+import { find, propEq } from 'ramda';
 import i18next from 'i18next';
 import { create } from 'apisauce';
-import _ from 'lodash';
 import {
   addLinkedContext,
   addOperation,
-  updateSig,
-  updateBlindSig,
-  setIsSponsoredv6,
   selectIsPrimaryDevice,
+  setIsSponsoredv6,
+  updateBlindSig,
+  updateSig,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
-
-export enum BrightIdNetwork {
-  TEST = 'test',
-  NODE = 'node',
-}
 
 export const getSignedTimestamp = (app: AppInfo) => {
   const sigs = selectAllSigs(store.getState());
@@ -69,7 +64,6 @@ export const handleBlindSigApp = async (
   params: Params,
   setSponsoringApp,
   api: NodeApi,
-  callbackUrl: string,
 ) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
@@ -79,13 +73,7 @@ export const handleBlindSigApp = async (
       {
         text: i18next.t('common.alert.yes'),
         onPress: () =>
-          sponsorAndlinkAppId(
-            appId,
-            appUserId,
-            setSponsoringApp,
-            api,
-            callbackUrl,
-          ),
+          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
         // linkAppId(appId, appUserId),
       },
       {
@@ -136,7 +124,6 @@ const linkContextId = async (
 export const linkAppId = async (
   appId: string,
   appUserId: string,
-  callbackUrl: string,
   silent = false,
 ) => {
   const {
@@ -150,13 +137,15 @@ export const linkAppId = async (
   const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
 
   const onSuccess = async () => {
-    const api = create({
-      baseURL: callbackUrl,
-    });
-    const res = await api.post('/', {
-      network,
-      contextId: appUserId,
-    });
+    if (appInfo.callbackUrl) {
+      const api = create({
+        baseURL: appInfo.callbackUrl,
+      });
+      await api.post('/', {
+        network,
+        appUserId,
+      });
+    }
   };
 
   // generate blind sig for apps with no verification expiration at linking time
@@ -358,14 +347,13 @@ const sponsorAndlinkAppId = async (
   appUserId: string,
   setSponsoringApp,
   api: NodeApi,
-  callbackUrl: string,
 ) => {
   const {
     apps: { apps },
     user: { isSponsored, isSponsoredv6 },
   } = store.getState();
   if (isSponsored || isSponsoredv6) {
-    await linkAppId(appId, appUserId, callbackUrl);
+    await linkAppId(appId, appUserId);
   } else {
     /*
     1. get appId from deep link
@@ -419,7 +407,7 @@ const sponsorAndlinkAppId = async (
       // sponsoring complete
       store.dispatch(setIsSponsoredv6(true));
       // now link app.
-      await linkAppId(appId, appUserId, callbackUrl);
+      await linkAppId(appId, appUserId);
     } catch (err) {
       const msg = err instanceof Error ? err.message : err;
       console.log(`Error getting sponsored: ${msg}`);

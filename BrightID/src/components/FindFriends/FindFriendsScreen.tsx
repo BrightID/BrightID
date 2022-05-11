@@ -16,18 +16,18 @@ import {
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
-import Contacts from 'react-native-contacts';
+import Contacts from '@/utils/ContactsProvider';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { useSelector } from '@/store';
-import socialMediaService from '@/api/socialMediaService';
-import { BrightIdNetwork } from '@/components/Apps/model';
 import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 import { extractDigits } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
+import socialMediaService from '@/utils/socialMediaServiceProvider';
 
 const FlatListItemSeparator = () => {
   return (
@@ -78,9 +78,10 @@ export const FindFriendsScreen = function () {
   const phoneNumberSocialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, SocialMediaVariationIds.PHONE_NUMBER),
   );
-  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>(null);
-  const [apiError, setApiError] = useState<string>(null);
-  const [friends, setFriends] = useState<FriendProfile[]>(null);
+  const [friendsRaw, setFriendsRaw] = useState<FriendProfile[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [friends, setFriends] = useState<FriendProfile[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getContacts = useCallback(async () => {
     let _friendsRaw: FriendProfile[] = [];
@@ -126,9 +127,10 @@ export const FindFriendsScreen = function () {
   }, [getContacts]);
 
   const fetchFriends = useCallback(async () => {
-    if (!friendsRaw) {
+    if (!friendsRaw.length) {
       return;
     }
+    setLoading(true);
     setApiError(null);
     const _profileHashes = friendsRaw.map(
       (friendProfile) => friendProfile.profileHash,
@@ -148,7 +150,10 @@ export const FindFriendsScreen = function () {
       } catch (_e) {
         setApiError(t('common.text.noConnection'));
       }
+    } else {
+      setFriends([]);
     }
+    setLoading(false);
   }, [friendsRaw, t]);
 
   useEffect(() => {
@@ -187,7 +192,10 @@ export const FindFriendsScreen = function () {
 
   const renderItem = ({ item }: { item: FriendProfile }) => {
     return (
-      <View style={styles.contactCon}>
+      <View
+        style={styles.contactCon}
+        testID={`${item.name}-${item.variation.name}`}
+      >
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
             <Text style={styles.txt}>{item.name ? item.name[0] : ''}</Text>
@@ -200,7 +208,7 @@ export const FindFriendsScreen = function () {
           <Text style={styles.profile} numberOfLines={1}>
             {item.variation.name}
           </Text>
-          <Text style={styles.profile} numberOfLines={1}>
+          <Text style={styles.profile} numberOfLines={1} testID={item.profile}>
             {item.profile}
           </Text>
         </View>
@@ -268,9 +276,9 @@ export const FindFriendsScreen = function () {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="tasksScreen"
+      testID="findFriendsScreen"
     >
-      {friends ? renderFriendsList() : renderStatus()}
+      {loading || apiError ? renderStatus() : renderFriendsList()}
     </View>
   );
 };

@@ -7,7 +7,7 @@ import {
   UpdateSocialMediaRequest,
 } from '@/api/socialMediaService_types.d';
 
-export const socialMediaUrl = 'http://168.119.127.117:8090/api';
+export const socialMediaUrl = 'https://finder.brightid.org/api';
 
 export const SOCIAL_API_AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
 
@@ -99,6 +99,4 @@ class SocialMediaService {
   }
 }
 
-const socialMediaService = new SocialMediaService();
-
-export default socialMediaService;
+export { SocialMediaService };

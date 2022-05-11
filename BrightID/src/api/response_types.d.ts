@@ -130,6 +130,7 @@ type AppInfo = {
   verificationExpirationLength?: number;
   sponsorPublicKey?: string;
   nodeUrl?: string;
+  callbackUrl?: string;
 };
 
 type OperationInfo = OperationState & {

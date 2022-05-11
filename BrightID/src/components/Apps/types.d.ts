@@ -6,3 +6,8 @@ type Params = {
 };
 
 type AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;
+
+export enum BrightIdNetwork {
+  TEST = 'test',
+  NODE = 'node',
+}

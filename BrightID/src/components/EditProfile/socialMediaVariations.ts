@@ -61,7 +61,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.COPY,
     shareActionDataFormat: `%%PROFILE%%`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.INSTAGRAM,
@@ -72,7 +72,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://instagram.com/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.KEYBASE,
@@ -83,7 +83,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://keybase.io/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.LINKEDIN,
@@ -94,7 +94,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.URL,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://www.linkedin.com/in/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.MEDIUM,
@@ -105,7 +105,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.URL,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `%%PROFILE%%`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.REDDIT,
@@ -116,7 +116,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://www.reddit.com/user/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.SIGNAL,
@@ -127,7 +127,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.TELEPHONE,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `%%PROFILE%%`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.TELEGRAM,
@@ -138,7 +138,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME_OR_TELEPHONE,
     shareActionType: SocialMediaShareActionType.COPY_IF_PHONE_LINK_IF_USERNAME,
     shareActionDataFormat: `https://t.me/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.TWITTER,
@@ -149,7 +149,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.USERNAME,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://twitter.com/%%PROFILE%%/`,
-    brightIdAppName: 'twitterRegistry',
+    brightIdAppId: 'twitterRegistry',
   },
   {
     id: SocialMediaVariationIds.WHATSAPP,
@@ -160,7 +160,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.TELEPHONE,
     shareActionType: SocialMediaShareActionType.OPEN_LINK,
     shareActionDataFormat: `https://wa.me/%%PROFILE%%/`,
-    brightIdAppName: null,
+    brightIdAppId: null,
   },
   {
     id: SocialMediaVariationIds.PHONE_NUMBER,
@@ -171,7 +171,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.TELEPHONE,
     shareActionType: SocialMediaShareActionType.COPY,
     shareActionDataFormat: `%%PROFILE%%`,
-    brightIdAppName: 'phoneRegistry',
+    brightIdAppId: 'phoneRegistry',
   },
   {
     id: SocialMediaVariationIds.EMAIL,
@@ -182,7 +182,7 @@ export const socialMediaVariations: SocialMediaVariations = [
     shareTypeDisplay: SocialMediaShareTypeDisplay.EMAIL,
     shareActionType: SocialMediaShareActionType.COPY,
     shareActionDataFormat: `%%PROFILE%%`,
-    brightIdAppName: 'emailRegistry',
+    brightIdAppId: 'emailRegistry',
   },
 ];
 
