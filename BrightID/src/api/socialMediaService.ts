@@ -99,6 +99,4 @@ class SocialMediaService {
   }
 }
 
-const socialMediaService = new SocialMediaService();
-
-export default socialMediaService;
+export { SocialMediaService };
