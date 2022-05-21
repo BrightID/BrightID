@@ -131,6 +131,7 @@ type AppInfo = {
   sponsorPublicKey?: string;
   nodeUrl?: string;
   callbackUrl?: string;
+  soulbound: boolean;
 };
 
 type OperationInfo = OperationState & {

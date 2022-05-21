@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { find, propEq } from 'ramda';
+import { any, find, propEq } from 'ramda';
 import i18next from 'i18next';
 import { create } from 'apisauce';
 import {
@@ -39,17 +39,33 @@ export const getSignedTimestamp = (app: AppInfo) => {
   return null;
 };
 
-export const handleAppContext = async (params: Params) => {
-  // if 'params' is defined, the user came through a deep link
+export const handleV5App = async (
+  params: Params,
+  setSponsoringApp,
+  api: NodeApi,
+) => {
+  const {
+    apps: { apps },
+  } = store.getState();
   params.baseUrl = decodeURIComponent(params.baseUrl);
-  const { baseUrl, context, contextId } = params;
+  const appInfo = find(propEq('id', params.context))(apps) as AppInfo;
+  if (appInfo && appInfo.soulbound) {
+    // soulbound apps link after sponsorship just like v6 apps
+    const { baseUrl, context: appId, contextId: appUserId } = params;
+    var handler = () => sponsor(appId, appUserId, setSponsoringApp, api, () =>
+      linkContextId(baseUrl, appId, appUserId),
+    );
+  } else {
+    const { baseUrl, context, contextId } = params;
+    var handler = () => linkContextId(baseUrl, context, contextId);
+  }
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
-    i18next.t('apps.alert.text.linkApp', { context: `${context}` }),
+    i18next.t('apps.alert.text.linkApp', { context: `${params.context}` }),
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () => linkContextId(baseUrl, context, contextId),
+        onPress: handler,
       },
       {
         text: i18next.t('common.alert.no'),
@@ -60,7 +76,7 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-export const handleBlindSigApp = async (
+export const handleV6App = async (
   params: Params,
   setSponsoringApp,
   api: NodeApi,
@@ -72,9 +88,11 @@ export const handleBlindSigApp = async (
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () =>
-          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
-        // linkAppId(appId, appUserId),
+        onPress: () => {
+          sponsor(appId, appUserId, setSponsoringApp, api, () =>
+            linkAppId(appId, appUserId),
+          );
+        },
       },
       {
         text: i18next.t('common.alert.no'),
@@ -342,84 +360,95 @@ export const linkAppId = async (
   return false;
 };
 
-const sponsorAndlinkAppId = async (
+const getSponsorship = async (appUserId: string, api: NodeApi) => {
+  try {
+    return await api.getSponsorship(appUserId);
+  } catch (e) {
+    if (e instanceof BrightidError && e.errorNum === APP_ID_NOT_FOUND) {
+      // node has not yet registered the sponsor request -> Ignore
+      console.log(`sponsor request for ${appUserId} not yet existing`);
+      return;
+    } else {
+      throw e;
+    }
+  }
+};
+
+const sponsor = async (
   appId: string,
   appUserId: string,
   setSponsoringApp,
   api: NodeApi,
+  onSuccess,
 ) => {
   const {
     apps: { apps },
     user: { isSponsored, isSponsoredv6 },
   } = store.getState();
   if (isSponsored || isSponsoredv6) {
-    await linkAppId(appId, appUserId);
-  } else {
-    /*
-    1. get appId from deep link
-    2. already Sponsored? yes: go to step 6. no: go to step 3.
-    3. optimistically send Spend Sponsorship operation.
-    4. wait a bit for node to process sponsor operation from app.
-    5. check GET /sponsorships/{appId} to see if it really got sponsored.
-    6. proceed with posting the verification to the node under the appId.
-     */
-    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-    setSponsoringApp(appInfo);
-    console.log(`Sending spend sponsorship op...`);
-    const op = await api.spendSponsorship(appId, appUserId);
+    onSuccess();
+    return;
+  }
+  /*
+  1. get appId from deep link
+  2. already Sponsored? yes: go to step 6. no: go to step 3.
+  3. ensure no one else is sponsored using this appId before
+  4. optimistically send Spend Sponsorship operation.
+  5. wait a bit for node to process sponsor operation from app.
+  6. check GET /sponsorships/{appId} to see if it really got sponsored.
+  7. proceed with posting the verification to the node under the appId.
+   */
+  const sp = await getSponsorship(appUserId, api);
+  if (sp && sp.appHasAuthorized && sp.spendRequested) {
+    console.log(
+      'the appUserId is used by another user to get sponsored before.',
+    );
+    Alert.alert(
+      i18next.t('apps.alert.title.linkingFailed'),
+      i18next.t('apps.alert.text.duplicateAppUserId', { appUserId }),
+    );
+    return;
+  }
+  const appInfo = find(propEq('id', appId))(apps) as AppInfo;
+  setSponsoringApp(appInfo);
+  console.log(`Sending spend sponsorship op...`);
+  const op = await api.spendSponsorship(appId, appUserId);
 
-    // TODO wait for op to be applied before starting polling sponsorship status?
+  // TODO wait for op to be applied before starting polling sponsorship status?
 
-    // wait for app to complete the sponsorship
-    try {
-      await new Promise<void>((resolve, reject) => {
-        const startTime = Date.now();
-        const intervalId = setInterval(async () => {
-          const timeElapsed = Date.now() - startTime;
-          if (timeElapsed > sponsorTimeout) {
+  // wait for app to complete the sponsorship
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const startTime = Date.now();
+      const intervalId = setInterval(async () => {
+        const timeElapsed = Date.now() - startTime;
+        if (timeElapsed > sponsorTimeout) {
+          clearInterval(intervalId);
+          reject(new Error(`Timeout waiting for sponsorship`));
+        } else {
+          const sp = await getSponsorship(appUserId, api);
+          console.log(`Got sponsorRes: ${sp}`);
+          if (sp && sp.appHasAuthorized && sp.spendRequested) {
+            console.log(`Sponsorship complete!`);
             clearInterval(intervalId);
-            reject(new Error(`Timeout waiting for sponsorship`));
-          } else {
-            try {
-              const sponsorshipInfo = await api.getSponsorShip(appUserId);
-              console.log(`Got sponsorRes: ${sponsorshipInfo}`);
-              if (sponsorshipInfo.appHasAuthorized) {
-                console.log(`Sponsorship complete!`);
-                clearInterval(intervalId);
-                resolve();
-              }
-            } catch (e) {
-              if (
-                e instanceof BrightidError &&
-                e.errorNum === APP_ID_NOT_FOUND
-              ) {
-                // node has not yet registered the sponsor request -> Ignore
-                console.log(
-                  `sponsor request for ${appUserId} not yet existing`,
-                );
-              } else {
-                throw e;
-              }
-            }
+            resolve();
           }
-        }, sponsorPollInterval);
-      });
-      // sponsoring complete
-      store.dispatch(setIsSponsoredv6(true));
-      // now link app.
-      await linkAppId(appId, appUserId);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : err;
-      console.log(`Error getting sponsored: ${msg}`);
-      Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${msg}`, [
-        {
-          text: i18next.t('common.alert.dismiss'),
-          style: 'cancel',
-          onPress: () => null,
-        },
-      ]);
-    } finally {
-      setSponsoringApp(undefined);
-    }
+        }
+      }, sponsorPollInterval);
+    });
+    // sponsoring complete
+    store.dispatch(setIsSponsoredv6(true));
+    setSponsoringApp(undefined);
+    onSuccess();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : err;
+    console.log(`Error getting sponsored: ${msg}`);
+    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${msg}`, [
+      {
+        text: i18next.t('common.alert.dismiss'),
+        style: 'cancel',
+        onPress: () => null,
+      },
+    ]);
   }
 };

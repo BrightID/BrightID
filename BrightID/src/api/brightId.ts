@@ -514,7 +514,7 @@ export class NodeApi {
     return this.submitOp(op, message);
   }
 
-  async getSponsorShip(appUserId: string) {
+  async getSponsorship(appUserId: string) {
     const res = await this.api.get<SponsorshipRes, ErrRes>(
       `/sponsorships/${appUserId}`,
     );
