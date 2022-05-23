@@ -54,7 +54,7 @@ export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
 export const NODE_CHOOSER_TIMEOUT_MS = 20 * 1000; // Fail if no valid node found within timeout
-export const requiredSemVer = '^6.3.0'; // client requires this node version
+export const requiredSemVer = '^6.9.0'; // client requires this node version
 
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';
