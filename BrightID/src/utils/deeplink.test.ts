@@ -1,6 +1,6 @@
 import { parseLinkAppParams } from '@/utils/deeplink';
 
-describe('Test deep link parsing', () => {
+describe('Test channel data', () => {
   const linkParams = {
     callbackUrl: 'https://api.example.com/',
     context: 'exampleApp',
