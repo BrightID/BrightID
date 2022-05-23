@@ -25,13 +25,13 @@ export const CHANNEL_TTL = 900000; // 15 minutes
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
 export const MIN_CHANNEL_JOIN_TTL = 5000;
 export const PROFILE_POLL_INTERVAL = 2000;
-export const RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD = 30000;
 export const RECOVERY_COOLDOWN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 export const PROFILE_VERSION = 1;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
 export const MAX_CONNECTIONS_DUPLICATE_SEARCH = 1000;
+export const CONNECTION_STALE_AGE = 60 * 15 * 1000;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
@@ -43,6 +43,9 @@ export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
 export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
 // TODO: Set dedicated prefix for importing once node backends are updated
 export const IMPORT_PREFIX = 'sig_';
+export const CHANNEL_UPLOAD_RETRY_COUNT = 5; // max number of upload retries when upload failed
+export const CHANNEL_UPLOAD_RETRY_INTERVAL = 5000; // ms to wait between retries
+export const RECOVERY_CHANNEL_TTL = 60 * 60 * 24 * 1000; // 24 hours
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
@@ -51,7 +54,7 @@ export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
 export const NODE_CHOOSER_TIMEOUT_MS = 20 * 1000; // Fail if no valid node found within timeout
-export const requiredSemVer = '^6.3.0'; // client requires this node version
+export const requiredSemVer = '^6.9.0'; // client requires this node version
 
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';
