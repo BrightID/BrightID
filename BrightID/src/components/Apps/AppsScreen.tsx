@@ -25,6 +25,7 @@ import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
 import { handleV5App, handleV6App } from './model';
+import { AppsRoute } from '@/components/Apps/types';
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();

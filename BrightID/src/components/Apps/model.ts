@@ -1,7 +1,8 @@
 import { Alert } from 'react-native';
-import { any, find, propEq } from 'ramda';
+import { find, propEq } from 'ramda';
 import i18next from 'i18next';
 import { create } from 'apisauce';
+import { Dispatch, SetStateAction } from 'react';
 import {
   addLinkedContext,
   addOperation,
@@ -14,7 +15,7 @@ import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
-import { BrightIdNetwork } from '@/components/Apps/types.d';
+import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
@@ -41,23 +42,25 @@ export const getSignedTimestamp = (app: AppInfo) => {
 
 export const handleV5App = async (
   params: Params,
-  setSponsoringApp,
+  setSponsoringApp: Dispatch<SetStateAction<AppInfo>>,
   api: NodeApi,
 ) => {
   const {
     apps: { apps },
   } = store.getState();
+  let handler: () => Promise<void>;
   params.baseUrl = decodeURIComponent(params.baseUrl);
   const appInfo = find(propEq('id', params.context))(apps) as AppInfo;
   if (appInfo && appInfo.soulbound) {
     // soulbound apps link after sponsorship just like v6 apps
     const { baseUrl, context: appId, contextId: appUserId } = params;
-    var handler = () => sponsor(appId, appUserId, setSponsoringApp, api, () =>
-      linkContextId(baseUrl, appId, appUserId),
-    );
+    handler = () =>
+      sponsor(appId, appUserId, setSponsoringApp, api, () =>
+        linkContextId(baseUrl, appId, appUserId),
+      );
   } else {
     const { baseUrl, context, contextId } = params;
-    var handler = () => linkContextId(baseUrl, context, contextId);
+    handler = () => linkContextId(baseUrl, context, contextId);
   }
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
@@ -367,7 +370,6 @@ const getSponsorship = async (appUserId: string, api: NodeApi) => {
     if (e instanceof BrightidError && e.errorNum === APP_ID_NOT_FOUND) {
       // node has not yet registered the sponsor request -> Ignore
       console.log(`sponsor request for ${appUserId} not yet existing`);
-      return;
     } else {
       throw e;
     }
@@ -379,7 +381,7 @@ const sponsor = async (
   appUserId: string,
   setSponsoringApp,
   api: NodeApi,
-  onSuccess,
+  onSuccess: () => any,
 ) => {
   const {
     apps: { apps },
