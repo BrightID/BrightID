@@ -8,7 +8,8 @@ export const connectFakeUsers = async (
 ) => {
   const timestamp = Date.now();
 
-  let flagReason;
+  let reportReason;
+  let requestProof;
 
   // Connect user1 -> user2
   const user1Promise = api.addConnection(
@@ -16,7 +17,8 @@ export const connectFakeUsers = async (
     fakeUser2.id,
     level,
     timestamp,
-    flagReason,
+    reportReason,
+    requestProof,
     fakeUser1,
   );
 
@@ -26,7 +28,8 @@ export const connectFakeUsers = async (
     fakeUser1.id,
     level,
     timestamp,
-    flagReason,
+    reportReason,
+    requestProof,
     fakeUser2,
   );
 

@@ -98,6 +98,7 @@ declare global {
 
   /* Profile information shared P2P via channel when making connections */
   type SharedProfile = {
+    requestProof?: string;
     id: string;
     photo: string;
     name: string;
