@@ -27,6 +27,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    // v5 sponsored is not used anymore and should be merged by v6 into a single sponsored status
+    // after most users loaded their v5 sponsored status from nodes by opening their apps
     setIsSponsored(state, action) {
       state.isSponsored = action.payload;
       state.updateTimestamps.isSponsored = Date.now();
