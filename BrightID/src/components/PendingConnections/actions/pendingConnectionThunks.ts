@@ -21,7 +21,12 @@ import {
 import { NodeApi } from '@/api/brightId';
 
 export const confirmPendingConnectionThunk =
-  (id: string, level: ConnectionLevel, api: NodeApi, reportReason?: string) =>
+  (
+    id: string,
+    level: ConnectionLevel,
+    api: NodeApi,
+    reportReason?: ReportReason,
+  ) =>
   async (dispatch: dispatch, getState: getState) => {
     const connection: PendingConnection = selectPendingConnectionById(
       getState(),

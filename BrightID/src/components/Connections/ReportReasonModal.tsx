@@ -6,7 +6,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch } from '@/store';
 import {
   connection_levels,
   report_reasons,
@@ -78,17 +78,17 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
   const dispatch = useDispatch();
-  const [reason, setReason] = useState(!reporting ? 'Unreport' : '');
+  const [reason, setReason] = useState<ReportReason>(undefined);
 
   const confirmReport = () => {
     // inside report module
-    if (reason && reporting) {
+    if (reporting) {
       console.log(
         `Reporting connection ${connectionName} with reason ${reason}`,
       );
       // close modal
       navigation.goBack();
-      if (reporting && source == report_sources.PROFILE) {
+      if (reporting && source === report_sources.PROFILE) {
         dispatch(reportConnection({ id: connectionId, reason, api }));
       }
       // inside undo report module
@@ -121,7 +121,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     navigation.goBack();
   };
 
-  const renderReasonButton = (btnReason: string) => {
+  const renderReasonButton = (btnReason: ReportReason) => {
     const active = btnReason === reason;
     return (
       <TouchableOpacity
@@ -144,7 +144,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
 
   const reportConnectionText = t(
     `connectionDetails.text.${
-      source == report_sources.PROFILE ? 'remove' : 'report'
+      source === report_sources.PROFILE ? 'remove' : 'report'
     }Connection`,
     {
       name: connectionName,
@@ -158,7 +158,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   );
   const reportConnectionDetailsText = t(
     `connectionDetails.text.why${
-      source == report_sources.PROFILE ? 'remove' : 'report'
+      source === report_sources.PROFILE ? 'remove' : 'report'
     }`,
     'Please tell us why you want to remove this connection',
   );
@@ -166,9 +166,10 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     'connectionDetails.text.unReportImpact',
     {
       name: connectionName,
-      reportReason: reportReason,
+      reportReason,
     },
   );
+  const submitDisabled = reporting && !reason;
   return (
     <View style={styles.container} testID="ReportReasonModal">
       <BlurView
@@ -202,13 +203,13 @@ const ReportReasonModal = ({ route, navigation }: props) => {
             testID="SubmitReportBtn"
             style={[styles.modalButton, styles.submitButton]}
             onPress={confirmReport}
-            disabled={!reason}
+            disabled={submitDisabled}
           >
             <Text
               style={
-                reason
-                  ? styles.submitButtonText
-                  : styles.submitButtonDisabledText
+                submitDisabled
+                  ? styles.submitButtonDisabledText
+                  : styles.submitButtonText
               }
             >
               {reporting

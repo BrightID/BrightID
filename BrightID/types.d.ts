@@ -8,7 +8,7 @@ import {
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
-import { connection_levels } from '@/utils/constants';
+import { connection_levels, report_reasons } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
   SocialMediaType,
@@ -224,8 +224,6 @@ declare global {
     brightIdAppName: string;
   };
 
-  type SocialMediaVariationState = EntityState<SocialMediaVariation>;
-
   type SocialMediaVariations = SocialMediaVariation[];
 
   type SocialMediaShared = {
@@ -317,6 +315,8 @@ declare global {
     secretKey: string; // Base64 encoded secretkey
   };
 
+  type ReportReason = keyof typeof report_reasons;
+
   type ModalStackParamList = {
     FullScreenPhoto: {
       photo?: Photo;
@@ -334,8 +334,11 @@ declare global {
     };
     ReportReason: {
       connectionId: string;
-      successCallback?: () => void;
+      connectionName: string;
+      reportReason: ReportReason;
+      successCallback?: (ReportReason) => void;
       reporting?: boolean;
+      source: ReportSource;
     };
     SortConnections: undefined;
     ViewPasswordWalkthrough: undefined;
