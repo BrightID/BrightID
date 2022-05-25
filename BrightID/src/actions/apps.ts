@@ -7,6 +7,7 @@ import { store } from '@/store';
 import {
   setApps,
   upsertSig,
+  removeSig,
   updateSig,
   selectAllSigs,
   selectExpireableBlindSigApps,
@@ -15,6 +16,8 @@ import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import backupApi from '@/api/backupService';
+import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
+import { BrightIdNetwork } from '@/components/Apps/types.d';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -47,7 +50,7 @@ export const updateBlindSig =
       }
 
       try {
-        const network = __DEV__ ? 'test' : 'node';
+        const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
         // TODO: Don't fallback to node.brightid.org. 'app.nodeUrl' should be mandatory.
         // noinspection HttpUrlsUsage
         const url = app.nodeUrl || `http://${network}.brightid.org`;
@@ -132,6 +135,15 @@ export const updateBlindSig =
           `error in getting sig for ${app.name} (${verification})`,
           err,
         );
+        if (
+          err.errorNum === CACHED_PARAMS_NOT_FOUND &&
+          sigInfo &&
+          sigInfo.uid
+        ) {
+          console.log('removing sig and retrying');
+          dispatch(removeSig(sigInfo.uid));
+          await dispatch(updateBlindSig(app));
+        }
       }
     }
   };
@@ -142,7 +154,7 @@ export const updateBlindSigs =
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
         for (const app of expireableBlindSigApps) {
-          dispatch(updateBlindSig(app));
+          await dispatch(updateBlindSig(app));
         }
       });
     });
@@ -164,7 +176,7 @@ const encryptAndBackup = async (key: string, data: string) => {
 export const fetchApps = (api) => async (dispatch: dispatch, _) => {
   try {
     const apps = await api.getApps();
-    dispatch(setApps(apps));
+    await dispatch(setApps(apps));
   } catch (err) {
     console.log(err);
   }

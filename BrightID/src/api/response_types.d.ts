@@ -130,6 +130,8 @@ type AppInfo = {
   verificationExpirationLength?: number;
   sponsorPublicKey?: string;
   nodeUrl?: string;
+  callbackUrl?: string;
+  soulbound: boolean;
 };
 
 type OperationInfo = OperationState & {
@@ -171,16 +173,18 @@ type InviteInfo = {
   data: string;
 };
 
+type Report = { id: string; reportReason: string };
+
 type ProfileInfo = {
   id: string;
   connectionsNum: number;
   groupsNum: number;
-  mutualConnections: string[];
-  mutualGroups: string[];
+  mutualConnections?: string[];
+  mutualGroups?: string[];
   recoveryConnections: RecoveryConnection[];
   connectedAt: number;
   createdAt: number;
-  reports: Array<{ id: string; reportReason: string }>;
+  reports: Array<Report>;
   verifications: Verification[];
   signingKeys: string[];
   sponsored: boolean;

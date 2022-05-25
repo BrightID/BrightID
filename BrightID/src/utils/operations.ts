@@ -136,7 +136,10 @@ export const pollOperations = async (api) => {
         }
       } else {
         // stop polling for op if trace time is expired
-        if (op.timestamp + OPERATION_TRACE_TIME < Date.now()) {
+        if (
+          (op.postTimestamp || op.timestamp) + OPERATION_TRACE_TIME <
+          Date.now()
+        ) {
           store.dispatch(
             updateOperation({
               id: op.hash,

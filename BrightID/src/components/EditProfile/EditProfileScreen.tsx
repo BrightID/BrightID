@@ -1,43 +1,66 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
+  Alert,
   Image,
+  LayoutChangeEvent,
+  ScrollView,
+  StyleSheet,
+  Switch,
   Text,
   TextInput,
-  StyleSheet,
-  ScrollView,
-  View,
   TouchableOpacity,
-  Alert,
-  LayoutChangeEvent,
+  View,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
-import {
-  DARK_ORANGE,
-  LIGHT_GREY,
-  DARKER_GREY,
-  WHITE,
-  BLACK,
-  GREEN,
-  DARK_BLUE,
-  BLUE,
-} from '@/theme/colors';
-import { fontSize } from '@/theme/fonts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
-import { chooseImage, takePhoto } from '@/utils/images';
-import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
-import { setPhoto, setName } from '@/actions';
-import Chevron from '@/components/Icons/Chevron';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import i18next from 'i18next';
+import { useDispatch, useSelector } from '@/store';
+import { DEVICE_IOS, DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
-  selectAllSocialMedia,
-  removeSocialMedia,
+  BLACK,
+  BLUE,
+  DARK_BLUE,
+  DARK_ORANGE,
+  DARKER_GREY,
+  GREEN,
+  GREY,
+  LIGHT_GREY,
+  ORANGE,
+  WHITE,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { chooseImage, takePhoto } from '@/utils/images';
+import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
+import {
+  selectSyncSocialMediaEnabled,
+  setName,
+  setPhoto,
+  setSyncSocialMediaEnabled,
+} from '@/actions';
+import Chevron from '@/components/Icons/Chevron';
+import {
+  selectExistingSocialMedia,
   setProfileDisplayWidth,
-} from './socialMediaSlice';
+} from '../../reducer/socialMediaSlice';
+import {
+  selectAllSocialMediaVariationsByType,
+  selectSocialMediaVariationById,
+} from '@/reducer/socialMediaVariationSlice';
+import { SocialMediaType } from './socialMediaVariations';
+import {
+  removeSocialMediaThunk,
+  setSyncSocialMediaEnabledThunk,
+} from '@/components/EditProfile/socialMediaThunks';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -151,11 +174,18 @@ const EditName = ({ nextName, setNextName }) => {
   );
 };
 
-const SocialMediaLink = (props: SocialMedia) => {
+const SocialMediaLink = (props: {
+  socialMedia: SocialMedia;
+  type: SocialMediaType;
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order, company } = props;
+  const { id, profile, profileDisplayWidth, order } = props.socialMedia;
+  const { t } = useTranslation();
 
+  const socialMediaVariation = useSelector((state) =>
+    selectSocialMediaVariationById(state, id),
+  );
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
@@ -177,8 +207,24 @@ const SocialMediaLink = (props: SocialMedia) => {
     }
   };
 
+  const removeSocialMedia = async (id: string) => {
+    try {
+      await dispatch(removeSocialMediaThunk(id));
+    } catch (e) {
+      Alert.alert(
+        i18next.t('common.alert.error'),
+        i18next.t('common.alert.text.commonError'),
+      );
+    }
+  };
+
   const innerTextStyle = profileDisplayWidth
-    ? { width: profileDisplayWidth }
+    ? {
+        width:
+          typeof profileDisplayWidth === 'number'
+            ? profileDisplayWidth - 10
+            : profileDisplayWidth,
+      }
     : { flexGrow: 1 };
 
   return (
@@ -187,13 +233,14 @@ const SocialMediaLink = (props: SocialMedia) => {
         style={styles.socialMediaSelect}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
+            type: props.type,
             order,
             prevId: id,
             page: 0,
           });
         }}
       >
-        <Text style={styles.socialMediaType}>{company.name}</Text>
+        <Text style={styles.socialMediaType}>{socialMediaVariation.name}</Text>
         <Chevron
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}
@@ -206,6 +253,7 @@ const SocialMediaLink = (props: SocialMedia) => {
         onLayout={updateInnerTextLayout}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
+            type: props.type,
             order,
             prevId: id,
             page: 1,
@@ -222,9 +270,7 @@ const SocialMediaLink = (props: SocialMedia) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.closeButton}
-        onPress={() => {
-          dispatch(removeSocialMedia(id));
-        }}
+        onPress={() => removeSocialMedia(id)}
       >
         <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
       </TouchableOpacity>
@@ -232,42 +278,63 @@ const SocialMediaLink = (props: SocialMedia) => {
   );
 };
 
-const SocialMediaLinks = () => {
+const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const navigation = useNavigation();
-  const socialMediaItems = useSelector(selectAllSocialMedia);
+  const socialMediaItems = useSelector(selectExistingSocialMedia);
+  const selectSocialMediaVariations = useMemo(
+    selectAllSocialMediaVariationsByType,
+    [],
+  );
+  const socialMediaVariations = useSelector((state) =>
+    selectSocialMediaVariations(state, props.type),
+  );
+  const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
-  console.log('socialMedia', socialMediaItems);
+  // console.log('socialMedia', socialMediaItems);
 
-  const SocialMediaList = socialMediaItems.map((item) => (
-    <SocialMediaLink key={item.id} {...item} />
-  ));
+  const SocialMediaVariations = socialMediaItems
+    .filter((item) => socialMediaVariationIds.includes(item.id))
+    .map((item) => (
+      <SocialMediaLink key={item.id} socialMedia={item} type={props.type} />
+    ));
+
+  // disable adding new item if we are entering phone number and
+  // phone number is already entered
+  const disableAdd =
+    socialMediaVariations.length === SocialMediaVariations.length;
 
   return (
     <View style={styles.socialMediaContainer}>
       <View style={styles.socialMediaLinkLabel}>
-        <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SelectSocialMedia', {
-              order: socialMediaItems.length,
-              prevId: null,
-              page: 0,
-            });
-          }}
-          style={styles.addSocialMediaBtn}
-        >
-          <Material
-            name="plus-thick"
-            size={DEVICE_LARGE ? 18 : 16}
-            color={DARK_BLUE}
-          />
-        </TouchableOpacity>
+        {props.type === SocialMediaType.CONTACT_INFO ? (
+          <Text style={styles.label}>{t('profile.label.contactInfo')}</Text>
+        ) : (
+          <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
+        )}
+
+        {!disableAdd ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SelectSocialMedia', {
+                order: socialMediaItems.length,
+                type: props.type,
+                prevId: null,
+                page: 0,
+              });
+            }}
+            style={styles.addSocialMediaBtn}
+          >
+            <Material
+              name="plus-thick"
+              size={DEVICE_LARGE ? 18 : 16}
+              color={DARK_BLUE}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
-      {SocialMediaList}
-
-      <View style={styles.bottomDivider} />
+      {SocialMediaVariations}
     </View>
   );
 };
@@ -295,9 +362,7 @@ const ShowEditPassword = () => {
         {t('profile.text.backupPasswordTitle', 'Backup password')}
       </Text>
       <View style={styles.passwordInfoContainer}>
-        <Text style={styles.passwordInfoText}>
-          {t('signup.text.passwordInfo')}
-        </Text>
+        <Text style={styles.infoText}>{t('signup.text.passwordInfo')}</Text>
       </View>
       {password ? (
         <>
@@ -343,6 +408,34 @@ const ShowEditPassword = () => {
     </View>
   );
 };
+
+function SyncSocialMedia() {
+  const dispatch = useDispatch();
+  const syncSocialMediaEnabled = useSelector(selectSyncSocialMediaEnabled);
+  return (
+    <>
+      <View style={styles.syncSocialMediaSwitchContainer}>
+        <Text style={styles.label}>Sync </Text>
+        <Switch
+          style={styles.syncSocialMediaSwitch}
+          trackColor={{ false: GREY, true: DARK_ORANGE }}
+          thumbColor="#ffffff"
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={(value) => {
+            dispatch(setSyncSocialMediaEnabledThunk(value));
+          }}
+          value={syncSocialMediaEnabled}
+        />
+      </View>
+      <Text style={styles.infoText}>
+        Do you want to allow people who have your contact info and social media
+        links to know that you're a BrightID user so they can connect to you on
+        BrightID? This does not reveal your information to people who don't
+        already have it.
+      </Text>
+    </>
+  );
+}
 
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -453,7 +546,12 @@ export const EditProfileScreen = ({ navigation }) => {
           setProfilePhoto={setProfilePhoto}
         />
         <EditName nextName={nextName} setNextName={setNextName} />
-        <SocialMediaLinks />
+
+        <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
+        <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
+        <SyncSocialMedia />
+        <View style={styles.bottomDivider} />
+
         <ShowEditPassword />
         <View style={styles.saveContainer}>
           <TouchableOpacity
@@ -494,7 +592,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
-    paddingHorizontal: DEVICE_LARGE ? 40 : 30,
   },
   shadow: {
     shadowColor: 'rgba(196, 196, 196, 0.25)',
@@ -507,7 +604,7 @@ const styles = StyleSheet.create({
     },
   },
   contentContainer: {
-    flex: 1,
+    paddingHorizontal: DEVICE_LARGE ? 40 : 30,
     width: '100%',
   },
   profilePhotoContainer: {
@@ -546,6 +643,15 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
     color: BLACK,
+  },
+  syncSocialMediaSwitchContainer: {
+    alignItems: 'center',
+    paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  syncSocialMediaSwitch: {
+    flex: 1,
   },
   bottomDivider: {
     width: '100%',
@@ -624,7 +730,7 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   passwordInfoContainer: {},
-  passwordInfoText: {
+  infoText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[11],
     color: DARKER_GREY,

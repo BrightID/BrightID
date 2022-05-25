@@ -16,17 +16,15 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import Svg, { Line } from 'react-native-svg';
-
-import { useSelector } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from '@/store';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
-  selectAllPendingConnections,
+  selectAllUnconfirmedConnections,
   selectPendingConnectionById,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 
@@ -48,13 +46,14 @@ const calcY = (a: number) =>
 /** SELECTORS */
 
 const selectGroupConnections = createSelector(
-  selectAllPendingConnections,
+  selectAllUnconfirmedConnections,
   (_: State, channel: Channel) => channel,
   (pendingConnections, channel) => {
     console.log('calcing pending connections');
     return pendingConnections.filter(
       (pc) =>
-        pc.channelId === channel?.id && pc.id !== channel?.initiatorProfileId,
+        pc.channelId === channel?.id &&
+        pc.profileId !== channel?.initiatorProfileId,
     );
   },
 );
@@ -169,13 +168,13 @@ export const GroupConnectionScreen = () => {
             <TouchableWithoutFeedback
               onPress={() => {
                 navigation.navigate('FullScreenPhoto', {
-                  photo: pc.photo,
+                  photo: pc.pendingConnectionData.sharedProfile.photo,
                   base64: true,
                 });
               }}
             >
               <Image
-                key={pc.id}
+                key={pc.profileId}
                 style={[
                   styles.connectionBubble,
                   {
@@ -183,7 +182,7 @@ export const GroupConnectionScreen = () => {
                     top: bubbleCoords[index]?.top,
                   },
                 ]}
-                source={{ uri: pc.photo }}
+                source={{ uri: pc.pendingConnectionData.sharedProfile.photo }}
               />
             </TouchableWithoutFeedback>
           </>
@@ -239,18 +238,20 @@ export const GroupConnectionScreen = () => {
             },
           ]}
         />
-        {initiator?.photo && (
+        {initiator?.pendingConnectionData.sharedProfile.photo && (
           <TouchableWithoutFeedback // style={styles.cancelButton}
             onPress={() => {
               navigation.navigate('FullScreenPhoto', {
-                photo: initiator.photo,
+                photo: initiator.pendingConnectionData.sharedProfile.photo,
                 base64: true,
               });
             }}
           >
             <Image
               style={styles.groupFounder}
-              source={{ uri: initiator.photo }}
+              source={{
+                uri: initiator.pendingConnectionData.sharedProfile.photo,
+              }}
             />
           </TouchableWithoutFeedback>
         )}

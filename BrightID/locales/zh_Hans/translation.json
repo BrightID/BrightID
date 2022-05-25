@@ -132,6 +132,7 @@
       "success": "成功",
       "sure": "当然",
       "text": {
+        "commonError": "抱歉，我们无法完成您的请求。请稍后再试。",
         "failedOp": "{{name}} 失败!\n{{message}}",
         "incorrectPassword": "密码错误！",
         "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
@@ -311,6 +312,7 @@
       "contactUs": "联系我们",
       "copyExplorerCode": "复制资源管理器代码",
       "editProfile": "编辑简介",
+      "findFriends": "邀请",
       "home": "主页"
     }
   },
@@ -527,7 +529,8 @@
       },
       "text": {
         "discardChanges": "您有未储存的更改。确定放弃更改并离开此页吗？",
-        "passwordMatch": "当前密码不匹配。"
+        "passwordMatch": "当前密码不匹配。",
+        "invalidPhoneNumber": "输入有效的电话号码"
       },
       "title": {
         "discardChanges": "放弃更改？",
@@ -544,7 +547,8 @@
       "newPassword": "新密码",
       "newPasswordAgain": "请再次输入密码",
       "password": "密码",
-      "socialMediaLink": "社交媒体账号链接"
+      "socialMediaLink": "社交媒体账号链接",
+      "phoneNumber": "电话号码"
     },
     "placeholder": {
       "name": "输入姓名",
@@ -731,6 +735,14 @@
       "gotIt": "知道了!",
       "setPassword": "您可以随时在此处设置\n您的BrightID密码",
       "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "邀请"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此应用目前无法发送邀请。"
     }
   }
 }

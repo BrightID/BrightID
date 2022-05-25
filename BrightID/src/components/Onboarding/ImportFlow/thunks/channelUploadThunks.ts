@@ -3,14 +3,15 @@ import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { retrieveImage } from '@/utils/filesystem';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { selectAllSigs } from '@/reducer/appsSlice';
+import { selectAllLinkedContexts, selectAllSigs } from '@/reducer/appsSlice';
 import ChannelAPI from '@/api/channelService';
 import {
   uploadBlindSig,
   uploadConnection,
+  uploadContextInfo,
   uploadGroup,
 } from '@/utils/channels';
-import { IMPORT_PREFIX } from '@/utils/constants';
+import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 export const uploadAllInfoAfter = async (after) => {
   const {
@@ -33,6 +34,7 @@ export const uploadAllInfoAfter = async (after) => {
     name: user.name,
     photo,
     isSponsored: user.isSponsored,
+    isSponsoredv6: user.isSponsoredv6,
     backupCompleted: user.backupCompleted,
     password: user.password,
     updateTimestamps: user.updateTimestamps,
@@ -53,14 +55,12 @@ export const uploadAllInfoAfter = async (after) => {
     (conn) => conn.timestamp > after,
   );
   for (const conn of connections) {
-    if (conn.timestamp > after) {
-      await uploadConnection({
-        conn,
-        channelApi,
-        aesKey,
-        signingKey,
-      });
-    }
+    await uploadConnection({
+      conn,
+      channelApi,
+      aesKey,
+      signingKey,
+    });
   }
 
   console.log('uploading groups');
@@ -73,6 +73,21 @@ export const uploadAllInfoAfter = async (after) => {
         signingKey,
       });
     }
+  }
+
+  console.log('uploading linked contexts');
+  const linkedContexts = selectAllLinkedContexts(store.getState()).filter(
+    (linkedContext) =>
+      linkedContext.dateAdded > after && linkedContext.state === 'applied',
+  );
+  for (const contextInfo of linkedContexts) {
+    await uploadContextInfo({
+      contextInfo,
+      channelApi,
+      aesKey,
+      signingKey,
+      prefix: IMPORT_PREFIX,
+    });
   }
 
   console.log('uploading blind sigs');
@@ -117,5 +132,6 @@ export const uploadDeviceInfo = async () => {
     channelId,
     data,
     dataId: `${IMPORT_PREFIX}data`,
+    requestedTtl: RECOVERY_CHANNEL_TTL,
   });
 };

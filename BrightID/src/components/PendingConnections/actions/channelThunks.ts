@@ -8,13 +8,12 @@ import {
   channel_types,
   selectAllChannels,
 } from '@/components/PendingConnections/channelSlice';
-import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
+import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData, createChannelInfo } from '@/utils/channels';
 import {
   CHANNEL_CONNECTION_LIMIT,
-  CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
@@ -34,6 +33,8 @@ export const createChannel =
     try {
       const baseUrl = selectBaseUrl(getState());
       const url = new URL(`${baseUrl}/profile`);
+      // use this for local running profile service
+      // const url = new URL(`http://10.0.2.2:3000/`);
       channel = await generateChannelData(channelType, url);
 
       // Set timeout to expire channel
@@ -52,6 +53,7 @@ export const createChannel =
         channelId: channel.id,
         data: channelInfo,
         dataId: CHANNEL_INFO_NAME,
+        requestedTtl: channel.ttl,
       });
 
       // upload my profile
@@ -80,14 +82,6 @@ export const joinChannel =
       return;
     }
 
-    // limit too high channel Time-To-Live
-    if (channel.ttl > CHANNEL_TTL) {
-      console.log(
-        `WARNING - TTL ${channel.ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
-      );
-      channel.ttl = CHANNEL_TTL;
-    }
-
     // calc remaining lifetime of channel
     const ttl_remain = channel.timestamp + channel.ttl - Date.now();
 
@@ -100,6 +94,19 @@ export const joinChannel =
         throw new Error('Channel expired');
       }
 
+      // don't join channel if it already has maximum allowed number of entries.
+      // Note that this is a client-side limitation in order to keep the UI usable.
+      const entries = await channel.api.list(channel.id);
+      // channel.api.list() will include the channelInfo.json file.
+      // Remove it from list as I don't want to download and interpret it as a profile.
+      const channelInfoIndex = entries.indexOf(CHANNEL_INFO_NAME);
+      if (channelInfoIndex > -1) {
+        entries.splice(channelInfoIndex, 1);
+      }
+      if (entries.length >= CHANNEL_CONNECTION_LIMIT) {
+        throw new Error(`Channel is full`);
+      }
+
       // Start timer to expire channel
       channel.timeoutId = setTimeout(() => {
         console.log(`timer expired for channel ${channel.id}`);
@@ -108,7 +115,7 @@ export const joinChannel =
 
       // add channel to store
       // we need channel to exist prior to uploadingProfileToChannel
-      await dispatch(addChannel(channel));
+      dispatch(addChannel(channel));
 
       // upload my profile to channel
       await dispatch(encryptAndUploadProfileToChannel(channel.id));
@@ -229,9 +236,6 @@ export const fetchChannelProfiles =
       case channel_types.STAR:
         if (channel.initiatorProfileId === channel.myProfileId) {
           // Channel creator: Load all profiles
-          console.log(
-            `STAR channel - Initiator (${channel.initiatorProfileId})`,
-          );
           for (const profileId of profileIds) {
             if (
               profileId !== channel.myProfileId &&
@@ -336,13 +340,13 @@ export const encryptAndUploadProfileToChannel =
 
     const { notificationToken } = getState().notifications;
 
-    const socialMedia = selectAllSocialMedia(getState());
+    const socialMedia = selectAllSocialMediaToShare(getState());
 
     // retrieve photo
     const photo = await retrieveImage(filename);
     const profileTimestamp = Date.now();
 
-    const dataObj = {
+    const dataObj: SharedProfile = {
       id,
       photo,
       name,

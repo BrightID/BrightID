@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  Alert,
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
@@ -19,9 +20,9 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
-  selectAllApps,
   setActiveNotification,
   updateBlindSigs,
+  selectActiveDevices,
 } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
@@ -34,7 +35,11 @@ import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-import { selectBaseUrl, selectIsPrimaryDevice } from '@/reducer/settingsSlice';
+import {
+  selectBaseUrl,
+  selectIsPrimaryDevice,
+  removeCurrentNodeUrl,
+} from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -44,6 +49,10 @@ import {
 
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
+import {
+  syncAndLinkSocialMedias,
+  updateSocialMediaVariations,
+} from '@/components/EditProfile/socialMediaThunks';
 
 /**
  * Home screen of BrightID
@@ -65,11 +74,11 @@ export const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
-  const apps = useSelector(selectAllApps);
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
   const isPrimaryDevice = useSelector(selectIsPrimaryDevice);
+  const activeDevices = useSelector(selectActiveDevices);
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
@@ -94,6 +103,8 @@ export const HomeScreen = (props) => {
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
+      dispatch(updateSocialMediaVariations());
+      dispatch(syncAndLinkSocialMedias());
       const timeoutId = setTimeout(() => {
         setLoading(false);
       }, 3000);
@@ -103,22 +114,35 @@ export const HomeScreen = (props) => {
     }, [api, dispatch, isPrimaryDevice, photoFilename]),
   );
 
-  /* Update list of apps from server if
-     - apps are empty (first startup?)
-     - apps are from previous api version (app object in store
-      is missing 'usingBlindSig' key)
-   */
   useEffect(() => {
     if (api) {
-      if (
-        apps.length === 0 ||
-        !Object.keys(apps[0]).includes('usingBlindSig')
-      ) {
-        console.log(`updating apps...`);
-        dispatch(fetchApps(api));
+      console.log(`updating apps...`);
+      dispatch(fetchApps(api));
+    }
+  }, [api, dispatch]);
+
+  useEffect(() => {
+    if (activeDevices.length) {
+      console.log(`checking signing key...`);
+      const invalidSigingKey = !activeDevices.find(
+        (d) => d.signingKey === publicKey,
+      );
+      if (invalidSigingKey) {
+        return Alert.alert(
+          t('common.alert.title.invalidSigningKey'),
+          t('common.alert.text.invalidSigningKey'),
+          [
+            {
+              text: 'Switch to different node',
+              onPress: () => {
+                dispatch(removeCurrentNodeUrl());
+              },
+            },
+          ],
+        );
       }
     }
-  }, [api, apps, dispatch]);
+  }, [activeDevices, dispatch, publicKey, t]);
 
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));

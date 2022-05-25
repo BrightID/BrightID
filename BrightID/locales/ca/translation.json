@@ -29,9 +29,36 @@
       }
     }
   },
+  "drawer": {
+    "label": {
+      "findFriends": "convidar"
+    }
+  },
+  "common": {
+    "alert": {
+      "text": {
+        "commonError": "Ho sentim, no hem pogut completar la teva sol·licitud. Si us plau, torna-ho a provar en un moment."
+      }
+    }
+  },
   "contact": {
     "label": {
       "email": "Correu-e"
     }
+  },
+  "profile": {
+    "alert": {
+      "text": {
+        "invalidPhoneNumber": "Enter a valid phone number"
+      }
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "convidar"
+    },
+    "text": {
+      "invitationNotAvailable": "Ho sentim, l'enviament de la invitació no està disponible actualment per a aquesta aplicació."
+    }
   }
-}
+},

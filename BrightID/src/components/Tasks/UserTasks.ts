@@ -36,7 +36,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.getSponsored.description`),
     url: 'https://apps.brightid.org/',
     checkFn(state: State) {
-      return state.user.isSponsored;
+      return state.user.isSponsored || state.user.isSponsoredv6;
     },
   },
   make_two_connection: {

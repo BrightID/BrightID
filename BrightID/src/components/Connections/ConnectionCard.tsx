@@ -13,14 +13,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { CHANNEL_TTL, connection_levels } from '@/utils/constants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import i18next from 'i18next';
+import { useDispatch, useSelector } from '@/store';
+import { connection_levels, CONNECTION_STALE_AGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection, addOperation } from '@/actions';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
@@ -32,12 +35,9 @@ import {
   RED,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { encryptAesKey } from '@/utils/invites';
-import i18next from 'i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 
 /**
@@ -80,7 +80,7 @@ const ConnectionCard = (props: Props) => {
       if (status === 'initiated') {
         const checkStale = () => {
           const ageMs = Date.now() - connectionDate;
-          if (ageMs > CHANNEL_TTL) {
+          if (ageMs > CONNECTION_STALE_AGE) {
             console.log(`Connection ${name} is stale (age: ${ageMs} ms)`);
             return true;
           }
@@ -90,8 +90,9 @@ const ConnectionCard = (props: Props) => {
           // this is already old. Immediately mark as "stale", no need for a timer.
           dispatch(staleConnection(id));
         } else {
-          // start timer to check if connection got verified after maximum channel lifetime
-          let checkTime = connectionDate + CHANNEL_TTL + 5000 - Date.now(); // add 5 seconds buffer
+          // start timer to check if connection got verified after waiting CONNECTION_STALE_AGE ms
+          let checkTime =
+            connectionDate + CONNECTION_STALE_AGE + 5000 - Date.now(); // add 5 seconds buffer
           if (checkTime < 0) {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second

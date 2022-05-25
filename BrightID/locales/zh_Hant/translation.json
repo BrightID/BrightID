@@ -113,6 +113,7 @@
       "success": "成功",
       "sure": "確認",
       "text": {
+        "commonError": "抱歉，我們無法完成您的請求。請稍後再試。",
         "failedOp": "{{name}}失敗!\n{{message}}",
         "lostKeys": "請創建一個新的 BrightID 或嘗試恢復您以前的 BrightID",
         "passwordMatch": "密碼和密碼確認輸入不一致。",
@@ -289,6 +290,7 @@
       "contactUs": "聯係我們",
       "copyExplorerCode": "複製窗口信息",
       "editProfile": "編輯個人資料",
+      "findFriends": "邀請",
       "home": "主頁"
     }
   },
@@ -498,7 +500,8 @@
       },
       "text": {
         "discardChanges": "您有未保存的更改。您確定要丟棄它們並離開屏幕嗎？",
-        "passwordMatch": "當前密碼不匹配。"
+        "passwordMatch": "當前密碼不匹配。",
+        "invalidPhoneNumber": "輸入有效的電話號碼"
       },
       "title": {
         "discardChanges": "放棄更改？",
@@ -515,7 +518,8 @@
       "newPassword": "新密碼",
       "newPasswordAgain": "重複密碼",
       "password": "密碼",
-      "socialMediaLink": "社交媒體鏈接"
+      "socialMediaLink": "社交媒體鏈接",
+      "phoneNumber": "電話號碼"
     },
     "placeholder": {
       "name": "輸入姓名",
@@ -685,6 +689,14 @@
       "gotIt": "知道了！",
       "setPassword": "您可以隨時設置您的\nBrightID 密碼在這裡",
       "viewPassword": "你總能看到你的\nBrightID 密碼在這裡"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "邀請"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此應用目前無法發送邀請。"
     }
   }
 }

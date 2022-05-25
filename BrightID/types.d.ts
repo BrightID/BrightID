@@ -1,5 +1,6 @@
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
+import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
 import {
   channel_states,
@@ -9,7 +10,13 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
-import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
+import {
+  SocialMediaType,
+  SocialMediaShareActionType,
+  SocialMediaShareType,
+  SocialMediaShareTypeDisplay,
+  SocialMediaVariationIds,
+} from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -34,7 +41,7 @@ declare global {
     context: string;
     contextId: string;
     dateAdded: number;
-    state: string;
+    state: 'pending' | 'applied' | 'failed';
   };
 
   type SigInfo = {
@@ -89,6 +96,18 @@ declare global {
     initiatorProfileId: string;
   };
 
+  /* Profile information shared P2P via channel when making connections */
+  type SharedProfile = {
+    id: string;
+    photo: string;
+    name: string;
+    socialMedia?: Array<SocialMedia>;
+    profileTimestamp: number;
+    secretKey?: string;
+    notificationToken?: string;
+    version: number;
+  };
+
   type Photo = {
     filename: string;
   };
@@ -128,39 +147,39 @@ declare global {
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 
-  type PendingConnection = Partial<{
-    id: string;
-    channelId: string;
-    brightId: string;
-    name: string;
-    photo: string;
-    notificationToken: string;
-    score: number;
-    state: PendingConnectionState;
-    verifications: Verification[];
-    connectionsNum: number;
-    reports: Array<{ id: string; reportReason: string }>;
-    connectedAt: number;
-    groupsNum: number;
-    mutualConnections: string[];
-    existingConnection: Connection;
-    socialMedia: SocialMedia[];
-    mutualGroups: string[];
-    createdAt: number;
-    profileTimestamp: number;
-    initiator: string;
-    myself?: boolean;
-    secretKey?: string;
-  }>;
+  /**
+   * PendingConnectionData contains all available info about a pending connection
+   * - existingConnection, if there already is a connection to this user
+   * - sharedProfile: The connection data that was shared via channel
+   * - profileInfo: The connection data that was obtained via brightID node API
+   */
+  type PendingConnectionData = {
+    existingConnection?: Connection;
+    sharedProfile: SharedProfile;
+    profileInfo?: ProfileInfo;
+    notificationToken?: string;
+    myself: boolean;
+  };
 
-  type PendingConnectionsState = EntityState<PendingConnection>;
+  /**
+   * Pending connection is made of
+   * - identifier (channelId, profileId)
+   * - state
+   * The actual connection data is downloaded from a channel and stored in pendingConnectionData.
+   */
+  type PendingConnection = {
+    profileId: string;
+    channelId: string;
+    state: PendingConnectionState;
+    pendingConnectionData?: PendingConnectionData;
+  };
 
   type RecoveryData = {
     publicKey: string;
     secretKey: Uint8Array;
     id: string;
     name: string;
-    photo: string;
+    photo: Photo;
     aesKey: string;
     timestamp: number;
     recoveredConnections: number;
@@ -187,37 +206,64 @@ declare global {
 
   // We are sure that these properties are
   // shared in old or new versions of app
-  interface SocialMediaCompanyShared {
+  interface SocialMediaVariationShared {
     name: string;
-    shareType: string;
+    shareType: SocialMediaShareType;
   }
 
-  type SocialMediaCompany = SocialMediaCompanyShared & {
-    shareTypeDisplay: string;
-    icon: any;
-    getShareAction: (profile: string) => SocialMediaShareAction;
-  };
+  type SocialMediaId = string | SocialMediaVariationIds;
 
-  type SocialMediaId = string;
-
-  type SocialMediaList = {
-    [key: SocialMediaId]: SocialMediaCompany;
-  };
-
-  type SocialMedia = {
+  type SocialMediaVariation = SocialMediaVariationShared & {
     id: SocialMediaId;
-    company: SocialMediaCompanyShared;
+    type: SocialMediaType;
+    shareTypeDisplay: SocialMediaShareTypeDisplay;
+    shareActionType: SocialMediaShareActionType;
+    shareActionDataFormat: string;
+    icon: any;
+    brightIdAppId: string;
+  };
+
+  type SocialMediaVariationState = EntityState<SocialMediaVariation>;
+
+  type SocialMediaVariations = SocialMediaVariation[];
+
+  type SocialMediaShared = {
+    id: SocialMediaId;
+    company: SocialMediaVariationShared;
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
   };
 
-  type SocialMediaShareAction = {
-    actionType: SocialMediaShareActionType;
-    data: string;
+  type BrightIdSocialAppData = {
+    linked: boolean;
+    appUserId: string;
+    token: string;
+    synced: boolean;
+  };
+
+  type SocialMedia = SocialMediaShared & {
+    brightIdSocialAppData?: BrightIdSocialAppData;
+  };
+
+  type PhoneNumberObject = {
+    country: CountryCode;
+    number: string;
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
+
+  /*
+    Connection information synced via channel when using multiple
+    devices or performing recovery.
+  */
+  type SyncConnection = {
+    id: string;
+    name: string;
+    photo: string; // base64-encoded photo data
+    timestamp: number;
+    socialMedia?: SocialMedia[];
+  };
 
   type TasksState = { [taskId: string]: TasksStateEntry };
 
@@ -277,6 +323,7 @@ declare global {
     };
     ChangePassword: undefined;
     SelectSocialMedia: {
+      type: SocialMediaType;
       order: number;
       page: number;
       prevId: SocialMediaId;

@@ -45,8 +45,9 @@ import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { isVerified } from '@/utils/verifications';
 import AppCard from './AppCard';
+import { handleV5App, handleV6App } from './model';
+import { AppsRoute } from '@/components/Apps/types';
 import AnimatedLinearGradient from './AnimatedLinearGradient';
-import { handleAppContext, handleBlindSigApp } from './model';
 
 export const AppsScreen = () => {
   const filters = [
@@ -63,10 +64,12 @@ export const AppsScreen = () => {
   const { t } = useTranslation();
 
   const apps = useSelector(selectAllApps);
+  const isSponsored = useSelector(
+    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+  );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
-  const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
   const userVerifications = useSelector(
     (state: State) => state.user.verifications,
@@ -142,11 +145,13 @@ export const AppsScreen = () => {
       });
   }, [api, dispatch]);
 
-  const handleDeepLink = useCallback(() => {
+  const handleV5DeepLink = useCallback(() => {
     const context = route.params?.context;
+    const isValidApp = any(propEq('id', context))(apps);
     const isValidContext = any(propEq('context', context))(apps);
-    if (isValidContext) {
-      handleAppContext(route.params);
+    // legacy apps send context in the deep link but soulbound apps send app
+    if (isValidApp || isValidContext) {
+      handleV5App(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidContext'),
@@ -159,13 +164,13 @@ export const AppsScreen = () => {
       context: '',
       contextId: '',
     });
-  }, [navigation, route.params, apps, t]);
+  }, [navigation, route.params, apps, api, t]);
 
-  const handleAppDeepLink = useCallback(() => {
+  const handleV6DeepLink = useCallback(() => {
     const appId = route.params?.context;
     const appInfo = find(propEq('id', appId))(apps) as AppInfo;
     if (api && appInfo && appInfo.usingBlindSig) {
-      handleBlindSigApp(route.params, setSponsoringApp, api);
+      handleV6App(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),
@@ -181,11 +186,11 @@ export const AppsScreen = () => {
 
   useEffect(() => {
     if (apps.length > 0 && route.params?.baseUrl) {
-      handleDeepLink();
+      handleV5DeepLink();
     } else if (apps.length > 0 && route.params?.context) {
-      handleAppDeepLink();
+      handleV6DeepLink();
     }
-  }, [apps, handleDeepLink, handleAppDeepLink, route.params]);
+  }, [apps, handleV5DeepLink, handleV6DeepLink, route.params]);
 
   // handle filter
   useEffect(() => {

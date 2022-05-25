@@ -25,27 +25,24 @@ const downloadConnection = async ({
   channelApi: ChannelAPI;
   aesKey: string;
   channelId: string;
-}) => {
+}): Promise<SyncConnection> => {
   try {
     console.log(channelId, dataId);
-    const encrypted = await channelApi.download({ channelId, dataId });
-    const connectionData = decryptData(encrypted, aesKey);
+    const encrypted = await channelApi.download({
+      channelId,
+      dataId,
+      deleteAfterDownload: true,
+    });
+    const connectionData = decryptData(encrypted, aesKey) as SyncConnection;
 
     // missing data
     if (!connectionData || !connectionData?.id || !connectionData?.name) {
       console.log('missing connection data');
       return;
     }
-    console.log(`Downloading profile data of ${connectionData?.id} ...`);
-
-    let filename: string;
-    if (connectionData.photo) {
-      filename = await saveImage({
-        imageName: connectionData.id,
-        base64Image: connectionData.photo,
-      });
-    }
-    connectionData.photo = { filename };
+    console.log(
+      `Downloaded profile data of ${connectionData.name} (${connectionData?.id})`,
+    );
 
     return connectionData;
   } catch (err) {
@@ -98,7 +95,19 @@ export const downloadConnections =
           channelId,
         });
         if (connectionData) {
-          dispatch(addConnection(connectionData));
+          let filename: string;
+          if (connectionData.photo) {
+            filename = await saveImage({
+              imageName: connectionData.id,
+              base64Image: connectionData.photo,
+            });
+          }
+          const newConnection: Connection = {
+            ...connectionData,
+            photo: { filename },
+          };
+
+          dispatch(addConnection(newConnection));
           count++;
         }
       }
@@ -151,7 +160,16 @@ export const downloadNamePhoto =
       } = getState();
 
       if (!name && connectionData) {
-        dispatch(updateNamePhoto(connectionData));
+        let filename: string;
+        if (connectionData.photo) {
+          filename = await saveImage({
+            imageName: connectionData.id,
+            base64Image: connectionData.photo,
+          });
+        }
+        dispatch(
+          updateNamePhoto({ name: connectionData.name, photo: { filename } }),
+        );
       }
     }
   };
@@ -168,7 +186,11 @@ const downloadGroup = async ({
   channelId: string;
 }) => {
   try {
-    const encrypted = await channelApi.download({ channelId, dataId });
+    const encrypted = await channelApi.download({
+      channelId,
+      dataId,
+      deleteAfterDownload: true,
+    });
     const groupData = decryptData(encrypted, aesKey);
     // group data missing
     if (!groupData || !groupData?.id || !groupData?.aesKey) {

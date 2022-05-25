@@ -2,6 +2,7 @@ import {
   createSlice,
   createEntityAdapter,
   PayloadAction,
+  createSelector,
 } from '@reduxjs/toolkit';
 
 import { original, Draft } from 'immer';
@@ -23,6 +24,7 @@ const socialMediaSlice = createSlice({
         id: incomingId,
         order: incomingOrder,
         profile: incomingProfile,
+        brightIdSocialAppData: incomingBrightIdSocialAppData,
       } = action.payload;
 
       // access previous values from the reducer
@@ -49,6 +51,7 @@ const socialMediaSlice = createSlice({
           id: incomingId,
           changes: {
             profile: incomingProfile,
+            brightIdSocialAppData: incomingBrightIdSocialAppData,
           },
         });
       }
@@ -63,10 +66,11 @@ const socialMediaSlice = createSlice({
         const shouldDecrement = !shouldIncrement;
 
         const updateList = Object.values(entities).map((entity) => {
-          let { order, profile } = entity;
+          let { order, profile, brightIdSocialAppData } = entity;
           if (entity.id === incomingId) {
             order = incomingOrder;
             profile = incomingProfile;
+            brightIdSocialAppData = incomingBrightIdSocialAppData;
           } else if (
             shouldIncrement &&
             order >= incomingOrder &&
@@ -83,7 +87,7 @@ const socialMediaSlice = createSlice({
 
           return {
             id: entity.id,
-            changes: { order, profile },
+            changes: { order, profile, brightIdSocialAppData },
           };
         });
 
@@ -101,19 +105,36 @@ const socialMediaSlice = createSlice({
         },
       });
     },
-    removeSocialMedia: socialMediaAdapter.removeOne,
   },
 });
 
-export const {
-  saveSocialMedia,
-  removeSocialMedia,
-  setProfileDisplayWidth,
-} = socialMediaSlice.actions;
+export const { saveSocialMedia, setProfileDisplayWidth } =
+  socialMediaSlice.actions;
 
 export const {
   selectById: selectSocialMediaById,
   selectAll: selectAllSocialMedia,
 } = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
 
+export const selectExistingSocialMedia = createSelector(
+  selectAllSocialMedia,
+  (socialMedias) => socialMedias.filter((socialMedia) => socialMedia.profile),
+);
+
+export const selectExistingSocialMediaIds = createSelector(
+  selectExistingSocialMedia,
+  (socialMedias) => socialMedias.map((socialMedia) => socialMedia.id),
+);
+
+export const selectAllSocialMediaToShare = createSelector(
+  selectExistingSocialMedia,
+  (socialMedias) =>
+    socialMedias.map((socialMedia) => ({
+      id: socialMedia.id,
+      company: socialMedia.company,
+      order: socialMedia.order,
+      profile: socialMedia.profile,
+      profileDisplayWidth: socialMedia.profileDisplayWidth,
+    })) as SocialMediaShared[],
+);
 export default socialMediaSlice.reducer;

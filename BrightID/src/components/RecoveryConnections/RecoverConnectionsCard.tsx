@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from '@/store';
-import { CHANNEL_TTL, ORANGE } from '@/utils/constants';
+import { CONNECTION_STALE_AGE, ORANGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
@@ -63,7 +63,7 @@ const RecoveryConnectionCard = (props: Props) => {
       if (status === 'initiated') {
         const checkStale = () => {
           const ageMs = Date.now() - connectionDate;
-          if (ageMs > CHANNEL_TTL) {
+          if (ageMs > CONNECTION_STALE_AGE) {
             console.log(`Connection ${name} is stale (age: ${ageMs} ms)`);
             return true;
           }
@@ -74,7 +74,8 @@ const RecoveryConnectionCard = (props: Props) => {
           dispatch(staleConnection(id));
         } else {
           // start timer to check if connection got verified after maximum channel lifetime
-          let checkTime = connectionDate + CHANNEL_TTL + 5000 - Date.now(); // add 5 seconds buffer
+          let checkTime =
+            connectionDate + CONNECTION_STALE_AGE + 5000 - Date.now(); // add 5 seconds buffer
           if (checkTime < 0) {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second

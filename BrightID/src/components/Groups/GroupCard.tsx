@@ -75,6 +75,9 @@ export const GroupCard = ({ group, index }: GroupCardProps) => {
             </Text>
             <Text style={styles.membersUnknown}>{unknownsCount}</Text>
           </View>
+          <View>
+            <Text style={styles.groupId}>ID: {group.id}</Text>
+          </View>
           {groupInfo}
         </View>
       </View>
@@ -139,6 +142,10 @@ const styles = StyleSheet.create({
   membersUnknown: {
     color: DARK_ORANGE,
     fontSize: fontSize[16],
+  },
+  groupId: {
+    fontSize: 8,
+    color: BLACK,
   },
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',

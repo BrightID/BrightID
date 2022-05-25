@@ -47,9 +47,22 @@
       "description": "Lege ein Passwort fest, um die verschlüsselte Sicherung deiner Daten zu ermöglichen",
       "title": "Sicherungspasswort festlegen"
     },
+    "setupRecoveryConnections": {
+      "description": "Richte deine Wiederherstellungsverbindungen ein, um die Wiederherstellung von Sozialkonten zu ermöglichen",
+      "title": "Soziale Erholung einrichten"
+    },
     "setupTrustedConnections": {
       "description": "Erstelle Wiederherstellungsverbindungen und sichere deine BrightID",
       "title": "Soziale Wiederherstellung einrichten"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Geräteinformationen hinzufügen"
+    },
+    "steps": {
+      "downloading": "Herunterladen von neuen Gerätedaten …",
+      "error": "Hinzufügen des Signierschlüssels fehlgeschlagen"
     }
   },
   "apps": {
@@ -143,6 +156,7 @@
       "success": "Erfolg",
       "sure": "Ja",
       "text": {
+        "commonError": "Entschuldigung, wir konnten Ihre Anfrage nicht abschließen. Bitte versuchen Sie es gleich noch einmal.",
         "failedOp": "{{name}} fehlgeschlagen!\n{{message}}",
         "incorrectPassword": "Falsches Passwort!",
         "lostKeys": "Bitte erstelle eine neue BrightID oder versuche, deine vorherige BrightID wiederherzustellen",
@@ -325,6 +339,7 @@
       "contactUs": "Kontaktiere uns",
       "copyExplorerCode": "Explorer Code kopieren",
       "editProfile": "Profil bearbeiten",
+      "findFriends": "einladen",
       "home": "Startseite"
     }
   },
@@ -566,7 +581,8 @@
       "newPasswordAgain": "Passwort wiederholen",
       "password": "Passwort",
       "passwordAgain": "Passwort wiederholen",
-      "socialMediaLink": "Social Media Verknüpfung"
+      "socialMediaLink": "Social Media Verknüpfung",
+      "phoneNumber": "Telefonnummer"
     },
     "placeholder": {
       "name": "Namen eingeben",
@@ -769,6 +785,14 @@
       "gotIt": "Verstanden!",
       "setPassword": "Du kannst jederzeit dein\nBrightID-Passwort hier festlegen",
       "viewPassword": "Du kannst immer dein\nBrightID-Passwort hier sehen"
+    }
+  },
+  "findFriends" : {
+    "button": {
+      "invite": "einladen"
+    },
+    "text": {
+      "invitationNotAvailable": "Tut mir leid, das Senden von Einladungen ist derzeit für diese App nicht verfügbar."
     }
   }
 }

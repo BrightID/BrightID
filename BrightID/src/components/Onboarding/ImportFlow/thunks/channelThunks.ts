@@ -11,6 +11,7 @@ import {
 import {
   checkCompletedFlags,
   downloadBlindSigs,
+  downloadContextInfo,
   downloadUserInfo,
 } from './channelDownloadThunks';
 import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
@@ -34,6 +35,8 @@ export const createSyncChannel =
     } = getState();
     const baseUrl = selectBaseUrl(getState());
     const url = new URL(`${baseUrl}/profile`);
+    // use this for local running profile service
+    // const url = new URL(`http://10.0.2.2:3000/`);
     const channelId = hash(aesKey);
     console.log(`created channel ${channelId} for sync data`);
     dispatch(setRecoveryChannel({ channelId, url }));
@@ -70,6 +73,7 @@ export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
     const dataString = await channelApi.download({
       channelId,
       dataId: `${IMPORT_PREFIX}data`,
+      deleteAfterDownload: true,
     });
     return JSON.parse(dataString) as SyncDeviceInfo;
   } catch (err) {
@@ -132,6 +136,7 @@ export const checkImportChannel =
     await dispatch(downloadUserInfo({ channelApi, dataIds }));
     await dispatch(downloadConnections({ channelApi, dataIds }));
     await dispatch(downloadGroups({ channelApi, dataIds }));
+    await dispatch(downloadContextInfo({ channelApi, dataIds }));
     if (!isPrimaryDevice) {
       await dispatch(downloadBlindSigs({ channelApi, dataIds }));
     }

@@ -9,6 +9,7 @@ import {
   createBrightID,
   createFakeConnection,
   createGroup,
+  expectAppsScreen,
   expectConnectionsScreen,
   expectHomescreen,
   getGroupKeys,
@@ -20,7 +21,11 @@ import { NodeApi } from '@/api/brightId';
 import { b64ToUrlSafeB64, hash } from '@/utils/encoding';
 import { loadRecoveryData } from '@/utils/recovery';
 import { encryptData } from '@/utils/cryptoHelper';
-import { uploadConnection, uploadGroup } from '@/utils/channels';
+import {
+  uploadConnection,
+  uploadContextInfo,
+  uploadGroup,
+} from '@/utils/channels';
 import { IMPORT_PREFIX } from '@/utils/constants';
 
 const apiUrl = 'http://test.brightid.org';
@@ -48,6 +53,35 @@ describe('Import BrightID', () => {
   const fakeConnectionIds: Array<string> = [];
   const groupNames = ['Group one', 'Group two'];
   let groupKeys: Array<{ id: string; aesKey: string }> = [];
+  const apps: { appId: string; contextInfo: ContextInfo }[] = [
+    {
+      appId: 'ethereum',
+      contextInfo: {
+        context: 'ethereum',
+        contextId: '0xB0008ADAFF0DDC5D03652944D28A0F246E5D46A3',
+        dateAdded: 1648459346910,
+        state: 'applied',
+      },
+    },
+    {
+      appId: 'Gitcoin',
+      contextInfo: {
+        context: 'Gitcoin',
+        contextId: '0x1CF62DC276BC71AFC700E4DB9BA7B932F6DB3621',
+        dateAdded: 1648463194129,
+        state: 'applied',
+      },
+    },
+    {
+      appId: '1hive',
+      contextInfo: {
+        context: '1hive',
+        contextId: '0x82978C22A3FF7AF9276AC0FA4D48DD8FE2C123DF',
+        dateAdded: 1648463298792,
+        state: 'applied',
+      },
+    },
+  ];
 
   describe(`Prepare BrightID to be imported`, () => {
     afterAll(async () => {
@@ -135,6 +169,12 @@ describe('Import BrightID', () => {
 
       // create channel instance to load import/recovery data
       const channelURL = new URL(qrUrl);
+      // Android emulator has well-known alias of 10.0.2.2 routing to localhost where emulator is running
+      if (channelURL.host === '10.0.2.2:3000') {
+        console.log(`Patching 10.0.2.2 to 127.0.0.1...`);
+        channelURL.host = '127.0.0.1:3000';
+        console.log(channelURL);
+      }
       // Pop 'type' parameter from url
       channelURL.searchParams.delete('t');
       // Pop 'aes' parameter from url
@@ -165,11 +205,13 @@ describe('Import BrightID', () => {
         name: 'Quentin',
         photo: photoData,
         isSponsored: false,
+        isSponsoredv6: false,
         backupCompleted: false,
         password: '',
         updateTimestamps: {
           backupCompleted: 0,
           isSponsored: 0,
+          isSponsoredv6: 0,
           photo: 0,
           name: 0,
           password: 0,
@@ -219,6 +261,17 @@ describe('Import BrightID', () => {
         });
       }
 
+      // upload ContextInfos
+      for (const app of apps) {
+        await uploadContextInfo({
+          contextInfo: app.contextInfo,
+          channelApi,
+          aesKey,
+          signingKey,
+          prefix: IMPORT_PREFIX,
+        });
+      }
+
       // upload "completed" flag
       await channelApi.upload({
         channelId,
@@ -227,6 +280,20 @@ describe('Import BrightID', () => {
         )}`,
         data: 'completed',
       });
+    });
+
+    it('should import uploaded apps data', async () => {
+      // check that all imported linked Context show app as linked
+      for (const app of apps) {
+        await expectHomescreen();
+        await element(by.id('appsBtn')).tap();
+        await expectAppsScreen();
+        await waitFor(element(by.id(`Linked_${app.appId}`)))
+          .toBeVisible()
+          .whileElement(by.id('appsList'))
+          .scroll(50, 'down');
+        await navigateHome();
+      }
     });
 
     it('should import uploaded connections data', async () => {
@@ -302,8 +369,6 @@ describe('Import BrightID', () => {
 
       await navigateHome();
     });
-
-    test.todo('should import uploaded apps data');
   });
 });
 

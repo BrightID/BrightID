@@ -1,0 +1,785 @@
+{
+  "achievements": {
+    "bituVerification": {
+      "description": "Meer inforrmatie",
+      "title": "Bitu-verificatie"
+    },
+    "getSponsored": {
+      "description": "Verkrijg sponsoring door een app met sponsoring te koppelen",
+      "title": "Verkrijg sponsoring"
+    },
+    "joinMeet": {
+      "description": "Neem deel aan een BrightID-bijeenkomst",
+      "title": "BrightID-bijeenkomst"
+    },
+    "linkApp": {
+      "description": "Koppel je BrightID met een app",
+      "title": "Koppel met een app"
+    },
+    "makeFirstConnection": {
+      "description": "Leg contact met een andere BrightID-gebruiker",
+      "title": "Eerste contact"
+    },
+    "makeThreeConnection": {
+      "description": "Leg contact met 3 BrightID-gebruikers",
+      "title": "Drie contacten"
+    },
+    "makeTwoConnection": {
+      "description": "Leg contact met 2 BrightID-gebruikers",
+      "title": "Twee contacten"
+    },
+    "notification": {
+      "message": "Je hebt de taak ‘{{title}}’ volbracht.",
+      "title": "Prestatie ontgrendeld!"
+    },
+    "progress": {
+      "title": "Volbracht:"
+    },
+    "setupBackup": {
+      "description": "Stel een wachtwoord in om je gegevens veilig te bewaren",
+      "title": "Back-upwachtwoord instellen"
+    },
+    "setupRecoveryConnections": {
+      "description": "Stel herstelmogelijkheden in om je socialenetwerkaccounts te herstellen",
+      "title": "Sociaalaccountherstel instellen"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Apparaatinformatie toevoegen"
+    },
+    "info": "Hiermee kan je op het nieuwe apparaat gebruikmaken van je BrightID",
+    "steps": {
+      "adding": "Bezig met toevoegen van sleutel…",
+      "complete": "De sleutel is toegevoegd",
+      "downloading": "Bezig met ophalen van nieuwe apparaatgegevens…",
+      "error": "De sleutel kan niet worden toegevoegd"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Prima"
+      },
+      "text": {
+        "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Je probeert {{app}} te koppelen via {{appUserId}}, maar {{app}} is al gekoppeld aan een andere id: {{previousAppUserIds}}. Dit kan problemen veroorzaken tijdens het gebruik van de app.",
+        "checkWebsite": "Meer informatie over {{name}} is te vinden op hun website!",
+        "invalidApp": "{{app}} is geen geldige app!",
+        "invalidContext": "{{context}} is geen geldige context!",
+        "linkApp": "Wil je je account in {{context}} koppelen aan je BrightID?",
+        "linkFailure": "Je account in {{context}} kan niet worden gekoppeld aan je BrightID:\n{{result}}",
+        "linkSigFailed": "De verificatie, {{verification}}, kan niet worden gekoppeld aan {{appId}}. Foutmelding: {{msg}}",
+        "linkSuccess": "Je account in {{context}} is gekoppeld aan je BrightID",
+        "missingBlindSig": "Er is geen ondertekening aangetroffen in {{appId}}. Ontbrekend: {{missingVerifications}} - Reeds gekoppeld: {{linkedVerifications}}"
+      },
+      "title": {
+        "invalidApp": "Mislukt",
+        "invalidContext": "Mislukt",
+        "linkApp": "Wil je de app koppelen?",
+        "linkFailure": "Mislukt",
+        "linkSuccess": "Voltooid",
+        "linkingFailed": "De app kan niet worden gekoppeld"
+      }
+    },
+    "text": {
+      "noApps": "Geen apps",
+      "notSponsored": "Je wordt niet gesponsord.\nZoek hieronder een app die jou kan sponsoren.",
+      "pendingLink": "Je account in {{context}} wordt gekoppeld…",
+      "sponsoring": "{{app}} sponsort je…"
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "De clientversie is verouderd. Werk de client bij en probeer het opnieuw.",
+        "otherOutdated": "De andere client is verouderd. De QR-code-aanmaker dient de client bij te werken."
+      }
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "Foto toevoegen",
+      "editPhoto": "Andere foto kiezen",
+      "profilePhoto": "Profielfoto",
+      "userPhoto": "Profielfoto"
+    },
+    "actionSheet": {
+      "cancel": "Annuleren",
+      "title": "Wat wil je doen?"
+    },
+    "alert": {
+      "cancel": "Annuleren",
+      "dismiss": "Negeren",
+      "error": "Foutmelding",
+      "info": "Informatie",
+      "no": "Nee",
+      "ok": "Oké",
+      "success": "Voltooid",
+      "sure": "Prima",
+      "text": {
+        "failedOp": "{{name}} mislukt:\n{{message}}",
+        "invalidSigningKey": "Je sleutel is ongeldig. Dit kan een van de volgende oorzaken hebben:\n-Je hebt je BrightID op een ander apparaat hersteld;\n-Je hebt dit apparaat verwijderd van de lijst met actieve apparaten;\n-Er is een mislukte herstelpoging geweest;\n-Er is een probleem met de gekoppelde server.",
+        "lostKeys": "Maak een nieuwe BrightID aan of herstel je vorige BrightID",
+        "passwordMatch": "De wachtwoorden komen niet overeen.",
+        "passwordShort": "Je wachtwoord dient uit minimaal 8 tekens te bestaan.",
+        "recoverySigned": "Een van je herstelmethoden is goedgekeurd"
+      },
+      "title": {
+        "invalidSigningKey": "Ongeldige sleutel",
+        "lostKeys": "De BrightID-sleutel van je apparaat ontbreekt",
+        "pleaseConfirm": "Bevestig je keuze"
+      },
+      "yes": "Ja"
+    },
+    "button": {
+      "cancel": "Annuleren",
+      "copy": "Kopiëren",
+      "retry": "Opnieuw",
+      "save": "Opslaan"
+    },
+    "camera": {
+      "cancel": "Annuleren",
+      "message": "We hebben toestemming nodig om je camera te gebruiken",
+      "ok": "Oké",
+      "title": "Toestemming om camera te gebruiken"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Kiezen uit galerij",
+      "takePhoto": "Foto maken",
+      "title": "Foto kiezen"
+    },
+    "placeholder": {
+      "searchConnections": "Gekoppelde diensten doorzoeken"
+    },
+    "tag": {
+      "connectionDate": "Gekoppeld op {{date}}",
+      "reportReason": " als ‘{{reportReason}}’",
+      "reported": "(gemeld)",
+      "reportedByUser": "door jou gemeld"
+    },
+    "text": {
+      "uploadingData": "Bezig met uploaden naar back-upserver…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Opslaan",
+      "ok": "Oké",
+      "report": "Loskoppelen",
+      "reportCancel": "Annuleren",
+      "reportSubmit": "Versturen",
+      "undoReport": "Melding intrekken"
+    },
+    "header": {
+      "connectionDetails": "Koppelingsinformatie"
+    },
+    "label": {
+      "connectionLevel": "Koppelingsniveau",
+      "mutualConnections": "Gemeenschappelijke koppelingen",
+      "mutualGroups": "Gemeenschappelijke groepen",
+      "possibleDuplicates": "Mogelijke duplicaten",
+      "recoveryConnections": "Herstelmethoden",
+      "socialMedia": "Sociale media"
+    },
+    "tags": {
+      "connectedAt": "Gekoppeld op {{date}}",
+      "loading": "Bezig met laden…"
+    },
+    "text": {
+      "copied": "Gekopieerd naar het klembord!",
+      "level": "Hoe goed ken je {{name}}?",
+      "levelAlreadyKnown": "Ik ken deze persoon goed",
+      "levelJustMet": "Ik heb deze persoon zojuist ontmoet",
+      "levelRecovery": "Ik vertrouw op deze persoon om mijn BrightID te herstellen",
+      "levelSuspicious": "Ik ken deze persoon niet",
+      "reportConnection": "Loskoppelen van {{name}}",
+      "reportDuplicate": "Deze koppeling is verouderd of een duplicaat",
+      "reportOther": "Andere reden",
+      "reportSpammer": "Deze persoon stuurde me een ongewenst verzoek",
+      "unReportConnection": "Herstellen",
+      "unReportImpact": "Je hebt {{name}} gemeld als ‘{{reportReason}}’. Weet je zeker dat je dit wilt intrekken en de koppeling wilt herstellen?",
+      "unkownRecoveryConnection": "Onbekend",
+      "whyremove": "Vertel ons waarom je deze koppeling wilt verwijderen"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Koppelingsfoto",
+      "viewConnectionDetails": "Koppelingsinformatie tonen",
+      "viewPhoto": "Foto beeldvullend bekijken"
+    },
+    "button": {
+      "reconnect": "Opnieuw koppelen",
+      "reportConnection": "Melding maken",
+      "updateConnection": "Bijwerken"
+    },
+    "header": {
+      "connections": "Koppelingen"
+    },
+    "label": {
+      "currentConnectionLevel": "Koppelingsniveau",
+      "newProfile": "Nieuw profiel",
+      "oldProfile": "Oud profiel"
+    },
+    "removeActionSheet": {
+      "info": "Weet je zeker dat je de koppeling met {{name}} wilt verwijderen? Je kunt te allen tijde opnieuw koppelen.",
+      "remove": "Verwijderen",
+      "title": "Koppeling verwijderen"
+    },
+    "tag": {
+      "deleted": "Verwijderd",
+      "failed": "Het koppelen is mislukt;\nprobeer het opnieuw.",
+      "lastConnected": "Gekoppeld op {{date}}",
+      "reported": "Gemeld",
+      "reportedAs": "Gemeld als ‘{{flag}}’",
+      "waiting": "Bezig met wachten…"
+    },
+    "text": {
+      "alreadyConnectedWith": "Je bent al gekoppeld aan {{name}}",
+      "noConnections": "Geen kopppelingen"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "E-mailadres",
+      "meet": "Kom in contact",
+      "socialMedia": "Sociale media",
+      "website": "Website"
+    },
+    "text": {
+      "meet": "Neem deel aan een BrightID-bijeenkomst!",
+      "openSource": "open source!",
+      "weAre": "Wij zijn "
+    },
+    "title": {
+      "contactUs": "Contact opnemen"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Geef de groep een naam",
+        "nameTooShort": "De groepsnaam dient uit minimaal 2 tekens te bestaan"
+      },
+      "title": {
+        "createFailed": "De groep kan niet worden aangemaakt",
+        "formIncomplete": "Niet alles is ingevuld"
+      }
+    },
+    "button": {
+      "createGroup": "Groep aanmaken",
+      "next": "Volgende",
+      "skip": "Overslaan"
+    },
+    "label": {
+      "invitees": "GENODIGDEN"
+    },
+    "placeholder": {
+      "groupName": "Wat is de naam van deze groep?"
+    },
+    "text": {
+      "invitees": "Nodig mensen uit",
+      "noConnections": "Geen koppelingen"
+    }
+  },
+  "devices": {
+    "alert": {
+      "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren.",
+      "confirmAdd": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat?",
+      "confirmRemove": "Weet je zeker dat je je BrightID wilt verwijderen van ‘{{name}}’?",
+      "confirmSync": "Weet je zeker dat je je BrightID-gegevens wilt delen en synchroniseren met dit apparaat?",
+      "noPrimary": "Je apparaten kunnen alleen worden gesynchroniseerd door det primaire apparaat."
+    },
+    "button": {
+      "submit": "Versturen"
+    },
+    "placeholder": {
+      "deviceName": "Apparaatnaam"
+    },
+    "text": {
+      "listDescription": "Je BrightID is beschikbaar op de volgende apparaten:",
+      "syncCompleted": "Je apparaat is gesynchroniseerd.",
+      "waitSyncing": "Bezig met synchroniseren…",
+      "whatsDeviceName": "Geef het nieuwe apparaat een naam"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "Je beschikt over de nieuwse versie."
+      },
+      "title": {
+        "upToDate": "Controleren op updates"
+      }
+    },
+    "label": {
+      "achievements": "Prestaties",
+      "checkForUpdates": "Controleren op updates",
+      "contactUs": "Contact opnemen",
+      "copyExplorerCode": "Verkennercode kopiëren",
+      "devices": "Apparaten",
+      "editProfile": "Profiel bewerken",
+      "groups": "Groepen",
+      "home": "Startpagina"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Licentie-overeenkomst"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "Gekopieerd naar het klembord!"
+      }
+    },
+    "button": {
+      "copyCode": "Code kopiëren"
+    },
+    "text": {
+      "backupRequired": "Het instellen van back-up en herstel is vereist om toegang te krijgen tot je grafiekverkennercode. Controleer je meldingen of koppel meer gebruikers om back-up en herstel in te stellen.",
+      "explorerWebsiteDescription": "is een website die speciaal ontworpen is om de sociale BrightID-grafiek te bekijken. Gebruik bovenstaande code om je netwerk te bekijken."
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "groepslogo"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "Weet je zeker dat je {{name}} wilt aanwijzen als groepsbeheerder?",
+        "dismissMember": "Weet je zeker dat je {{name}} wilt verwijderen uit deze groep?",
+        "groupIdCopied": "De groepsid is gekopieerd naar het klembord",
+        "inviteSuccess": "Je hebt {{name}} uitgenodigd",
+        "leaveGroup": "Weet je zeker dat je deze groep wilt verlaten?"
+      },
+      "title": {
+        "addAdmin": "Beheerder toevoegen",
+        "dismissMember": "Lid verwijderen",
+        "errorDismissMember": "Dit lid kan niet worden verwijderd",
+        "errorLeaveGroup": "De groep kan niet worden verlaten",
+        "inviteSuccess": "De uitnodiging is verstuurd",
+        "leaveGroup": "Groep verlaten"
+      }
+    },
+    "button": {
+      "createGroup": "Groep aanmaken",
+      "learnMore": "Meer informatie"
+    },
+    "groupActionSheet": {
+      "cancel": "Annuleren",
+      "copyGroupId": "Groepsid kopiëren naar klembord",
+      "inviteUser": "Gebruiker uitnodigen",
+      "leaveGroup": "Groep verlaten"
+    },
+    "header": {
+      "groups": "Groepen",
+      "inviteList": "Uitnodigingslijst",
+      "newGroup": "Nieuwe groep"
+    },
+    "label": {
+      "knownMembers": "Bekende leden:",
+      "unknownMembers": "Onbekende leden:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Beheerder toevoegen",
+      "cancel": "Annuleren",
+      "dismissMember": "Verwijderen uit groep"
+    },
+    "state": {
+      "creatingGroup": "Bezig met aanmaken…",
+      "uploadingGroupPhoto": "Bezig met uploaden…"
+    },
+    "tag": {
+      "primaryGroup": "Primaire groep"
+    },
+    "text": {
+      "noGroups": "<text>Verifieer sneller</text><text>door groepen te maken</text><text>en lid te worden</text>",
+      "noGroupsMatchSearch": "Er zijn geen zoekresultaten",
+      "noMembers": "Er zijn geen bekende leden - nodig mensen uit…"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "Koppelen"
+    },
+    "button": {
+      "achievements": "Prestaties",
+      "apps": "Apps",
+      "connections": "Koppelingen",
+      "myCode": "Mijn code",
+      "scanCode": "Scan een code"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID Discord-groep",
+      "title": "Wil je met ons kletsen?"
+    },
+    "label": {
+      "createNewConnection": "Maak een koppeling"
+    },
+    "link": {
+      "community": "Word lid van de gemeenschap"
+    }
+  },
+  "import": {
+    "alert": {
+      "text": "Open deze link in de te importeren BrightID-app.",
+      "title": "BrightID-link importeren"
+    },
+    "clipboardmessage": "Exporteer je BrightID naar een ander apparaat: {{link}}",
+    "header": {
+      "title": "Account importeren"
+    },
+    "text": {
+      "additionalInfo": "Scan deze QR-code met je andere apparaat om je BrightID te importeren",
+      "askScanning": "Scan deze QR-code met je andere apparaat",
+      "waitImporting": "Bezig met importeren van koppelingen…"
+    }
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Standaardlijst herstellen",
+      "text": "Je maakt geen gebruik van de standaardlijst"
+    },
+    "state": {
+      "connecting": "Bezig met koppelen…",
+      "noConnection": "Er kan geen verbinding worden gemaakt - controleer je internetverbinding.",
+      "noNode": "De lijst is blanco."
+    },
+    "timer": {
+      "text": "Resterend: {{secondsLeft}} seconden"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Huidige instantie:"
+    },
+    "switchNodeButtonLabel": "Andere instantie gebruiken"
+  },
+  "notificationBar": {
+    "text": {
+      "backupPassword": "Stel een wachtwoord in om je gegevens veilig te back-uppen",
+      "pendingConnections": "Er is {{count}} koppelingsverzoek",
+      "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+      "socialRecovery": "Kies herstelmethoden om je BrightID met behulp van je socialemedia-accounts te herstellen"
+    },
+    "title": {
+      "backupPassword": "Back-upwachtwoord instellen",
+      "pendingConnection": "Koppelingen bevestigen",
+      "socialRecovery": "Sociale herstelmethoden instellen"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "Je kunt geen lid worden van deze groep",
+        "rejectGroupInvite": "Weet je zeker dat je deze uitnodiging wilt afwijzen?",
+        "successGroupInvite": "Je bent lid geworden van {{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "De uitnodiging kan niet worden afgewezen",
+        "rejectGroupInvite": "Afwijzen"
+      }
+    },
+    "item": {
+      "msg": {
+        "backupBrightId": "Stel een wachtwoord in om je gegevens veilig te back-uppen",
+        "socialRecovery": "Kies herstelmethoden om je BrightID met behulp van je socialemedia-accounts te herstellen"
+      },
+      "text": {
+        "pendingConnections": "Er is {{count}} koppelingsverzoek",
+        "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+        "pendingGroupInvite": "{{name}} heeft je uitgenodigd voor deze groep"
+      },
+      "title": {
+        "backupBrightId": "Back-upwachtwoord instellen",
+        "socialRecovery": "Sociale herstelmethoden instellen"
+      }
+    },
+    "tab": {
+      "connections": "Koppelingen",
+      "groups": "Groepen",
+      "miscellaneous": "Overig"
+    },
+    "text": {
+      "noGroupInvites": "Je hebt geen groepsuitnodigingen…",
+      "noMiscellaneous": "Er valt hier niks te zien…",
+      "noPendingConnections": "Er zijn geen koppelingsverzoeken…"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "BrightID aanmaken",
+      "import": "Importeren",
+      "recover": "Herstellen"
+    },
+    "text": {
+      "congratulations": "Gefeliciteerd!\nJe BrightID is aangemaakt.\nNu wordt het tijd om je te koppelen.",
+      "register": "Registreer om je eigen digitale\nidentiteit aan te maken"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "Het koppelingskanaal kan niet worden aangemaakt. Foutmelding: {{message}}",
+        "errorJoinChannel": "Er kaan geen verbinding worden gemaakt met het koppelingskanaal. Foutmelding: {{message}}",
+        "localOutdated": "De koppeling met {{name}} is mislukt wegens een incompatibele clientversie. Update de BrightID-app en herstart.",
+        "otherOutdated": "De koppeling met {{name}} is mislukt wegens een incompatibele clientversie. Vraag {{name}} om zijn/haar BrightID-app te updaten en herstart."
+      },
+      "title": {
+        "connectionImpossible": "Koppelen mislukt"
+      }
+    },
+    "text": {
+      "alreadyRated": "Je hebt deze koppeling al beoordeeld",
+      "errorExpired": "De koppeling is verlopen - probeer het opnieuw.",
+      "errorMyself": "Je kunt niet aan jezelf worden gekoppeld.",
+      "errorUnhandled": "Onbehandelde koppelingsstatus"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "Reeds bekend",
+      "connections": "Koppelingen",
+      "created": "Lid geworden van BrightID op {{date}}",
+      "groups": "Groepen",
+      "justMet": "Zojuist ontmoet",
+      "mutualConnections": "Gemeenschappelijke koppelingen",
+      "rating": "Hoe goed ken je hem/haar?",
+      "recovery": "Herstel",
+      "reported": "Gemeld",
+      "suspicious": "Verdacht"
+    },
+    "text": {
+      "errorGeneric": "Er is een fout opgetreden - probeer het opnieuw.",
+      "rating": "Met jouw antwoord kunnen we aanvallen voorkomen"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}}/{{total}} bevestigd"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "Negeren",
+        "dontLeave": "Niet verlaten"
+      },
+      "text": {
+        "discardChanges": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je het scherm wilt verlaten?",
+        "passwordMatch": "Het huidige wachtwoord is onjuist."
+      },
+      "title": {
+        "discardChanges": "Wijzigingen negeren?",
+        "passwordMatch": "Probeer het opnieuw"
+      }
+    },
+    "button": {
+      "socialNext": "Volgende",
+      "socialPrevious": "Vorige"
+    },
+    "label": {
+      "currentPassword": "Huidig wachtwoord",
+      "name": "Naam",
+      "newPassword": "Nieuw wachtwoord",
+      "newPasswordAgain": "Wachtwoord herhalen",
+      "password": "Wachtwoord",
+      "socialMediaLink": "Socialemedialink"
+    },
+    "placeholder": {
+      "name": "Voer een naam in",
+      "newPassword": "Nieuw wachtwoord",
+      "newPasswordAgain": "Wachtwoord herhalen",
+      "password": "Wachtwoord"
+    },
+    "text": {
+      "backupPasswordTitle": "Wachtwoord bewaren",
+      "changePassword": "Wachtwoord wijzigen",
+      "changeProfilePicture": "Profielfoto wijzigen",
+      "setPassword": "Wachtwoord instellen",
+      "viewPassword": "Wachtwoord tonen"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "Word lid van een groep met {{name}} op BrightID: {{link}}",
+      "connectSingle": "Leg contact met {{name}} op BrightID: {{link}}",
+      "text": {
+        "codeGroup": "Deze QR-code is ontworpen om contact te leggen met meerdere personen tegelijk.",
+        "codeSingle": "Deze QR-code is ontworpen om contact te leggen met één gebruiker.",
+        "codeStar": "Deze QR-code is ontworpen om meerdere personen te koppelen aan één persoon.",
+        "shareLinkGroup": "Link delen",
+        "shareLinkSingle": "Link delen met één vriend(in)",
+        "universalLink": "Universele link"
+      },
+      "title": {
+        "codeGroup": "Groepscode",
+        "codeSingle": "Eenmalige code",
+        "codeStar": "Stercode"
+      }
+    },
+    "button": {
+      "copyLink": "Link kopiëren",
+      "scanCode": "Scan een code",
+      "showCode": "Toon je QR-code"
+    },
+    "header": {
+      "connections": "{{count}}/30 koppelingen",
+      "connections_plural": "{{count}}/30 koppelingen"
+    },
+    "label": {
+      "connectionType": "Soort koppeling:"
+    },
+    "text": {
+      "canAlso": "Of je kunt…",
+      "codeGroup": "Groepscode",
+      "codeSingle": "Eenmalige code",
+      "codeStar": "Stercode",
+      "confirmConnections": "Koppelingen bevestigen",
+      "downloadingConnectionData": "Bezig met ophalen van koppelingsinformatie…",
+      "expiresIn": "Vervalt over",
+      "pendingConnections": "Er is {{count}} koppelingsverzoek",
+      "pendingConnections_plural": "Er zijn {{count}} koppelingsverzoeken",
+      "scanCode": "<text>Hoi {{name}}, scan een code en</text><text>leg vandaag nog een nieuwe vriendschap</text>"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "text": "Deel deze link met al je herstelconnecties.",
+      "title": "Herstellink"
+    },
+    "clipboardmessage": "Help me om mijn BrightID te herstellen: {{link}}",
+    "error": {
+      "mismatchId": "Je herstelconnecties hebben andere accounts gekozen",
+      "title": "Accountherstel mislukt",
+      "unknown": "Er is een onbekende fout opgetreden"
+    },
+    "header": {
+      "text": "Stap 1: herstel je account"
+    },
+    "info": "Met deze stap herstel je je BrightID op dit apparaat. De namen en foto's van connecties die overeenkomen met je herstelconnecties worden hersteld.",
+    "state": "Hersteld: {{recoveredConnections}} connecties; {{recoveredGroups}} groepen",
+    "steps": {
+      "complete": "Je account is hersteld",
+      "downloading": "Bezig met ophalen van gegevens van herstelconnecties…",
+      "error": "Je account kan niet worden hersteld",
+      "recovering": "Bezig met herstellen…"
+    },
+    "text": {
+      "additionalInfo": "Je herstelconnecties moeten dit scannen zodat je je BrightID kunt herstellen",
+      "askScanning": "Toon deze QR-code aan je herstelconnecties",
+      "signatures": "{{count}} / 2 handtekeningen",
+      "signatures_plural": ""
+    }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "Toevoegen",
+      "addMoreRecovery": "Voeg meer herstelconnecties toe +",
+      "addRecoveryConnections": "Herstelconnecties toevoegen",
+      "chooseThreeConnections": "Kies drie of meer reeds bekende connecties om je BrightID te back-uppen",
+      "completed": "De herstelconnecties zijn toegevoegd",
+      "connectionsAlreadyKnown": "De connecties dienen reeds bekend te zijn voordat ze kunnen worden ingesteld.",
+      "currentRecoveryConnections": "Mijn herstelconnecties",
+      "emptyList": "Voeg herstelconnecties toe om sociaal herstel mogelijk te maken",
+      "pleaseMakeSomeConnections": "Verbind met wat mensen. :)",
+      "threeMore": "Je hebt nog {{amount}} reeds bekende connecties nodig voordat je kunt doorgaan"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Ik begrijp het",
+    "text": {
+      "cooldownGeneric": "Let op: de gewijzigde herstelconnecties worden omwille van beveiligingsredenen pas doorgevoerd na een periode van <period>{{ cooldownPeriod }}</period>."
+    },
+    "title": "Periode alvorens wijzigingen door te voeren"
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "requestRecovering": "Je herstelverzoek is ingediend!",
+        "restoreConfirm": "Is {{name}} de naam van het account dat je wilt helpen?",
+        "restoreSuccess": "Je account is hersteld!"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "nobodyHasChosen": "Het herstellen is mislukt.\nJe bent niet ingesteld als herstelconnectie."
+      }
+    },
+    "header": {
+      "accountRecovery": "Accountherstel",
+      "text": "Stap 2: herstel een back-up (optioneel)"
+    },
+    "info": "Met je back-upwachtwoord kun je namen en foto's van al je connecties en groepen herstellen.",
+    "password": {
+      "placeholder": "Voer je wachtwoord in",
+      "skip": "Overslaan",
+      "submit": "Herstellen"
+    },
+    "steps": {
+      "complete": "Alles is hersteld",
+      "error": "Het herstellen is mislukt. Klopt je wachtwoord?",
+      "restoring": "Bezig met herstellen…",
+      "restoringProgress": "Bezig met herstellen van {{currentItem}} van {{totalItems}}",
+      "skipped": "Het herstellen is overgeslagen",
+      "waitingAccount": "In afwachting van accountherstel",
+      "waitingPassword": "Voer je wachtwoord in of sla over"
+    },
+    "text": {
+      "chooseConnectionToHelp": "Kies de connectie die je wilt helpen."
+    }
+  },
+  "signup": {
+    "button": {
+      "skip": "Overslaan en later doen",
+      "submit": "Versturen"
+    },
+    "header": {
+      "title": "Registreren"
+    },
+    "placeholder": {
+      "confirmPassword": "Bevestig je wachtwoord",
+      "name": "Naam",
+      "password": "Wachtwoord"
+    },
+    "text": {
+      "createPassword": "BrightID-wachwoord aanmaken",
+      "nameNotShared": "Je naam wordt nooit en te nimmer gedeeld met andere apps of\nopgeslagen op ons netwerk.",
+      "passwordInfo": "Met dit wachtwoord versleutel je de namen en foto's van je connecties. Niemand kan met dit wachtwoord je account overnemen.",
+      "photoNotShared": "Je foto wordt nooit en te nimmer gedeeld met andere apps of\nopgeslagen op ons netwerk.",
+      "pleaseAddPhoto": "Voeg een foto toe",
+      "whatsYouName": "Hoe noemen je vrienden je?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Open deze link in de te synchroniseren BrightID-app.",
+      "title": "Gegevens synchroniseren"
+    },
+    "clipboardmessage": "Synchroniseer je BrightID-gegevens met een andere apparaat: {{link}}",
+    "text": {
+      "additionalInfo": "Scan deze QR-code met je andere apparaat om de synchronisatie te starten",
+      "askScanning": "Scan deze QR-code met je andere apparaat"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Gegevens uploaden"
+    },
+    "info": "Bezig met uploaden van gegevens (connecties, gekoppelde apps, …) naar het nieuwe apparaat",
+    "steps": {
+      "complete": "Het uploaden is voltooid.",
+      "downloading": "Bezig met uploaden van gegevens…",
+      "error": "Het uploaden is mislukt",
+      "waiting": "Bezig met wachten op sleutels…"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "Ik begrijp het!",
+      "setPassword": "Je kunt hier te allen tijde je\nBrightID-wachtwoord instellen",
+      "viewPassword": "Je kunt hier te allen tijde je\nBrightID-wachtwoord bekijken"
+    }
+  }
+}

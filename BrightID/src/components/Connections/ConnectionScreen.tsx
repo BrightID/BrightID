@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { SvgXml } from 'react-native-svg';
 import Clipboard from '@react-native-community/clipboard';
-import { selectAllConnections } from '@/reducer/connectionsSlice';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
@@ -35,17 +34,15 @@ import {
   DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  connection_levels,
-  POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE,
-} from '@/utils/constants';
+import { connection_levels } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
-import stringSimilarity from '@/utils/stringSimilarity';
-import socialMediaList, {
+import {
   SocialMediaShareActionType,
-} from '@/components/EditProfile/socialMediaList';
+  SocialMediaType,
+} from '@/components/EditProfile/socialMediaVariations';
+import { selectAllSocialMediaVariationsByType } from '@/reducer/socialMediaVariationSlice';
 
 /**
  Connection details screen
@@ -60,13 +57,15 @@ type Props = {
   mutualGroups: Array<Group>;
   mutualConnections: Array<Connection>;
   recoveryConnections: Array<RecoveryConnection>;
+  possibleDuplicates: Array<Connection>;
   loading: boolean;
 };
 
 type SocialMediaOnConnectionPage = {
   id: SocialMediaId;
   icon: any;
-  shareAction: SocialMediaShareAction | null;
+  shareActionType: SocialMediaShareActionType;
+  shareActionData: string;
 };
 
 interface Section {
@@ -84,6 +83,11 @@ enum ConnectionScreenSectionKeys {
   SOCIAL_MEDIA = 'socialMedia',
 }
 
+const isPhoneNumber = (profile: string): boolean => {
+  const c = profile[0];
+  return c === '+' || (c >= '0' && c <= '9');
+};
+
 function ConnectionScreen(props: Props) {
   const {
     connection,
@@ -93,9 +97,17 @@ function ConnectionScreen(props: Props) {
     mutualConnections,
     recoveryConnections,
     loading,
+    possibleDuplicates,
   } = props;
   const navigation = useNavigation();
-  const myConnections = useSelector(selectAllConnections);
+
+  const selectSocialMediaVariations = useMemo(
+    selectAllSocialMediaVariationsByType,
+    [],
+  );
+  const socialMediaVariations = useSelector((state) =>
+    selectSocialMediaVariations(state, SocialMediaType.SOCIAL_PROFILE),
+  );
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
@@ -103,41 +115,43 @@ function ConnectionScreen(props: Props) {
     useState(true);
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] =
     useState(true);
-  const [socailMediaCollapsed, setSocialMediaCollapsed] = useState(true);
-  const [possibleDuplicates, setPossibleDuplicates] = useState([]);
-  const [connectionSocailMedia, setConnectionSocailMedia] = useState<
+  const [socialMediaCollapsed, setSocialMediaCollapsed] = useState(true);
+  const [connectionSocialMedia, setConnectionSocialMedia] = useState<
     SocialMediaOnConnectionPage[]
   >([]);
 
   useEffect(() => {
-    setPossibleDuplicates(
-      myConnections.filter(
-        (conn) =>
-          stringSimilarity(conn.name, connection.name) >=
-            POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE &&
-          conn.id !== connection.id,
-      ),
-    );
-  }, [connection.id, connection.name, myConnections]);
-
-  useEffect(() => {
     const socialMediaOnConnectionPage: SocialMediaOnConnectionPage[] = [];
-    for (const socialMediaId in socialMediaList) {
-      const element = socialMediaList[socialMediaId];
+    for (let i = 0; i < socialMediaVariations.length; i++) {
+      const element = socialMediaVariations[i];
       const profile = connection.socialMedia?.find(
-        (s) => s.id === socialMediaId,
+        (s) => s.id === element.id,
       )?.profile;
       if (profile) {
+        let { shareActionType } = element;
+        if (
+          shareActionType ===
+          SocialMediaShareActionType.COPY_IF_PHONE_LINK_IF_USERNAME
+        ) {
+          if (isPhoneNumber(profile)) {
+            shareActionType = SocialMediaShareActionType.COPY;
+          } else {
+            shareActionType = SocialMediaShareActionType.OPEN_LINK;
+          }
+        }
         socialMediaOnConnectionPage.push({
-          id: socialMediaId,
+          id: element.id,
           icon: element.icon,
-          shareAction: element.getShareAction(profile),
+          shareActionType,
+          shareActionData: element.shareActionDataFormat.replace(
+            '%%PROFILE%%',
+            profile,
+          ),
         });
       }
     }
-    console.log(socialMediaOnConnectionPage);
-    setConnectionSocailMedia(socialMediaOnConnectionPage);
-  }, [connection]);
+    setConnectionSocialMedia(socialMediaOnConnectionPage);
+  }, [connection, socialMediaVariations]);
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
@@ -155,7 +169,7 @@ function ConnectionScreen(props: Props) {
         setPossibleDuplicatesCollapsed(!possibleDuplicatesCollapsed);
         break;
       case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
-        setSocialMediaCollapsed(!socailMediaCollapsed);
+        setSocialMediaCollapsed(!socialMediaCollapsed);
         break;
     }
   };
@@ -192,9 +206,10 @@ function ConnectionScreen(props: Props) {
       },
       {
         title: t('connectionDetails.label.socialMedia'),
-        data: socailMediaCollapsed ? [] : [connectionSocailMedia],
+        data: socialMediaCollapsed ? [] : [connectionSocialMedia],
         key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
-        numEntries: connectionSocailMedia.filter((s) => !!s.shareAction).length,
+        numEntries: connectionSocialMedia.filter((s) => !!s.shareActionData)
+          .length,
       },
     ];
     return data;
@@ -208,8 +223,8 @@ function ConnectionScreen(props: Props) {
     recoveryConnections,
     possibleDuplicatesCollapsed,
     possibleDuplicates,
-    connectionSocailMedia,
-    socailMediaCollapsed,
+    connectionSocialMedia,
+    socialMediaCollapsed,
   ]);
 
   const renderSticker = () => {
@@ -321,7 +336,7 @@ function ConnectionScreen(props: Props) {
       return renderRecoveryItem({ item, index });
     }
     if (section.key === ConnectionScreenSectionKeys.SOCIAL_MEDIA) {
-      return renderSocialMediaList({ item, index });
+      return renderSocialMediaVariations({ item, index });
     }
     const testID = `${section.key}-${index}`;
     console.log(
@@ -337,7 +352,7 @@ function ConnectionScreen(props: Props) {
     );
   };
 
-  const renderSocialMediaList = ({
+  const renderSocialMediaVariations = ({
     item,
     index,
   }: {
@@ -346,21 +361,23 @@ function ConnectionScreen(props: Props) {
   }) => {
     return (
       <FlatList
-        style={styles.socialMediaList}
-        columnWrapperStyle={styles.socialMediaListColumn}
+        style={styles.socialMediaVariations}
+        columnWrapperStyle={styles.socialMediaVariationsColumn}
         data={item}
         numColumns={5}
-        renderItem={renderSocialMediaListItem}
-        keyExtractor={socialMediaListKeyExtractor}
+        renderItem={renderSocialMediaVariation}
+        keyExtractor={socialMediaVariationsKeyExtractor}
       />
     );
   };
 
-  const socialMediaListKeyExtractor = (item: SocialMediaOnConnectionPage) => {
+  const socialMediaVariationsKeyExtractor = (
+    item: SocialMediaOnConnectionPage,
+  ) => {
     return item.id;
   };
 
-  const renderSocialMediaListItem = ({
+  const renderSocialMediaVariation = ({
     item,
   }: {
     item: SocialMediaOnConnectionPage;
@@ -368,15 +385,12 @@ function ConnectionScreen(props: Props) {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if (item.shareAction) {
-            const { data } = item.shareAction;
-            if (
-              item.shareAction.actionType ===
-              SocialMediaShareActionType.OPEN_LINK
-            ) {
+          if (item.shareActionData) {
+            const data = item.shareActionData;
+            if (item.shareActionType === SocialMediaShareActionType.OPEN_LINK) {
               Linking.openURL(data);
             } else if (
-              item.shareAction.actionType === SocialMediaShareActionType.COPY
+              item.shareActionType === SocialMediaShareActionType.COPY
             ) {
               Clipboard.setString(data);
               if (Platform.OS === 'android') {
@@ -488,7 +502,7 @@ function ConnectionScreen(props: Props) {
         collapsed = possibleDuplicatesCollapsed;
         break;
       case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
-        collapsed = socailMediaCollapsed;
+        collapsed = socialMediaCollapsed;
         break;
     }
     return (
@@ -556,11 +570,11 @@ const ItemSeparator = () => {
 };
 
 const styles = StyleSheet.create({
-  socialMediaList: {
+  socialMediaVariations: {
     marginTop: DEVICE_LARGE ? 8 : 6,
     marginBottom: DEVICE_LARGE ? 8 : 6,
   },
-  socialMediaListColumn: {
+  socialMediaVariationsColumn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',

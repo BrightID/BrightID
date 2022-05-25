@@ -2,7 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  getStateFromPath,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import AppRoutes from './routes';
@@ -26,7 +29,7 @@ export const App = () => {
         App: {
           screens: {
             Apps: {
-              path: 'link-verification/:baseUrl?/:context/:contextId',
+              path: 'link-verification/:baseUrl?/:context/:contextId/',
               exact: true,
             },
             ScanCode: {

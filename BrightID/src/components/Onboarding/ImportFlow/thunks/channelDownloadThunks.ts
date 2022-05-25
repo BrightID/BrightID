@@ -1,6 +1,6 @@
 import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import { saveImage } from '@/utils/filesystem';
-import { upsertSig } from '@/reducer/appsSlice';
+import { addLinkedContext, upsertSig } from '@/reducer/appsSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import {
   setUploadCompletedBy,
@@ -12,9 +12,51 @@ import {
   setIsSponsored,
   setBackupCompleted,
   setPassword,
+  setIsSponsoredv6,
 } from '@/reducer/userSlice';
 import ChannelAPI from '@/api/channelService';
 import { IMPORT_PREFIX } from '@/utils/constants';
+
+export const downloadContextInfo =
+  ({
+    channelApi,
+    dataIds,
+  }: {
+    channelApi: ChannelAPI;
+    dataIds: Array<string>;
+  }) =>
+  async (dispatch: dispatch, getState: getState) => {
+    try {
+      const {
+        recoveryData: {
+          aesKey,
+          channel: { channelId },
+        },
+      } = getState();
+
+      const isContextInfo = (id: string) =>
+        id.startsWith(`${IMPORT_PREFIX}contextInfo_`);
+
+      const contextInfoDataIds = dataIds.filter((dataId) =>
+        isContextInfo(dataId),
+      );
+
+      for (const dataId of contextInfoDataIds) {
+        const encrypted = await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
+        const contextInfo = decryptData(encrypted, aesKey) as ContextInfo;
+        console.log(`ContextInfo:`);
+        console.log(contextInfo);
+        dispatch(addLinkedContext(contextInfo));
+      }
+      return contextInfoDataIds.length;
+    } catch (err) {
+      console.error(`downloadContextInfo error: ${err.message}`);
+    }
+  };
 
 export const downloadBlindSigs =
   ({
@@ -38,7 +80,11 @@ export const downloadBlindSigs =
       const blindSigDataIds = dataIds.filter((dataId) => isBlindSig(dataId));
 
       for (const dataId of blindSigDataIds) {
-        const encrypted = await channelApi.download({ channelId, dataId });
+        const encrypted = await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
         const blindSigData = decryptData(encrypted, aesKey) as SigInfo;
         dispatch(upsertSig(blindSigData));
       }
@@ -82,6 +128,7 @@ export const downloadUserInfo =
       const encrypted = await channelApi.download({
         channelId,
         dataId: userInfoDataId,
+        deleteAfterDownload: true,
       });
       const info = decryptData(encrypted, aesKey);
       dispatch(setRecoveryId(info.id));
@@ -109,6 +156,12 @@ export const downloadUserInfo =
         dispatch(setIsSponsored(info.isSponsored));
       }
       if (
+        !updateTimestamps.isSponsoredv6 ||
+        info.updateTimestamps.isSponsoredv6 > updateTimestamps.isSponsoredv6
+      ) {
+        dispatch(setIsSponsoredv6(info.isSponsoredv6));
+      }
+      if (
         !updateTimestamps.password ||
         info.updateTimestamps.password > updateTimestamps.password
       ) {
@@ -127,12 +180,21 @@ export const downloadUserInfo =
   };
 
 export const checkCompletedFlags =
-  ({ dataIds }: { channelApi: ChannelAPI; dataIds: Array<string> }) =>
+  ({
+    channelApi,
+    dataIds,
+  }: {
+    channelApi: ChannelAPI;
+    dataIds: Array<string>;
+  }) =>
   async (dispatch: dispatch, getState: getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },
-        recoveryData: { uploadCompletedBy },
+        recoveryData: {
+          channel: { channelId },
+          uploadCompletedBy,
+        },
       } = getState();
 
       const prefix = `${IMPORT_PREFIX}completed_`;
@@ -148,6 +210,11 @@ export const checkCompletedFlags =
       );
 
       for (const dataId of completedDataIds) {
+        await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
         const uploader = completedBy(dataId);
         dispatch(setUploadCompletedBy(uploader));
       }
