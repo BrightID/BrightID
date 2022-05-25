@@ -19,6 +19,7 @@ import {
   encryptAndUploadProfileToChannel,
 } from '@/components/PendingConnections/actions/channelThunks';
 import { NodeApi } from '@/api/brightId';
+import { connection_levels } from '@/utils/constants';
 
 export const confirmPendingConnectionThunk =
   (
@@ -114,23 +115,31 @@ export const confirmPendingConnectionThunk =
     dispatch(addConnection(connectionData));
     dispatch(confirmPendingConnection(connection.profileId));
 
-    // upload profile to channel only after accepting the connection with creator
-    if (
-      connection.profileId == channel.initiatorProfileId &&
-      level != 'suspicious' &&
-      level != 'reported'
-    ) {
-      await dispatch(encryptAndUploadProfileToChannel(channel.id));
+    const reported = Array<ConnectionLevel>(
+      connection_levels.SUSPICIOUS,
+      connection_levels.REPORTED,
+    ).includes(level);
+
+    // check connection level with initiator to decide next steps
+    if (connection.profileId === channel.initiatorProfileId) {
+      if (!reported) {
+        // upload profile to channel only *after* accepting the connection with creator
+        // to prevent leaking my profile info to unwanted connections
+        await dispatch(encryptAndUploadProfileToChannel(channel.id));
+      } else if (channel.type === channel_types.GROUP) {
+        // immediately leave group connection channel if initiator got reported
+        console.log(
+          `Leaving group channel ${channel.id} cause I don't trust the initiator (level: '${level}')`,
+        );
+        dispatch(leaveChannel(channel.id));
+      }
     }
 
     // Leave channel if no additional connections are expected
     if (
       channel.type === channel_types.SINGLE ||
       (channel.type === channel_types.STAR &&
-        channel.initiatorProfileId !== channel.myProfileId) ||
-      (channel.type === channel_types.GROUP &&
-        sharedProfile.id == channel.initiatorProfileId &&
-        (level == 'suspicious' || level == 'reported'))
+        channel.initiatorProfileId !== channel.myProfileId)
     ) {
       dispatch(leaveChannel(channel.id));
     }
