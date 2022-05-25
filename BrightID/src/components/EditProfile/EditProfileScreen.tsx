@@ -229,6 +229,14 @@ const SocialMediaLink = (props: {
       }
     : { flexGrow: 1 };
 
+  const toggleShareWithConnectionsState = () => {
+    dispatch(
+      saveSocialMedia({
+        ...props.socialMedia,
+        shareWithConnections: !getShareWithConnectionsValue(props.socialMedia),
+      }),
+    );
+  };
   return (
     <>
       <View style={styles.socialMediaLinkContainer}>
@@ -280,21 +288,14 @@ const SocialMediaLink = (props: {
           <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
         </TouchableOpacity>
       </View>
-      <View style={styles.syncSocialMediaSwitchContainer}>
-        <Text style={styles.label}>Share with connections</Text>
+      <View style={styles.shareSocialMediaToggleContainer}>
+        <Text onPress={toggleShareWithConnectionsState} style={styles.label}>
+          Share with connections
+        </Text>
         <CheckBox
           style={styles.syncSocialMediaSwitch}
           tintColors={{ false: GREY, true: ORANGE }}
-          onValueChange={(value) => {
-            dispatch(
-              saveSocialMedia({
-                ...props.socialMedia,
-                shareWithConnections: !getShareWithConnectionsValue(
-                  props.socialMedia,
-                ),
-              }),
-            );
-          }}
+          onValueChange={(_value) => toggleShareWithConnectionsState()}
           value={getShareWithConnectionsValue(props.socialMedia)}
         />
       </View>
@@ -439,7 +440,14 @@ function SyncSocialMedia() {
   return (
     <>
       <View style={styles.syncSocialMediaSwitchContainer}>
-        <Text style={styles.label}>Sync </Text>
+        <Text
+          style={styles.label}
+          onPress={() => {
+            dispatch(setSyncSocialMediaEnabledThunk(!syncSocialMediaEnabled));
+          }}
+        >
+          Allow friends to see I'm a BrightID user{' '}
+        </Text>
         <CheckBox
           style={styles.syncSocialMediaSwitch}
           tintColors={{ false: GREY, true: ORANGE }}
@@ -451,7 +459,9 @@ function SyncSocialMedia() {
       </View>
       <Text style={styles.infoText}>
         Items you add to your profile are encrypted and used anonymously to help
-        your contacts see that you're a BrightID user
+        your contacts see that you're a BrightID user. If you check the box next
+        to an item, it will also be shared directly with people you connect to.
+        Profile info is not shared with BrightID or apps.
       </Text>
     </>
   );
@@ -567,9 +577,10 @@ export const EditProfileScreen = ({ navigation }) => {
         />
         <EditName nextName={nextName} setNextName={setNextName} />
 
+        <View style={styles.socialMediaTopDivider} />
+        <SyncSocialMedia />
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
-        <SyncSocialMedia />
         <View style={styles.bottomDivider} />
 
         <ShowEditPassword />
@@ -666,7 +677,12 @@ const styles = StyleSheet.create({
   },
   syncSocialMediaSwitchContainer: {
     alignItems: 'center',
-    paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  shareSocialMediaToggleContainer: {
+    alignItems: 'center',
+    paddingBottom: DEVICE_LARGE ? 4 : 2,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -678,6 +694,12 @@ const styles = StyleSheet.create({
     borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginTop: DEVICE_LARGE ? 16 : 12,
+  },
+  socialMediaTopDivider: {
+    width: '100%',
+    borderBottomColor: LIGHT_GREY,
+    borderBottomWidth: 1,
+    marginBottom: DEVICE_LARGE ? 10 : 8,
   },
   socialMediaContainer: {
     width: '100%',

@@ -23,7 +23,7 @@ interface SettingsSlice {
 }
 
 const initialState: SettingsSlice = {
-  syncSocialMediaEnabled: false,
+  syncSocialMediaEnabled: undefined,
   baseUrl: null,
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
   isPrimaryDevice: true,
@@ -106,8 +106,8 @@ export const {
   setLastSyncTime,
 } = settingsSlice.actions;
 
-export const selectSyncSocialMediaEnabled = (state: State) =>
-  state.settings.syncSocialMediaEnabled;
+export const selectSyncSocialMediaEnabled = (state: State): boolean =>
+  !!state.settings.syncSocialMediaEnabled;
 export const selectBaseUrl = (state: State) => state.settings.baseUrl;
 export const selectAllNodeUrls = (state: State) => state.settings.nodeUrls;
 export const selectDefaultNodeUrls = (_: State) => initialState.nodeUrls;
