@@ -87,3 +87,4 @@ export enum qrCodeURL_types {
 }
 
 export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;
+export const DEFAULT_SHARE_WITH_CONNECTIONS_VALUE = true;

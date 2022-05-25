@@ -1,6 +1,7 @@
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';
 import { extractDigits, parsePhoneNumber } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
+import { DEFAULT_SHARE_WITH_CONNECTIONS_VALUE } from '@/utils/constants';
 
 export function generateSocialProfileHashes(
   profile: string,
@@ -19,3 +20,11 @@ export function generateSocialProfileHashes(
   }
   return [hashSocialProfile(profile)];
 }
+
+export const getShareWithConnectionsValue = (
+  socialMedia: SocialMedia,
+): boolean => {
+  return socialMedia.shareWithConnections === undefined
+    ? DEFAULT_SHARE_WITH_CONNECTIONS_VALUE
+    : socialMedia.shareWithConnections;
+};

@@ -11,12 +11,12 @@ import {
   LayoutChangeEvent,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -49,6 +49,7 @@ import {
 } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
+  saveSocialMedia,
   selectExistingSocialMedia,
   setProfileDisplayWidth,
 } from '../../reducer/socialMediaSlice';
@@ -61,6 +62,7 @@ import {
   removeSocialMediaThunk,
   setSyncSocialMediaEnabledThunk,
 } from '@/components/EditProfile/socialMediaThunks';
+import { getShareWithConnectionsValue } from '@/utils/socialUtils';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -228,53 +230,75 @@ const SocialMediaLink = (props: {
     : { flexGrow: 1 };
 
   return (
-    <View style={styles.socialMediaLinkContainer}>
-      <TouchableOpacity
-        style={styles.socialMediaSelect}
-        onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            type: props.type,
-            order,
-            prevId: id,
-            page: 0,
-          });
-        }}
-      >
-        <Text style={styles.socialMediaType}>{socialMediaVariation.name}</Text>
-        <Chevron
-          width={DEVICE_LARGE ? 14 : 12}
-          height={DEVICE_LARGE ? 14 : 12}
-          color={DARK_BLUE}
-          strokeWidth={2}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={innerTextStyle}
-        onLayout={updateInnerTextLayout}
-        onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            type: props.type,
-            order,
-            prevId: id,
-            page: 1,
-          });
-        }}
-      >
-        <Text
-          style={styles.socialMediaInput}
-          numberOfLines={1}
-          ellipsizeMode="head"
+    <>
+      <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity
+          style={styles.socialMediaSelect}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              type: props.type,
+              order,
+              prevId: id,
+              page: 0,
+            });
+          }}
         >
-          {innerTextStyle.width ? profile : ''}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => removeSocialMedia(id)}
-      >
-        <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
-      </TouchableOpacity>
-    </View>
+          <Text style={styles.socialMediaType}>
+            {socialMediaVariation.name}
+          </Text>
+          <Chevron
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            color={DARK_BLUE}
+            strokeWidth={2}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={innerTextStyle}
+          onLayout={updateInnerTextLayout}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              type: props.type,
+              order,
+              prevId: id,
+              page: 1,
+            });
+          }}
+        >
+          <Text
+            style={styles.socialMediaInput}
+            numberOfLines={1}
+            ellipsizeMode="head"
+          >
+            {innerTextStyle.width ? profile : ''}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => removeSocialMedia(id)}
+        >
+          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.syncSocialMediaSwitchContainer}>
+        <Text style={styles.label}>Share with connections</Text>
+        <CheckBox
+          style={styles.syncSocialMediaSwitch}
+          tintColors={{ false: GREY, true: ORANGE }}
+          onValueChange={(value) => {
+            dispatch(
+              saveSocialMedia({
+                ...props.socialMedia,
+                shareWithConnections: !getShareWithConnectionsValue(
+                  props.socialMedia,
+                ),
+              }),
+            );
+          }}
+          value={getShareWithConnectionsValue(props.socialMedia)}
+        />
+      </View>
+    </>
   );
 };
 
@@ -416,11 +440,9 @@ function SyncSocialMedia() {
     <>
       <View style={styles.syncSocialMediaSwitchContainer}>
         <Text style={styles.label}>Sync </Text>
-        <Switch
+        <CheckBox
           style={styles.syncSocialMediaSwitch}
-          trackColor={{ false: GREY, true: DARK_ORANGE }}
-          thumbColor="#ffffff"
-          ios_backgroundColor="#3e3e3e"
+          tintColors={{ false: GREY, true: ORANGE }}
           onValueChange={(value) => {
             dispatch(setSyncSocialMediaEnabledThunk(value));
           }}
@@ -428,10 +450,8 @@ function SyncSocialMedia() {
         />
       </View>
       <Text style={styles.infoText}>
-        Do you want to allow people who have your contact info and social media
-        links to know that you're a BrightID user so they can connect to you on
-        BrightID? This does not reveal your information to people who don't
-        already have it.
+        Items you add to your profile are encrypted and used anonymously to help
+        your contacts see that you're a BrightID user
       </Text>
     </>
   );
