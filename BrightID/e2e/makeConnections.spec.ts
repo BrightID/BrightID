@@ -7,6 +7,7 @@ import {
   expectHomescreen,
   navigateHome,
 } from './testUtils';
+import { connection_levels, report_reasons } from '@/utils/constants';
 
 describe('make Connections', () => {
   beforeAll(async () => {
@@ -65,8 +66,11 @@ describe('make Connections', () => {
     });
   });
 
-  describe('Connect with different Connection levels', () => {
-    const levels = ['suspicious', 'just met', 'already known'];
+  describe('Connect with positive Connection levels', () => {
+    const levels: Array<ConnectionLevel> = [
+      connection_levels.JUST_MET,
+      connection_levels.ALREADY_KNOWN,
+    ];
 
     afterEach(async () => {
       await navigateHome();
@@ -82,6 +86,35 @@ describe('make Connections', () => {
         // Should end up in the connection list
         await expectConnectionsScreen();
       });
+    });
+  });
+
+  describe('Connect with suspicious Connection levels', () => {
+    afterEach(async () => {
+      await navigateHome();
+    });
+
+    it(`should create a suspicious connection and report it`, async () => {
+      const level = connection_levels.SUSPICIOUS;
+      const reason = report_reasons.SPAMMER;
+      const testID = `${level}Btn`;
+      await createFakeConnection(false);
+      // confirm connection with SUSPICIOUS level
+      await expect(element(by.id(testID))).toBeVisible();
+      await element(by.id(testID)).tap();
+      // should now show report reason modal
+      await expect(element(by.id('ReportReasonModal'))).toBeVisible();
+      const reasonButton = element(by.id(`${reason}-RadioBtn`));
+      const submitButton = element(by.id('SubmitReportBtn'));
+      await expect(reasonButton).toBeVisible();
+      await reasonButton.tap();
+      // click Submit button
+      await submitButton.tap();
+      // modal should be closed
+      await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
+
+      // Should end up in the connection list
+      await expectConnectionsScreen();
     });
   });
 });

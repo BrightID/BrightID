@@ -1,3 +1,4 @@
+import nacl from 'tweetnacl';
 import {
   addChannel,
   selectChannelById,
@@ -25,6 +26,7 @@ import {
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApi } from '@/api/brightId';
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 
 export const createChannel =
   (channelType: ChannelType, api: NodeApi) =>
@@ -117,8 +119,6 @@ export const joinChannel =
       // we need channel to exist prior to uploadingProfileToChannel
       dispatch(addChannel(channel));
 
-      // upload my profile to channel
-      await dispatch(encryptAndUploadProfileToChannel(channel.id));
       // start polling for profiles
       dispatch(subscribeToConnectionRequests(channel.id, api));
     } catch (e) {
@@ -355,6 +355,16 @@ export const encryptAndUploadProfileToChannel =
       notificationToken,
       version: PROFILE_VERSION,
     };
+
+    if (channel.initiatorProfileId === channel.myProfileId) {
+      // create request proof that proves the user requested
+      // the connection by creating the qr code
+      const message = `${id}|${profileTimestamp}`;
+      const { secretKey } = getState().keypair;
+      dataObj.requestProof = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
+    }
 
     console.log(`Encrypting profile data with key ${channel.aesKey}`);
     const encrypted = encryptData(dataObj, channel.aesKey);

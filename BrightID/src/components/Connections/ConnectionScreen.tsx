@@ -34,7 +34,7 @@ import {
   DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { connection_levels } from '@/utils/constants';
+import { connection_levels, report_sources } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
@@ -306,7 +306,9 @@ function ConnectionScreen(props: Props) {
         onPress={() => {
           navigation.navigate('ReportReason', {
             connectionId: connection.id,
+            connectionName: connection.name,
             reporting: true,
+            source: report_sources.PROFILE
           });
         }}
       >
@@ -321,7 +323,10 @@ function ConnectionScreen(props: Props) {
         onPress={() => {
           navigation.navigate('ReportReason', {
             connectionId: connection.id,
+            connectionName: connection.name,
+            reportReason: connection.reportReason,
             reporting: false,
+            source: report_sources.PROFILE
           });
         }}
       >

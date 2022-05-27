@@ -11,8 +11,8 @@ import {
 describe('Report Connections', () => {
   let hasBackButton = true;
   const reasons = [
-    report_reasons.SPAMMER,
     report_reasons.DUPLICATE,
+    report_reasons.REPLACED,
     report_reasons.OTHER,
   ];
   let remainingConnections = 4;
@@ -85,7 +85,7 @@ describe('Report Connections', () => {
   });
 
   reasons.forEach((reason) => {
-    describe(reason, () => {
+    describe(`Report as ${reason}`, () => {
       beforeAll(async () => {
         // go to connections screen
         await element(by.id('connectionsBtn')).tap();

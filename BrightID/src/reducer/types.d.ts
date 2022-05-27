@@ -34,6 +34,7 @@ type LocalConnectionData = {
   publicKey?: string;
   secretKey?: any;
   reportReason?: string;
+  requestProof?: string;
   verifications: Verification[];
 };
 
