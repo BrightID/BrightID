@@ -105,6 +105,7 @@ export const AppsScreen = () => {
   });
   const translateYSearch = scrollY.interpolate({
     inputRange: [-640, 0, 290],
+    // @ts-ignore notifHeight._value
     outputRange: [790, notifHeight._value + 160, 0],
     extrapolate: 'clamp',
   });
@@ -214,8 +215,7 @@ export const AppsScreen = () => {
 
     // filter verified app
     const verifiedApps = allApps.filter((app) => {
-      /* eslint no-var: 0 */
-      var count = 0;
+      let count = 0;
       for (const verification of app.verifications) {
         const verified = isVerified(
           _.keyBy(userVerifications, (v) => v.name),
@@ -232,7 +232,7 @@ export const AppsScreen = () => {
     setTotalApps(allApps.length);
     setTotalVerifiedApp(verifiedApps.length);
 
-    var filteredApp: AppInfo[] = [];
+    let filteredApp: AppInfo[] = [];
     if (activefilter === 0) {
       filteredApp = allApps;
     } else if (activefilter === 1) {
@@ -261,36 +261,6 @@ export const AppsScreen = () => {
 
   useFocusEffect(refreshApps);
 
-  const AppStatus = () => {
-    let msg: string, waiting: boolean;
-    if (sponsoringApp) {
-      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
-      waiting = true;
-    } else if (pendingLink) {
-      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
-      waiting = true;
-    } else if (!isSponsored) {
-      msg = t('apps.text.notSponsored');
-      waiting = false;
-    } else {
-      msg = '';
-      waiting = false;
-    }
-    return msg ? (
-      <View style={styles.statusContainer}>
-        <Text style={styles.statusMessage}>{msg}</Text>
-        <Spinner
-          isVisible={true}
-          size={DEVICE_LARGE ? 48 : 42}
-          type="ThreeBounce"
-          color={BLUE}
-        />
-      </View>
-    ) : (
-      <View style={{ height: DEVICE_LARGE ? 12 : 10 }} />
-    );
-  };
-
   const OverallDescription = () => {
     let msg: string, waiting: boolean;
 
@@ -316,6 +286,7 @@ export const AppsScreen = () => {
         containerStyle={[
           styles.headerContainer,
           {
+            // @ts-ignore notifHeight._value
             height: 310 + notifHeight._value,
             opacity: fadeBackgroundHeader,
             transform: [{ translateY: translateYHeader }],
@@ -446,6 +417,7 @@ export const AppsScreen = () => {
           columnWrapperStyle={styles.wrapperColumn}
           contentContainerStyle={[
             styles.contentContainer,
+            // @ts-ignore notifHeight._value
             { marginTop: headerHeight + 190 + notifHeight._value },
           ]}
           keyExtractor={({ name }, index) => name + index}
