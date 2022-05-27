@@ -101,7 +101,8 @@ export class NodeApi {
     id2: string,
     level: string,
     timestamp: number,
-    reportReason?: string,
+    reportReason?: ReportReason,
+    requestProof?: string,
     fakeUser?: FakeUser,
   ) {
     this.requiresCredentials();
@@ -120,6 +121,9 @@ export class NodeApi {
 
     if (reportReason) {
       op.reportReason = reportReason;
+    }
+    if (requestProof) {
+      op.requestProof = requestProof;
     }
 
     const message = stringify(op);
@@ -514,7 +518,7 @@ export class NodeApi {
     return this.submitOp(op, message);
   }
 
-  async getSponsorShip(appUserId: string) {
+  async getSponsorship(appUserId: string) {
     const res = await this.api.get<SponsorshipRes, ErrRes>(
       `/sponsorships/${appUserId}`,
     );

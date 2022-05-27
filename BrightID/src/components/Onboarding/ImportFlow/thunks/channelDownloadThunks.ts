@@ -42,7 +42,11 @@ export const downloadContextInfo =
       );
 
       for (const dataId of contextInfoDataIds) {
-        const encrypted = await channelApi.download({ channelId, dataId });
+        const encrypted = await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
         const contextInfo = decryptData(encrypted, aesKey) as ContextInfo;
         console.log(`ContextInfo:`);
         console.log(contextInfo);
@@ -76,7 +80,11 @@ export const downloadBlindSigs =
       const blindSigDataIds = dataIds.filter((dataId) => isBlindSig(dataId));
 
       for (const dataId of blindSigDataIds) {
-        const encrypted = await channelApi.download({ channelId, dataId });
+        const encrypted = await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
         const blindSigData = decryptData(encrypted, aesKey) as SigInfo;
         dispatch(upsertSig(blindSigData));
       }
@@ -120,6 +128,7 @@ export const downloadUserInfo =
       const encrypted = await channelApi.download({
         channelId,
         dataId: userInfoDataId,
+        deleteAfterDownload: true,
       });
       const info = decryptData(encrypted, aesKey);
       dispatch(setRecoveryId(info.id));
@@ -171,12 +180,21 @@ export const downloadUserInfo =
   };
 
 export const checkCompletedFlags =
-  ({ dataIds }: { channelApi: ChannelAPI; dataIds: Array<string> }) =>
+  ({
+    channelApi,
+    dataIds,
+  }: {
+    channelApi: ChannelAPI;
+    dataIds: Array<string>;
+  }) =>
   async (dispatch: dispatch, getState: getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },
-        recoveryData: { uploadCompletedBy },
+        recoveryData: {
+          channel: { channelId },
+          uploadCompletedBy,
+        },
       } = getState();
 
       const prefix = `${IMPORT_PREFIX}completed_`;
@@ -192,6 +210,11 @@ export const checkCompletedFlags =
       );
 
       for (const dataId of completedDataIds) {
+        await channelApi.download({
+          channelId,
+          dataId,
+          deleteAfterDownload: true,
+        });
         const uploader = completedBy(dataId);
         dispatch(setUploadCompletedBy(uploader));
       }

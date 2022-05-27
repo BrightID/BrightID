@@ -14,11 +14,20 @@ import {
   selectPendingConnectionById,
   updatePendingConnection,
 } from '@/components/PendingConnections/pendingConnectionSlice';
-import { leaveChannel } from '@/components/PendingConnections/actions/channelThunks';
+import {
+  leaveChannel,
+  encryptAndUploadProfileToChannel,
+} from '@/components/PendingConnections/actions/channelThunks';
 import { NodeApi } from '@/api/brightId';
+import { connection_levels } from '@/utils/constants';
 
 export const confirmPendingConnectionThunk =
-  (id: string, level: ConnectionLevel, api: NodeApi) =>
+  (
+    id: string,
+    level: ConnectionLevel,
+    api: NodeApi,
+    reportReason?: ReportReason,
+  ) =>
   async (dispatch: dispatch, getState: getState) => {
     const connection: PendingConnection = selectPendingConnectionById(
       getState(),
@@ -52,15 +61,14 @@ export const confirmPendingConnectionThunk =
       user: { id: brightId, backupCompleted },
     } = getState();
 
-    const connectionTimestamp = Date.now();
-    const reportReason = undefined;
-
+    const connectionTimestamp = sharedProfile.profileTimestamp;
     const op = await api.addConnection(
       brightId,
       sharedProfile.id,
       level,
       connectionTimestamp,
       reportReason,
+      sharedProfile.requestProof,
     );
     dispatch(addOperation(op));
 
@@ -73,6 +81,7 @@ export const confirmPendingConnectionThunk =
           level,
           connectionTimestamp,
           reportReason,
+          sharedProfile.requestProof,
           {
             id: sharedProfile.id,
             secretKey: sharedProfile.secretKey,
@@ -98,12 +107,33 @@ export const confirmPendingConnectionThunk =
       notificationToken: sharedProfile.notificationToken,
       secretKey: sharedProfile.secretKey,
       level,
+      reportReason,
       socialMedia: sharedProfile.socialMedia,
       verifications: profileInfo?.verifications || [],
     };
 
     dispatch(addConnection(connectionData));
     dispatch(confirmPendingConnection(connection.profileId));
+
+    const reported = Array<ConnectionLevel>(
+      connection_levels.SUSPICIOUS,
+      connection_levels.REPORTED,
+    ).includes(level);
+
+    // check connection level with initiator to decide next steps
+    if (connection.profileId === channel.initiatorProfileId) {
+      if (!reported) {
+        // upload profile to channel only *after* accepting the connection with creator
+        // to prevent leaking my profile info to unwanted connections
+        await dispatch(encryptAndUploadProfileToChannel(channel.id));
+      } else if (channel.type === channel_types.GROUP) {
+        // immediately leave group connection channel if initiator got reported
+        console.log(
+          `Leaving group channel ${channel.id} cause I don't trust the initiator (level: '${level}')`,
+        );
+        dispatch(leaveChannel(channel.id));
+      }
+    }
 
     // Leave channel if no additional connections are expected
     if (

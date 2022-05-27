@@ -23,6 +23,7 @@ type PreviewConnectionProps = {
   pendingConnection: PendingConnection;
   setLevelHandler: (level: ConnectionLevel) => any;
   photoTouchHandler: () => any;
+  abuseHandler: () => any;
 };
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
@@ -34,6 +35,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     },
     setLevelHandler,
     photoTouchHandler,
+    abuseHandler,
   } = props;
   const id = useSelector((state) => state.user.id);
 
@@ -48,7 +50,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   let ratingView;
   switch (state) {
     case pendingConnection_states.UNCONFIRMED: {
-      ratingView = <RatingView setLevelHandler={setLevelHandler} />;
+      ratingView = <RatingView setLevelHandler={setLevelHandler} abuseHandler={abuseHandler}/>;
       break;
     }
     case pendingConnection_states.CONFIRMING:

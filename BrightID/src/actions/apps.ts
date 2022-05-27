@@ -91,7 +91,7 @@ export const updateBlindSig =
             linkedTimestamp: 0,
             signedTimestamp: Date.now(),
           };
-          await dispatch(upsertSig(sigInfo));
+          dispatch(upsertSig(sigInfo));
         } else if (sigInfo && !sigInfo.sig) {
           pub = sigInfo.pub;
           uid = sigInfo.uid;
@@ -124,7 +124,7 @@ export const updateBlindSig =
         const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
         await encryptAndBackup(backupKey, backupData);
 
-        await dispatch(
+        dispatch(
           updateSig({
             id: uid,
             changes: { sig: blindSig },
@@ -141,7 +141,7 @@ export const updateBlindSig =
           sigInfo.uid
         ) {
           console.log('removing sig and retrying');
-          await dispatch(removeSig(sigInfo.uid));
+          dispatch(removeSig(sigInfo.uid));
           await dispatch(updateBlindSig(app));
         }
       }

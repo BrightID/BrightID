@@ -4,11 +4,11 @@ const generateRandomString = function (length = 6) {
   return Math.random().toString(20).substr(2, length);
 };
 
-// increase test timeout to 30 seconds (default is 5 seconds, which sometimes fails when running in CI env)
-jest.setTimeout(30000);
+// increase test timeout (default is 5 seconds, which sometimes fails when running in CI env)
+jest.setTimeout(90000);
 
 describe('ChannelAPI', () => {
-  let channelApi;
+  let channelApi: ChannelAPI;
   const sharedChannelId = generateRandomString();
   const myData = {
     some: 'random stuff',
@@ -21,7 +21,7 @@ describe('ChannelAPI', () => {
 
   beforeAll(() => {
     channelApi = new ChannelAPI('http://test.brightid.org/profile');
-    // channelApi = new ChannelAPI('127.0.0.1:3000');
+    // channelApi = new ChannelAPI('http://127.0.0.1:3000');
   });
 
   test(`list unknown/empty channel`, async () => {
@@ -56,36 +56,48 @@ describe('ChannelAPI', () => {
     });
   });
 
-  describe(`Channel limit`, () => {
-    const channel_limit = 30;
-    const channelId = generateRandomString();
+  /*
+  Channel limit tests should only run against a local instance of channel service with
+  low limits. Otherwise they run very long and cause high load on our test server.
 
+  describe('Channel limit', () => {
     beforeAll(async () => {
-      // fill channel up to limit
-      for (let i = 0; i < channel_limit; i++) {
-        await channelApi.upload({
-          channelId,
-          dataId: generateRandomString(),
-          data: {
-            somekey: `value ${i}`,
-          },
-        });
-      }
-      // check if all entries are there
-      const list = await channelApi.list(channelId);
-      expect(list).toHaveLength(channel_limit);
+      const uploadTillFull = async (resolve, reject, count) => {
+        console.log(`Uploading ${count}...`);
+        try {
+          await channelApi.upload({
+            channelId: sharedChannelId,
+            dataId: `${dataId}-${count++}`,
+            data: myData,
+          });
+          uploadTillFull(resolve, reject, count);
+        } catch (e) {
+          console.log(`uploaded ${count} items until channel error`);
+          return resolve(e);
+        }
+      };
+      // upload random data until "channel full" response.
+      const error: Error = await new Promise((r, j) => uploadTillFull(r, j, 0));
+      expect(error.message).toEqual('Channel full');
     });
 
-    test(`Adding more than ${channel_limit} entries to channel fails`, async () => {
+    test('upload should succeed when deleting an item before', async () => {
+      // download and delete one item from channel
+      const data = await channelApi.download({
+        channelId: sharedChannelId,
+        dataId: `${dataId}-0`,
+        deleteAfterDownload: true,
+      });
+
+      // try upload again
       await expect(
         channelApi.upload({
-          channelId,
-          dataId: generateRandomString(),
-          data: {
-            somekey: `random data`,
-          },
+          channelId: sharedChannelId,
+          dataId: `extraData`,
+          data: myData,
         }),
-      ).rejects.toThrow('Channel full');
+      ).resolves.toBeUndefined();
     });
   });
+   */
 });

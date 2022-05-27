@@ -15,7 +15,15 @@ import { loadRecoveryData } from '@/utils/recovery';
 import { uploadConnection, uploadGroup } from '@/utils/channels';
 
 export const uploadSig =
-  ({ id, aesKey, channelApi }) =>
+  ({
+    id,
+    aesKey,
+    channelApi,
+  }: {
+    id: string;
+    aesKey: string;
+    channelApi: ChannelAPI;
+  }) =>
   async (_, getState) => {
     const {
       keypair: { secretKey },

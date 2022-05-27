@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store';
 import { navigate, getRoute } from '@/NavigationService';
 import AddGroup from '@/components/Icons/AddGroup';
 import AddPerson from '@/components/Icons/AddPerson';
 import Certificate from '@/components/Icons/Certificate';
 import PhoneLock from '@/components/Icons/PhoneLock';
-import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';

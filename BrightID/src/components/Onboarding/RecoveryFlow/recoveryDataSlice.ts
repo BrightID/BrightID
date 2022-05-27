@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { CHANNEL_TTL } from '@/utils/constants';
+import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 import { RESET_STORE } from '@/actions';
 
 export const initialState: RecoveryData = {
@@ -70,10 +70,10 @@ const recoveryData = createSlice({
       const { channelId, url } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
-      state.channel.expires = Date.now() + CHANNEL_TTL;
+      state.channel.expires = Date.now() + RECOVERY_CHANNEL_TTL;
     },
     resetChannelExpiration(state) {
-      state.channel.expires = Date.now() + CHANNEL_TTL;
+      state.channel.expires = Date.now() + RECOVERY_CHANNEL_TTL;
     },
     setSig(state, action: PayloadAction<{ sig: Signature; signer: string }>) {
       const { signer, sig } = action.payload;

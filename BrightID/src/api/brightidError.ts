@@ -64,6 +64,8 @@ export const APP_AUTHORIZED_BEFORE = 62;
 export const SPEND_REQUESTED_BEFORE = 63;
 export const INVALID_APP_ID = 64;
 export const CACHED_PARAMS_NOT_FOUND = 65;
+export const FORBIDDEN_CONNECTION = 66;
+export const UNSIGNABLE_APP_USER_ID = 67;
 
 class BrightidError extends Error {
   errorNum: number;

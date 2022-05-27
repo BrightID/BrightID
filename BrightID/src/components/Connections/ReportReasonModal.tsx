@@ -6,57 +6,89 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch, useSelector } from '@/store';
-import { connection_levels, report_reasons } from '@/utils/constants';
+import { useDispatch } from '@/store';
+import {
+  connection_levels,
+  report_reasons,
+  report_sources,
+} from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  selectConnectionById,
-  setReportReason,
-} from '@/reducer/connectionsSlice';
+import { setReportReason } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { setConnectionLevel } from '@/actions';
 import { reportConnection } from './models/reportConnection';
 
-const reasonStrings = {
-  [report_reasons.SPAMMER]: {
-    description: i18next.t('connectionDetails.text.reportSpammer'),
-  },
-  [report_reasons.DUPLICATE]: {
-    description: i18next.t('connectionDetails.text.reportDuplicate'),
-  },
-  [report_reasons.OTHER]: {
-    description: i18next.t('connectionDetails.text.reportOther'),
-  },
+const reasons = {
+  [report_sources.RECONNECT]: [
+    {
+      reason: report_reasons.SPAMMER,
+      description: i18next.t('connectionDetails.text.reportSpammer'),
+    },
+    {
+      reason: report_reasons.DUPLICATE,
+      description: i18next.t('connectionDetails.text.reportSuspicious'),
+    },
+    {
+      reason: report_reasons.OTHER,
+      description: i18next.t('connectionDetails.text.reportOther'),
+    },
+  ],
+  [report_sources.PREVIEW]: [
+    {
+      reason: report_reasons.SPAMMER,
+      description: i18next.t('connectionDetails.text.reportSpammer'),
+    },
+    {
+      reason: report_reasons.DUPLICATE,
+      description: i18next.t('connectionDetails.text.reportDuplicate'),
+    },
+    {
+      reason: report_reasons.OTHER,
+      description: i18next.t('connectionDetails.text.reportOther'),
+    },
+  ],
+  [report_sources.PROFILE]: [
+    {
+      reason: report_reasons.REPLACED,
+      description: i18next.t('connectionDetails.text.reportReplaced'),
+    },
+    {
+      reason: report_reasons.DUPLICATE,
+      description: i18next.t('connectionDetails.text.reportDuplicate'),
+    },
+    {
+      reason: report_reasons.OTHER,
+      description: i18next.t('connectionDetails.text.reportOther'),
+    },
+  ],
 };
 
 type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
 
 const ReportReasonModal = ({ route, navigation }: props) => {
-  const { connectionId, successCallback, reporting } = route.params;
+  const {
+    connectionId,
+    connectionName,
+    reportReason,
+    successCallback,
+    reporting,
+    source,
+  } = route.params;
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const connection: Connection = useSelector((state: State) =>
-    selectConnectionById(state, connectionId),
-  );
   const dispatch = useDispatch();
-  const [reason, setReason] = useState(!reporting ? 'Unreport' : '');
-
-  // If connection just got reported it will not exist anymore. Just return null for this render cycle, as
-  // navigation.goBack() is already dispatched
-  if (!connection) {
-    return null;
-  }
+  const [reason, setReason] = useState<ReportReason>(undefined);
 
   const confirmReport = () => {
     // inside report module
-    if (reason && reporting) {
+    if (reporting) {
       console.log(
-        `Reporting connection ${connection.name} with reason ${reason}`,
+        `Reporting connection ${connectionName} with reason ${reason}`,
       );
       // close modal
       navigation.goBack();
-      if (reporting) {
+      if (reporting && source === report_sources.PROFILE) {
         dispatch(reportConnection({ id: connectionId, reason, api }));
       }
       // inside undo report module
@@ -69,19 +101,19 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       });
       dispatch(
         setConnectionLevel({
-          id: connection.id,
+          id: connectionId,
           level: connection_levels.SUSPICIOUS,
         }),
       );
       dispatch(
         setReportReason({
-          id: connection.id,
+          id: connectionId,
           reason: null,
         }),
       );
     }
     if (successCallback) {
-      successCallback();
+      successCallback(reason);
     }
   };
 
@@ -89,7 +121,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     navigation.goBack();
   };
 
-  const renderReasonButton = (btnReason: string) => {
+  const renderReasonButton = (btnReason: ReportReason) => {
     const active = btnReason === reason;
     return (
       <TouchableOpacity
@@ -103,34 +135,41 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         </View>
         <View style={styles.radioLabel}>
           <Text style={styles.radioLabelText}>
-            {reasonStrings[btnReason]?.description}
+            {reasons[source].find((r) => r.reason === btnReason)?.description}
           </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
-  const reportConnectionText = t('connectionDetails.text.reportConnection', {
-    name: connection.name,
-  });
+  const reportConnectionText = t(
+    `connectionDetails.text.${
+      source === report_sources.PROFILE ? 'remove' : 'report'
+    }Connection`,
+    {
+      name: connectionName,
+    },
+  );
   const unReportConnectionText = t(
     'connectionDetails.text.unReportConnection',
     {
-      name: connection.name,
+      name: connectionName,
     },
   );
   const reportConnectionDetailsText = t(
-    'connectionDetails.text.whyremove',
+    `connectionDetails.text.why${
+      source === report_sources.PROFILE ? 'remove' : 'report'
+    }`,
     'Please tell us why you want to remove this connection',
   );
   const unReportConnectionDetailsText = t(
     'connectionDetails.text.unReportImpact',
     {
-      name: connection.name,
-      reportReason: connection.reportReason,
+      name: connectionName,
+      reportReason,
     },
   );
-
+  const submitDisabled = reporting && !reason;
   return (
     <View style={styles.container} testID="ReportReasonModal">
       <BlurView
@@ -156,9 +195,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         <View style={styles.divider} />
         {reporting && (
           <View style={styles.radioButtonsContainer}>
-            {Object.keys(reasonStrings).map((reason) =>
-              renderReasonButton(reason),
-            )}
+            {reasons[source].map((r) => renderReasonButton(r.reason))}
           </View>
         )}
         <View style={styles.modalButtons}>
@@ -166,13 +203,13 @@ const ReportReasonModal = ({ route, navigation }: props) => {
             testID="SubmitReportBtn"
             style={[styles.modalButton, styles.submitButton]}
             onPress={confirmReport}
-            disabled={!reason}
+            disabled={submitDisabled}
           >
             <Text
               style={
-                reason
-                  ? styles.submitButtonText
-                  : styles.submitButtonDisabledText
+                submitDisabled
+                  ? styles.submitButtonDisabledText
+                  : styles.submitButtonText
               }
             >
               {reporting

@@ -72,6 +72,7 @@ const TrustlevelModal = ({ route }: props) => {
             level,
             Date.now(),
             null,
+            null,
             {
               id: connection.id,
               secretKey: connection.secretKey,
