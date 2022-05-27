@@ -65,13 +65,15 @@
         "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Je probeert {{app}} te koppelen via {{appUserId}}, maar {{app}} is al gekoppeld aan een andere id: {{previousAppUserIds}}. Dit kan problemen veroorzaken tijdens het gebruik van de app.",
         "checkWebsite": "Meer informatie over {{name}} is te vinden op hun website!",
+        "duplicateAppUserId": "{{appUserId}} is al in gebruik door een andere gesponsorde gebruiker.",
         "invalidApp": "{{app}} is geen geldige app!",
         "invalidContext": "{{context}} is geen geldige context!",
         "linkApp": "Wil je je account in {{context}} koppelen aan je BrightID?",
         "linkFailure": "Je account in {{context}} kan niet worden gekoppeld aan je BrightID:\n{{result}}",
         "linkSigFailed": "De verificatie, {{verification}}, kan niet worden gekoppeld aan {{appId}}. Foutmelding: {{msg}}",
         "linkSuccess": "Je account in {{context}} is gekoppeld aan je BrightID",
-        "missingBlindSig": "Er is geen ondertekening aangetroffen in {{appId}}. Ontbrekend: {{missingVerifications}} - Reeds gekoppeld: {{linkedVerifications}}"
+        "missingBlindSig": "Er is geen ondertekening aangetroffen in {{appId}}. Ontbrekend: {{missingVerifications}} - Reeds gekoppeld: {{linkedVerifications}}",
+        "notPrimary": "Je maakt momenteel gebruik van een tweede apparaat. Je kunt ‘{{app}}’ alléén koppelen via je gebruikelijke apparaat."
       },
       "title": {
         "invalidApp": "Mislukt",
@@ -79,7 +81,8 @@
         "linkApp": "Wil je de app koppelen?",
         "linkFailure": "Mislukt",
         "linkSuccess": "Voltooid",
-        "linkingFailed": "De app kan niet worden gekoppeld"
+        "linkingFailed": "De app kan niet worden gekoppeld",
+        "notPrimary": "Het koppelen is mislukt"
       }
     },
     "text": {
@@ -118,6 +121,7 @@
       "success": "Voltooid",
       "sure": "Prima",
       "text": {
+        "commonError": "Je verzoek kan niet worden verwerkt - probeer het later opnieuw.",
         "failedOp": "{{name}} mislukt:\n{{message}}",
         "invalidSigningKey": "Je sleutel is ongeldig. Dit kan een van de volgende oorzaken hebben:\n-Je hebt je BrightID op een ander apparaat hersteld;\n-Je hebt dit apparaat verwijderd van de lijst met actieve apparaten;\n-Er is een mislukte herstelpoging geweest;\n-Er is een probleem met de gekoppelde server.",
         "lostKeys": "Maak een nieuwe BrightID aan of herstel je vorige BrightID",
@@ -159,6 +163,7 @@
       "reportedByUser": "door jou gemeld"
     },
     "text": {
+      "noConnection": "Er kan geen verbinding worden gemaakt met de server",
       "uploadingData": "Bezig met uploaden naar back-upserver…"
     }
   },
@@ -320,6 +325,7 @@
       "copyExplorerCode": "Verkennercode kopiëren",
       "devices": "Apparaten",
       "editProfile": "Profiel bewerken",
+      "findFriends": "Vrienden zoeken",
       "groups": "Groepen",
       "home": "Startpagina"
     }
@@ -327,6 +333,12 @@
   "eula": {
     "header": {
       "title": "Licentie-overeenkomst"
+    }
+  },
+  "findFriends": {
+    "text": {
+      "invitationNotAvailable": "Uitnodigingen kunnen momenteel niet worden verstuurd vanuit deze app.",
+      "noFriends": "Geen vrienden"
     }
   },
   "graphExplorer": {
@@ -568,6 +580,7 @@
       },
       "text": {
         "discardChanges": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je het scherm wilt verlaten?",
+        "invalidPhoneNumber": "Voer een geldig telefoonnummer in",
         "passwordMatch": "Het huidige wachtwoord is onjuist."
       },
       "title": {
@@ -580,6 +593,7 @@
       "socialPrevious": "Vorige"
     },
     "label": {
+      "contactInfo": "Contactpersooninformatie",
       "currentPassword": "Huidig wachtwoord",
       "name": "Naam",
       "newPassword": "Nieuw wachtwoord",
