@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, ViewStyle } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { StyleSheet, Animated } from 'react-native';
+// import LinearGradient from 'react-native-linear-gradient';
 
 type AnimatedLinearGradientProps = {
   children?: React.ReactNode;
@@ -12,7 +12,18 @@ type AnimatedLinearGradientProps = {
 export default function AnimatedLinearGradient(
   props: AnimatedLinearGradientProps,
 ) {
-  return (
+  const noGradient = (
+    <Animated.View style={[styles.simple, props.containerStyle]}>
+      <Animated.View
+        style={StyleSheet.flatten([styles.linearGradient, props.style])}
+      >
+        {props.children}
+      </Animated.View>
+    </Animated.View>
+  );
+
+  /*
+  const gradient = (
     <Animated.View
       style={StyleSheet.flatten([styles.container, props.containerStyle])}
     >
@@ -24,9 +35,16 @@ export default function AnimatedLinearGradient(
       </LinearGradient>
     </Animated.View>
   );
+
+   */
+
+  return noGradient;
 }
 
 const styles = StyleSheet.create({
+  simple: {
+    backgroundColor: '#3E4481',
+  },
   container: {
     flex: 1,
   },

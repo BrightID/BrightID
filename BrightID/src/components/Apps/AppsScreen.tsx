@@ -27,6 +27,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/stack';
 import _ from 'lodash';
 import Spinner from 'react-native-spinkit';
+import Svg, { Path } from 'react-native-svg';
 import {
   linkedContextTotal,
   selectAllLinkedContexts,
