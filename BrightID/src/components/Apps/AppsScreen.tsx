@@ -27,6 +27,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/stack';
 import _ from 'lodash';
 import Spinner from 'react-native-spinkit';
+import Svg, { Path } from 'react-native-svg';
 import {
   linkedContextTotal,
   selectAllLinkedContexts,
@@ -64,9 +65,10 @@ export const AppsScreen = () => {
   const { t } = useTranslation();
 
   const apps = useSelector(selectAllApps);
-  const isSponsored = useSelector(
-    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
-  );
+  //  const isSponsored = useSelector(
+  //     (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+  // );
+  const isSponsored = true;
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
