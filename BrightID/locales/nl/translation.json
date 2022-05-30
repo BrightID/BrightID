@@ -198,14 +198,18 @@
       "levelJustMet": "Ik heb deze persoon zojuist ontmoet",
       "levelRecovery": "Ik vertrouw op deze persoon om mijn BrightID te herstellen",
       "levelSuspicious": "Ik ken deze persoon niet",
-      "reportConnection": "Loskoppelen van {{name}}",
-      "reportDuplicate": "Deze koppeling is verouderd of een duplicaat",
+      "removeConnection": "Loskoppelen van {{name}}",
+      "reportConnection": "Melding maken over {{name}}",
+      "reportDuplicate": "Deze koppeling is een duplicaat",
       "reportOther": "Andere reden",
-      "reportSpammer": "Deze persoon stuurde me een ongewenst verzoek",
+      "reportReplaced": "Deze koppeling is verouderd en vervangen door een ander account",
+      "reportSpammer": "Deze persoon bleef me ongewenste verzoeken sturen",
+      "reportSuspicious": "Dit account behoorde eerst toe aan een ander persoon",
       "unReportConnection": "Herstellen",
       "unReportImpact": "Je hebt {{name}} gemeld als ‘{{reportReason}}’. Weet je zeker dat je dit wilt intrekken en de koppeling wilt herstellen?",
       "unkownRecoveryConnection": "Onbekend",
-      "whyremove": "Vertel ons waarom je deze koppeling wilt verwijderen"
+      "whyremove": "Vertel ons waarom je deze koppeling wilt verwijderen",
+      "whyreport": "Vertel ons waarom je deze connectie niet vertrouwt"
     }
   },
   "connections": {
