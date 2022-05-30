@@ -65,10 +65,9 @@ export const AppsScreen = () => {
   const { t } = useTranslation();
 
   const apps = useSelector(selectAllApps);
-  //  const isSponsored = useSelector(
-  //     (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
-  // );
-  const isSponsored = true;
+  const isSponsored = useSelector(
+    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+  );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
