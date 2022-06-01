@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { translations } from '@/i18n.js';
+import { translations } from '@/i18n';
 import { selectLanguageTag, setLanguageTag } from '@/reducer/settingsSlice';
 import { useDispatch, useSelector } from '@/store';
 
