@@ -33,9 +33,17 @@ export const SettingsScreen = () => {
     }
   };
 
-  const availableLanguages = Object.keys(translations).map((key) => (
-    <Picker.Item label={translations[key].nativeLabel} value={key} key={key} />
-  ));
+  const availableLanguages = Object.keys(translations)
+    .sort((a, b) =>
+      translations[a].nativeLabel < translations[b].nativeLabel ? -1 : 1,
+    )
+    .map((key) => (
+      <Picker.Item
+        label={translations[key].nativeLabel}
+        value={key}
+        key={key}
+      />
+    ));
 
   return (
     <View
