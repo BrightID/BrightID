@@ -52,12 +52,14 @@ export const SettingsScreen = () => {
     >
       <View style={styles.headerTextContainer}>
         <Text style={styles.headerText}>
-          <Text>Settings</Text>
+          <Text>{t('drawer.label.settings', 'Settings')}</Text>
         </Text>
       </View>
       <View style={styles.divider} />
       <View style={styles.setLanguageContainer}>
-        <Text style={styles.label}>Language</Text>
+        <Text style={styles.label}>
+          {t('settings.language.label', 'Language')}
+        </Text>
         <Picker
           selectedValue={languageTag}
           onValueChange={setLanguageHandler}

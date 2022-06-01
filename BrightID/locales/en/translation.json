@@ -64,8 +64,8 @@
       "text": {
         "blindSigAlreadyLinked": "You are already linked with {{app}} with id {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.",
-        "duplicateAppUserId": "The id {{appUserId}} is used by another user to get sponsored before.",
         "checkWebsite": "To find out more about {{name}}, check out their website!",
+        "duplicateAppUserId": "The id {{appUserId}} is used by another user to get sponsored before.",
         "invalidApp": "{{app}} is not a valid app!",
         "invalidContext": "{{context}} is not a valid context!",
         "linkApp": "Do you want to link your account in {{context}} to your BrightID?",
@@ -198,18 +198,14 @@
       "levelJustMet": "This person is a stranger I just met",
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
-      "removeConnection": "Disconnect from {{name}}",
-      "reportConnection": "Report {{name}}",
       "reportDuplicate": "This connection is a duplicate",
-      "reportReplaced": "This connection is old and replaced by another account",
-      "reportSuspicious": "This account belonged to a different person before",
       "reportOther": "Other reason",
+      "reportReplaced": "This connection is old and replaced by another account",
       "reportSpammer": "This person spammed me with an unwanted connection request",
+      "reportSuspicious": "This account belonged to a different person before",
       "unkownRecoveryConnection": "Unknown",
       "unReportConnection": "Restore connection",
-      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
-      "whyreport": "Please tell us why you are suspicious of this connection",
-      "whyremove": "Please tell us why you want to remove this connection"
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?"
     }
   },
   "connections": {
@@ -331,7 +327,8 @@
       "editProfile": "Edit Profile",
       "findFriends": "Find Friends",
       "groups": "Groups",
-      "home": "Home"
+      "home": "Home",
+      "settings": "Settings"
     }
   },
   "eula": {
@@ -746,6 +743,11 @@
     },
     "text": {
       "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover."
+    }
+  },
+  "settings": {
+    "language": {
+      "label": "Language"
     }
   },
   "signup": {
