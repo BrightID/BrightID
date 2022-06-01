@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import * as RNLocalize from 'react-native-localize';
 import { RESET_STORE } from '@/actions/resetStore';
-import { defaultLanguage, translations } from '@/i18n';
 
 const ProdCandidates = [
   'http://node.brightid.org',
@@ -22,12 +20,8 @@ interface SettingsSlice {
   nodeUrls: Array<string>;
   isPrimaryDevice: boolean;
   lastSyncTime: number;
-  languageTag: string;
+  languageTag: string | null;
 }
-
-const initialLanguage =
-  RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
-  defaultLanguage;
 
 const initialState: SettingsSlice = {
   syncSocialMediaEnabled: false,
@@ -35,7 +29,7 @@ const initialState: SettingsSlice = {
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
   isPrimaryDevice: true,
   lastSyncTime: 0,
-  languageTag: initialLanguage.languageTag,
+  languageTag: null,
 };
 
 export const settingsSlice = createSlice({

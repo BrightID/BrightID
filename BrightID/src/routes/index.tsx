@@ -44,7 +44,7 @@ const MainApp = () => {
   const languageTag = useSelector(selectLanguageTag);
   useEffect(() => {
     const runEffect = async () => {
-      if (i18next.resolvedLanguage !== languageTag) {
+      if (languageTag && i18next.resolvedLanguage !== languageTag) {
         console.log(
           `Setting language from ${i18next.resolvedLanguage} to ${languageTag}`,
         );

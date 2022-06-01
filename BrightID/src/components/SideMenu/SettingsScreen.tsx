@@ -8,8 +8,8 @@ import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { BLUE, DARK_ORANGE, LIGHT_GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { translations } from '@/i18n';
-import { selectLanguageTag, setLanguageTag } from '@/reducer/settingsSlice';
-import { useDispatch, useSelector } from '@/store';
+import { setLanguageTag } from '@/reducer/settingsSlice';
+import { useDispatch } from '@/store';
 
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();
@@ -17,7 +17,7 @@ export const SettingsScreen = () => {
     headerHeight += 7;
   }
   const { t } = useTranslation();
-  const languageTag = useSelector(selectLanguageTag);
+  const languageTag = i18next.resolvedLanguage;
   const dispatch = useDispatch();
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
