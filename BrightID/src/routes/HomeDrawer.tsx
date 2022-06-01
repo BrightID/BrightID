@@ -42,6 +42,7 @@ import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 import RecoveryConnectionsScreen from '@/components/RecoveryConnections/RecoveryConnectionsScreen';
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
+import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
 
 const CustomItem = ({
   onPress,
@@ -136,8 +137,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.home')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <Home
             width={DEVICE_LARGE ? 28 : 24}
@@ -161,8 +160,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.editProfile')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <Pencil
             width={DEVICE_LARGE ? 28 : 24}
@@ -186,8 +183,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label="Recovery Connections"
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <RecoveryAccount
             width={DEVICE_LARGE ? 28 : 24}
@@ -211,8 +206,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.achievements')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <List
             width={DEVICE_LARGE ? 28 : 24}
@@ -237,8 +230,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.copyExplorerCode')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <GraphQl
             width={DEVICE_LARGE ? 28 : 24}
@@ -262,8 +253,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.groups')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={() => (
           <SvgXml
             xml={GroupsDrawerIcon}
@@ -286,8 +275,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.findFriends')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={() => (
           <SvgXml
             xml={FindFriendsIcon}
@@ -311,8 +298,6 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.devices')}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <Devices
             width={DEVICE_LARGE ? 28 : 24}
@@ -366,10 +351,31 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerSettingsBtn"
+        focused={state.routeNames[state.index] === 'Settings'}
+        inactiveBackgroundColor={WHITE}
+        inactiveTintColor={BLACK}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.settings', 'Settings')}
+        icon={({ focused }) => (
+          <Mail
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Settings' }],
+          });
+        }}
+      />
+      <CustomItem
         testId="drawerContactUsBtn"
         focused={state.routeNames[state.index] === 'ContactUs'}
-        // style={styles.drawerItem}
-        // labelStyle={styles.labelStyle}
         inactiveBackgroundColor={WHITE}
         inactiveTintColor={BLACK}
         activeTintColor={WHITE}
@@ -461,6 +467,7 @@ export const HomeDrawer = () => {
         name="Copy Explorer Code"
         component={GraphExplorerScreen}
       />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
       {__DEV__ && (
         <Drawer.Screen

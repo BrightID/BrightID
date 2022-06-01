@@ -8,11 +8,11 @@ import {
 } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
+import MainApp from '@/routes';
 
 /**
  * Central part of the application
@@ -79,7 +79,7 @@ export const App = () => {
               ref={navigationRef}
               fallback={<InitialLoading app={false} />}
             >
-              <AppRoutes />
+              <MainApp />
             </NavigationContainer>
           </SafeAreaProvider>
         </ActionSheetProvider>
