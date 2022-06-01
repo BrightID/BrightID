@@ -43,6 +43,7 @@ import RecoveryConnectionsScreen from '@/components/RecoveryConnections/Recovery
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
+import AppSettings from '@/components/Icons/AppSettings';
 
 const CustomItem = ({
   onPress,
@@ -318,6 +319,28 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
+        testId="drawerSettingsBtn"
+        focused={state.routeNames[state.index] === 'Settings'}
+        inactiveBackgroundColor={WHITE}
+        inactiveTintColor={BLACK}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.settings', 'Settings')}
+        icon={({ focused }) => (
+          <AppSettings
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Settings' }],
+          });
+        }}
+      />
+      <CustomItem
         testId="drawerUpdateBtn"
         focused={false}
         inactiveTintColor={BLACK}
@@ -348,29 +371,6 @@ const CustomDrawerContent = (props) => {
               }
             },
           );
-        }}
-      />
-      <CustomItem
-        testId="drawerSettingsBtn"
-        focused={state.routeNames[state.index] === 'Settings'}
-        inactiveBackgroundColor={WHITE}
-        inactiveTintColor={BLACK}
-        activeTintColor={WHITE}
-        activeBackgroundColor={ORANGE}
-        label={t('drawer.label.settings', 'Settings')}
-        icon={({ focused }) => (
-          <Mail
-            width={DEVICE_LARGE ? 28 : 24}
-            height={DEVICE_LARGE ? 28 : 24}
-            color={focused ? GREY : BLACK}
-            highlight={focused ? WHITE : ORANGE}
-          />
-        )}
-        onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Settings' }],
-          });
         }}
       />
       <CustomItem

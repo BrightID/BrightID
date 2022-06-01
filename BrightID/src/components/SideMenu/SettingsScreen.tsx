@@ -5,7 +5,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { Picker } from '@react-native-picker/picker';
 import i18next from 'i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { WHITE } from '@/theme/colors';
+import { BLUE, DARK_ORANGE, LIGHT_GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { translations } from '@/i18n';
 import { selectLanguageTag, setLanguageTag } from '@/reducer/settingsSlice';
@@ -21,7 +21,6 @@ export const SettingsScreen = () => {
   const dispatch = useDispatch();
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
-    console.log(`Setting language to ${itemValue}...`);
     await i18next.changeLanguage(itemValue);
     const currentLanguage = i18next.resolvedLanguage;
     if (currentLanguage === itemValue) {
@@ -43,19 +42,23 @@ export const SettingsScreen = () => {
       style={[styles.container, { marginTop: headerHeight }]}
       testID="SettingsScreen"
     >
-      <View style={styles.infoTextContainer}>
-        <Text style={styles.infoText}>
-          <Text>Change language</Text>
+      <View style={styles.headerTextContainer}>
+        <Text style={styles.headerText}>
+          <Text>Settings</Text>
         </Text>
       </View>
-      <Picker
-        selectedValue={languageTag}
-        onValueChange={setLanguageHandler}
-        style={styles.pickerStyle}
-        itemStyle={styles.pickerItemStyle}
-      >
-        {availableLanguages}
-      </Picker>
+      <View style={styles.divider} />
+      <View style={styles.setLanguageContainer}>
+        <Text style={styles.label}>Language</Text>
+        <Picker
+          selectedValue={languageTag}
+          onValueChange={setLanguageHandler}
+          style={styles.pickerStyle}
+          itemStyle={styles.pickerItemStyle}
+        >
+          {availableLanguages}
+        </Picker>
+      </View>
     </View>
   );
 };
@@ -63,26 +66,39 @@ export const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: WHITE,
-    flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
+    paddingHorizontal: DEVICE_LARGE ? 40 : 30,
   },
-  infoTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: DEVICE_LARGE ? 100 : 80,
-    paddingHorizontal: DEVICE_LARGE ? 22 : 20,
+  headerTextContainer: {
+    marginTop: DEVICE_LARGE ? 20 : 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  infoText: {
-    fontFamily: 'Poppins-Regular',
+  headerText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[20],
+    color: BLUE,
+  },
+  label: {
+    fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
+    color: DARK_ORANGE,
   },
-  pickerStyle: {
-    width: '80%',
+  setLanguageContainer: {
+    width: '100%',
+    marginTop: DEVICE_LARGE ? 12 : 8,
   },
+  pickerStyle: {},
   pickerItemStyle: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
+  },
+  divider: {
+    width: '100%',
+    borderBottomColor: LIGHT_GREY,
+    borderBottomWidth: 1,
+    marginTop: DEVICE_LARGE ? 16 : 12,
   },
 });
