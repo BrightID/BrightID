@@ -250,14 +250,18 @@
       "levelJustMet": "Je viens de rencontrer cette personne",
       "levelRecovery": "Je fais confiance à cette personne pour m'aider si je perds mon BrightID",
       "levelSuspicious": "Je ne connais pas du tout cette personne",
-      "reportConnection": "Se déconnecter de {{name}}",
-      "reportDuplicate": "Cette connexion est ancienne ou un doublon",
+      "removeConnection": "Déconnecter de {{name}}",
+      "reportConnection": "Signaler {{name}}",
+      "reportDuplicate": "Cette connexion est un doublon",
       "reportOther": "Autre raison",
-      "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
+      "reportReplaced": "Cette connexion est ancienne et remplacée par un autre compte",
+      "reportSpammer": "Cette personne m'a envoyé une demande de connexion non désirée",
+      "reportSuspicious": "Ce compte appartenait à une personne différente avant",
       "unReportConnection": "Rétablir la connexion",
       "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
       "unkownRecoveryConnection": "Inconnu",
-      "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion"
+      "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion",
+      "whyreport": "Veuillez nous dire pourquoi vous soupçonnez cette connexion"
     }
   },
   "connections": {
