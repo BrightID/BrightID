@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import './i18n';
+import './src/i18n';
 // import { enableScreens } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

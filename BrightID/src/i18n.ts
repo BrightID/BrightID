@@ -7,14 +7,14 @@ import * as RNLocalize from 'react-native-localize';
  * For each supported language, import the corresponding language file.
  * Consumed by i18next.
  */
-import * as englishTranslation from './locales/en/translation.json';
-import * as frenchTranslation from './locales/fr/translation.json';
-import * as germanTranslation from './locales/de/translation.json';
-import * as spanishTranslation from './locales/es/translation.json';
-import * as hindiTranslation from './locales/hi/translation.json';
-import * as hansTranslation from './locales/zh_Hans/translation.json';
-import * as hantTranslation from './locales/zh_Hant/translation.json';
-import * as russianTranslation from './locales/ru/translation.json';
+import * as englishTranslation from '../locales/en/translation.json';
+import * as frenchTranslation from '../locales/fr/translation.json';
+import * as germanTranslation from '../locales/de/translation.json';
+import * as spanishTranslation from '../locales/es/translation.json';
+import * as hindiTranslation from '../locales/hi/translation.json';
+import * as hansTranslation from '../locales/zh_Hans/translation.json';
+import * as hantTranslation from '../locales/zh_Hant/translation.json';
+import * as russianTranslation from '../locales/ru/translation.json';
 
 /**
  * For each supported language other than English, import the corresponding moment locale
@@ -28,34 +28,42 @@ import 'moment/locale/zh-cn'; // simplified chinese
 import 'moment/locale/zh-tw'; // traditional chinese
 import 'moment/locale/ru';
 
-const translations = {
+export const translations = {
   de: {
     translation: germanTranslation,
+    nativeLabel: 'Deutsch',
   },
   en: {
     translation: englishTranslation,
+    nativeLabel: 'English',
   },
   fr: {
     translation: frenchTranslation,
+    nativeLabel: 'Français',
   },
   es: {
     translation: spanishTranslation,
+    nativeLabel: 'Español',
   },
   hi: {
     translation: hindiTranslation,
+    nativeLabel: 'हिन्दी',
   },
   'zh-Hans': {
     translation: hansTranslation,
+    nativeLabel: '简体',
   },
   'zh-Hant': {
     translation: hantTranslation,
+    nativeLabel: '繁體',
   },
   ru: {
     translation: russianTranslation,
+    nativeLabel: 'Русский',
   },
 };
 
-const defaultLanguage = {
+export const defaultLanguage = {
   languageTag: 'en-US',
   isRTL: false,
 };
@@ -64,8 +72,8 @@ const { languageTag } =
   RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
   defaultLanguage;
 
-// console.log(RNLocalize.getLocales());
-// console.log(`Using languagetag ${languageTag}`);
+console.log(RNLocalize.getLocales());
+console.log(`Using languagetag ${languageTag}`);
 
 /**
  * Moment will use detected language throughout the app.
