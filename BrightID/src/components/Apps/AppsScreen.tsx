@@ -202,6 +202,7 @@ export const AppsScreen = ({
           searchTerm={searchTerm}
           setFilter={setFilter}
           setSearchTerm={setSearch}
+          fadeBackgroundSearch={fadeBackgroundSearch}
           translateYSearch={translateYSearch}
         />
 
