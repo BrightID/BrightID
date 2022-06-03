@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useEffect } from 'react';
+import i18next from 'i18next';
 import { useSelector } from '@/store';
 import NodeApiGate from '@/components/NodeApiGate';
 import Apps from './Apps';
@@ -14,6 +16,7 @@ import Modals from './Modals';
 import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
+import { selectLanguageTag } from '@/reducer/settingsSlice';
 
 const TopStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -38,6 +41,19 @@ const MainTabs = () => {
 const MainApp = () => {
   const id = useSelector((state: State) => state.user.id);
   const eula = useSelector((state: State) => state.user.eula);
+  const languageTag = useSelector(selectLanguageTag);
+  useEffect(() => {
+    const runEffect = async () => {
+      if (languageTag && i18next.resolvedLanguage !== languageTag) {
+        console.log(
+          `Setting language from ${i18next.resolvedLanguage} to ${languageTag}`,
+        );
+        await i18next.changeLanguage(languageTag);
+      }
+    };
+    runEffect();
+  }, [languageTag]);
+
   return (
     <NodeApiGate>
       <TopStack.Navigator>

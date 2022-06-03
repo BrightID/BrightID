@@ -77,13 +77,15 @@
         "blindSigAlreadyLinked": "Vous êtes déjà lié·e à {{app}} avec l’identifiant {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Vous essayez d'établir un lien avec {{app}} en utilisant {{appUserId}}. Vous êtes déjà lié·e à {{app}} avec un idientifiant différent {{previousAppUserIds}}. Ceci peut entraîner des problèmes d'utilisation de l'application.",
         "checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
+        "duplicateAppUserId": "L'identifiant {{appUserId}} est déjà utilisé par un autre utilisateur.",
         "invalidApp": "{{app}} n'est pas une application valide !",
         "invalidContext": "{{context}} n'est pas un contexte valide !",
         "linkApp": "Voulez-vous lier votre compte BrightID à {{context}} ?",
         "linkFailure": "Impossible de lier votre compte BrightID avec {{context}}\n{{result}}",
         "linkSigFailed": "Erreur de liaison entre la vérification {{verification}} et l'application {{appId}}. Message d'erreur : {{msg}}",
         "linkSuccess": "Votre compte BrightID est désormais lié à {{context}}",
-        "missingBlindSig": "Aucun sig aveugle trouvé pour l'application {{appId}}. Vérifications manquantes : {{missingVerifications}}. Vérifications déjà liées : {{linkedVerifications}}"
+        "missingBlindSig": "Aucun sig aveugle trouvé pour l'application {{appId}}. Vérifications manquantes : {{missingVerifications}}. Vérifications déjà liées : {{linkedVerifications}}",
+        "notPrimary": "Vous utilisez actuellement un appareil secondaire. La liaison de l'application « {{app}} » nécessite une interaction avec votre appareil principal. Veuillez vous synchroniser avec votre appareil principal ou effectuer la liaison avec votre appareil principal."
       },
       "title": {
         "invalidApp": "Échec",
@@ -91,7 +93,8 @@
         "linkApp": "Lier l'application ?",
         "linkFailure": "Échec",
         "linkSuccess": "Succès",
-        "linkingFailed": "Échec de la liaison de l'application"
+        "linkingFailed": "Échec de la liaison de l'application",
+        "notPrimary": "Liaison impossible"
       }
     },
     "tag": {
@@ -211,6 +214,7 @@
       "reportedByUser": "signalé par vous"
     },
     "text": {
+      "noConnection": "Impossible de se connecter au serveur",
       "progress": "{{completed}}/{{total}} complété(s)",
       "uploadingData": "Téléversement des données chiffrées sur le serveur de sauvegarde…"
     }
@@ -246,14 +250,18 @@
       "levelJustMet": "Je viens de rencontrer cette personne",
       "levelRecovery": "Je fais confiance à cette personne pour m'aider si je perds mon BrightID",
       "levelSuspicious": "Je ne connais pas du tout cette personne",
-      "reportConnection": "Se déconnecter de {{name}}",
-      "reportDuplicate": "Cette connexion est ancienne ou un doublon",
+      "removeConnection": "Déconnecter de {{name}}",
+      "reportConnection": "Signaler {{name}}",
+      "reportDuplicate": "Cette connexion est un doublon",
       "reportOther": "Autre raison",
-      "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
+      "reportReplaced": "Cette connexion est ancienne et remplacée par un autre compte",
+      "reportSpammer": "Cette personne m'a envoyé une demande de connexion non désirée",
+      "reportSuspicious": "Ce compte appartenait à une personne différente avant",
       "unReportConnection": "Rétablir la connexion",
       "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
       "unkownRecoveryConnection": "Inconnu",
-      "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion"
+      "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion",
+      "whyreport": "Veuillez nous dire pourquoi vous soupçonnez cette connexion"
     }
   },
   "connections": {
@@ -384,6 +392,15 @@
   "eula": {
     "header": {
       "title": "Contrat de licence"
+    }
+  },
+  "findFriends": {
+    "button": {
+      "invite": "inviter"
+    },
+    "text": {
+      "invitationNotAvailable": "Désolé, l'envoi d'invitation n'est actuellement pas disponible pour cette application.",
+      "noFriends": "Aucun ami"
     }
   },
   "graphExplorer": {
@@ -636,8 +653,8 @@
       },
       "text": {
         "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr·e de vouloir les annuler en quittant l'écran ?",
-        "passwordMatch": "Le mot de passe actuel est incorrect.",
-        "invalidPhoneNumber": "Entrez un numéro de téléphone valide"
+        "invalidPhoneNumber": "Entrez un numéro de téléphone valide",
+        "passwordMatch": "Le mot de passe actuel est incorrect."
       },
       "title": {
         "discardChanges": "Annuler les changements ?",
@@ -649,14 +666,15 @@
       "socialPrevious": "Retour"
     },
     "label": {
+      "contactInfo": "Infos de contact",
       "currentPassword": "Mot de passe actuel",
       "name": "Nom",
       "newPassword": "Nouveau mot de passe",
       "newPasswordAgain": "Répétez le mot de passe",
       "password": "Mot de passe",
       "passwordAgain": "Répétez le mot de passe",
-      "socialMediaLink": "Liens de réseaux sociaux",
-      "phoneNumber": "Numéro de téléphone"
+      "phoneNumber": "Numéro de téléphone",
+      "socialMediaLink": "Liens de réseaux sociaux"
     },
     "placeholder": {
       "name": "Entrez un nom",
@@ -884,14 +902,6 @@
       "gotIt": "Compris !",
       "setPassword": "Vous pouvez toujours définir votre\nmot de passe BrightID ici",
       "viewPassword": "Vous pouvez toujours voir votre\nmot de passe BrightID ici"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "inviter"
-    },
-    "text": {
-      "invitationNotAvailable": "Désolé, l'envoi d'invitation n'est actuellement pas disponible pour cette application."
     }
   }
 }

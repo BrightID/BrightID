@@ -3,9 +3,9 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack';
-import AppsScreen from '@/components/Apps/AppsScreen';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { headerOptions, NavHome } from './helpers';
+import AppsScreenController from '@/components/Apps/AppsScreenController';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,11 @@ const topOptions: StackNavigationOptions = {
 };
 
 const Apps = () => (
-  <Stack.Screen name="Apps" component={AppsScreen} options={topOptions} />
+  <Stack.Screen
+    name="Apps"
+    component={AppsScreenController}
+    options={topOptions}
+  />
 );
 
 export default Apps;

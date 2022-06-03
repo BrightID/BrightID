@@ -20,6 +20,7 @@ interface SettingsSlice {
   nodeUrls: Array<string>;
   isPrimaryDevice: boolean;
   lastSyncTime: number;
+  languageTag: string | null;
 }
 
 const initialState: SettingsSlice = {
@@ -28,6 +29,7 @@ const initialState: SettingsSlice = {
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
   isPrimaryDevice: true,
   lastSyncTime: 0,
+  languageTag: null,
 };
 
 export const settingsSlice = createSlice({
@@ -85,6 +87,12 @@ export const settingsSlice = createSlice({
     setLastSyncTime: (state, action: PayloadAction<number>) => {
       state.lastSyncTime = action.payload;
     },
+    setLanguageTag: (state, action: PayloadAction<string>) => {
+      state.languageTag = action.payload;
+    },
+    resetLanguageTag: (state) => {
+      state.languageTag = initialState.languageTag;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -104,6 +112,8 @@ export const {
   resetNodeUrls,
   setPrimaryDevice,
   setLastSyncTime,
+  setLanguageTag,
+  resetLanguageTag,
 } = settingsSlice.actions;
 
 export const selectSyncSocialMediaEnabled = (state: State) =>
@@ -114,5 +124,6 @@ export const selectDefaultNodeUrls = (_: State) => initialState.nodeUrls;
 export const selectIsPrimaryDevice = (state: State) =>
   state.settings.isPrimaryDevice;
 export const selectLastSyncTime = (state: State) => state.settings.lastSyncTime;
+export const selectLanguageTag = (state: State) => state.settings.languageTag;
 
 export default settingsSlice.reducer;
