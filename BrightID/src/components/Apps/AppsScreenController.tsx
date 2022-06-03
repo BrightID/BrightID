@@ -26,9 +26,9 @@ const AppsScreenController = () => {
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
-  const isSponsored = true; /* useSelector(
-   (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
-   ); */
+  const isSponsored = useSelector(
+    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+  );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);

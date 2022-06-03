@@ -74,9 +74,10 @@ export const AppsScreen = ({
     extrapolate: 'clamp',
   });
   const translateYSearch = scrollY.interpolate({
-    inputRange: [-640, 0, 290],
     // @ts-ignore notifHeight._value
-    outputRange: [790, notifHeight._value + 160, 0],
+    inputRange: [0, notifHeight._value + 160],
+    // @ts-ignore notifHeight._value
+    outputRange: [notifHeight._value + 160, 0],
     extrapolate: 'clamp',
   });
   const handleScroll = Animated.event(
@@ -201,7 +202,6 @@ export const AppsScreen = ({
           searchTerm={searchTerm}
           setFilter={setFilter}
           setSearchTerm={setSearch}
-          fadeBackgroundSearch={fadeBackgroundSearch}
           translateYSearch={translateYSearch}
         />
 

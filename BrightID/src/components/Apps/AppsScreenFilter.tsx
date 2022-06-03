@@ -16,7 +16,6 @@ type Props = {
   filter: number;
   setSearchTerm: (searchTerm: string) => void;
   setFilter: (filter: number) => void;
-  fadeBackgroundSearch: Animated.AnimatedInterpolation;
   translateYSearch: Animated.AnimatedInterpolation;
 };
 
@@ -25,7 +24,6 @@ const AppsScreenFilter = ({
   setSearchTerm,
   filter,
   setFilter,
-  fadeBackgroundSearch,
   translateYSearch,
 }: Props) => {
   const headerHeight = useHeaderHeight();
@@ -37,54 +35,46 @@ const AppsScreenFilter = ({
   ];
 
   return (
-    <>
-      <Animated.View
-        style={[
-          styles.searchBackground,
-          { top: headerHeight, opacity: fadeBackgroundSearch },
-        ]}
+    <Animated.View
+      style={[
+        styles.searchContainer,
+        {
+          top: headerHeight + 10,
+          transform: [{ translateY: translateYSearch }],
+        },
+      ]}
+    >
+      <TextInput
+        style={[styles.shadow, styles.textInput]}
+        onChangeText={(value) => setSearchTerm(value)}
+        placeholder="App name"
+        value={searchTerm}
+        // onFocus={handleSearchFocus}
       />
-      <Animated.View
-        style={[
-          styles.searchContainer,
-          {
-            top: headerHeight + 10,
-            transform: [{ translateY: translateYSearch }],
-          },
-        ]}
-      >
-        <TextInput
-          style={[styles.shadow, styles.textInput]}
-          onChangeText={(value) => setSearchTerm(value)}
-          placeholder="App name"
-          value={searchTerm}
-          // onFocus={handleSearchFocus}
-        />
 
-        <View style={styles.filterContainer}>
-          {filters.map((item, index) => (
-            <TouchableOpacity
-              key={item.id}
-              style={[
-                styles.filterItemContainer,
-                { backgroundColor: index === filter ? ORANGE : WHITE },
-              ]}
-              onPress={() => setFilter(index)}
+      <View style={styles.filterContainer}>
+        {filters.map((item, index) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[
+              styles.filterItemContainer,
+              { backgroundColor: index === filter ? ORANGE : WHITE },
+            ]}
+            onPress={() => setFilter(index)}
+          >
+            <Text
+              style={{
+                fontFamily: 'Poppins-Medium',
+                fontSize: 12,
+                color: index === filter ? WHITE : ORANGE,
+              }}
             >
-              <Text
-                style={{
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 12,
-                  color: index === filter ? WHITE : ORANGE,
-                }}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Animated.View>
-    </>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </Animated.View>
   );
 };
 
@@ -100,7 +90,6 @@ const styles = StyleSheet.create({
     zIndex: 6,
     // marginTop: 40,
     overflow: 'visible',
-    backgroundColor: `white`,
   },
   searchBackground: {
     position: 'absolute',
