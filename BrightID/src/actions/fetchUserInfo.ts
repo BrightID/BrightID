@@ -1,6 +1,7 @@
 import { InteractionManager } from 'react-native';
 import _ from 'lodash';
 import { NodeApi } from '@/api/brightId';
+import { selectAllLinkedContexts } from '@/reducer/appsSlice';
 import {
   setVerifications,
   updateMemberships,
@@ -8,6 +9,7 @@ import {
   setIsSponsored,
   updateNotifications,
   setActiveDevices,
+  setIsSponsoredv6,
 } from './index';
 
 const fetchUserInfo =
@@ -15,7 +17,7 @@ const fetchUserInfo =
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const {
-          user: { id },
+          user: { id, isSponsored, isSponsoredv6 },
         } = getState();
 
         if (!id) {
@@ -43,6 +45,26 @@ const fetchUserInfo =
           resolve(null);
         } catch (err) {
           console.log(err.message);
+        }
+        // this section is added to recover sponsorships missed because of a bug
+        // and should be removed in future releases
+        if (!isSponsored && !isSponsoredv6) {
+          console.log('checking missed sponsorships');
+          const linkedContexts = selectAllLinkedContexts(getState());
+          for (const contextInfo of linkedContexts) {
+            try {
+              const sp = await api.getSponsorship(contextInfo.contextId);
+              if (sp && sp.appHasAuthorized && sp.spendRequested) {
+                console.log(
+                  `sponsored ${contextInfo.contextId} by ${contextInfo.context}`,
+                );
+                dispatch(setIsSponsoredv6(true));
+                break;
+              }
+            } catch (e) {
+              continue;
+            }
+          }
         }
       });
     });

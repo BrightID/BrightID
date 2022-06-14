@@ -65,7 +65,6 @@
         "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Je probeert {{app}} te koppelen via {{appUserId}}, maar {{app}} is al gekoppeld aan een andere id: {{previousAppUserIds}}. Dit kan problemen veroorzaken tijdens het gebruik van de app.",
         "checkWebsite": "Meer informatie over {{name}} is te vinden op hun website!",
-        "duplicateAppUserId": "{{appUserId}} is al in gebruik door een andere gesponsorde gebruiker.",
         "invalidApp": "{{app}} is geen geldige app!",
         "invalidContext": "{{context}} is geen geldige context!",
         "linkApp": "Wil je je account in {{context}} koppelen aan je BrightID?",

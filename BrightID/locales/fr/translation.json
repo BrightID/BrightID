@@ -77,7 +77,6 @@
         "blindSigAlreadyLinked": "Vous êtes déjà lié·e à {{app}} avec l’identifiant {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Vous essayez d'établir un lien avec {{app}} en utilisant {{appUserId}}. Vous êtes déjà lié·e à {{app}} avec un idientifiant différent {{previousAppUserIds}}. Ceci peut entraîner des problèmes d'utilisation de l'application.",
         "checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
-        "duplicateAppUserId": "L'identifiant {{appUserId}} est déjà utilisé par un autre utilisateur.",
         "invalidApp": "{{app}} n'est pas une application valide !",
         "invalidContext": "{{context}} n'est pas un contexte valide !",
         "linkApp": "Voulez-vous lier votre compte BrightID à {{context}} ?",

@@ -48,20 +48,14 @@ export const handleV5App = async (
   const {
     apps: { apps },
   } = store.getState();
-  let handler: () => Promise<void>;
   params.baseUrl = decodeURIComponent(params.baseUrl);
   const appInfo = find(propEq('id', params.context))(apps) as AppInfo;
-  if (appInfo && appInfo.soulbound) {
-    // soulbound apps link after sponsorship just like v6 apps
-    const { baseUrl, context: appId, contextId: appUserId } = params;
-    handler = () =>
-      sponsor(appId, appUserId, setSponsoringApp, api, () =>
-        linkContextId(baseUrl, appId, appUserId),
-      );
-  } else {
-    const { baseUrl, context, contextId } = params;
-    handler = () => linkContextId(baseUrl, context, contextId);
-  }
+  // v5 apps link after sponsorship just like v6 apps
+  const { baseUrl, context: appId, contextId: appUserId } = params;
+  const handler = () =>
+    sponsor(appId, appUserId, setSponsoringApp, api, () =>
+      linkContextId(baseUrl, appId, appUserId),
+    );
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
     i18next.t('apps.alert.text.linkApp', { context: `${params.context}` }),
@@ -394,23 +388,11 @@ const sponsor = async (
   /*
   1. get appId from deep link
   2. already Sponsored? yes: go to step 6. no: go to step 3.
-  3. ensure no one else is sponsored using this appId before
-  4. optimistically send Spend Sponsorship operation.
-  5. wait a bit for node to process sponsor operation from app.
-  6. check GET /sponsorships/{appId} to see if it really got sponsored.
-  7. proceed with posting the verification to the node under the appId.
+  3. optimistically send Spend Sponsorship operation.
+  4. wait a bit for node to process sponsor operation from app.
+  5. check GET /sponsorships/{appId} to see if it really got sponsored.
+  6. proceed with posting the verification to the node under the appId.
    */
-  const sp = await getSponsorship(appUserId, api);
-  if (sp && sp.appHasAuthorized && sp.spendRequested) {
-    console.log(
-      'the appUserId is used by another user to get sponsored before.',
-    );
-    Alert.alert(
-      i18next.t('apps.alert.title.linkingFailed'),
-      i18next.t('apps.alert.text.duplicateAppUserId', { appUserId }),
-    );
-    return;
-  }
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   console.log(`Sending spend sponsorship op...`);
@@ -445,6 +427,7 @@ const sponsor = async (
   } catch (err) {
     const msg = err instanceof Error ? err.message : err;
     console.log(`Error getting sponsored: ${msg}`);
+    setSponsoringApp(undefined);
     Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${msg}`, [
       {
         text: i18next.t('common.alert.dismiss'),
