@@ -400,9 +400,8 @@ const sponsor = async (
   if (!sp || !sp.spendRequested) {
     console.log(`Sending spend sponsorship op...`);
     const op = await api.spendSponsorship(appId, appUserId);
+    // TODO wait for op to be applied before starting polling sponsorship status?
   }
-
-  // TODO wait for op to be applied before starting polling sponsorship status?
 
   // wait for app to complete the sponsorship
   try {
