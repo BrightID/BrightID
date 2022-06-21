@@ -395,10 +395,13 @@ const sponsor = async (
    */
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
-  console.log(`Sending spend sponsorship op...`);
-  const op = await api.spendSponsorship(appId, appUserId);
-
-  // TODO wait for op to be applied before starting polling sponsorship status?
+  const sp = await getSponsorship(appUserId, api);
+  // ignore spending if spend requseted before to prevent getting error
+  if (!sp || !sp.spendRequested) {
+    console.log(`Sending spend sponsorship op...`);
+    const op = await api.spendSponsorship(appId, appUserId);
+    // TODO wait for op to be applied before starting polling sponsorship status?
+  }
 
   // wait for app to complete the sponsorship
   try {
