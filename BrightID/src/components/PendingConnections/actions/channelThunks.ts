@@ -333,6 +333,13 @@ export const encryptAndUploadProfileToChannel =
   (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
     // get channel
     const channel = selectChannelById(getState(), channelId);
+
+    // prevent duplicate upload of my data. Could happen when rejoining hydrated channels after app restart.
+    // Existence of myProfileTimestamp indicates that I already uploaded my profile.
+    if (channel.myProfileTimestamp) {
+      return;
+    }
+
     // get user data
     const {
       id,
