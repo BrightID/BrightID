@@ -7,6 +7,10 @@ import {
 } from '@reduxjs/toolkit';
 
 import { Draft } from 'immer';
+import { AppDispatch } from '@/store';
+import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
+import ChannelAPI from '@/api/channelService';
+import { RESET_STORE } from '@/actions';
 /*
 
   What is a channel:
@@ -121,6 +125,12 @@ const channelSlice = createSlice({
       const channelType = action.payload;
       state.displayChannelType = channelType;
     },
+    upsertChannel: channelsAdapter.upsertOne,
+  },
+  extraReducers: {
+    [RESET_STORE]: () => {
+      return initialState;
+    },
   },
 });
 
@@ -128,6 +138,7 @@ const channelSlice = createSlice({
 export const {
   addChannel,
   updateChannel,
+  upsertChannel,
   removeChannel,
   setMyChannel,
   closeChannel,
@@ -163,6 +174,35 @@ export const selectAllActiveChannelIdsByType = createSelector(
       )
       .map((pc) => pc.id),
 );
+
+/* Select all channels that are rehydrated. Can be identified by missing timerIDs. */
+export const selectHydratedChannelIds = createSelector(
+  selectAllChannels,
+  (channels) => {
+    return channels.filter((channel: Channel) => {
+      if (channel.pollTimerId || channel.timeoutId) {
+        console.log(
+          `Not hydrating channel ${channel.id}. pollTimerId: ${channel.pollTimerId}, timeoutId: ${channel.timeoutId}`,
+        );
+        return false;
+      }
+      return true;
+    });
+  },
+);
+
+export const hydrateChannels =
+  () => (dispatch: AppDispatch, getState: getState) => {
+    const hydratedChannels = selectHydratedChannelIds(getState());
+    console.log(
+      `Hydrating channels: ${hydratedChannels.map((channel) => channel.id)}`,
+    );
+    for (const channel of hydratedChannels) {
+      // create channel API instance and join
+      channel.api = new ChannelAPI(channel.url.href);
+      dispatch(joinChannel(channel));
+    }
+  };
 
 // Export reducer
 export default channelSlice.reducer;

@@ -73,7 +73,6 @@ export const ScanCodeScreen = () => {
   const [qrData, setQrData] = useState(undefined);
   const name = useSelector((state: State) => state.user.name);
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
 
   const pendingConnectionSizeForChannel = useSelector((state: State) => {
     if (channel) {
@@ -180,7 +179,7 @@ export const ScanCodeScreen = () => {
               );
               const channel = await parseChannelQrURL(channelURL);
               setChannel(channel);
-              await dispatch(joinChannel(channel, api));
+              await dispatch(joinChannel(channel));
               break;
             }
           }
@@ -201,7 +200,7 @@ export const ScanCodeScreen = () => {
     if (qrData) {
       handleQrData(qrData);
     }
-  }, [api, dispatch, navigation, qrData]);
+  }, [dispatch, navigation, qrData]);
 
   const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
     console.log(`Scanned QRCode: ${data}`);

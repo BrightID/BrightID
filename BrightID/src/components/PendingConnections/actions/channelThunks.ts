@@ -5,9 +5,9 @@ import {
   removeChannel,
   setMyChannel,
   updateChannel,
-  selectAllChannelIds,
   channel_types,
   selectAllChannels,
+  upsertChannel,
 } from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -25,11 +25,11 @@ import {
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
-import { NodeApi } from '@/api/brightId';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { getGlobalNodeApi } from '@/components/NodeApiGate';
 
 export const createChannel =
-  (channelType: ChannelType, api: NodeApi) =>
+  (channelType: ChannelType) =>
   async (dispatch: dispatch, getState: getState) => {
     let channel: Channel | null | undefined;
     try {
@@ -61,7 +61,7 @@ export const createChannel =
       // upload my profile
       await dispatch(encryptAndUploadProfileToChannel(channel.id));
       // start polling for profiles
-      dispatch(subscribeToConnectionRequests(channel.id, api));
+      dispatch(subscribeToConnectionRequests(channel.id));
     } catch (e) {
       // Something went wrong while creating channel.
       if (channel && channel.id) {
@@ -74,12 +74,12 @@ export const createChannel =
   };
 
 export const joinChannel =
-  (channel: Channel, api: NodeApi) =>
-  async (dispatch: dispatch, getState: getState) => {
+  (channel: Channel) => async (dispatch: dispatch, getState: getState) => {
     console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
+
     // check to see if channel exists
-    const channelIds = selectAllChannelIds(getState());
-    if (channelIds.includes(channel.id)) {
+    const existingChannel = selectChannelById(getState(), channel.id);
+    if (existingChannel && existingChannel.timeoutId) {
       console.log(`Channel ${channel.id} already joined`);
       return;
     }
@@ -117,12 +117,13 @@ export const joinChannel =
 
       // add channel to store
       // we need channel to exist prior to uploadingProfileToChannel
-      dispatch(addChannel(channel));
+      dispatch(upsertChannel(channel));
 
       // start polling for profiles
-      dispatch(subscribeToConnectionRequests(channel.id, api));
+      dispatch(subscribeToConnectionRequests(channel.id));
     } catch (e) {
       // Something went wrong while trying to join channel.
+      console.log(`Error joining channel ${channel.id}: ${e}`);
       dispatch(leaveChannel(channel.id));
       throw e;
     }
@@ -150,8 +151,7 @@ export const leaveAllChannels =
   };
 
 export const subscribeToConnectionRequests =
-  (channelId: string, api: NodeApi) =>
-  (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: dispatch, getState: getState) => {
     let { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -165,7 +165,7 @@ export const subscribeToConnectionRequests =
 
     pollTimerId = setInterval(() => {
       // fetch all profileIDs in channel
-      dispatch(fetchChannelProfiles(channelId, api));
+      dispatch(fetchChannelProfiles(channelId));
     }, PROFILE_POLL_INTERVAL);
 
     console.log(
@@ -201,8 +201,14 @@ export const unsubscribeFromConnectionRequests =
   };
 
 export const fetchChannelProfiles =
-  (channelId: string, api: NodeApi) =>
-  async (dispatch: Dispatch, getState: GetState) => {
+  (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
+    // don't try to fetch profiles if there is no node API available. Can happen if node goes down or
+    // when rejoining hydrated channels at app startup
+    if (!getGlobalNodeApi()) {
+      console.log(`Skipping channel poll cycle - no NodeAPI available`);
+      return;
+    }
+
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
 
@@ -245,7 +251,6 @@ export const fetchChannelProfiles =
                 newPendingConnection({
                   channelId,
                   profileId,
-                  api,
                 }),
               );
             }
@@ -271,7 +276,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId: channel.initiatorProfileId,
-                api,
               }),
             );
           }
@@ -290,7 +294,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId,
-                api,
               }),
             );
           }
@@ -309,7 +312,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId,
-                api,
               }),
             );
           }
