@@ -28,6 +28,8 @@ export const ApiGateState = {
 } as const;
 export type ApiGateState = typeof ApiGateState[keyof typeof ApiGateState];
 
+// some thunks require access to the current NodeAPI, so also
+// make it available as a global var.
 let globalNodeApi: ApiContext = null;
 export const getGlobalNodeApi = () => globalNodeApi;
 
