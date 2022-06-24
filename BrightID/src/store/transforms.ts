@@ -1,6 +1,7 @@
 // exclude some keys from persisting channels
 
 import { createTransform } from 'redux-persist';
+import ChannelAPI from '@/api/channelService';
 
 const ChannelsTransform = createTransform(
   // clear timerIDs and API instance before persisting
@@ -19,15 +20,18 @@ const ChannelsTransform = createTransform(
     return newState;
   },
 
-  // recreate URL object from url string when restoring
+  // recreate URL and api objects when hydrating
   (outboundState: any, _key) => {
     const newState = {};
     Object.keys(outboundState).forEach((id, index) => {
       console.log(`outbound channel #${index}, id ${id}`);
       console.log(outboundState[id]);
+      const url = new URL(outboundState[id].url);
+      const api = new ChannelAPI(url.href);
       newState[id] = {
         ...outboundState[id],
-        url: new URL(outboundState[id].url),
+        url,
+        api,
       };
     });
     console.log(Object.values(newState));

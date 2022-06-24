@@ -180,26 +180,20 @@ export const selectHydratedChannelIds = createSelector(
   selectAllChannels,
   (channels) => {
     return channels.filter((channel: Channel) => {
-      if (channel.pollTimerId || channel.timeoutId) {
-        console.log(
-          `Not hydrating channel ${channel.id}. pollTimerId: ${channel.pollTimerId}, timeoutId: ${channel.timeoutId}`,
-        );
-        return false;
-      }
-      return true;
+      return !(channel.pollTimerId || channel.timeoutId);
     });
   },
 );
 
-export const hydrateChannels =
+export const rejoinChannels =
   () => (dispatch: AppDispatch, getState: getState) => {
     const hydratedChannels = selectHydratedChannelIds(getState());
     console.log(
-      `Hydrating channels: ${hydratedChannels.map((channel) => channel.id)}`,
+      `Rejoining hydrated channels: ${hydratedChannels.map(
+        (channel) => channel.id,
+      )}`,
     );
     for (const channel of hydratedChannels) {
-      // create channel API instance and join
-      channel.api = new ChannelAPI(channel.url.href);
       dispatch(joinChannel(channel));
     }
   };

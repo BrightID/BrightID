@@ -4,7 +4,7 @@ import { dangerouslyDeleteStorage } from '@/utils/dev';
 import { store } from './store';
 import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 import { scrubOps } from '@/reducer/operationsSlice';
-import { hydrateChannels } from '@/components/PendingConnections/channelSlice';
+import { rejoinChannels } from '@/components/PendingConnections/channelSlice';
 
 // happens inside of the loading screen
 
@@ -20,7 +20,7 @@ export const bootstrap = async () => {
   // scrub outdated operations from state
   store.dispatch(scrubOps());
   // restore persisted channels
-  store.dispatch(hydrateChannels());
+  store.dispatch(rejoinChannels());
 
   try {
     // delete all storage if brightid is empty
