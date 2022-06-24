@@ -158,9 +158,8 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   );
   const reportConnectionDetailsText = t(
     `connectionDetails.text.why${
-      source === report_sources.PROFILE ? 'remove' : 'report'
-    }`,
-    'Please tell us why you want to remove this connection',
+      source === report_sources.PROFILE ? 'Remove' : 'Report'
+    }`
   );
   const unReportConnectionDetailsText = t(
     'connectionDetails.text.unReportImpact',
