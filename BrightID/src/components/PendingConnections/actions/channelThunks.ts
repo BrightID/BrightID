@@ -30,7 +30,7 @@ import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 
 export const createChannel =
   (channelType: ChannelType, api: NodeApi) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     let channel: Channel | null | undefined;
     try {
       const baseUrl = selectBaseUrl(getState());
@@ -75,7 +75,7 @@ export const createChannel =
 
 export const joinChannel =
   (channel: Channel, api: NodeApi) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
     // check to see if channel exists
     const channelIds = selectAllChannelIds(getState());
@@ -129,7 +129,7 @@ export const joinChannel =
   };
 
 export const leaveChannel =
-  (channelId: string) => (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: AppDispatch, getState: getState) => {
     const channel: Channel = selectChannelById(getState(), channelId);
     if (channel) {
       clearTimeout(channel.timeoutId);
@@ -139,7 +139,7 @@ export const leaveChannel =
   };
 
 export const leaveAllChannels =
-  () => (dispatch: dispatch, getState: getState) => {
+  () => (dispatch: AppDispatch, getState: getState) => {
     const channels = selectAllChannels(getState());
     for (const channel of channels) {
       console.log(`Leaving channel ${channel.id}`);
@@ -151,7 +151,7 @@ export const leaveAllChannels =
 
 export const subscribeToConnectionRequests =
   (channelId: string, api: NodeApi) =>
-  (dispatch: dispatch, getState: getState) => {
+  (dispatch: AppDispatch, getState: getState) => {
     let { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -183,7 +183,7 @@ export const subscribeToConnectionRequests =
   };
 
 export const unsubscribeFromConnectionRequests =
-  (channelId: string) => (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: AppDispatch, getState: getState) => {
     const { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -202,7 +202,7 @@ export const unsubscribeFromConnectionRequests =
 
 export const fetchChannelProfiles =
   (channelId: string, api: NodeApi) =>
-  async (dispatch: Dispatch, getState: GetState) => {
+  async (dispatch: AppDispatch, getState: GetState) => {
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
 
@@ -328,7 +328,7 @@ export const fetchChannelProfiles =
   };
 
 export const encryptAndUploadProfileToChannel =
-  (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
+  (channelId: string) => async (dispatch: AppDispatch, getState: GetState) => {
     // get channel
     const channel = selectChannelById(getState(), channelId);
     // get user data

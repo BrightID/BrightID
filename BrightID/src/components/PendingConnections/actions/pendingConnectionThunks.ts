@@ -28,7 +28,7 @@ export const confirmPendingConnectionThunk =
     api: NodeApi,
     reportReason?: ReportReason,
   ) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     const connection: PendingConnection = selectPendingConnectionById(
       getState(),
       id,

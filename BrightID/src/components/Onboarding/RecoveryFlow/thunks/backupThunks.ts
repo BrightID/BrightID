@@ -9,85 +9,81 @@ const hashId = (id: string, password: string) => {
   return h;
 };
 
-export const encryptAndBackup = (key: string, data: string) => async (
-  _: dispatch,
-  getState: getState,
-) => {
-  const {
-    user: { id, password },
-  } = getState();
-  const hashedId = hashId(id, password);
-  try {
-    const encrypted = CryptoJS.AES.encrypt(data, password).toString();
-    await backupApi.putRecovery(hashedId, key, encrypted);
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
-
-export const backupPhoto = (id: string, filename: string) => async (
-  dispatch: dispatch,
-) => {
-  try {
-    const data = await retrieveImage(filename);
-    await dispatch(encryptAndBackup(id, data));
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
-
-const backupPhotos = () => async (dispatch: dispatch, getState: getState) => {
-  try {
+export const encryptAndBackup =
+  (key: string, data: string) => async (_: AppDispatch, getState: getState) => {
     const {
-      groups: { groups },
-      user: { id, photo },
+      user: { id, password },
     } = getState();
-    const connections = selectAllConnections(getState());
-    for (const item of connections) {
-      if (item.photo?.filename) {
-        await dispatch(backupPhoto(item.id, item.photo.filename));
-      }
+    const hashedId = hashId(id, password);
+    try {
+      const encrypted = CryptoJS.AES.encrypt(data, password).toString();
+      await backupApi.putRecovery(hashedId, key, encrypted);
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
-    for (const item of groups) {
-      if (item.photo?.filename) {
-        await dispatch(backupPhoto(item.id, item.photo.filename));
-      }
+  };
+
+export const backupPhoto =
+  (id: string, filename: string) => async (dispatch: AppDispatch) => {
+    try {
+      const data = await retrieveImage(filename);
+      await dispatch(encryptAndBackup(id, data));
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
-    await dispatch(backupPhoto(id, photo.filename));
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
+  };
 
-export const backupUser = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  try {
-    const {
-      user: { id, name, photo },
-      groups: { groups },
-    } = getState();
-    const connections = selectAllConnections(getState());
+const backupPhotos =
+  () => async (dispatch: AppDispatch, getState: getState) => {
+    try {
+      const {
+        groups: { groups },
+        user: { id, photo },
+      } = getState();
+      const connections = selectAllConnections(getState());
+      for (const item of connections) {
+        if (item.photo?.filename) {
+          await dispatch(backupPhoto(item.id, item.photo.filename));
+        }
+      }
+      for (const item of groups) {
+        if (item.photo?.filename) {
+          await dispatch(backupPhoto(item.id, item.photo.filename));
+        }
+      }
+      await dispatch(backupPhoto(id, photo.filename));
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
 
-    const userData = {
-      id,
-      name,
-      photo,
-    };
+export const backupUser =
+  () => async (dispatch: AppDispatch, getState: getState) => {
+    try {
+      const {
+        user: { id, name, photo },
+        groups: { groups },
+      } = getState();
+      const connections = selectAllConnections(getState());
 
-    const dataStr = JSON.stringify({
-      userData,
-      connections,
-      groups,
-    });
-    await dispatch(encryptAndBackup('data', dataStr));
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
+      const userData = {
+        id,
+        name,
+        photo,
+      };
 
-export const backupAppData = () => async (dispatch: dispatch) => {
+      const dataStr = JSON.stringify({
+        userData,
+        connections,
+        groups,
+      });
+      await dispatch(encryptAndBackup('data', dataStr));
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
+
+export const backupAppData = () => async (dispatch: AppDispatch) => {
   try {
     // backup user
     await dispatch(backupUser());

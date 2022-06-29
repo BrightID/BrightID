@@ -22,7 +22,7 @@ export const createNewGroup =
     newGroupInvitees: Array<string>,
     setCreationState: (string) => void,
   ) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     try {
       const {
         user: { id, backupCompleted },

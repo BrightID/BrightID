@@ -93,7 +93,7 @@ export const selectOutdatedOperations = createSelector(
   },
 );
 
-export const scrubOps = () => (dispatch: dispatch, getState: getState) => {
+export const scrubOps = () => (dispatch: AppDispatch, getState: getState) => {
   const removeOpIds = selectOutdatedOperations(getState());
   console.log(
     `Scrubbing ${removeOpIds.length} outdated operations: ${removeOpIds}`,

@@ -18,7 +18,7 @@ import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
 import { IMPORT_PREFIX } from '@/utils/constants';
 
 export const setupSync =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const { recoveryData } = getState();
     // setup recovery data
     if (!recoveryData.aesKey) {
@@ -29,7 +29,7 @@ export const setupSync =
   };
 
 export const createSyncChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const {
       recoveryData: { aesKey },
     } = getState();
@@ -98,7 +98,7 @@ export const pollOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
-export const pollImportChannel = () => async (dispatch: dispatch) => {
+export const pollImportChannel = () => async (dispatch: AppDispatch) => {
   clearInterval(channelIntervalId);
 
   channelIntervalId = setInterval(() => {
@@ -124,7 +124,7 @@ export const clearImportChannel = () => {
 };
 
 export const checkImportChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const {
       recoveryData: {
         channel: { channelId, url },

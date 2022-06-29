@@ -22,7 +22,7 @@ import { BrightIdNetwork } from '@/components/Apps/types.d';
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
 export const updateBlindSig =
-  (app) => async (dispatch: dispatch, getState: GetState) => {
+  (app) => async (dispatch: AppDispatch, getState: GetState) => {
     const {
       user: { verifications, id },
       keypair: { secretKey },
@@ -149,7 +149,7 @@ export const updateBlindSig =
   };
 
 export const updateBlindSigs =
-  () => async (dispatch: dispatch, getState: GetState) => {
+  () => async (dispatch: AppDispatch, getState: GetState) => {
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
@@ -173,7 +173,7 @@ const encryptAndBackup = async (key: string, data: string) => {
   }
 };
 
-export const fetchApps = (api) => async (dispatch: dispatch, _) => {
+export const fetchApps = (api) => async (dispatch: AppDispatch, _) => {
   try {
     const apps = await api.getApps();
     await dispatch(setApps(apps));

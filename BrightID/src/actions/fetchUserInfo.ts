@@ -13,7 +13,7 @@ import {
 } from './index';
 
 const fetchUserInfo =
-  (api: NodeApi) => (dispatch: dispatch, getState: getState) => {
+  (api: NodeApi) => (dispatch: AppDispatch, getState: getState) => {
     return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(async () => {
         const {

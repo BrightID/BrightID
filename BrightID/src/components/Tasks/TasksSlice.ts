@@ -1,7 +1,7 @@
-import { setActiveNotification } from '@/actions';
-import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import i18next from 'i18next';
+import { setActiveNotification } from '@/actions';
+import { MISC_TYPE } from '@/utils/constants';
 import { UserTasks } from './UserTasks';
 
 /*
@@ -80,17 +80,13 @@ const tasksSlice = createSlice({
   },
 });
 
-export const {
-  addTask,
-  removeTask,
-  completeTask,
-  resetTask,
-} = tasksSlice.actions;
+export const { addTask, removeTask, completeTask, resetTask } =
+  tasksSlice.actions;
 
 // UserTasks.js may have tasks added or removed with an app update. This action takes care
 // that the persisted store always is up to date with the available tasks.
 export const syncStoreTasks = () => {
-  return (dispatch: dispatch, getState: getState) => {
+  return (dispatch: AppDispatch, getState: getState) => {
     const userTaskIds = Object.keys(UserTasks);
     const storeTaskIds = Object.keys(getState().tasks);
     const idsToRemove = storeTaskIds.filter((id) => !userTaskIds.includes(id));
@@ -109,7 +105,7 @@ export const syncStoreTasks = () => {
 };
 
 export const checkTasks = () => {
-  return (dispatch: dispatch, getState: getState) => {
+  return (dispatch: AppDispatch, getState: getState) => {
     const state = getState();
     for (const task of Object.values(state.tasks)) {
       if (UserTasks[task.id]) {

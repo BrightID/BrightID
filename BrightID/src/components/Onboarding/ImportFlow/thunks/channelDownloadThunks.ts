@@ -25,7 +25,7 @@ export const downloadContextInfo =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     try {
       const {
         recoveryData: {
@@ -66,7 +66,7 @@ export const downloadBlindSigs =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     try {
       const {
         recoveryData: {
@@ -102,7 +102,7 @@ export const downloadUserInfo =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },
@@ -187,7 +187,7 @@ export const checkCompletedFlags =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },

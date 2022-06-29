@@ -84,7 +84,7 @@ export async function syncSocialMedia(
 
 export const saveAndLinkSocialMedia =
   (incomingSocialMedia: SocialMedia) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     const prevProfile = selectSocialMediaById(
       getState(),
       incomingSocialMedia.id,
@@ -153,7 +153,7 @@ export const removeSocialFromServer = async (socialMedia: SocialMedia) => {
 };
 
 export const removeSocialMediaThunk =
-  (id: string) => async (dispatch: dispatch, getState: getState) => {
+  (id: string) => async (dispatch: AppDispatch, getState: getState) => {
     const prevProfile = selectSocialMediaById(getState(), id);
     if (prevProfile) {
       await removeSocialFromServer(prevProfile);
@@ -166,14 +166,14 @@ export const removeSocialMediaThunk =
   };
 
 export const updateSocialMediaVariations =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const socialMediaVariations =
       await socialMediaService.retrieveSocialMediaVariations();
     dispatch(upsertSocialMediaVariations(socialMediaVariations));
   };
 
 export const syncAndLinkSocialMedias =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const socialMedias = selectAllSocialMedia(getState());
 
     /* TODO: add "syncSocialMediaEnabled === undefined &&" to the if statement
@@ -194,7 +194,7 @@ export const syncAndLinkSocialMedias =
   };
 
 export const removeAllSocialMediasFromServer =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     const socialMedias = selectAllSocialMedia(getState());
     for (let i = 0; i < socialMedias.length; i++) {
       const socialMedia = socialMedias[i];
@@ -213,7 +213,7 @@ export const removeAllSocialMediasFromServer =
   };
 
 export const setSyncSocialMediaEnabledThunk =
-  (value: boolean) => async (dispatch: dispatch, getState: getState) => {
+  (value: boolean) => async (dispatch: AppDispatch, getState: getState) => {
     const prevState = selectSyncSocialMediaEnabled(getState());
 
     dispatch(setSyncSocialMediaEnabled(value));

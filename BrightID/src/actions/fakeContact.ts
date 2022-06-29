@@ -30,7 +30,7 @@ export const selectOtherFakeConnections = createSelector(
 );
 
 export const addFakeConnection =
-  () => async (dispatch: dispatch, getState: getState) => {
+  () => async (dispatch: AppDispatch, getState: getState) => {
     try {
       // create a fake user
       console.log('creating fake user');
@@ -90,7 +90,7 @@ export const addFakeConnection =
 
 export const connectWithOtherFakeConnections =
   (id: string, api: NodeApi, level: ConnectionLevel) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     // get fakeUser by ID
     const fakeUser1 = selectConnectionById(getState(), id);
 
@@ -124,7 +124,7 @@ export const connectWithOtherFakeConnections =
 
 export const joinAllGroups =
   (id: string, api: NodeApi) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     // get fakeUser by ID
     const fakeUser = selectConnectionById(getState(), id);
 
@@ -150,7 +150,7 @@ export const joinAllGroups =
 
 export const reconnectFakeConnection =
   (id: string, changeProfile: boolean) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState: getState) => {
     // get fakeUser by ID
     const fakeUser1 = selectConnectionById(getState(), id);
 

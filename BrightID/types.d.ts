@@ -32,10 +32,6 @@ declare global {
   type getState = () => State;
   type GetState = getState;
 
-  // TODO: make this type more specific
-  type dispatch = AppDispatch;
-  type Dispatch = dispatch;
-
   type navigation = () => any;
   type State = RootState;
 
