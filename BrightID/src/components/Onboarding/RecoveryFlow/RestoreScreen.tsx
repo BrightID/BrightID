@@ -72,7 +72,7 @@ const RestoreScreen = () => {
     useCallback(() => {
       // wait 3 passes of the the poll channel to make sure all data is downloaded
       const t = setTimeout(() => {
-        clearRecoveryChannel();
+        dispatch(clearRecoveryChannel());
         setAccountStep(AccountSteps.DOWNLOAD_COMPLETE);
       }, channelTimeout);
 

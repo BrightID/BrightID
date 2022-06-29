@@ -22,7 +22,10 @@ import {
   pollRecoveryChannel,
 } from './thunks/channelThunks';
 import {
+  RecoverSteps,
   resetRecoveryData,
+  selectRecoveryStep,
+  setRecoverStep,
   uploadCompletedByOtherSide,
 } from './recoveryDataSlice';
 import {
@@ -37,11 +40,6 @@ import {
  *
  * displays a qrcode
  */
-enum RecoverSteps {
-  NOT_STARTED,
-  RUNNING,
-  ERROR,
-}
 
 const RecoveryCodeScreen = ({ route }) => {
   const { action, urlType } = route.params;
@@ -59,11 +57,28 @@ const RecoveryCodeScreen = ({ route }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [step, setStep] = useState<RecoverSteps>(RecoverSteps.NOT_STARTED);
+  const step = useSelector(selectRecoveryStep);
 
   const sigCount = recoveryData.sigs
     ? Object.values(recoveryData.sigs).length
     : 0;
+
+  // start polling recovery channel to get sig and mutual info
+  useEffect(() => {
+    if (
+      action === 'recovery' &&
+      recoveryData.recoverStep === RecoverSteps.RUNNING &&
+      !recoveryData.channel.pollTimerId
+    ) {
+      console.log(`Start polling recovery channel...`);
+      dispatch(pollRecoveryChannel());
+    }
+  }, [
+    action,
+    dispatch,
+    recoveryData.channel.pollTimerId,
+    recoveryData.recoverStep,
+  ]);
 
   // create recovery data and start polling channel
   useEffect(() => {
@@ -72,8 +87,6 @@ const RecoveryCodeScreen = ({ route }) => {
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to get signed by the scanner
       await dispatch(createRecoveryChannel());
-      // start polling channel to get sig and mutual info
-      dispatch(pollRecoveryChannel());
     };
     const runImportEffect = async () => {
       // create publicKey, secretKey, aesKey for user
@@ -95,6 +108,7 @@ const RecoveryCodeScreen = ({ route }) => {
     };
 
     if (step === RecoverSteps.NOT_STARTED) {
+      dispatch(setRecoverStep(RecoverSteps.RUNNING));
       if (action === 'recovery') {
         console.log(`initializing recovery process`);
         runRecoveryEffect();
@@ -105,9 +119,8 @@ const RecoveryCodeScreen = ({ route }) => {
         console.log(`initializing sync process`);
         runSyncEffect();
       }
-      setStep(RecoverSteps.RUNNING);
     }
-  }, [action, dispatch, recoveryData.aesKey, step]);
+  }, [action, dispatch, step]);
 
   // set QRCode and SVG
   useEffect(() => {
@@ -157,12 +170,12 @@ const RecoveryCodeScreen = ({ route }) => {
         message,
       );
       if (action === 'recovery') {
-        clearRecoveryChannel();
+        // dispatch(clearRecoveryChannel());
       } else if (action === 'import') {
         clearImportChannel();
       }
       dispatch(resetRecoveryData());
-      setStep(RecoverSteps.ERROR);
+      dispatch(setRecoverStep(RecoverSteps.ERROR));
       navigation.goBack();
     }
   }, [

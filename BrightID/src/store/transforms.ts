@@ -3,12 +3,43 @@
 import { createTransform } from 'redux-persist';
 import ChannelAPI from '@/api/channelService';
 
+const RecoveryDataTransform = createTransform(
+  (
+    inboundState: {
+      channelId: string;
+      url: URL;
+      expires: number;
+      pollTimerId: IntervalId;
+    },
+    _key,
+  ) => {
+    console.log(`Persisting recovery channel: ${inboundState}`);
+    return { ...inboundState };
+  },
+  (outboundState: any, _key) => {
+    const newState = { ...outboundState };
+    if (newState?.url) {
+      console.log(`restoring URL object for recovery channel url`);
+      newState.url = new URL(outboundState.url);
+    }
+    if (newState.pollTimerId) {
+      console.log(
+        `clearing pollTimerId of recovery channel ${newState.channelId}`,
+      );
+      newState.pollTimerId = null;
+    }
+    return newState;
+  },
+  {
+    whitelist: ['channel'],
+  },
+);
+
 const ChannelsTransform = createTransform(
   // clear timerIDs and API instance before persisting
   (inboundState: ChannelsState, _key) => {
     const newState = {};
-    Object.keys(inboundState).forEach((id, index) => {
-      console.log(`inbound channel #${index}, id ${id}`);
+    Object.keys(inboundState).forEach((id, _index) => {
       newState[id] = {
         ...inboundState[id],
         api: undefined,
@@ -16,16 +47,13 @@ const ChannelsTransform = createTransform(
         timeoutId: undefined,
       };
     });
-    console.log(Object.values(newState));
     return newState;
   },
 
   // recreate URL and api objects when hydrating
   (outboundState: any, _key) => {
     const newState = {};
-    Object.keys(outboundState).forEach((id, index) => {
-      console.log(`outbound channel #${index}, id ${id}`);
-      console.log(outboundState[id]);
+    Object.keys(outboundState).forEach((id, _index) => {
       const url = new URL(outboundState[id].url);
       const api = new ChannelAPI(url.href);
       newState[id] = {
@@ -34,7 +62,6 @@ const ChannelsTransform = createTransform(
         api,
       };
     });
-    console.log(Object.values(newState));
     return newState;
   },
 
@@ -44,4 +71,4 @@ const ChannelsTransform = createTransform(
   },
 );
 
-export default ChannelsTransform;
+export { ChannelsTransform, RecoveryDataTransform };

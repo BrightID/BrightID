@@ -7,7 +7,11 @@ import {
   downloadSigs,
   downloadNamePhoto,
 } from './channelDownloadThunks';
-import { setRecoveryChannel } from '../recoveryDataSlice';
+import {
+  selectRecoveryChannel,
+  setChannelIntervalId,
+  setRecoveryChannel,
+} from '../recoveryDataSlice';
 import { uploadRecoveryData } from '@/utils/recovery';
 
 // CONSTANTS
@@ -38,33 +42,39 @@ export const createRecoveryChannel =
     }
   };
 
-let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
-export const pollRecoveryChannel = () => async (dispatch: dispatch) => {
-  clearInterval(channelIntervalId);
+export const pollRecoveryChannel =
+  () => async (dispatch: dispatch, getState: getState) => {
+    let { pollTimerId } = selectRecoveryChannel(getState());
+    clearInterval(pollTimerId);
 
-  channelIntervalId = setInterval(() => {
-    if (!checkInProgress) {
-      checkInProgress = true;
-      dispatch(checkRecoveryChannel())
-        .then(() => {
-          checkInProgress = false;
-        })
-        .catch((err) => {
-          checkInProgress = false;
-          console.error(`Error polling recovery channel: ${err.message}`);
-        });
-    }
-  }, CHANNEL_POLL_INTERVAL);
+    pollTimerId = setInterval(() => {
+      if (!checkInProgress) {
+        checkInProgress = true;
+        dispatch(checkRecoveryChannel())
+          .then(() => {
+            checkInProgress = false;
+          })
+          .catch((err) => {
+            checkInProgress = false;
+            console.error(`Error polling recovery channel: ${err.message}`);
+          });
+      }
+    }, CHANNEL_POLL_INTERVAL);
 
-  console.log(`start polling recovery channel (${channelIntervalId}`);
-};
+    dispatch(setChannelIntervalId(pollTimerId));
 
-export const clearRecoveryChannel = () => {
-  console.log(`stop polling recovery channel (${channelIntervalId})`);
-  clearInterval(channelIntervalId);
-};
+    console.log(`start polling recovery channel (${pollTimerId}`);
+  };
+
+export const clearRecoveryChannel =
+  () => async (dispatch: dispatch, getState: getState) => {
+    const { pollTimerId } = selectRecoveryChannel(getState());
+    console.log(`stop polling recovery channel (${pollTimerId})`);
+    clearInterval(pollTimerId);
+    dispatch(setChannelIntervalId(null));
+  };
 
 export const checkRecoveryChannel =
   () => async (dispatch: dispatch, getState: getState) => {

@@ -4,8 +4,17 @@ import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 import { RESET_STORE } from '@/actions';
+import { AppDispatch, RootState } from '@/store';
+import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
+
+export enum RecoverSteps {
+  NOT_STARTED,
+  RUNNING,
+  ERROR,
+}
 
 export const initialState: RecoveryData = {
+  recoverStep: RecoverSteps.NOT_STARTED,
   publicKey: '',
   secretKey: new Uint8Array(),
   aesKey: '',
@@ -27,6 +36,7 @@ export const initialState: RecoveryData = {
     channelId: '',
     url: null,
     expires: 0,
+    pollTimerId: null,
   },
 };
 
@@ -59,6 +69,7 @@ const recoveryData = createSlice({
       state.recoveredBlindSigs = 0;
       state.sigs = {};
       state.uploadCompletedBy = {};
+      state.recoverStep = RecoverSteps.NOT_STARTED;
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
@@ -135,6 +146,12 @@ const recoveryData = createSlice({
     setRecoveryId(state, action: PayloadAction<string>) {
       state.id = action.payload;
     },
+    setRecoverStep(state, action: PayloadAction<RecoverSteps>) {
+      state.recoverStep = action.payload;
+    },
+    setChannelIntervalId(state, action: PayloadAction<IntervalId>) {
+      state.channel.pollTimerId = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -143,9 +160,14 @@ const recoveryData = createSlice({
   },
 });
 
-export const uploadCompletedByOtherSide = (state) => {
+export const uploadCompletedByOtherSide = (state: RootState) => {
   return Object.keys(state.recoveryData.uploadCompletedBy).length > 0;
 };
+
+export const selectRecoveryChannel = (state: RootState) =>
+  state.recoveryData.channel;
+
+export const selectRecoveryStep = (state) => state.recoveryData.recoverStep;
 
 // Export channel actions
 export const {
@@ -163,7 +185,18 @@ export const {
   setRecoveryError,
   setUploadCompletedBy,
   setRecoveryId,
+  setRecoverStep,
+  setChannelIntervalId,
 } = recoveryData.actions;
+
+export const rejoinRecoveryChannel =
+  () => (dispatch: AppDispatch, getState: getState) => {
+    const channel = selectRecoveryChannel(getState());
+    if (channel?.channelId) {
+      console.log(`Rejoining recovery channel ${channel.channelId}`);
+      dispatch(pollRecoveryChannel());
+    }
+  };
 
 // Export reducer
 export default recoveryData.reducer;

@@ -18,6 +18,7 @@ import {
   SocialMediaVariationIds,
 } from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { RecoverSteps } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 declare global {
   type EntityState<T> = _EntityState<T>;
@@ -193,9 +194,11 @@ declare global {
       channelId: string;
       url: URL;
       expires: number;
+      pollTimerId: IntervalId;
     };
     errorType: RecoveryErrorType;
     errorMessage: string;
+    recoverStep: RecoverSteps;
   };
 
   type RecoveryChannel = {
