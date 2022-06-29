@@ -17,9 +17,9 @@ import { RecoveryErrorType } from './RecoveryError';
 import { setupRecovery } from './thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
-  clearChannel,
-  createChannel,
-  pollChannel,
+  clearRecoveryChannel,
+  createRecoveryChannel,
+  pollRecoveryChannel,
 } from './thunks/channelThunks';
 import {
   resetRecoveryData,
@@ -71,15 +71,15 @@ const RecoveryCodeScreen = ({ route }) => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to get signed by the scanner
-      await dispatch(createChannel());
+      await dispatch(createRecoveryChannel());
       // start polling channel to get sig and mutual info
-      dispatch(pollChannel());
+      dispatch(pollRecoveryChannel());
     };
     const runImportEffect = async () => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to be added as a new signing key by the scanner
-      await dispatch(createChannel());
+      await dispatch(createRecoveryChannel());
       // start polling channel to get connections/groups/blindsigs info
       dispatch(pollImportChannel());
     };
@@ -157,7 +157,7 @@ const RecoveryCodeScreen = ({ route }) => {
         message,
       );
       if (action === 'recovery') {
-        clearChannel();
+        clearRecoveryChannel();
       } else if (action === 'import') {
         clearImportChannel();
       }

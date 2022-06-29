@@ -4,7 +4,7 @@ import { getDefaultMiddleware } from '@reduxjs/toolkit';
 import ChannelAPI from '@/api/channelService';
 import { hash, uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { setupRecovery } from './recoveryThunks';
-import { createChannel, checkChannel } from './channelThunks';
+import { createRecoveryChannel, checkRecoveryChannel } from './channelThunks';
 import { uploadSig } from './channelUploadThunks';
 import { initialState } from '../recoveryDataSlice';
 
@@ -72,7 +72,7 @@ describe('Test recovery data', () => {
       },
     });
 
-    await store.dispatch(createChannel());
+    await store.dispatch(createRecoveryChannel());
 
     const actions = store.getActions();
     expect(actions).toHaveLength(1);
@@ -194,7 +194,7 @@ describe('Test recovery data', () => {
       },
     });
 
-    await store.dispatch(checkChannel());
+    await store.dispatch(checkRecoveryChannel());
 
     const actions = store.getActions();
 

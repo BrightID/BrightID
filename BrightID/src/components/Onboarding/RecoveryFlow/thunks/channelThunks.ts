@@ -16,7 +16,7 @@ export const CHANNEL_POLL_INTERVAL = 3000;
 
 // THUNKS
 
-export const createChannel =
+export const createRecoveryChannel =
   () => async (dispatch: dispatch, getState: getState) => {
     try {
       const { recoveryData } = getState();
@@ -41,13 +41,13 @@ export const createChannel =
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
-export const pollChannel = () => async (dispatch: dispatch) => {
+export const pollRecoveryChannel = () => async (dispatch: dispatch) => {
   clearInterval(channelIntervalId);
 
   channelIntervalId = setInterval(() => {
     if (!checkInProgress) {
       checkInProgress = true;
-      dispatch(checkChannel())
+      dispatch(checkRecoveryChannel())
         .then(() => {
           checkInProgress = false;
         })
@@ -61,12 +61,12 @@ export const pollChannel = () => async (dispatch: dispatch) => {
   console.log(`start polling recovery channel (${channelIntervalId}`);
 };
 
-export const clearChannel = () => {
+export const clearRecoveryChannel = () => {
   console.log(`stop polling recovery channel (${channelIntervalId})`);
   clearInterval(channelIntervalId);
 };
 
-export const checkChannel =
+export const checkRecoveryChannel =
   () => async (dispatch: dispatch, getState: getState) => {
     const {
       recoveryData: {
@@ -80,11 +80,9 @@ export const checkChannel =
 
     if (recoveryId) {
       // process connections uploaded to the channel
-      // returns true if downloading connecion data this cycle
       await dispatch(downloadConnections({ channelApi, dataIds }));
 
       // process groups uploaded to the channel
-      // returns true if downloading group data this cycle
       await dispatch(downloadGroups({ channelApi, dataIds }));
 
       if (!name) {
@@ -93,6 +91,5 @@ export const checkChannel =
     }
 
     // process signatures uploaded to the channel
-    // returns true if downloading sigs this cycle
     await dispatch(downloadSigs({ channelApi, dataIds }));
   };
