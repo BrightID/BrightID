@@ -48,9 +48,9 @@ const RecoveryCodeScreen = ({ route }) => {
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
-  const recoveryData = useSelector((state: State) => state.recoveryData);
+  const recoveryData = useSelector((state) => state.recoveryData);
   const isScanned = useSelector(
-    (state: State) =>
+    (state) =>
       uploadCompletedByOtherSide(state) ||
       state.recoveryData.recoveredConnections ||
       state.recoveryData.recoveredGroups ||

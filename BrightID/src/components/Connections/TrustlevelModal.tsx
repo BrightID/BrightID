@@ -34,9 +34,9 @@ type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 const TrustlevelModal = ({ route }: props) => {
   const navigation = useNavigation();
   const { connectionId } = route.params;
-  const { id: myId } = useSelector((state: State) => state.user);
+  const { id: myId } = useSelector((state) => state.user);
   const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
-  const connection: Connection = useSelector((state: State) =>
+  const connection: Connection = useSelector((state) =>
     selectConnectionById(state, connectionId),
   );
   const dispatch = useDispatch();

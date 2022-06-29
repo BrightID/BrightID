@@ -40,7 +40,7 @@ let thecount = 0;
 /** SELECTORS */
 
 const inviteSelector = createSelector(
-  (state: State) => state.groups.invites,
+  (state: RootState) => state.groups.invites,
   (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
 );
 

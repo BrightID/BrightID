@@ -3,9 +3,9 @@ import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { toSearchString } from '@/utils/strings';
 import { sortConnectionsBy } from '@/utils/sorting';
 
-const searchParamSelector = (state: State) => state.connections.searchParam;
-const connSortSelector = (state: State) => state.connections.connectionsSort;
-const filtersSelector = (state: State) => state.connections.filters;
+const searchParamSelector = (state: RootState) => state.connections.searchParam;
+const connSortSelector = (state: RootState) => state.connections.connectionsSort;
+const filtersSelector = (state: RootState) => state.connections.filters;
 
 export const connectionsSelector = createSelector(
   [
@@ -13,7 +13,7 @@ export const connectionsSelector = createSelector(
     searchParamSelector,
     filtersSelector,
     connSortSelector,
-    (_: State, excluded: string[] | undefined) => excluded,
+    (_: RootState, excluded: string[] | undefined) => excluded,
   ],
   (connections, searchParam, filters, connectionsSort, excluded) => {
     const searchString = toSearchString(searchParam);

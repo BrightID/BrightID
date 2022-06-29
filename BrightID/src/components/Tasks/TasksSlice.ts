@@ -105,7 +105,7 @@ export const syncStoreTasks = () => {
 };
 
 export const checkTasks = () => {
-  return (dispatch: AppDispatch, getState: getState) => {
+  return (dispatch: AppDispatch, getState) => {
     const state = getState();
     for (const task of Object.values(state.tasks)) {
       if (UserTasks[task.id]) {
@@ -140,7 +140,7 @@ export const checkTasks = () => {
 export default tasksSlice.reducer;
 
 export const selectTaskIds = createSelector(
-  (state: State) => state.tasks,
+  (state: RootState) => state.tasks,
   (tasks) => {
     return Object.keys(tasks)
       .filter((id) => id !== '_persist')
@@ -150,7 +150,7 @@ export const selectTaskIds = createSelector(
 
 export const selectCompletedTaskIds = createSelector(
   selectTaskIds,
-  (state: State) => state.tasks,
+  (state: RootState) => state.tasks,
   (taskIds, tasks) =>
     taskIds.filter((taskId: string) => tasks[taskId].completed),
 );

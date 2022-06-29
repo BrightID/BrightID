@@ -47,7 +47,7 @@ export enum pendingConnection_states {
 export const newPendingConnection = createAsyncThunk<
   PendingConnectionData,
   { channelId: string; profileId: string; api: NodeApi },
-  { state: State }
+  { state: RootState }
 >(
   'pendingConnections/newPendingConnection',
   async ({ channelId, profileId, api }, { getState }) => {
@@ -230,7 +230,7 @@ export const {
   selectById: selectPendingConnectionById,
   selectIds: selectAllPendingConnectionIds,
 } = pendingConnectionsAdapter.getSelectors(
-  (state: State) => state.pendingConnections,
+  (state: RootState) => state.pendingConnections,
 );
 
 export const selectAllUnconfirmedConnections = createSelector(

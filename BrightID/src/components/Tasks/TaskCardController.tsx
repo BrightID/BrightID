@@ -14,7 +14,7 @@ type TaskCardControllerProps = {
 
 function TaskCardController({ taskId }: TaskCardControllerProps) {
   const dispatch = useDispatch();
-  const storeTask = useSelector((state: State) => state.tasks[taskId]);
+  const storeTask = useSelector((state) => state.tasks[taskId]);
   const extendedTask = {
     ...storeTask,
     ...UserTasks[taskId],

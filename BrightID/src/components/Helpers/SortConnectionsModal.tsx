@@ -46,9 +46,9 @@ type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
 const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
 
-  const filters = useSelector((state: State) => state.connections.filters);
+  const filters = useSelector((state) => state.connections.filters);
   const connectionsSort =
-    useSelector((state: State) => state.connections.connectionsSort) ||
+    useSelector((state) => state.connections.connectionsSort) ||
     types.byDateAddedDescending;
 
   const [newFilters, setNewFilters] = useState<ConnectionLevel[]>(

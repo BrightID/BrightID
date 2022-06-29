@@ -23,7 +23,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, moveToNext } = props;
   const dispatch = useDispatch();
   const api = useContext(NodeApiContext);
-  const pendingConnection = useSelector((state: State) =>
+  const pendingConnection = useSelector((state) =>
     selectPendingConnectionById(state, pendingConnectionId),
   ) as PendingConnection;
 

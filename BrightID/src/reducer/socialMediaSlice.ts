@@ -124,7 +124,7 @@ export const { saveSocialMedia, setProfileDisplayWidth } =
 export const {
   selectById: selectSocialMediaById,
   selectAll: selectAllSocialMedia,
-} = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
+} = socialMediaAdapter.getSelectors((state: RootState) => state.socialMedia);
 
 export const selectExistingSocialMedia = createSelector(
   selectAllSocialMedia,

@@ -62,8 +62,8 @@ const ChangePasswordModal = ({ navigation }: props) => {
   const [newPasswordAgain, setNewPasswordAgain] = useState('');
   const [backupInProgress, setBackupInProgress] = useState(false);
 
-  const password = useSelector((state: State) => state.user.password);
-  const id = useSelector((state: State) => state.user.id);
+  const password = useSelector((state) => state.user.password);
+  const id = useSelector((state) => state.user.id);
 
   const { t } = useTranslation();
 

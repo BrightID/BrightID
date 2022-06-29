@@ -39,9 +39,7 @@ export const PhotoScreen = () => {
 
   const [finalBase64, setfinalBase64] = useState('');
 
-  const photoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
+  const photoFilename = useSelector((state) => state.user.photo.filename);
 
   useFocusEffect(
     useCallback(() => {

@@ -45,7 +45,7 @@ export const NotificationBanner = () => {
   // const route = useRoute();
   const dropDownAlertRef = useRef(null);
   const activeNotification = useSelector(
-    (state: State) => state.notifications.activeNotification,
+    (state) => state.notifications.activeNotification,
   );
 
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);

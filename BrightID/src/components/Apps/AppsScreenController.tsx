@@ -27,15 +27,13 @@ const AppsScreenController = () => {
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
   const isSponsored = useSelector(
-    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+    (state) => state.user.isSponsored || state.user.isSponsoredv6,
   );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const pendingLink = useSelector(selectPendingLinkedContext);
-  const userVerifications = useSelector(
-    (state: State) => state.user.verifications,
-  );
+  const userVerifications = useSelector((state) => state.user.verifications);
 
   const [refreshing, setRefreshing] = useState(false);
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(

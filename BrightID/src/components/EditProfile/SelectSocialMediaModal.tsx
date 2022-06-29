@@ -114,7 +114,7 @@ const SelectMediaModal = ({ route }: props) => {
     );
   }, [selectedId, socialMediaVariations]);
 
-  const prevProfile = useSelector((state: State) =>
+  const prevProfile = useSelector((state) =>
     selectSocialMediaById(state, selectedId),
   );
 

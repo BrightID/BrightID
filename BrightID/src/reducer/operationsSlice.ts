@@ -56,7 +56,7 @@ export const {
   selectById: selectOperationByHash,
   selectAll: selectAllOperations,
   selectTotal: selectOperationsTotal,
-} = operationsAdapter.getSelectors((state: State) => state.operations);
+} = operationsAdapter.getSelectors((state: RootState) => state.operations);
 
 const pendingStates = [
   operation_states.UNKNOWN,

@@ -33,7 +33,6 @@ declare global {
   type GetState = getState;
 
   type navigation = () => any;
-  type State = RootState;
 
   type ContextInfo = {
     context: string;

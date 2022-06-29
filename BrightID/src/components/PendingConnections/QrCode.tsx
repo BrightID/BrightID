@@ -67,7 +67,7 @@ const Timer = ({ channel }) => {
 export const QrCode = ({ channel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const myName = useSelector((state: State) => state.user.name);
+  const myName = useSelector((state) => state.user.name);
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
 

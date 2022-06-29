@@ -36,11 +36,11 @@ const InviteCard = (props) => {
   const { invite } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const inviter = useSelector((state: State) =>
+  const inviter = useSelector((state) =>
     selectConnectionById(state, invite.inviter),
   );
   const navigation = useNavigation();
-  const { backupCompleted } = useSelector((state: State) => state.user);
+  const { backupCompleted } = useSelector((state) => state.user);
   const api = useContext(NodeApiContext);
 
   const handleRejectInvite = () => {

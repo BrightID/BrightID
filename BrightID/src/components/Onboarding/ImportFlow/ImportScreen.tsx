@@ -18,7 +18,7 @@ import { clearImportChannel } from './thunks/channelThunks';
 const ImportScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const recoveryData = useSelector((state: State) => state.recoveryData);
+  const recoveryData = useSelector((state) => state.recoveryData);
   const importCompleted = useSelector(uploadCompletedByOtherSide);
 
   useEffect(() => {

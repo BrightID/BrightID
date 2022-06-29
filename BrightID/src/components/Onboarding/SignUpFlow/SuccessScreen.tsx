@@ -30,7 +30,7 @@ export const SuccessScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const password = useSelector((state: State) => state.user.password);
+  const password = useSelector((state) => state.user.password);
 
   // this is used instead of a timeout
   const [currentTime, setCurrentTime] = useState(null);

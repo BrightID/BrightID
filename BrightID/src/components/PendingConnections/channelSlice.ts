@@ -139,20 +139,20 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
   selectIds: selectAllChannelIds,
-} = channelsAdapter.getSelectors((state: State) => state.channels);
+} = channelsAdapter.getSelectors((state: RootState) => state.channels);
 
 // additional selectors
 export const selectAllActiveChannelIds = createSelector(
   selectAllChannels,
   // check to see if this is state or channel state
-  (_: State, type: ChannelType) => type,
+  (_: RootState, type: ChannelType) => type,
   (channels, type) =>
     channels.filter((pc) => pc.type === type).map((pc) => pc.id),
 );
 
 export const selectAllActiveChannelIdsByType = createSelector(
   selectAllChannels,
-  (_: State, type: ChannelType) => type,
+  (_: RootState, type: ChannelType) => type,
   (channels, type) =>
     channels
       .filter(

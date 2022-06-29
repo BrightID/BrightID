@@ -101,10 +101,8 @@ const CustomItem = ({
 const CustomDrawerContent = (props) => {
   const { state, navigation } = props;
   // selectors
-  const photoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
-  const name = useSelector((state: State) => state.user.name);
+  const photoFilename = useSelector((state) => state.user.photo.filename);
+  const name = useSelector((state) => state.user.name);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();

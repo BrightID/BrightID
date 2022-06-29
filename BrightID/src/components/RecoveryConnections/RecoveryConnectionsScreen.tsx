@@ -60,7 +60,7 @@ export const RecoveryConnectionsScreen = (props) => {
     headerHeight += 7;
   }
   const { t } = useTranslation();
-  const me = useSelector((state: State) => state.user);
+  const me = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
   const [recoveryConnections, setRecoveryConnections] = useState<
     Array<Connection>

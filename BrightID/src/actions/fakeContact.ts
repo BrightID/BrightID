@@ -25,7 +25,7 @@ import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 
 export const selectOtherFakeConnections = createSelector(
   selectAllConnections,
-  (_: State, id: string) => id,
+  (_: RootState, id: string) => id,
   (connections, id) => connections.filter((c) => c.secretKey && c.id !== id),
 );
 

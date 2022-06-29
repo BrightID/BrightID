@@ -71,11 +71,11 @@ export const ScanCodeScreen = () => {
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
-  const name = useSelector((state: State) => state.user.name);
+  const name = useSelector((state) => state.user.name);
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
 
-  const pendingConnectionSizeForChannel = useSelector((state: State) => {
+  const pendingConnectionSizeForChannel = useSelector((state) => {
     if (channel) {
       return selectAllUnconfirmedConnectionsByChannelIds(state, [channel.id])
         .length;

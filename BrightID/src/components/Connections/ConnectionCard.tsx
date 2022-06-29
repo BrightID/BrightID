@@ -52,7 +52,7 @@ type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
   const stale_check_timer = useRef<TimeoutId>(null);
-  const { backupCompleted } = useSelector((state: State) => state.user);
+  const { backupCompleted } = useSelector((state) => state.user);
   const navigation = useNavigation();
   const route: { params?: { group: Group } } = useRoute() as {
     params?: { group: Group };

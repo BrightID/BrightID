@@ -63,7 +63,7 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 /** Selectors */
 
 export const verificationPatchesSelector = createSelector(
-  (state: State) => state.user.verifications,
+  (state: RootState) => state.user.verifications,
   getVerificationPatches,
 );
 
@@ -73,22 +73,20 @@ export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
-  const name = useSelector((state: State) => state.user.name);
+  const name = useSelector((state) => state.user.name);
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   const verificationPatches = useSelector(verificationPatchesSelector);
   const isPrimaryDevice = useSelector(selectIsPrimaryDevice);
   const activeDevices = useSelector(selectActiveDevices);
-  const photoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
+  const photoFilename = useSelector((state) => state.user.photo.filename);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextTotal);
   const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
   const api = useContext(NodeApiContext);
-  const { id } = useSelector((state: State) => state.user);
+  const { id } = useSelector((state) => state.user);
   const { secretKey, publicKey } = useSelector((state) => state.keypair);
 
   const { t } = useTranslation();

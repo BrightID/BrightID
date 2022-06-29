@@ -49,7 +49,7 @@ export const { addDevice, removeDevice, setActiveDevices } =
 
 // export selectors
 export const { selectAll: selectAllDevices } = devicesAdapter.getSelectors(
-  (state: State) => state.devices,
+  (state: RootState) => state.devices,
 );
 
 export const selectActiveDevices = createSelector(

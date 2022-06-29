@@ -46,15 +46,13 @@ const AppCard = (props: AppInfo) => {
     usingBlindSig,
   } = props;
   const dispatch = useDispatch();
-  const userVerifications = useSelector(
-    (state: State) => state.user.verifications,
-  );
+  const userVerifications = useSelector((state) => state.user.verifications);
   const [verifiedCount, setVerifiedCount] = useState(0);
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
   const linkedContextSelector = useMemo(() => selectLinkedContext, []);
-  const linkedContext = useSelector((state: State) =>
+  const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),
   );
 
