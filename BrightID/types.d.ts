@@ -1,4 +1,8 @@
-import { EntityState as _EntityState } from '@reduxjs/toolkit';
+import {
+  ThunkAction,
+  AnyAction,
+  EntityState as _EntityState,
+} from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
@@ -25,12 +29,15 @@ declare global {
   type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
   type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
+  type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    RootState,
+    unknown,
+    AnyAction
+  >;
 
   type IntervalId = ReturnType<typeof setInterval>;
   type TimeoutId = ReturnType<typeof setTimeout>;
-
-  type getState = () => State;
-  type GetState = getState;
 
   type navigation = () => any;
 

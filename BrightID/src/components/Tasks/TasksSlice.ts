@@ -85,8 +85,8 @@ export const { addTask, removeTask, completeTask, resetTask } =
 
 // UserTasks.js may have tasks added or removed with an app update. This action takes care
 // that the persisted store always is up to date with the available tasks.
-export const syncStoreTasks = () => {
-  return (dispatch: AppDispatch, getState: getState) => {
+export const syncStoreTasks = (): AppThunk => {
+  return (dispatch: AppDispatch, getState) => {
     const userTaskIds = Object.keys(UserTasks);
     const storeTaskIds = Object.keys(getState().tasks);
     const idsToRemove = storeTaskIds.filter((id) => !userTaskIds.includes(id));
@@ -104,7 +104,7 @@ export const syncStoreTasks = () => {
   };
 };
 
-export const checkTasks = () => {
+export const checkTasks = (): AppThunk => {
   return (dispatch: AppDispatch, getState) => {
     const state = getState();
     for (const task of Object.values(state.tasks)) {

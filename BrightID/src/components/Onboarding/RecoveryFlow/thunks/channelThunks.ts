@@ -17,7 +17,7 @@ export const CHANNEL_POLL_INTERVAL = 3000;
 // THUNKS
 
 export const createChannel =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       const { recoveryData } = getState();
       const baseUrl = selectBaseUrl(getState());
@@ -41,7 +41,7 @@ export const createChannel =
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
-export const pollChannel = () => async (dispatch: AppDispatch) => {
+export const pollChannel = (): AppThunk => async (dispatch: AppDispatch) => {
   clearInterval(channelIntervalId);
 
   channelIntervalId = setInterval(() => {
@@ -67,7 +67,7 @@ export const clearChannel = () => {
 };
 
 export const checkChannel =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const {
       recoveryData: {
         id: recoveryId,

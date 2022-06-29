@@ -10,7 +10,8 @@ const hashId = (id: string, password: string) => {
 };
 
 export const encryptAndBackup =
-  (key: string, data: string) => async (_: AppDispatch, getState: getState) => {
+  (key: string, data: string): AppThunk =>
+  async (_: AppDispatch, getState) => {
     const {
       user: { id, password },
     } = getState();
@@ -24,7 +25,8 @@ export const encryptAndBackup =
   };
 
 export const backupPhoto =
-  (id: string, filename: string) => async (dispatch: AppDispatch) => {
+  (id: string, filename: string): AppThunk =>
+  async (dispatch: AppDispatch) => {
     try {
       const data = await retrieveImage(filename);
       await dispatch(encryptAndBackup(id, data));
@@ -34,7 +36,7 @@ export const backupPhoto =
   };
 
 const backupPhotos =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       const {
         groups: { groups },
@@ -58,7 +60,7 @@ const backupPhotos =
   };
 
 export const backupUser =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       const {
         user: { id, name, photo },
@@ -83,16 +85,17 @@ export const backupUser =
     }
   };
 
-export const backupAppData = () => async (dispatch: AppDispatch) => {
-  try {
-    // backup user
-    await dispatch(backupUser());
-    // backup connection photos
-    await dispatch(backupPhotos());
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
+export const backupAppData =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
+    try {
+      // backup user
+      await dispatch(backupUser());
+      // backup connection photos
+      await dispatch(backupPhotos());
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
 
 export const fetchBackupData = async (
   key: string,

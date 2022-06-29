@@ -59,7 +59,7 @@ export const downloadConnections =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },
@@ -128,7 +128,7 @@ export const downloadNamePhoto =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     const {
       keypair: { publicKey: signingKey },
       recoveryData: {
@@ -220,7 +220,7 @@ export const downloadGroups =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         keypair: { publicKey: signingKey },
@@ -265,7 +265,7 @@ export const downloadSigs =
     channelApi: ChannelAPI;
     dataIds: Array<string>;
   }) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         recoveryData: {

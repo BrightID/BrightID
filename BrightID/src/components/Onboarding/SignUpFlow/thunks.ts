@@ -4,7 +4,7 @@ import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 
 export const createKeypair =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     // do not create new keypair if photo already exists (photo is saved using id)
     const { filename } = getState().user.photo;
 
@@ -18,8 +18,8 @@ export const createKeypair =
   };
 
 export const savePhoto =
-  (base64Image: string) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  (base64Image: string): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
     // creates Image Directory
     await createImageDirectory();
 
@@ -30,7 +30,7 @@ export const savePhoto =
     dispatch(setPhoto({ filename }));
   };
 
-export const saveId = () => (dispatch: AppDispatch, getState: getState) => {
+export const saveId = () => (dispatch: AppDispatch, getState) => {
   const { publicKey } = getState().keypair;
   const id = b64ToUrlSafeB64(publicKey);
 

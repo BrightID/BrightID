@@ -18,7 +18,7 @@ import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
 import { IMPORT_PREFIX } from '@/utils/constants';
 
 export const setupSync =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const { recoveryData } = getState();
     // setup recovery data
     if (!recoveryData.aesKey) {
@@ -29,7 +29,7 @@ export const setupSync =
   };
 
 export const createSyncChannel =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const {
       recoveryData: { aesKey },
     } = getState();
@@ -98,25 +98,26 @@ export const pollOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
-export const pollImportChannel = () => async (dispatch: AppDispatch) => {
-  clearInterval(channelIntervalId);
+export const pollImportChannel =
+  (): AppThunk => async (dispatch: AppDispatch) => {
+    clearInterval(channelIntervalId);
 
-  channelIntervalId = setInterval(() => {
-    if (!checkInProgress) {
-      checkInProgress = true;
-      dispatch(checkImportChannel())
-        .then(() => {
-          checkInProgress = false;
-        })
-        .catch((err) => {
-          checkInProgress = false;
-          console.error(`error polling sync/import channel: ${err.message}`);
-        });
-    }
-  }, CHANNEL_POLL_INTERVAL);
+    channelIntervalId = setInterval(() => {
+      if (!checkInProgress) {
+        checkInProgress = true;
+        dispatch(checkImportChannel())
+          .then(() => {
+            checkInProgress = false;
+          })
+          .catch((err) => {
+            checkInProgress = false;
+            console.error(`error polling sync/import channel: ${err.message}`);
+          });
+      }
+    }, CHANNEL_POLL_INTERVAL);
 
-  console.log(`start polling sync/import channel (${channelIntervalId})`);
-};
+    console.log(`start polling sync/import channel (${channelIntervalId})`);
+  };
 
 export const clearImportChannel = () => {
   console.log(`stop polling sync/import channel (${channelIntervalId})`);
@@ -124,7 +125,7 @@ export const clearImportChannel = () => {
 };
 
 export const checkImportChannel =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const {
       recoveryData: {
         channel: { channelId, url },

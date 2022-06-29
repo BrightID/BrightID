@@ -1,8 +1,3 @@
-import {
-  useDispatch as originalUseDispatch,
-  useSelector as originalUseSelector,
-  TypedUseSelectorHook,
-} from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import {
   combineReducers,
@@ -98,7 +93,10 @@ const keypairPersistConfig = {
 
 const rootReducer = combineReducers({
   ...reducers,
-  apps: persistReducer(appsPersistConfig, reducers.apps),
+  apps: persistReducer(
+    appsPersistConfig,
+    reducers.apps,
+  ) as typeof reducers.apps,
   connections: persistReducer(connectionsPersistConfig, reducers.connections),
   groups: persistReducer(groupsPersistConfig, reducers.groups),
   keypair: persistReducer(keypairPersistConfig, reducers.keypair),

@@ -29,7 +29,7 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 // THUNKS
 
 export const setupRecovery =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     console.log(`Setting up recovery...`);
     const { recoveryData } = getState();
     await createImageDirectory();
@@ -43,7 +43,8 @@ export const setupRecovery =
   };
 
 export const socialRecovery =
-  (api: NodeApi) => async (dispatch: AppDispatch, getState: getState) => {
+  (api: NodeApi): AppThunk<Promise<SubmittedOp | 'ALREADY APPLIED'>> =>
+  async (dispatch: AppDispatch, getState) => {
     const { recoveryData } = getState();
     const sigs = Object.values(recoveryData.sigs);
     console.log('setting signing key');
@@ -107,11 +108,10 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
-export const setRecoveryKeys =
-  () => (dispatch: AppDispatch, getState: getState) => {
-    const { publicKey, secretKey } = getState().recoveryData;
-    dispatch(setKeypair({ publicKey, secretKey }));
-  };
+export const setRecoveryKeys = () => (dispatch: AppDispatch, getState) => {
+  const { publicKey, secretKey } = getState().recoveryData;
+  dispatch(setKeypair({ publicKey, secretKey }));
+};
 
 export const recoverData =
   (
@@ -120,7 +120,7 @@ export const recoverData =
     setTotalItems: (totalItems: number) => void,
     setCurrentItem: (currentItem: number) => void,
   ) =>
-  async (dispatch: AppDispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     const { id } = getState().recoveryData;
     console.log(`Starting recoverData for ${id}`);
     // throws if data is bad
@@ -202,7 +202,7 @@ export const recoverData =
   };
 
 export const finishRecovery =
-  () => async (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     // collect user data that was populated either by uploads from recovery connections or by restoring backup
     const { id, name, photo } = getState().recoveryData;
     // clear recovery data from state
