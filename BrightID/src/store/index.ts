@@ -1,11 +1,14 @@
-import { combineReducers } from 'redux';
 import {
   useDispatch as originalUseDispatch,
   useSelector as originalUseSelector,
   TypedUseSelectorHook,
 } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  configureStore,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 import reducers from '@/reducer';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
