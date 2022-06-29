@@ -175,6 +175,17 @@ export const updateSocialMediaVariations =
 export const syncAndLinkSocialMedias =
   () => async (dispatch: dispatch, getState: getState) => {
     const socialMedias = selectAllSocialMedia(getState());
+
+    /* TODO: add "syncSocialMediaEnabled === undefined &&" to the if statement
+        after all clients got the new version. for now some clients have the
+        other version in which syncSocialMediaEnabled has default value of false
+     */
+    // If the user does not have any social media, set sync to
+    // true by default
+    if (!socialMedias.filter((s) => !!s.profile).length) {
+      dispatch(setSyncSocialMediaEnabled(true));
+    }
+
     socialMedias.forEach((socialMedia) => {
       if (socialMedia.profile) {
         dispatch(saveAndLinkSocialMedia(socialMedia));

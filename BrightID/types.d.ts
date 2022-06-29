@@ -242,6 +242,7 @@ declare global {
   };
 
   type SocialMedia = SocialMediaShared & {
+    shareWithConnections?: boolean;
     brightIdSocialAppData?: BrightIdSocialAppData;
   };
 
