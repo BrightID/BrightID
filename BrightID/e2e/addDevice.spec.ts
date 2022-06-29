@@ -18,6 +18,7 @@ import {
   expectConnectionsScreen,
   expectHomescreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 import {
   b64ToUrlSafeB64,
@@ -70,7 +71,7 @@ describe('Add Device', () => {
     await expectConnectionsScreen();
     await waitFor(element(by.id('connection-0')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await navigateHome();
     await expectHomescreen();
 

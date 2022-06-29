@@ -7,6 +7,7 @@ import {
   expectHomescreen,
   joinAllGroups,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 
 /*
@@ -35,13 +36,13 @@ describe('Groups', () => {
     await expectConnectionsScreen();
     await waitFor(element(by.id('connection-0')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-1')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-2')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
 
     await navigateHome();
   });
@@ -81,7 +82,7 @@ describe('Groups', () => {
       // header-back button takes 1-2 seconds to complete switch, so use waitFor() here
       await waitFor(element(by.id('noGroupsView')))
         .toBeVisible()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
     });
   });
 
@@ -116,7 +117,7 @@ describe('Groups', () => {
       // wait until 3 connections are there, sometimes they appear only after a few seconds
       await waitFor(element(by.id('checkInviteeBtn')).atIndex(2))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       // invite the first 2 available connections
       await element(by.id('checkInviteeBtn')).atIndex(0).tap();
       await element(by.id('checkInviteeBtn')).atIndex(1).tap();
@@ -167,7 +168,7 @@ describe('Groups', () => {
       // invite the 2nd and third available connections
       await waitFor(element(by.id('checkInviteeBtn')).atIndex(1))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await element(by.id('checkInviteeBtn')).atIndex(1).tap();
       await element(by.id('checkInviteeBtn')).atIndex(2).tap();
     });
@@ -184,8 +185,8 @@ describe('Groups', () => {
     });
 
     it('invited members should join group', async () => {
-      // wait 10 seconds until group creation op should be done on the backend
-      await new Promise((r) => setTimeout(r, 10000));
+      // wait until group creation op should be done on the backend
+      await new Promise((r) => setTimeout(r, operationTimeout));
       // accept invitation
       await joinAllGroups(0);
       await joinAllGroups(1);
@@ -197,8 +198,8 @@ describe('Groups', () => {
       await element(by.id('toggleDrawer')).tap();
       await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
-      // wait 20 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 20000));
+      // wait until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, operationTimeout));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
 

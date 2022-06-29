@@ -4,6 +4,7 @@ import {
   createFakeConnection,
   expectConnectionsScreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 
 describe('Connection details', () => {
@@ -19,7 +20,7 @@ describe('Connection details', () => {
     await expectConnectionsScreen();
     await waitFor(element(by.id('connection-0')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
 
     await navigateHome();
   });

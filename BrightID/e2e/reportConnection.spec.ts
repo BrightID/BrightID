@@ -6,6 +6,7 @@ import {
   expectConnectionScreen,
   expectConnectionsScreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 
 describe('Report Connections', () => {
@@ -34,10 +35,10 @@ describe('Report Connections', () => {
       // go to connections screen
       await element(by.id('connectionsBtn')).tap();
       await expectConnectionsScreen();
-      // wait upto 30 seconds till first connection is established
+      // wait till first connection is established
       await waitFor(element(by.id('connection-0')))
         .toBeVisible()
-        .withTimeout(30000);
+        .withTimeout(operationTimeout);
     });
 
     beforeEach(async () => {
@@ -93,10 +94,10 @@ describe('Report Connections', () => {
       });
 
       beforeEach(async () => {
-        // wait upto 30 seconds till connection is established
+        // wait till connection is established
         await waitFor(element(by.id('connection-0')))
           .toBeVisible()
-          .withTimeout(30000);
+          .withTimeout(operationTimeout);
         // open connection details of first connection
         await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
         await element(by.id('ConnectionCard-0')).tap();
