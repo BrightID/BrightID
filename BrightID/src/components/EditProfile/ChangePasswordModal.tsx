@@ -26,7 +26,6 @@ import {
   GREY,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from '@/store';
 import { validatePass } from '@/utils/password';
 import {
   setBackupCompleted,
@@ -34,6 +33,7 @@ import {
   updateNotifications,
 } from '@/actions';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();

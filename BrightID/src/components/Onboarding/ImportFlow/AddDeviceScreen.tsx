@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import store, { useDispatch, useSelector } from '@/store';
+import store from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -22,6 +22,7 @@ import { operation_states } from '@/utils/constants';
 import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey';
 import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
 import { loadRecoveryData } from '@/utils/recovery';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 /**
  * Screen for adding a new device

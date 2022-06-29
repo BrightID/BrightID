@@ -11,17 +11,9 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import {
-  WHITE,
-  DARKER_GREY,
-  BLACK,
-  BLUE,
-  ORANGE,
-  YELLOW,
-} from '@/theme/colors';
+import { WHITE, DARKER_GREY, BLUE, ORANGE, YELLOW } from '@/theme/colors';
 import {
   updateLinkedContext,
   selectLinkedContext,
@@ -30,6 +22,7 @@ import {
 
 import { isVerified } from '@/utils/verifications';
 import Check from '../Icons/Check';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 /**
  * App Card in the Apps Screen

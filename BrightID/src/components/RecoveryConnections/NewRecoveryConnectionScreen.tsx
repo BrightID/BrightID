@@ -13,7 +13,7 @@ import {
 // Redux
 import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   selectAllConnections,
   recoveryConnectionsSelector,

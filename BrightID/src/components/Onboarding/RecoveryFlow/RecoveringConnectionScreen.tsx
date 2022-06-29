@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from '@/store/hooks';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';

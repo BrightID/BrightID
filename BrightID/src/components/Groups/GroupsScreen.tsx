@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store/hooks';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { WHITE, ORANGE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -22,7 +23,6 @@ import {
   updateGroup,
   updateMemberships,
 } from '@/actions';
-import { useDispatch, useSelector } from '@/store';
 import { GroupCard } from './GroupCard';
 import { NoGroups } from './NoGroups';
 

@@ -11,7 +11,7 @@ import {
   useRoute,
   RouteProp,
 } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import { getVerificationPatches } from '@/utils/verifications';
 import {

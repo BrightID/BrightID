@@ -6,7 +6,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch } from '@/store';
+import { useDispatch } from '@/store/hooks';
 import {
   connection_levels,
   report_reasons,

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { InteractionManager, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { WHITE } from '@/theme/colors';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
@@ -66,7 +66,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
             pendingConnection.profileId,
             connection_levels.REPORTED,
             api,
-            reason
+            reason,
           ),
         );
       },

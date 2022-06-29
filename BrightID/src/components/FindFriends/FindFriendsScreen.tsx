@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import Contacts from '@/utils/ContactsProvider';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, DARKER_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { selectSocialMediaVariationById } from '@/reducer/socialMediaVariationSlice';
 import { fontSize } from '@/theme/fonts';
 import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVariations';

@@ -19,7 +19,7 @@ import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { WHITE, GREY, DARK_GREY, BLACK, ORANGE } from '@/theme/colors';

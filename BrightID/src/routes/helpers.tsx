@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { navigate } from '@/NavigationService';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TWENTY_TWO, SIXTY } from '@/theme/sizes';

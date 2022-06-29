@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect } from 'react';
 import i18next from 'i18next';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import NodeApiGate from '@/components/NodeApiGate';
 import Apps from './Apps';
 import RecoveringConnection from './RecoveringConnection';

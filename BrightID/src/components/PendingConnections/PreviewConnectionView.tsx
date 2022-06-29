@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
@@ -50,7 +50,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   let ratingView;
   switch (state) {
     case pendingConnection_states.UNCONFIRMED: {
-      ratingView = <RatingView setLevelHandler={setLevelHandler} abuseHandler={abuseHandler}/>;
+      ratingView = (
+        <RatingView
+          setLevelHandler={setLevelHandler}
+          abuseHandler={abuseHandler}
+        />
+      );
       break;
     }
     case pendingConnection_states.CONFIRMING:

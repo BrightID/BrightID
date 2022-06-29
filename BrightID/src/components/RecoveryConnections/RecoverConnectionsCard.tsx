@@ -4,7 +4,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from '@/store';
+import { useDispatch } from '@/store/hooks';
 import { CONNECTION_STALE_AGE, ORANGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';

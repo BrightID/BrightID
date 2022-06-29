@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import i18next from 'i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { connection_levels, CONNECTION_STALE_AGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection, addOperation } from '@/actions';

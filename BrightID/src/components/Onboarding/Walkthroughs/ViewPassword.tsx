@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { StackScreenProps } from '@react-navigation/stack';
+import { useSelector } from '@/store/hooks';
 import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
-import { useTranslation } from 'react-i18next';
 import FullScreenHighlightBox from '@/components/Helpers/FullScreenHighlightBox';
-import { StackScreenProps } from '@react-navigation/stack';
 import Arrow from '../../Icons/Arrow';
 
 // border radius for edit profile box

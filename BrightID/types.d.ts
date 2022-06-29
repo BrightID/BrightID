@@ -7,7 +7,7 @@ import {
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
-import { AppDispatch, RootState } from '@/store';
+import { store } from '@/store';
 import { connection_levels, report_reasons } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -20,6 +20,8 @@ import {
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
+  type RootState = ReturnType<typeof store.getState>;
+  type AppDispatch = typeof store.dispatch;
   type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
   type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;

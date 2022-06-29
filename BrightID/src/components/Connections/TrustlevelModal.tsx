@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   connection_levels,
   RECOVERY_COOLDOWN_EXEMPTION,
@@ -17,7 +18,6 @@ import {
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from '@/store';
 import {
   addOperation,
   firstRecoveryTimeSelector,

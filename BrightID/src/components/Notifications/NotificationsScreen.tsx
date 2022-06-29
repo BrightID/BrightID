@@ -7,7 +7,6 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import {
   useFocusEffect,
   useNavigation,
@@ -16,6 +15,8 @@ import {
 } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
+import { createSelector } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   INVITE_ACTIVE,
   CONNECTIONS_TYPE,
@@ -25,7 +26,6 @@ import {
 import { ORANGE, WHITE, GREY, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { createSelector } from '@reduxjs/toolkit';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { photoDirectory } from '@/utils/filesystem';

@@ -4,7 +4,6 @@ import { any, find, propEq } from 'ramda';
 import { Alert } from 'react-native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { AppsRoute } from '@/components/Apps/types';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
@@ -18,6 +17,7 @@ import AppsScreen from '@/components/Apps/AppsScreen';
 import { fetchApps } from '@/actions';
 import { handleV5App, handleV6App } from '@/components/Apps/model';
 import { isVerified } from '@/utils/verifications';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 const AppsScreenController = () => {
   const { t } = useTranslation();

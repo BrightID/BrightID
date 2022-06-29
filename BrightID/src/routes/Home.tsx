@@ -5,15 +5,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from '@/store';
-import { INVITE_ACTIVE } from '@/utils/constants';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLACK } from '@/theme/colors';
 import { createSelector } from '@reduxjs/toolkit';
 import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack';
+import { useSelector } from '@/store/hooks';
+import { INVITE_ACTIVE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import Bell from '@/components/Icons/NotificationBell';
 import Menu from '@/components/Icons/Menu';
 import {

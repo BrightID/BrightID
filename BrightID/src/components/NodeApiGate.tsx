@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, InteractionManager } from 'react-native';
 import { ApiResponse } from 'apisauce';
-import { RootState, useDispatch, useSelector } from '@/store';
 import {
   addNodeUrl,
   removeCurrentNodeUrl,
@@ -14,6 +13,7 @@ import { pollOperations } from '@/utils/operations';
 import chooseNode from '@/utils/nodeChooser';
 import { NodeApiGateScreen } from '@/components/NodeApiGateScreen';
 import { leaveAllChannels } from './PendingConnections/actions/channelThunks';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 type ApiContext = NodeApi | null;
 
