@@ -16,9 +16,9 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from '@/store';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -124,7 +124,7 @@ export const MyCodeScreen = () => {
         channelErr < 3
       ) {
         InteractionManager.runAfterInteractions(() => {
-          dispatch(createChannel(displayChannelType, api)).catch((err) => {
+          dispatch(createChannel(displayChannelType)).catch((err) => {
             console.log(`error creating channel: ${err.message}`);
             if (channelErr === 2) {
               Alert.alert(
@@ -139,15 +139,7 @@ export const MyCodeScreen = () => {
         });
       }
       dispatch(setActiveNotification(null));
-    }, [
-      navigation,
-      myChannel,
-      channelErr,
-      dispatch,
-      displayChannelType,
-      api,
-      t,
-    ]),
+    }, [navigation, myChannel, channelErr, dispatch, displayChannelType, t]),
   );
 
   // Navigate to next screen if QRCode has been scanned
