@@ -9,6 +9,7 @@ import {
   interConnect,
   joinAllGroups,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 import { connection_levels } from '@/utils/constants';
@@ -32,19 +33,19 @@ describe('Connection details', () => {
     await expectConnectionsScreen();
     await waitFor(element(by.id('connection-0')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-1')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-2')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-3')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     await waitFor(element(by.id('connection-4')))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
 
     await navigateHome();
     await expectHomescreen();
@@ -74,7 +75,7 @@ describe('Connection details', () => {
     // wait until 2 connections are there, sometimes they appear only after a few seconds
     await waitFor(element(by.id('checkInviteeBtn')).atIndex(1))
       .toExist()
-      .withTimeout(20000);
+      .withTimeout(operationTimeout);
     // invite first 2 available connections co-founder
     await element(by.id('checkInviteeBtn')).atIndex(0).tap();
     await element(by.id('checkInviteeBtn')).atIndex(1).tap();
@@ -83,8 +84,8 @@ describe('Connection details', () => {
     await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
     // if group was created successfully we should be back at the Groups screen
     await expectGroupsScreen();
-    // wait 20 seconds until group creation op should be done on the backend
-    await new Promise((r) => setTimeout(r, 20000));
+    // wait until group creation op should be done on the backend
+    await new Promise((r) => setTimeout(r, operationTimeout));
     // there should be exactly one group now
     await expect(element(by.id('groupItem-0'))).toBeVisible();
     await expect(element(by.id('groupName'))).toHaveText(groupName);
@@ -101,8 +102,8 @@ describe('Connection details', () => {
     await element(by.id('toggleDrawer')).tap();
     await expect(element(by.id('groupsBtn'))).toBeVisible();
     await element(by.id('groupsBtn')).tap();
-    // wait 20 seconds until all join ops should be done on the backend
-    await new Promise((r) => setTimeout(r, 20000));
+    // wait until all join ops should be done on the backend
+    await new Promise((r) => setTimeout(r, operationTimeout));
     // refresh
     await element(by.id('groupsFlatList')).swipe('down');
 
@@ -231,8 +232,8 @@ describe('Connection details', () => {
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
         connectionLevelStrings[connection_levels.RECOVERY],
       );
-      // wait 30 seconds until operation is confirmed in the backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait until operation is confirmed in the backend
+      await new Promise((r) => setTimeout(r, operationTimeout));
       // verify new value is still displayed after operation confirmed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
         connectionLevelStrings[connection_levels.RECOVERY],

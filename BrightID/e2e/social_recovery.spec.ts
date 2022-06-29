@@ -7,6 +7,7 @@ import {
   expectHomescreen,
   expectNotificationsScreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 
 describe('social recovery', () => {
@@ -27,13 +28,13 @@ describe('social recovery', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-1')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-2')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await navigateHome();
     });
 
