@@ -142,25 +142,20 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     );
   };
 
-  const reportConnectionText = t(
-    `connectionDetails.text.${
-      source === report_sources.PROFILE ? 'remove' : 'report'
-    }Connection`,
-    {
-      name: connectionName,
-    },
-  );
+  const reportConnectionText =
+    source === report_sources.PROFILE
+      ? t('connectionDetails.text.removeConnection', { name: connectionName })
+      : t('connectionDetails.text.reportConnection', { name: connectionName });
   const unReportConnectionText = t(
     'connectionDetails.text.unReportConnection',
     {
       name: connectionName,
     },
   );
-  const reportConnectionDetailsText = t(
-    `connectionDetails.text.why${
-      source === report_sources.PROFILE ? 'Remove' : 'Report'
-    }`
-  );
+  const reportConnectionDetailsText =
+    source === report_sources.PROFILE
+      ? t('connectionDetails.text.whyRemove')
+      : t('connectionDetails.text.whyReport');
   const unReportConnectionDetailsText = t(
     'connectionDetails.text.unReportImpact',
     {
