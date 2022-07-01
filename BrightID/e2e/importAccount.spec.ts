@@ -16,6 +16,7 @@ import {
   joinAllGroups,
   navigateGroupsScreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 import { NodeApi } from '@/api/brightId';
 import { b64ToUrlSafeB64, hash } from '@/utils/encoding';
@@ -109,13 +110,13 @@ describe('Import BrightID', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-1')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-2')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await navigateHome();
     });
 
@@ -190,8 +191,8 @@ describe('Import BrightID', () => {
       console.log(`SigningKey: ${signingKey}`);
       const op = await apiInstance.addSigningKey(signingKey);
       console.log(`OpHash: ${op.hash}`);
-      // wait 30 seconds until op is applied in backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait until op is applied in backend
+      await new Promise((r) => setTimeout(r, operationTimeout));
       const opInfo: OperationInfo = await apiInstance.getOperationState(
         op.hash,
       );
@@ -304,13 +305,13 @@ describe('Import BrightID', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-1')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await waitFor(element(by.id('connection-2')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await navigateHome();
     });
 
@@ -359,8 +360,8 @@ describe('Import BrightID', () => {
       // dismiss confirmation screen
       await element(by.text(actionOK)).tap();
 
-      // wait 20 seconds until all dismiss op should be done on the backend
-      await new Promise((r) => setTimeout(r, 20000));
+      // wait until all dismiss op should be done on the backend
+      await new Promise((r) => setTimeout(r, operationTimeout));
 
       // should be back on groups members screen, dismissed member should be removed
       // so the last index should be 1

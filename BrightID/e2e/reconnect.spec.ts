@@ -5,6 +5,7 @@ import {
   createFakeConnection,
   expectConnectionsScreen,
   navigateHome,
+  operationTimeout,
   reconnect,
 } from './testUtils';
 import { connection_levels, report_reasons } from '@/utils/constants';
@@ -24,7 +25,7 @@ describe('Reconnect existing connection', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await navigateHome();
     });
 
@@ -46,10 +47,10 @@ describe('Reconnect existing connection', () => {
       await element(by.id('updateBtn')).tap();
       // should move to connections screen
       await expectConnectionsScreen();
-      // wait upto 30 seconds till operation is applied
+      // wait till operation is applied
       await waitFor(element(by.id('connection-0')))
         .toBeVisible()
-        .withTimeout(30000);
+        .withTimeout(operationTimeout);
     });
 
     /*
@@ -71,10 +72,10 @@ describe('Reconnect existing connection', () => {
       await element(by.id('updateBtn')).tap();
       // should move to connections screen
       await expectConnectionsScreen();
-      // wait upto 30 seconds till operation is applied
+      // wait till operation is applied
       await waitFor(element(by.id('connection-0')))
         .toBeVisible()
-        .withTimeout(30000);
+        .withTimeout(operationTimeout);
       // new connection level should be set
       await expect(element(by.id('connection_level-0'))).toHaveText(
         connectionLevelStrings[connection_levels.RECOVERY],
@@ -107,7 +108,7 @@ describe('Reconnect existing connection', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       await navigateHome();
       await reconnect(0, false);
     });

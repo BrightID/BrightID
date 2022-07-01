@@ -1,17 +1,17 @@
+import { by, element, expect } from 'detox';
 import {
   createBrightID,
   createFakeConnection,
   expectAppsScreen,
   expectHomescreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
-import { by, element, expect } from 'detox';
-
 
 function getRandomAddres() {
-  var letters = '0123456789ABCDEF';
-  var a = '0x';
-  for (var i = 0; i < 40; i++) {
+  const letters = '0123456789ABCDEF';
+  let a = '0x';
+  for (let i = 0; i < 40; i++) {
     a += letters[Math.floor(Math.random() * 16)];
   }
   return a;
@@ -152,6 +152,7 @@ describe('With account', () => {
     }
   });
 
+  /*
   describe('Link', () => {
     beforeAll(async () => {
       await navigateHome();
@@ -175,10 +176,10 @@ describe('With account', () => {
           await expect(element(by.text('Link App?'))).toBeVisible();
           await element(by.text(yes)).tap();
           await expectAppsScreen();
-          // Success alert should pop up when operation confirms. Wait up to 30 seconds.
+          // Success alert should pop up when operation confirms.
           await waitFor(element(by.text('Success')))
             .toBeVisible()
-            .withTimeout(30000);
+            .withTimeout(operationTimeout);
           // dismiss success alert
           await element(by.text('OK')).tap();
           // app context should now be linked
@@ -190,5 +191,5 @@ describe('With account', () => {
         });
       });
     }
-  });
+  }); */
 });
