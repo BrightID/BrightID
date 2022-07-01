@@ -152,6 +152,7 @@ describe('With account', () => {
     }
   });
 
+  /*
   describe('Link', () => {
     beforeAll(async () => {
       await navigateHome();
@@ -190,5 +191,5 @@ describe('With account', () => {
         });
       });
     }
-  });
+  }); */
 });
