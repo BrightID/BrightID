@@ -6,6 +6,7 @@ import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 import { b64ToUint8Array } from '@/utils/encoding';
 
 const testUserName = 'Vincent Vega';
+const operationTimeout = 40000; // ms to wait for operations to be applied
 
 /*
 Accept EULA and proceed to Onboarding screen
@@ -456,5 +457,6 @@ export {
   joinAllGroups,
   navigateHome,
   navigateGroupsScreen,
+  operationTimeout,
   reconnect,
 };

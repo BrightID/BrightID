@@ -11,12 +11,12 @@ import {
   LayoutChangeEvent,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -24,7 +24,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_IOS, DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
   BLACK,
@@ -49,6 +49,7 @@ import {
 } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
+  saveSocialMedia,
   selectExistingSocialMedia,
   setProfileDisplayWidth,
 } from '../../reducer/socialMediaSlice';
@@ -61,12 +62,11 @@ import {
   removeSocialMediaThunk,
   setSyncSocialMediaEnabledThunk,
 } from '@/components/EditProfile/socialMediaThunks';
+import { getShareWithConnectionsValue } from '@/utils/socialUtils';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const prevPhotoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
   const { t } = useTranslation();
 
   const profileSource = profilePhoto
@@ -227,54 +227,77 @@ const SocialMediaLink = (props: {
       }
     : { flexGrow: 1 };
 
+  const toggleShareWithConnectionsState = () => {
+    dispatch(
+      saveSocialMedia({
+        ...props.socialMedia,
+        shareWithConnections: !getShareWithConnectionsValue(props.socialMedia),
+      }),
+    );
+  };
   return (
-    <View style={styles.socialMediaLinkContainer}>
-      <TouchableOpacity
-        style={styles.socialMediaSelect}
-        onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            type: props.type,
-            order,
-            prevId: id,
-            page: 0,
-          });
-        }}
-      >
-        <Text style={styles.socialMediaType}>{socialMediaVariation.name}</Text>
-        <Chevron
-          width={DEVICE_LARGE ? 14 : 12}
-          height={DEVICE_LARGE ? 14 : 12}
-          color={DARK_BLUE}
-          strokeWidth={2}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={innerTextStyle}
-        onLayout={updateInnerTextLayout}
-        onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            type: props.type,
-            order,
-            prevId: id,
-            page: 1,
-          });
-        }}
-      >
-        <Text
-          style={styles.socialMediaInput}
-          numberOfLines={1}
-          ellipsizeMode="head"
+    <>
+      <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity
+          style={styles.socialMediaSelect}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              type: props.type,
+              order,
+              prevId: id,
+              page: 0,
+            });
+          }}
         >
-          {innerTextStyle.width ? profile : ''}
+          <Text style={styles.socialMediaType}>
+            {socialMediaVariation.name}
+          </Text>
+          <Chevron
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            color={DARK_BLUE}
+            strokeWidth={2}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={innerTextStyle}
+          onLayout={updateInnerTextLayout}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              type: props.type,
+              order,
+              prevId: id,
+              page: 1,
+            });
+          }}
+        >
+          <Text
+            style={styles.socialMediaInput}
+            numberOfLines={1}
+            ellipsizeMode="head"
+          >
+            {innerTextStyle.width ? profile : ''}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => removeSocialMedia(id)}
+        >
+          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.shareSocialMediaToggleContainer}>
+        <Text onPress={toggleShareWithConnectionsState} style={styles.label}>
+          Share with connections
         </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => removeSocialMedia(id)}
-      >
-        <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
-      </TouchableOpacity>
-    </View>
+        <CheckBox
+          style={styles.syncSocialMediaSwitch}
+          tintColors={{ false: GREY, true: ORANGE }}
+          onValueChange={(_value) => toggleShareWithConnectionsState()}
+          value={getShareWithConnectionsValue(props.socialMedia)}
+        />
+      </View>
+    </>
   );
 };
 
@@ -340,7 +363,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
 };
 
 const ShowEditPassword = () => {
-  const password = useSelector((state: State) => state.user.password);
+  const password = useSelector((state) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -415,12 +438,17 @@ function SyncSocialMedia() {
   return (
     <>
       <View style={styles.syncSocialMediaSwitchContainer}>
-        <Text style={styles.label}>Sync </Text>
-        <Switch
+        <Text
+          style={styles.label}
+          onPress={() => {
+            dispatch(setSyncSocialMediaEnabledThunk(!syncSocialMediaEnabled));
+          }}
+        >
+          Allow friends to see I'm a BrightID user{' '}
+        </Text>
+        <CheckBox
           style={styles.syncSocialMediaSwitch}
-          trackColor={{ false: GREY, true: DARK_ORANGE }}
-          thumbColor="#ffffff"
-          ios_backgroundColor="#3e3e3e"
+          tintColors={{ false: GREY, true: ORANGE }}
           onValueChange={(value) => {
             dispatch(setSyncSocialMediaEnabledThunk(value));
           }}
@@ -428,10 +456,10 @@ function SyncSocialMedia() {
         />
       </View>
       <Text style={styles.infoText}>
-        Do you want to allow people who have your contact info and social media
-        links to know that you're a BrightID user so they can connect to you on
-        BrightID? This does not reveal your information to people who don't
-        already have it.
+        Items you add to your profile are encrypted and used anonymously to help
+        your contacts see that you're a BrightID user. If you check the box next
+        to an item, it will also be shared directly with people you connect to.
+        Profile info is not shared with BrightID or apps.
       </Text>
     </>
   );
@@ -447,11 +475,9 @@ export const EditProfileScreen = ({ navigation }) => {
   const isDrawerOpen = useIsDrawerOpen();
 
   // selectors
-  const id = useSelector((state: State) => state.user.id);
-  const prevPhotoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
-  const prevName = useSelector((state: State) => state.user.name);
+  const id = useSelector((state) => state.user.id);
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
+  const prevName = useSelector((state) => state.user.name);
   const prevPhoto = useRef(null);
   // state passed down to children
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
@@ -547,9 +573,10 @@ export const EditProfileScreen = ({ navigation }) => {
         />
         <EditName nextName={nextName} setNextName={setNextName} />
 
+        <View style={styles.socialMediaTopDivider} />
+        <SyncSocialMedia />
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
-        <SyncSocialMedia />
         <View style={styles.bottomDivider} />
 
         <ShowEditPassword />
@@ -646,7 +673,12 @@ const styles = StyleSheet.create({
   },
   syncSocialMediaSwitchContainer: {
     alignItems: 'center',
-    paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  shareSocialMediaToggleContainer: {
+    alignItems: 'center',
+    paddingBottom: DEVICE_LARGE ? 4 : 2,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -658,6 +690,12 @@ const styles = StyleSheet.create({
     borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginTop: DEVICE_LARGE ? 16 : 12,
+  },
+  socialMediaTopDivider: {
+    width: '100%',
+    borderBottomColor: LIGHT_GREY,
+    borderBottomWidth: 1,
+    marginBottom: DEVICE_LARGE ? 10 : 8,
   },
   socialMediaContainer: {
     width: '100%',

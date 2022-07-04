@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { StackScreenProps } from '@react-navigation/stack';
+import { useSelector } from '@/store/hooks';
 import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
-import { useTranslation } from 'react-i18next';
 import FullScreenHighlightBox from '@/components/Helpers/FullScreenHighlightBox';
-import { StackScreenProps } from '@react-navigation/stack';
 import Arrow from '../../Icons/Arrow';
 
 // border radius for edit profile box
@@ -24,21 +24,19 @@ const ViewPassword = ({ navigation }: props) => {
   );
   const { t } = useTranslation();
 
-  const password = useSelector((state: State) => state.user.password);
+  const password = useSelector((state) => state.user.password);
 
   /**
    * dimensions of edit profile button on the side bar
    * {x, y, width, height}
    */
   const editProfileMenuLayout = useSelector(
-    (state: State) => state.walkthrough.editProfileMenuLayout,
+    (state) => state.walkthrough.editProfileMenuLayout,
   );
   const editProfileTextLayout = useSelector(
-    (state: State) => state.walkthrough.editProfileTextLayout,
+    (state) => state.walkthrough.editProfileTextLayout,
   );
-  const headerHeight = useSelector(
-    (state: State) => state.walkthrough.headerHeight,
-  );
+  const headerHeight = useSelector((state) => state.walkthrough.headerHeight);
 
   /**
    * Dimensions for the transparent box around Edit Profile in the side menu

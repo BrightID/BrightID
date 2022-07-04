@@ -88,11 +88,11 @@ export const {
   selectById: selectLinkedContextById,
   selectAll: selectAllLinkedContexts,
 } = linkedContextsAdapter.getSelectors(
-  (state: State) => state.apps.linkedContexts,
+  (state: RootState) => state.apps.linkedContexts,
 );
 
 export const { selectAll: selectAllSigs } = sigsAdapter.getSelectors(
-  (state: State) => state.apps.sigs,
+  (state: RootState) => state.apps.sigs,
 );
 
 export const linkedContextTotal = createSelector(
@@ -106,7 +106,7 @@ export const linkedContextTotal = createSelector(
 
 export const selectLinkedContext = createSelector(
   selectAllLinkedContexts,
-  (_: State, context: string) => context,
+  (_: RootState, context: string) => context,
   (contexts, context) => contexts.find((link) => link.context === context),
 );
 
@@ -115,7 +115,7 @@ export const selectPendingLinkedContext = createSelector(
   (contexts) => contexts.find((link) => link.state === 'pending'),
 );
 
-export const selectAllApps = (state: State) => state.apps.apps;
+export const selectAllApps = (state: RootState) => state.apps.apps;
 
 export const selectAllLinkedSigs = createSelector(selectAllSigs, (sigs) =>
   sigs.filter((sig) => sig.linked),
@@ -127,7 +127,7 @@ export const createSelectLinkedSigsForApp = (appId) =>
     return linkedSigs.filter((sig) => sig.app === appId);
   });
 
-export const selectBlindSigApps = (state: State) =>
+export const selectBlindSigApps = (state: RootState) =>
   state.apps.apps.filter((app) => app.usingBlindSig);
 
 export const selectExpireableBlindSigApps = createSelector(

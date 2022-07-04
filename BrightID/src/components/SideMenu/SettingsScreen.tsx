@@ -9,7 +9,7 @@ import { BLUE, DARK_ORANGE, LIGHT_GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { translations } from '@/i18n';
 import { setLanguageTag } from '@/reducer/settingsSlice';
-import { useDispatch } from '@/store';
+import { useDispatch } from '@/store/hooks';
 
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();

@@ -7,9 +7,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Search from '@/components/Icons/Search';

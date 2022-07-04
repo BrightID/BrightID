@@ -19,7 +19,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -71,10 +71,10 @@ export const ScanCodeScreen = () => {
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
-  const name = useSelector((state: State) => state.user.name);
+  const name = useSelector((state) => state.user.name);
   const { t } = useTranslation();
 
-  const pendingConnectionSizeForChannel = useSelector((state: State) => {
+  const pendingConnectionSizeForChannel = useSelector((state) => {
     if (channel) {
       return selectAllUnconfirmedConnectionsByChannelIds(state, [channel.id])
         .length;

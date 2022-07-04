@@ -18,7 +18,7 @@ import {
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -83,24 +83,24 @@ export const MyCodeScreen = () => {
 
   // GROUP / SINGLE / STAR
   const displayChannelType = useSelector(
-    (state: State) => state.channels.displayChannelType,
+    (state) => state.channels.displayChannelType,
   );
   // current channel displayed by QRCode
   const myChannel = useSelector(
-    (state: State) =>
+    (state) =>
       selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
     (a, b) => a?.id === b?.id,
   );
 
   // All channels with current displayChannelType actively polling profile service
-  const activeChannelIds = useSelector((state: State) =>
+  const activeChannelIds = useSelector((state) =>
     selectAllActiveChannelIdsByType(state, displayChannelType),
   );
 
   console.log('activeChannelIds', activeChannelIds);
 
   // pending connections attached to active channel
-  const pendingConnectionSize = useSelector((state: State) => {
+  const pendingConnectionSize = useSelector((state) => {
     if (myChannel) {
       return selectAllPendingConnectionsByChannelIds(state, [myChannel.id])
         .length;

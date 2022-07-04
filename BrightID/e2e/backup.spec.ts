@@ -7,6 +7,7 @@ import {
   expectHomescreen,
   expectNotificationsScreen,
   navigateHome,
+  operationTimeout,
 } from './testUtils';
 
 describe('backup', () => {
@@ -22,7 +23,7 @@ describe('backup', () => {
       await expectConnectionsScreen();
       await waitFor(element(by.id('connection-0')))
         .toExist()
-        .withTimeout(20000);
+        .withTimeout(operationTimeout);
       // back to home screen
       await navigateHome();
     });

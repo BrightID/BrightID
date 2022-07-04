@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { original, Draft } from 'immer';
+import { getShareWithConnectionsValue } from '@/utils/socialUtils';
 
 const socialMediaAdapter = createEntityAdapter<SocialMedia>({
   sortComparer: (a, b) => a.order - b.order,
@@ -25,6 +26,7 @@ const socialMediaSlice = createSlice({
         order: incomingOrder,
         profile: incomingProfile,
         brightIdSocialAppData: incomingBrightIdSocialAppData,
+        shareWithConnections: incomingShareWithConnections,
       } = action.payload;
 
       // access previous values from the reducer
@@ -52,6 +54,7 @@ const socialMediaSlice = createSlice({
           changes: {
             profile: incomingProfile,
             brightIdSocialAppData: incomingBrightIdSocialAppData,
+            shareWithConnections: incomingShareWithConnections,
           },
         });
       }
@@ -66,11 +69,13 @@ const socialMediaSlice = createSlice({
         const shouldDecrement = !shouldIncrement;
 
         const updateList = Object.values(entities).map((entity) => {
-          let { order, profile, brightIdSocialAppData } = entity;
+          let { order, profile, brightIdSocialAppData, shareWithConnections } =
+            entity;
           if (entity.id === incomingId) {
             order = incomingOrder;
             profile = incomingProfile;
             brightIdSocialAppData = incomingBrightIdSocialAppData;
+            shareWithConnections = incomingShareWithConnections;
           } else if (
             shouldIncrement &&
             order >= incomingOrder &&
@@ -87,7 +92,12 @@ const socialMediaSlice = createSlice({
 
           return {
             id: entity.id,
-            changes: { order, profile, brightIdSocialAppData },
+            changes: {
+              order,
+              profile,
+              brightIdSocialAppData,
+              shareWithConnections,
+            },
           };
         });
 
@@ -114,7 +124,7 @@ export const { saveSocialMedia, setProfileDisplayWidth } =
 export const {
   selectById: selectSocialMediaById,
   selectAll: selectAllSocialMedia,
-} = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
+} = socialMediaAdapter.getSelectors((state: RootState) => state.socialMedia);
 
 export const selectExistingSocialMedia = createSelector(
   selectAllSocialMedia,
@@ -129,12 +139,14 @@ export const selectExistingSocialMediaIds = createSelector(
 export const selectAllSocialMediaToShare = createSelector(
   selectExistingSocialMedia,
   (socialMedias) =>
-    socialMedias.map((socialMedia) => ({
-      id: socialMedia.id,
-      company: socialMedia.company,
-      order: socialMedia.order,
-      profile: socialMedia.profile,
-      profileDisplayWidth: socialMedia.profileDisplayWidth,
-    })) as SocialMediaShared[],
+    socialMedias
+      .filter((socialMedia) => getShareWithConnectionsValue(socialMedia))
+      .map((socialMedia) => ({
+        id: socialMedia.id,
+        company: socialMedia.company,
+        order: socialMedia.order,
+        profile: socialMedia.profile,
+        profileDisplayWidth: socialMedia.profileDisplayWidth,
+      })) as SocialMediaShared[],
 );
 export default socialMediaSlice.reducer;

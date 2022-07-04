@@ -26,7 +26,6 @@ import {
   GREY,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from '@/store';
 import { validatePass } from '@/utils/password';
 import {
   setBackupCompleted,
@@ -34,6 +33,7 @@ import {
   updateNotifications,
 } from '@/actions';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();
@@ -62,8 +62,8 @@ const ChangePasswordModal = ({ navigation }: props) => {
   const [newPasswordAgain, setNewPasswordAgain] = useState('');
   const [backupInProgress, setBackupInProgress] = useState(false);
 
-  const password = useSelector((state: State) => state.user.password);
-  const id = useSelector((state: State) => state.user.id);
+  const password = useSelector((state) => state.user.password);
+  const id = useSelector((state) => state.user.id);
 
   const { t } = useTranslation();
 

@@ -8,7 +8,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import { useDispatch } from '@/store';
+import { useDispatch } from '@/store/hooks';
 import { ORANGE, DARKER_GREY, GREEN, WHITE, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';

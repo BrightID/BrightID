@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { setUserId, setPrimaryDevice } from '@/actions';
-import { useSelector, useDispatch } from '@/store';
+import { useSelector, useDispatch } from '@/store/hooks';
 import { BLACK, ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -18,7 +18,7 @@ import { clearImportChannel } from './thunks/channelThunks';
 const ImportScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const recoveryData = useSelector((state: State) => state.recoveryData);
+  const recoveryData = useSelector((state) => state.recoveryData);
   const importCompleted = useSelector(uploadCompletedByOtherSide);
 
   useEffect(() => {

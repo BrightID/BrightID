@@ -21,7 +21,7 @@ export const CHANNEL_POLL_INTERVAL = 3000;
 // THUNKS
 
 export const createRecoveryChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       const { recoveryData } = getState();
       const baseUrl = selectBaseUrl(getState());
@@ -45,7 +45,7 @@ export const createRecoveryChannel =
 let checkInProgress = false;
 
 export const pollRecoveryChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     let { pollTimerId } = selectRecoveryChannel(getState());
     clearInterval(pollTimerId);
 
@@ -69,7 +69,7 @@ export const pollRecoveryChannel =
   };
 
 export const clearRecoveryChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const { pollTimerId } = selectRecoveryChannel(getState());
     console.log(`stop polling recovery channel (${pollTimerId})`);
     clearInterval(pollTimerId);
@@ -77,7 +77,7 @@ export const clearRecoveryChannel =
   };
 
 export const checkRecoveryChannel =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk<Promis<void>> => async (dispatch: AppDispatch, getState) => {
     const {
       recoveryData: {
         id: recoveryId,

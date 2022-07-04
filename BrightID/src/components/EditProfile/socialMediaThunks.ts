@@ -84,7 +84,7 @@ export async function syncSocialMedia(
 
 export const saveAndLinkSocialMedia =
   (incomingSocialMedia: SocialMedia) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     const prevProfile = selectSocialMediaById(
       getState(),
       incomingSocialMedia.id,
@@ -153,7 +153,8 @@ export const removeSocialFromServer = async (socialMedia: SocialMedia) => {
 };
 
 export const removeSocialMediaThunk =
-  (id: string) => async (dispatch: dispatch, getState: getState) => {
+  (id: string): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     const prevProfile = selectSocialMediaById(getState(), id);
     if (prevProfile) {
       await removeSocialFromServer(prevProfile);
@@ -166,15 +167,26 @@ export const removeSocialMediaThunk =
   };
 
 export const updateSocialMediaVariations =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const socialMediaVariations =
       await socialMediaService.retrieveSocialMediaVariations();
     dispatch(upsertSocialMediaVariations(socialMediaVariations));
   };
 
 export const syncAndLinkSocialMedias =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const socialMedias = selectAllSocialMedia(getState());
+
+    /* TODO: add "syncSocialMediaEnabled === undefined &&" to the if statement
+        after all clients got the new version. for now some clients have the
+        other version in which syncSocialMediaEnabled has default value of false
+     */
+    // If the user does not have any social media, set sync to
+    // true by default
+    if (!socialMedias.filter((s) => !!s.profile).length) {
+      dispatch(setSyncSocialMediaEnabled(true));
+    }
+
     socialMedias.forEach((socialMedia) => {
       if (socialMedia.profile) {
         dispatch(saveAndLinkSocialMedia(socialMedia));
@@ -183,7 +195,7 @@ export const syncAndLinkSocialMedias =
   };
 
 export const removeAllSocialMediasFromServer =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const socialMedias = selectAllSocialMedia(getState());
     for (let i = 0; i < socialMedias.length; i++) {
       const socialMedia = socialMedias[i];
@@ -202,7 +214,8 @@ export const removeAllSocialMediasFromServer =
   };
 
 export const setSyncSocialMediaEnabledThunk =
-  (value: boolean) => async (dispatch: dispatch, getState: getState) => {
+  (value: boolean): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     const prevState = selectSyncSocialMediaEnabled(getState());
 
     dispatch(setSyncSocialMediaEnabled(value));

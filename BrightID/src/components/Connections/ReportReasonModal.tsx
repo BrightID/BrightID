@@ -6,7 +6,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch } from '@/store';
+import { useDispatch } from '@/store/hooks';
 import {
   connection_levels,
   report_reasons,
@@ -142,26 +142,20 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     );
   };
 
-  const reportConnectionText = t(
-    `connectionDetails.text.${
-      source === report_sources.PROFILE ? 'remove' : 'report'
-    }Connection`,
-    {
-      name: connectionName,
-    },
-  );
+  const reportConnectionText =
+    source === report_sources.PROFILE
+      ? t('connectionDetails.text.removeConnection', { name: connectionName })
+      : t('connectionDetails.text.reportConnection', { name: connectionName });
   const unReportConnectionText = t(
     'connectionDetails.text.unReportConnection',
     {
       name: connectionName,
     },
   );
-  const reportConnectionDetailsText = t(
-    `connectionDetails.text.why${
-      source === report_sources.PROFILE ? 'remove' : 'report'
-    }`,
-    'Please tell us why you want to remove this connection',
-  );
+  const reportConnectionDetailsText =
+    source === report_sources.PROFILE
+      ? t('connectionDetails.text.whyRemove')
+      : t('connectionDetails.text.whyReport');
   const unReportConnectionDetailsText = t(
     'connectionDetails.text.unReportImpact',
     {

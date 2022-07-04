@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -19,6 +19,7 @@ import { setBackupCompleted } from '@/reducer/userSlice';
 import DetoxEnabled from '@/utils/Detox';
 import { saveId } from './thunks';
 import Congratulations from '../../Icons/Congratulations';
+
 /* Onboarding Success Screen */
 
 /* ======================================== */
@@ -29,7 +30,7 @@ export const SuccessScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const password = useSelector((state: State) => state.user.password);
+  const password = useSelector((state) => state.user.password);
 
   // this is used instead of a timeout
   const [currentTime, setCurrentTime] = useState(null);

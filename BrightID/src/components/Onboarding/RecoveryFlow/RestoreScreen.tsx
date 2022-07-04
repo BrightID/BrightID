@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';

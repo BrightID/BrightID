@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
-import { useDispatch, useSelector } from '@/store';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -67,7 +67,7 @@ const Timer = ({ channel }) => {
 export const QrCode = ({ channel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const myName = useSelector((state: State) => state.user.name);
+  const myName = useSelector((state) => state.user.name);
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
 

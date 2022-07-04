@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { navigate, getRoute } from '@/NavigationService';
 import AddGroup from '@/components/Icons/AddGroup';
 import AddPerson from '@/components/Icons/AddPerson';
@@ -45,7 +45,7 @@ export const NotificationBanner = () => {
   // const route = useRoute();
   const dropDownAlertRef = useRef(null);
   const activeNotification = useSelector(
-    (state: State) => state.notifications.activeNotification,
+    (state) => state.notifications.activeNotification,
   );
 
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);

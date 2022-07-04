@@ -30,7 +30,7 @@ import { getGlobalNodeApi } from '@/components/NodeApiGate';
 
 export const createChannel =
   (channelType: ChannelType) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     let channel: Channel | null | undefined;
     try {
       const baseUrl = selectBaseUrl(getState());
@@ -74,7 +74,8 @@ export const createChannel =
   };
 
 export const joinChannel =
-  (channel: Channel) => async (dispatch: dispatch, getState: getState) => {
+  (channel: Channel) =>
+  async (dispatch: AppDispatch, getState) => {
     console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
 
     // check to see if channel exists
@@ -130,7 +131,7 @@ export const joinChannel =
   };
 
 export const leaveChannel =
-  (channelId: string) => (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: AppDispatch, getState) => {
     const channel: Channel = selectChannelById(getState(), channelId);
     if (channel) {
       clearTimeout(channel.timeoutId);
@@ -139,19 +140,18 @@ export const leaveChannel =
     }
   };
 
-export const leaveAllChannels =
-  () => (dispatch: dispatch, getState: getState) => {
-    const channels = selectAllChannels(getState());
-    for (const channel of channels) {
-      console.log(`Leaving channel ${channel.id}`);
-      clearTimeout(channel.timeoutId);
-      dispatch(unsubscribeFromConnectionRequests(channel.id));
-      dispatch(removeChannel(channel.id));
-    }
-  };
+export const leaveAllChannels = () => (dispatch: AppDispatch, getState) => {
+  const channels = selectAllChannels(getState());
+  for (const channel of channels) {
+    console.log(`Leaving channel ${channel.id}`);
+    clearTimeout(channel.timeoutId);
+    dispatch(unsubscribeFromConnectionRequests(channel.id));
+    dispatch(removeChannel(channel.id));
+  }
+};
 
 export const subscribeToConnectionRequests =
-  (channelId: string) => (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: AppDispatch, getState) => {
     let { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -183,7 +183,7 @@ export const subscribeToConnectionRequests =
   };
 
 export const unsubscribeFromConnectionRequests =
-  (channelId: string) => (dispatch: dispatch, getState: getState) => {
+  (channelId: string) => (dispatch: AppDispatch, getState) => {
     const { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -201,7 +201,7 @@ export const unsubscribeFromConnectionRequests =
   };
 
 export const fetchChannelProfiles =
-  (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
+  (channelId: string): AppThunk => async (dispatch: AppDispatch, getState: GetState) => {
     // don't try to fetch profiles if there is no node API available. Can happen if node goes down or
     // when rejoining hydrated channels at app startup
     if (!getGlobalNodeApi()) {
@@ -330,7 +330,8 @@ export const fetchChannelProfiles =
   };
 
 export const encryptAndUploadProfileToChannel =
-  (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
+  (channelId: string): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     // get channel
     const channel = selectChannelById(getState(), channelId);
 

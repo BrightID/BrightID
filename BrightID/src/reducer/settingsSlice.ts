@@ -24,7 +24,7 @@ interface SettingsSlice {
 }
 
 const initialState: SettingsSlice = {
-  syncSocialMediaEnabled: false,
+  syncSocialMediaEnabled: undefined,
   baseUrl: null,
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
   isPrimaryDevice: true,
@@ -116,14 +116,16 @@ export const {
   resetLanguageTag,
 } = settingsSlice.actions;
 
-export const selectSyncSocialMediaEnabled = (state: State) =>
-  state.settings.syncSocialMediaEnabled;
-export const selectBaseUrl = (state: State) => state.settings.baseUrl;
-export const selectAllNodeUrls = (state: State) => state.settings.nodeUrls;
-export const selectDefaultNodeUrls = (_: State) => initialState.nodeUrls;
-export const selectIsPrimaryDevice = (state: State) =>
+export const selectSyncSocialMediaEnabled = (state: RootState): boolean =>
+  !!state.settings.syncSocialMediaEnabled;
+export const selectBaseUrl = (state: RootState) => state.settings.baseUrl;
+export const selectAllNodeUrls = (state: RootState) => state.settings.nodeUrls;
+export const selectDefaultNodeUrls = (_: RootState) => initialState.nodeUrls;
+export const selectIsPrimaryDevice = (state: RootState) =>
   state.settings.isPrimaryDevice;
-export const selectLastSyncTime = (state: State) => state.settings.lastSyncTime;
-export const selectLanguageTag = (state: State) => state.settings.languageTag;
+export const selectLastSyncTime = (state: RootState) =>
+  state.settings.lastSyncTime;
+export const selectLanguageTag = (state: RootState) =>
+  state.settings.languageTag;
 
 export default settingsSlice.reducer;

@@ -1,4 +1,8 @@
-import { EntityState as _EntityState } from '@reduxjs/toolkit';
+import {
+  ThunkAction,
+  AnyAction,
+  EntityState as _EntityState,
+} from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
@@ -7,7 +11,7 @@ import {
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
-import { AppDispatch, RootState } from '@/store';
+import { store } from '@/store';
 import { connection_levels, report_reasons } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -21,22 +25,22 @@ import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/Recovery
 import { RecoverSteps } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 declare global {
+  type RootState = ReturnType<typeof store.getState>;
+  type AppDispatch = typeof store.dispatch;
   type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
   type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
+  type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    RootState,
+    unknown,
+    AnyAction
+  >;
 
   type IntervalId = ReturnType<typeof setInterval>;
   type TimeoutId = ReturnType<typeof setTimeout>;
 
-  type getState = () => State;
-  type GetState = getState;
-
-  // TODO: make this type more specific
-  type dispatch = AppDispatch;
-  type Dispatch = dispatch;
-
   type navigation = () => any;
-  type State = RootState;
 
   type ContextInfo = {
     context: string;
@@ -245,6 +249,7 @@ declare global {
   };
 
   type SocialMedia = SocialMediaShared & {
+    shareWithConnections?: boolean;
     brightIdSocialAppData?: BrightIdSocialAppData;
   };
 

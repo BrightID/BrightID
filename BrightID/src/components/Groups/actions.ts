@@ -21,8 +21,8 @@ export const createNewGroup =
     api: NodeApi,
     newGroupInvitees: Array<string>,
     setCreationState: (string) => void,
-  ) =>
-  async (dispatch: dispatch, getState: getState) => {
+  ): AppThunk<Promise<boolean>> =>
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         user: { id, backupCompleted },
