@@ -10,10 +10,10 @@ import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { LIGHT_BLACK, ORANGE, WHITE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from '@/store';
 import {
   clearBaseUrl,
   removeCurrentNodeUrl,

@@ -1,7 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
-import { RootState } from '@/store';
 import { toSearchString } from '@/utils/strings';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
@@ -29,13 +28,16 @@ const groupsSlice = createSlice({
       Object.assign(group, action.payload);
     },
     upsertGroup(state, action: PayloadAction<GroupInfo>) {
-      const group = state.groups.find(
-        (group) => group.id === action.payload.id,
-      );
+      const groupInfo = action.payload;
+      const group = state.groups.find((group) => group.id === groupInfo.id);
       if (group) {
-        Object.assign(group, action.payload);
+        Object.assign(group, groupInfo);
       } else {
-        state.groups.push(action.payload);
+        state.groups.push({
+          ...groupInfo,
+          state: 'verified',
+          joined: Date.now(),
+        });
       }
     },
     deleteGroup(state, action: PayloadAction<Group>) {
@@ -67,6 +69,10 @@ const groupsSlice = createSlice({
             joined: membership.timestamp,
             members: [],
             admins: [],
+            invites: [],
+            timestamp: Date.now(),
+            type: 'general',
+            url: '',
           });
         }
       });

@@ -9,13 +9,14 @@ import {
   ScrollView,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { store, useSelector } from '@/store';
+import { store } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import { getBituReportedByText } from '@/utils/verifications';
 import { GREY, BLUE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { useSelector } from '@/store/hooks';
 
 export const BituVerificationScreen = function ({ route }) {
   const { url } = route.params;
@@ -56,7 +57,9 @@ export const BituVerificationScreen = function ({ route }) {
         <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
         <View style={styles.itemLabel}>
           <Text style={styles.itemLabelText}>{item.name || 'Unknown'}</Text>
-          { reportedBy.length > 0 && <Text style={styles.itemReportedByText}>{reportedBy}</Text> }
+          {reportedBy.length > 0 && (
+            <Text style={styles.itemReportedByText}>{reportedBy}</Text>
+          )}
         </View>
         <View style={{ flex: 1 }} />
         <View style={styles.negativeScoreContainer}>
@@ -129,7 +132,9 @@ export const BituVerificationScreen = function ({ route }) {
       )}
       <FlatList
         data={directReports}
-        renderItem={({ item, index }) => renderItem(item, index, 'directReports')}
+        renderItem={({ item, index }) =>
+          renderItem(item, index, 'directReports')
+        }
         keyExtractor={(item) => item}
       />
       {reportedConnections.length > 0 && (
@@ -137,7 +142,9 @@ export const BituVerificationScreen = function ({ route }) {
       )}
       <FlatList
         data={reportedConnections}
-        renderItem={({ item, index }) => renderItem(item, index, 'reportedConnections')}
+        renderItem={({ item, index }) =>
+          renderItem(item, index, 'reportedConnections')
+        }
         keyExtractor={(item) => item}
       />
     </ScrollView>

@@ -5,7 +5,7 @@ import { NodeApi } from '@/api/brightId';
 
 export const reportConnection =
   ({ id, reason, api }: { id: string; reason: ReportReason; api: NodeApi }) =>
-  async (dispatch: Dispatch, getState: GetState) => {
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         user: { id: brightId, backupCompleted },

@@ -11,7 +11,7 @@ import {
   useRoute,
   RouteProp,
 } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -40,12 +40,12 @@ function ConnectionScreenController() {
   const dispatch = useDispatch();
   const { connectionId } = route.params;
   const api = useContext(NodeApiContext);
-  const connection = useSelector((state: State) =>
+  const connection = useSelector((state) =>
     selectConnectionById(state, connectionId),
   );
   const myConnections = useSelector(selectAllConnections);
-  const myGroups = useSelector((state: State) => state.groups.groups);
-  const me = useSelector((state: State) => state.user);
+  const myGroups = useSelector((state) => state.groups.groups);
+  const me = useSelector((state) => state.user);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
     [],

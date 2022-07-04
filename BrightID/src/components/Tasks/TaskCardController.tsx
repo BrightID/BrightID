@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import TaskCard from './TaskCard';
 import { UserTasks } from './UserTasks';
 import { resetTask } from './TasksSlice';
@@ -14,7 +14,7 @@ type TaskCardControllerProps = {
 
 function TaskCardController({ taskId }: TaskCardControllerProps) {
   const dispatch = useDispatch();
-  const storeTask = useSelector((state: State) => state.tasks[taskId]);
+  const storeTask = useSelector((state) => state.tasks[taskId]);
   const extendedTask = {
     ...storeTask,
     ...UserTasks[taskId],

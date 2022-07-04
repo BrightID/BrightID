@@ -13,7 +13,7 @@ import {
 // Redux
 import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   selectAllConnections,
   recoveryConnectionsSelector,
@@ -40,7 +40,7 @@ import { NodeApiContext } from '../NodeApiGate';
 import RecoveryConnectionCard from './RecoverConnectionsCard';
 import AnimatedTopSearchBar from './TopSearchBar';
 
-const searchParamSelector = (state: State) => state.connections.searchParam;
+const searchParamSelector = (state: RootState) => state.connections.searchParam;
 
 const newRecoveryConnectionSelector = createSelector(
   [selectAllConnections, searchParamSelector],
@@ -223,7 +223,7 @@ export const NewRecoveryConnectionList = (props) => {
           sortable={false}
           setSearchValue={setConnectionsSearch}
           setSearchOpen={setConnectionsSearchOpen}
-          searchOpenSelector={(state: State) => state.connections.searchOpen}
+          searchOpenSelector={(state: RootState) => state.connections.searchOpen}
         />
         {ConnectionsList}
         <View

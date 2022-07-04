@@ -19,7 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line } from 'react-native-svg';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -47,7 +47,7 @@ const calcY = (a: number) =>
 
 const selectGroupConnections = createSelector(
   selectAllUnconfirmedConnections,
-  (_: State, channel: Channel) => channel,
+  (_: RootState, channel: Channel) => channel,
   (pendingConnections, channel) => {
     console.log('calcing pending connections');
     return pendingConnections.filter(
@@ -73,11 +73,11 @@ export const GroupConnectionScreen = () => {
 
   const channel = route.params?.channel;
 
-  const initiator = useSelector((state: State) =>
+  const initiator = useSelector((state) =>
     selectPendingConnectionById(state, channel?.initiatorProfileId),
   );
 
-  const groupConnections = useSelector((state: State) =>
+  const groupConnections = useSelector((state) =>
     selectGroupConnections(state, channel),
   );
 

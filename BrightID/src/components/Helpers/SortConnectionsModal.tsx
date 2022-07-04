@@ -7,14 +7,14 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
+import { StackScreenProps } from '@react-navigation/stack';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch, useSelector } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { ORANGE, BLACK, WHITE, GREEN, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { types } from '@/utils/sorting';
 import { setFilters, setConnectionsSort } from '@/actions';
-import { StackScreenProps } from '@react-navigation/stack';
 import Chevron from '../Icons/Chevron';
 
 /** CONSTANTS */
@@ -46,9 +46,9 @@ type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
 const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
 
-  const filters = useSelector((state: State) => state.connections.filters);
+  const filters = useSelector((state) => state.connections.filters);
   const connectionsSort =
-    useSelector((state: State) => state.connections.connectionsSort) ||
+    useSelector((state) => state.connections.connectionsSort) ||
     types.byDateAddedDescending;
 
   const [newFilters, setNewFilters] = useState<ConnectionLevel[]>(

@@ -1,11 +1,9 @@
-import { combineReducers } from 'redux';
-import {
-  useDispatch as originalUseDispatch,
-  useSelector as originalUseSelector,
-  TypedUseSelectorHook,
-} from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  configureStore,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 import reducers from '@/reducer';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
@@ -95,7 +93,10 @@ const keypairPersistConfig = {
 
 const rootReducer = combineReducers({
   ...reducers,
-  apps: persistReducer(appsPersistConfig, reducers.apps),
+  apps: persistReducer(
+    appsPersistConfig,
+    reducers.apps,
+  ) as typeof reducers.apps,
   connections: persistReducer(connectionsPersistConfig, reducers.connections),
   groups: persistReducer(groupsPersistConfig, reducers.groups),
   keypair: persistReducer(keypairPersistConfig, reducers.keypair),
@@ -122,10 +123,5 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-export const useDispatch = () => originalUseDispatch<AppDispatch>();
-export const useSelector: TypedUseSelectorHook<RootState> = originalUseSelector;
 
 export default store;

@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { isEqual } from 'lodash';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { ApiGateState } from '@/components/NodeApiGate';
 import { BLACK, LIGHT_BLACK, ORANGE, RED, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -22,7 +23,6 @@ import {
   selectAllNodeUrls,
   selectDefaultNodeUrls,
 } from '@/reducer/settingsSlice';
-import { useDispatch, useSelector } from '@/store';
 
 const calculateSecondsLeft = (startTimestamp: number) => {
   const endTime = startTimestamp + NODE_CHOOSER_TIMEOUT_MS;

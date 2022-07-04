@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -31,7 +31,7 @@ export const NameScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const name = useSelector((state: State) => state.user.name);
+  const name = useSelector((state) => state.user.name);
   const [displayName, setDisplayName] = useState(name);
   const handleSubmit = () => {
     dispatch(setName(displayName));

@@ -4,7 +4,7 @@ import { SvgXml } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -36,11 +36,11 @@ const InviteCard = (props) => {
   const { invite } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const inviter = useSelector((state: State) =>
+  const inviter = useSelector((state) =>
     selectConnectionById(state, invite.inviter),
   );
   const navigation = useNavigation();
-  const { backupCompleted } = useSelector((state: State) => state.user);
+  const { backupCompleted } = useSelector((state) => state.user);
   const api = useContext(NodeApiContext);
 
   const handleRejectInvite = () => {

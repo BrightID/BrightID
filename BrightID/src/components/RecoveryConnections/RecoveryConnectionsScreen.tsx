@@ -14,7 +14,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { selectPendingOperations } from '@/reducer/operationsSlice';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -60,7 +60,7 @@ export const RecoveryConnectionsScreen = (props) => {
     headerHeight += 7;
   }
   const { t } = useTranslation();
-  const me = useSelector((state: State) => state.user);
+  const me = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
   const [recoveryConnections, setRecoveryConnections] = useState<
     Array<Connection>

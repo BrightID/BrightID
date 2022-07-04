@@ -25,12 +25,12 @@ import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 
 export const selectOtherFakeConnections = createSelector(
   selectAllConnections,
-  (_: State, id: string) => id,
+  (_: RootState, id: string) => id,
   (connections, id) => connections.filter((c) => c.secretKey && c.id !== id),
 );
 
 export const addFakeConnection =
-  () => async (dispatch: dispatch, getState: getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       // create a fake user
       console.log('creating fake user');
@@ -90,7 +90,7 @@ export const addFakeConnection =
 
 export const connectWithOtherFakeConnections =
   (id: string, api: NodeApi, level: ConnectionLevel) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     // get fakeUser by ID
     const fakeUser1 = selectConnectionById(getState(), id);
 
@@ -123,8 +123,8 @@ export const connectWithOtherFakeConnections =
   };
 
 export const joinAllGroups =
-  (id: string, api: NodeApi) =>
-  async (dispatch: dispatch, getState: getState) => {
+  (id: string, api: NodeApi): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     // get fakeUser by ID
     const fakeUser = selectConnectionById(getState(), id);
 
@@ -150,7 +150,7 @@ export const joinAllGroups =
 
 export const reconnectFakeConnection =
   (id: string, changeProfile: boolean) =>
-  async (dispatch: dispatch, getState: getState) => {
+  async (dispatch: AppDispatch, getState) => {
     // get fakeUser by ID
     const fakeUser1 = selectConnectionById(getState(), id);
 

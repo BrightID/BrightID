@@ -1,6 +1,6 @@
 import React from 'react';
-import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
 import { useNavigation } from '@react-navigation/native';
+import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
 import AnimatedTopSearchBar from './AnimatedTopSearchBar';
 
 /**
@@ -21,7 +21,7 @@ const SearchConnections = () => {
       handleSort={handleSort}
       setSearchValue={setConnectionsSearch}
       setSearchOpen={setConnectionsSearchOpen}
-      searchOpenSelector={(state: State) => state.connections.searchOpen}
+      searchOpenSelector={(state: RootState) => state.connections.searchOpen}
     />
   );
 };

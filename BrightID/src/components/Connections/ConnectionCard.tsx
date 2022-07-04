@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import i18next from 'i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { connection_levels, CONNECTION_STALE_AGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection, addOperation } from '@/actions';
@@ -52,7 +52,7 @@ type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
   const stale_check_timer = useRef<TimeoutId>(null);
-  const { backupCompleted } = useSelector((state: State) => state.user);
+  const { backupCompleted } = useSelector((state) => state.user);
   const navigation = useNavigation();
   const route: { params?: { group: Group } } = useRoute() as {
     params?: { group: Group };

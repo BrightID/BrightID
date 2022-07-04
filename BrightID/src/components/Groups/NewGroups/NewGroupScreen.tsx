@@ -11,7 +11,7 @@ import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
 import { useContext, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import store, { useSelector } from '@/store';
+import store from '@/store';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -19,6 +19,7 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 import { createNewGroup } from '../actions';
 import { NewGroupCard } from './NewGroupCard';
 import { connectionsSelector } from '@/utils/connectionsSelector';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
 const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
@@ -39,6 +40,7 @@ const creationStateStrings = {
 
 export const NewGroupScreen = () => {
   const api = useContext(NodeApiContext);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute() as {
     params?: { photo: string; name: string };
@@ -53,7 +55,7 @@ export const NewGroupScreen = () => {
     try {
       setCreating(true);
       const { photo, name } = route.params;
-      const res = await store.dispatch(
+      const res = await dispatch(
         createNewGroup(photo, name, api, newGroupInvitees, setCreationState),
       );
       if (res) {

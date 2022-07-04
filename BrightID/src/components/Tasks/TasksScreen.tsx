@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { GREY, WHITE } from '@/theme/colors';
-import { useTranslation } from 'react-i18next';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
 import {

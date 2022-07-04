@@ -11,17 +11,9 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import {
-  WHITE,
-  DARKER_GREY,
-  BLACK,
-  BLUE,
-  ORANGE,
-  YELLOW,
-} from '@/theme/colors';
+import { WHITE, DARKER_GREY, BLUE, ORANGE, YELLOW } from '@/theme/colors';
 import {
   updateLinkedContext,
   selectLinkedContext,
@@ -30,6 +22,7 @@ import {
 
 import { isVerified } from '@/utils/verifications';
 import Check from '../Icons/Check';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 /**
  * App Card in the Apps Screen
@@ -53,15 +46,13 @@ const AppCard = (props: AppInfo) => {
     usingBlindSig,
   } = props;
   const dispatch = useDispatch();
-  const userVerifications = useSelector(
-    (state: State) => state.user.verifications,
-  );
+  const userVerifications = useSelector((state) => state.user.verifications);
   const [verifiedCount, setVerifiedCount] = useState(0);
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
   const linkedContextSelector = useMemo(() => selectLinkedContext, []);
-  const linkedContext = useSelector((state: State) =>
+  const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),
   );
 
