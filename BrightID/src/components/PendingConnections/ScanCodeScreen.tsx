@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useContext } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Linking,
   StyleSheet,
@@ -23,16 +23,13 @@ import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  channel_types,
-  closeChannel,
-} from '@/components/PendingConnections/channelSlice';
+import { closeChannel } from '@/components/PendingConnections/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnections/pendingConnectionSlice';
 import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
-import { qrCodeURL_types } from '@/utils/constants';
+import { channel_types, qrCodeURL_types } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,

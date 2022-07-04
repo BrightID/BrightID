@@ -13,12 +13,9 @@ import { LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
-import {
-  channel_states,
-  channel_types,
-  closeChannel,
-} from '@/components/PendingConnections/channelSlice';
+import { closeChannel } from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
+import { channel_states, channel_types } from '@/utils/constants';
 
 /**
  * My Code screen of BrightID

@@ -25,8 +25,6 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Camera from '@/components/Icons/Camera';
 import {
-  channel_states,
-  channel_types,
   closeChannel,
   selectAllActiveChannelIdsByType,
   selectChannelById,
@@ -41,6 +39,7 @@ import { createChannel } from '@/components/PendingConnections/actions/channelTh
 import { setActiveNotification } from '@/actions';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { QrCode } from './QrCode';
+import { channel_states, channel_types } from '@/utils/constants';
 
 /**
  * My Code screen of BrightID

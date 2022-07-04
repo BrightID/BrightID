@@ -5,7 +5,6 @@ import {
   removeChannel,
   setMyChannel,
   updateChannel,
-  channel_types,
   selectAllChannels,
   upsertChannel,
 } from '@/components/PendingConnections/channelSlice';
@@ -19,6 +18,7 @@ import {
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
+  channel_types,
 } from '@/utils/constants';
 import {
   newPendingConnection,

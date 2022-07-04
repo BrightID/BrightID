@@ -106,3 +106,15 @@ export enum recover_steps {
 
 export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;
 export const DEFAULT_SHARE_WITH_CONNECTIONS_VALUE = true;
+
+export enum channel_types {
+  GROUP = 'GROUP',
+  SINGLE = 'SINGLE',
+  STAR = 'STAR',
+}
+
+export enum channel_states {
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
+  BACKGROUND = 'BACKGROUND',
+}

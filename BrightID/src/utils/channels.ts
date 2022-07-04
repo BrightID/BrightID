@@ -7,11 +7,9 @@ import {
   CHANNEL_INFO_VERSION_1,
   CHANNEL_INFO_VERSION_2,
   MAX_CHANNEL_INFO_VERSION,
-} from '@/utils/constants';
-import {
   channel_states,
   channel_types,
-} from '@/components/PendingConnections/channelSlice';
+} from '@/utils/constants';
 import ChannelAPI from '@/api/channelService';
 import { encryptData } from '@/utils/cryptoHelper';
 import { retrieveImage } from '@/utils/filesystem';

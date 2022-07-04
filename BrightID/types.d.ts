@@ -6,13 +6,14 @@ import {
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
+import ChannelAPI from '@/api/channelService';
+import { store } from '@/store';
 import {
   channel_states,
   channel_types,
-} from '@/components/PendingConnections/channelSlice';
-import ChannelAPI from '@/api/channelService';
-import { store } from '@/store';
-import { connection_levels, report_reasons } from '@/utils/constants';
+  connection_levels,
+  report_reasons,
+} from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
   SocialMediaType,
@@ -22,7 +23,6 @@ import {
   SocialMediaVariationIds,
 } from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { RecoverSteps } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 declare global {
   type RootState = ReturnType<typeof store.getState>;

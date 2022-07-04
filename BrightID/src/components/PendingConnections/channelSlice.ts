@@ -1,14 +1,14 @@
 import {
+  createEntityAdapter,
   createSelector,
   createSlice,
-  createEntityAdapter,
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
-
 import { Draft } from 'immer';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { RESET_STORE } from '@/actions';
+import { channel_states, channel_types } from '@/utils/constants';
 /*
 
   What is a channel:
@@ -29,18 +29,6 @@ import { RESET_STORE } from '@/actions';
   in a larger group session.
 
  */
-
-export enum channel_types {
-  GROUP = 'GROUP',
-  SINGLE = 'SINGLE',
-  STAR = 'STAR',
-}
-
-export enum channel_states {
-  OPEN = 'OPEN',
-  CLOSED = 'CLOSED',
-  BACKGROUND = 'BACKGROUND',
-}
 
 export const channelsAdapter = createEntityAdapter<Channel>();
 
