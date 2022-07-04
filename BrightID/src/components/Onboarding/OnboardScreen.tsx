@@ -20,7 +20,10 @@ import { createKeypair } from './SignUpFlow/thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
 import { qrCodeURL_types } from '@/utils/constants';
 import { version as app_version } from '../../../package.json';
-import { selectRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import {
+  resetRecoveryData,
+  selectRecoveryChannel,
+} from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 /* Description */
 
@@ -42,6 +45,7 @@ export const Onboard = () => {
   const channel = useSelector(selectRecoveryChannel);
 
   const handleCreateMyBrightID = () => {
+    dispatch(resetRecoveryData());
     dispatch(createKeypair())
       .then(() => {
         navigation.navigate('SignupName');
@@ -63,6 +67,13 @@ export const Onboard = () => {
         },
       });
     }
+  };
+
+  const handleImport = () => {
+    navigation.navigate('Import', {
+      screen: 'ImportCode',
+      params: { urlType: qrCodeURL_types.IMPORT, action: 'import' },
+    });
   };
 
   return (
@@ -127,12 +138,7 @@ export const Onboard = () => {
             <View style={styles.space} />
             <TouchableOpacity
               style={styles.recoverBtn}
-              onPress={() => {
-                navigation.navigate('Import', {
-                  screen: 'ImportCode',
-                  params: { urlType: qrCodeURL_types.IMPORT, action: 'import' },
-                });
-              }}
+              onPress={handleImport}
               accessibilityLabel={t('onboarding.button.import')}
               testID="importBrightID"
             >

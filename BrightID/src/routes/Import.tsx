@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ImportScreen from '@/components/Onboarding/ImportFlow/ImportScreen';
 import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCodeScreen';
 
-
 const Stack = createStackNavigator();
 
 const Import = () => {
