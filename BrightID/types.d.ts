@@ -194,21 +194,17 @@ declare global {
     uploadCompletedBy: { [uploader: string]: boolean };
     sigs: { [sig: string]: Signature };
     qrcode: string;
-    channel: {
-      channelId: string;
-      url: URL;
-      expires: number;
-      pollTimerId: IntervalId;
-    };
+    channel: RecoveryChannel;
     errorType: RecoveryErrorType;
     errorMessage: string;
     recoverStep: RecoverStep_Type;
   };
 
   type RecoveryChannel = {
-    aesKey: string;
+    channelId: string;
     url: URL;
-    t: QrCodeURL_Type;
+    expires: number;
+    pollTimerId: IntervalId;
   };
   type QrCodeURL_Type = typeof qrCodeURL_types[keyof typeof qrCodeURL_types];
 

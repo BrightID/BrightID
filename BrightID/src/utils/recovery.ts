@@ -6,7 +6,11 @@ export const buildRecoveryChannelQrUrl = ({
   aesKey,
   url,
   t,
-}: RecoveryChannel) => {
+}: {
+  aesKey: string;
+  url: URL;
+  t: QrCodeURL_Type;
+}) => {
   const qrUrl = new URL(url.href);
   qrUrl.searchParams.append('aes', aesKey);
   qrUrl.searchParams.append('t', t);
