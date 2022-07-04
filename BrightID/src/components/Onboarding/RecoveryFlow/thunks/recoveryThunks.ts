@@ -108,10 +108,11 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
-export const setRecoveryKeys = () => (dispatch: AppDispatch, getState) => {
-  const { publicKey, secretKey } = getState().recoveryData;
-  dispatch(setKeypair({ publicKey, secretKey }));
-};
+export const setRecoveryKeys =
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
+    const { publicKey, secretKey } = getState().recoveryData;
+    dispatch(setKeypair({ publicKey, secretKey }));
+  };
 
 export const recoverData =
   (
@@ -119,7 +120,7 @@ export const recoverData =
     api: NodeApi,
     setTotalItems: (totalItems: number) => void,
     setCurrentItem: (currentItem: number) => void,
-  ) =>
+  ): AppThunk =>
   async (dispatch: AppDispatch, getState) => {
     const { id } = getState().recoveryData;
     console.log(`Starting recoverData for ${id}`);

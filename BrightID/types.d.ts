@@ -202,7 +202,7 @@ declare global {
     };
     errorType: RecoveryErrorType;
     errorMessage: string;
-    recoverStep: RecoverSteps;
+    recoverStep: RecoverStep_Type;
   };
 
   type RecoveryChannel = {
@@ -380,4 +380,6 @@ declare global {
     lastSyncTime?: number;
     isPrimaryDevice: boolean;
   };
+
+  type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
 }

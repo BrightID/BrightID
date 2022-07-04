@@ -123,11 +123,14 @@ const rootReducer = combineReducers({
   settings: persistReducer(settingsPersistConfig, reducers.settings),
   operations: persistReducer(operationsPersistConfig, reducers.operations),
   devices: persistReducer(devicesPersistConfig, reducers.devices),
-  channels: persistReducer(channelsPersistConfig, reducers.channels),
+  channels: persistReducer(
+    channelsPersistConfig,
+    reducers.channels,
+  ) as typeof reducers.channels,
   recoveryData: persistReducer(
     recoveryDataPersistConfig,
     reducers.recoveryData,
-  ),
+  ) as typeof reducers.recoveryData,
 });
 
 export const store = configureStore({

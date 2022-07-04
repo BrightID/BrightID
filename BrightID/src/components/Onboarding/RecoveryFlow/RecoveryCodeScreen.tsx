@@ -17,12 +17,10 @@ import { RecoveryErrorType } from './RecoveryError';
 import { setupRecovery } from './thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
-  clearRecoveryChannel,
   createRecoveryChannel,
   pollRecoveryChannel,
 } from './thunks/channelThunks';
 import {
-  RecoverSteps,
   resetRecoveryData,
   selectRecoveryStep,
   setRecoverStep,
@@ -34,6 +32,7 @@ import {
   pollImportChannel,
   clearImportChannel,
 } from '../ImportFlow/thunks/channelThunks';
+import { recover_steps } from '@/utils/constants';
 
 /**
  * Recovery Code screen of BrightID
@@ -67,7 +66,7 @@ const RecoveryCodeScreen = ({ route }) => {
   useEffect(() => {
     if (
       action === 'recovery' &&
-      recoveryData.recoverStep === RecoverSteps.RUNNING &&
+      recoveryData.recoverStep === recover_steps.POLLING_SIGS &&
       !recoveryData.channel.pollTimerId
     ) {
       console.log(`Start polling recovery channel...`);
@@ -107,8 +106,8 @@ const RecoveryCodeScreen = ({ route }) => {
       dispatch(pollImportChannel());
     };
 
-    if (step === RecoverSteps.NOT_STARTED) {
-      dispatch(setRecoverStep(RecoverSteps.RUNNING));
+    if (step === recover_steps.NOT_STARTED) {
+      dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
       if (action === 'recovery') {
         console.log(`initializing recovery process`);
         runRecoveryEffect();
@@ -175,7 +174,7 @@ const RecoveryCodeScreen = ({ route }) => {
         clearImportChannel();
       }
       dispatch(resetRecoveryData());
-      dispatch(setRecoverStep(RecoverSteps.ERROR));
+      dispatch(setRecoverStep(recover_steps.ERROR));
       navigation.goBack();
     }
   }, [
@@ -197,13 +196,15 @@ const RecoveryCodeScreen = ({ route }) => {
         );
         setAlreadyNotified(true);
       } else if (action === 'recovery' && sigCount > 1) {
+        // we have enough sigs. Advance to next screen
+        dispatch(setRecoverStep(recover_steps.RESTORING));
         navigation.navigate('Restore');
       } else if (action === 'import' && isScanned) {
         navigation.navigate('Import');
       } else if (action === 'sync' && isScanned) {
         navigation.navigate('Devices', { syncing: true, asScanner: false });
       }
-    }, [action, alreadyNotified, sigCount, isScanned, t, navigation]),
+    }, [action, alreadyNotified, sigCount, isScanned, t, dispatch, navigation]),
   );
 
   const copyQr = () => {

@@ -59,6 +59,7 @@
   "include": [
     "src",
     "types.d.ts",
+    "src/reducer/types.d.ts",
     "e2e"
   ]
 }

@@ -2,18 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
+import { recover_steps, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 import { RESET_STORE } from '@/actions';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
-export enum RecoverSteps {
-  NOT_STARTED,
-  RUNNING,
-  ERROR,
-}
-
 export const initialState: RecoveryData = {
-  recoverStep: RecoverSteps.NOT_STARTED,
+  recoverStep: recover_steps.NOT_STARTED,
   publicKey: '',
   secretKey: new Uint8Array(),
   aesKey: '',
@@ -68,7 +62,7 @@ const recoveryData = createSlice({
       state.recoveredBlindSigs = 0;
       state.sigs = {};
       state.uploadCompletedBy = {};
-      state.recoverStep = RecoverSteps.NOT_STARTED;
+      state.recoverStep = recover_steps.NOT_STARTED;
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
@@ -113,8 +107,9 @@ const recoveryData = createSlice({
     resetRecoverySigs(state) {
       state.sigs = {};
     },
-    resetRecoveryData() {
-      return initialState;
+    resetRecoveryData(state, action: PayloadAction<RecoverStep_Type | void>) {
+      const step = action.payload;
+      return { ...initialState, recoverStep: step || initialState.recoverStep };
     },
     setRecoveryError(
       state,
@@ -145,7 +140,7 @@ const recoveryData = createSlice({
     setRecoveryId(state, action: PayloadAction<string>) {
       state.id = action.payload;
     },
-    setRecoverStep(state, action: PayloadAction<RecoverSteps>) {
+    setRecoverStep(state, action: PayloadAction<RecoverStep_Type>) {
       state.recoverStep = action.payload;
     },
     setChannelIntervalId(state, action: PayloadAction<IntervalId>) {

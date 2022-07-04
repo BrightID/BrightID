@@ -96,5 +96,13 @@ export enum report_sources {
   PROFILE = 'profile',
 }
 
+export enum recover_steps {
+  NOT_STARTED,
+  POLLING_SIGS,
+  RESTORING,
+  ERROR,
+  COMPLETE,
+}
+
 export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;
 export const DEFAULT_SHARE_WITH_CONNECTIONS_VALUE = true;
