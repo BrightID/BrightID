@@ -33,7 +33,6 @@ import { joinChannel } from '@/components/PendingConnections/actions/channelThun
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
 import { qrCodeURL_types } from '@/utils/constants';
-import { NodeApiContext } from '@/components/NodeApiGate';
 import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,
