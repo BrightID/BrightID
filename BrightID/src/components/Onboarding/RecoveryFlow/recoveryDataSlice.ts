@@ -107,9 +107,8 @@ const recoveryData = createSlice({
     resetRecoverySigs(state) {
       state.sigs = {};
     },
-    resetRecoveryData(state, action: PayloadAction<RecoverStep_Type | void>) {
-      const step = action.payload;
-      return { ...initialState, recoverStep: step || initialState.recoverStep };
+    resetRecoveryData() {
+      return { ...initialState };
     },
     setRecoveryError(
       state,

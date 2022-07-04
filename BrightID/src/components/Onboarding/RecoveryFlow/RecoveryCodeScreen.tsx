@@ -33,6 +33,7 @@ import {
   clearImportChannel,
 } from '../ImportFlow/thunks/channelThunks';
 import { recover_steps } from '@/utils/constants';
+import { userSelector } from '@/reducer/userSlice';
 
 /**
  * Recovery Code screen of BrightID
@@ -46,6 +47,7 @@ const RecoveryCodeScreen = ({ route }) => {
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
   const recoveryData = useSelector((state) => state.recoveryData);
+  const { id } = useSelector(userSelector);
   const isScanned = useSelector(
     (state) =>
       uploadCompletedByOtherSide(state) ||
@@ -107,10 +109,14 @@ const RecoveryCodeScreen = ({ route }) => {
     };
 
     if (step === recover_steps.NOT_STARTED) {
-      dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
       if (action === 'recovery') {
-        console.log(`initializing recovery process`);
-        runRecoveryEffect();
+        if (!id) {
+          console.log(`initializing recovery process`);
+          dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
+          runRecoveryEffect();
+        } else {
+          console.log(`Not starting recovery process, user has id!`);
+        }
       } else if (action === 'import') {
         console.log(`initializing import process`);
         runImportEffect();
@@ -119,7 +125,7 @@ const RecoveryCodeScreen = ({ route }) => {
         runSyncEffect();
       }
     }
-  }, [action, dispatch, step]);
+  }, [action, dispatch, id, step]);
 
   // set QRCode and SVG
   useEffect(() => {

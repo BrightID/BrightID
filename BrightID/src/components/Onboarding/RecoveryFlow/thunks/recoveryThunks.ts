@@ -206,8 +206,8 @@ export const finishRecovery =
   (): AppThunk => async (dispatch: AppDispatch, getState) => {
     // collect user data that was populated either by uploads from recovery connections or by restoring backup
     const { id, name, photo } = getState().recoveryData;
+    // set the user data
+    dispatch(setUserData({ id, name, photo }));
     // clear recovery data from state
     dispatch(resetRecoveryData());
-    // finally set the user data
-    dispatch(setUserData({ id, name, photo }));
   };
