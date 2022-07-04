@@ -4,7 +4,6 @@ import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 import { RESET_STORE } from '@/actions';
-import { AppDispatch, RootState } from '@/store';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export enum RecoverSteps {
@@ -190,7 +189,7 @@ export const {
 } = recoveryData.actions;
 
 export const rejoinRecoveryChannel =
-  () => (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
     const channel = selectRecoveryChannel(getState());
     if (channel?.channelId) {
       console.log(`Rejoining recovery channel ${channel.channelId}`);

@@ -43,7 +43,7 @@ export enum UploadDataSteps {
   ERROR,
 }
 
-export const AddDeviceScreen = () => {
+const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();

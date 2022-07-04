@@ -7,9 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { Draft } from 'immer';
-import { AppDispatch } from '@/store';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
-import ChannelAPI from '@/api/channelService';
 import { RESET_STORE } from '@/actions';
 /*
 
@@ -186,7 +184,7 @@ export const selectHydratedChannelIds = createSelector(
 );
 
 export const rejoinChannels =
-  () => (dispatch: AppDispatch, getState: getState) => {
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
     const hydratedChannels = selectHydratedChannelIds(getState());
     console.log(
       `Rejoining hydrated channels: ${hydratedChannels.map(

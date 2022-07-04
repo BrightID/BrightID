@@ -77,7 +77,7 @@ export const clearRecoveryChannel =
   };
 
 export const checkRecoveryChannel =
-  (): AppThunk<Promis<void>> => async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const {
       recoveryData: {
         id: recoveryId,
