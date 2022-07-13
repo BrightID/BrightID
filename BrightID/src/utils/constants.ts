@@ -6,11 +6,17 @@ export const INVITE_ACCEPTED = 'accepted';
 
 export const BACKUP_URL = 'https://explorer.brightid.org';
 
+// helpers for time constants (milliseconds)
+const second = 1000;
+const minute = 60 * second;
+const hour = 60 * minute;
+const day = 24 * hour;
+
 // Operation & API constants
 // Max. time to wait for operation result
-export const OPERATION_TRACE_TIME = 2 * 60 * 1000; // 2 minutes
+export const OPERATION_TRACE_TIME = 2 * minute;
 // How long to keep "done" operations (success, failed or expired) in local redux store
-export const LOCAL_OPERATION_KEEP_THRESHOLD = 60 * 60 * 24 * 7 * 1000; // 1 week
+export const LOCAL_OPERATION_KEEP_THRESHOLD = 7 * day;
 export const operation_states = {
   UNKNOWN: 'unknown',
   INIT: 'init',
@@ -21,17 +27,18 @@ export const operation_states = {
 };
 
 // CONNECTION CONSTANTS
-export const CHANNEL_TTL = 900000; // 15 minutes
+export const SINGLE_CHANNEL_TTL = 4 * hour;
+export const GROUP_CHANNEL_TTL = 15 * minute;
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
-export const MIN_CHANNEL_JOIN_TTL = 5000;
-export const PROFILE_POLL_INTERVAL = 2000;
-export const RECOVERY_COOLDOWN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
-export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
+export const MIN_CHANNEL_JOIN_TTL = 5 * second;
+export const PROFILE_POLL_INTERVAL = 2 * second;
+export const RECOVERY_COOLDOWN_DURATION = 7 * day;
+export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
 export const PROFILE_VERSION = 1;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
 export const MAX_CONNECTIONS_DUPLICATE_SEARCH = 1000;
-export const CONNECTION_STALE_AGE = 60 * 15 * 1000;
+export const CONNECTION_STALE_AGE = 15 * minute;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
@@ -44,8 +51,8 @@ export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
 // TODO: Set dedicated prefix for importing once node backends are updated
 export const IMPORT_PREFIX = 'sig_';
 export const CHANNEL_UPLOAD_RETRY_COUNT = 5; // max number of upload retries when upload failed
-export const CHANNEL_UPLOAD_RETRY_INTERVAL = 5000; // ms to wait between retries
-export const RECOVERY_CHANNEL_TTL = 60 * 60 * 24 * 1000; // 24 hours
+export const CHANNEL_UPLOAD_RETRY_INTERVAL = 5 * second; // ms to wait between retries
+export const RECOVERY_CHANNEL_TTL = day;
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
@@ -53,7 +60,7 @@ export const LIGHTBLUE = '#4A90E2';
 export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
-export const NODE_CHOOSER_TIMEOUT_MS = 20 * 1000; // Fail if no valid node found within timeout
+export const NODE_CHOOSER_TIMEOUT_MS = 20 * second; // Fail if no valid node found within timeout
 export const requiredSemVer = '^6.9.0'; // client requires this node version
 
 /** ** NOTIFICATION CONSTANTS  *** */
@@ -104,7 +111,7 @@ export enum recover_steps {
   COMPLETE,
 }
 
-export const SOCIAL_MEDIA_SIG_WAIT_TIME = 86400000;
+export const SOCIAL_MEDIA_SIG_WAIT_TIME = day;
 export const DEFAULT_SHARE_WITH_CONNECTIONS_VALUE = true;
 
 export enum channel_types {

@@ -36,12 +36,13 @@ const Timer = ({ channel }: { channel: Channel }) => {
   // start local timer to display countdown
   useInterval(timerTick, 1000);
   const displayTime = () => {
-    const minutes = Math.floor(countdown / 60000);
+    const minutes = Math.floor(countdown / 60000) % 60;
+    const hours = Math.floor(countdown / 3600000) || 0;
     let seconds: string | number = Math.trunc((countdown % 60000) / 1000);
     if (seconds < 10) {
       seconds = `0${seconds}`;
     }
-    return `${minutes}:${seconds}`;
+    return `${hours}:${minutes}:${seconds}`;
   };
 
   return countdown > 0 ? (

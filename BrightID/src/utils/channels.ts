@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import { b64ToUrlSafeB64, hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
-  CHANNEL_TTL,
+  SINGLE_CHANNEL_TTL,
   CHANNEL_INFO_NAME,
   MIN_CHANNEL_INFO_VERSION,
   CHANNEL_INFO_VERSION_1,
@@ -9,6 +9,7 @@ import {
   MAX_CHANNEL_INFO_VERSION,
   channel_states,
   channel_types,
+  GROUP_CHANNEL_TTL,
 } from '@/utils/constants';
 import ChannelAPI from '@/api/channelService';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -21,7 +22,10 @@ export const generateChannelData = async (
   const aesKey = await urlSafeRandomKey(16);
   const id = await urlSafeRandomKey(9);
   const timestamp = Date.now();
-  const ttl = CHANNEL_TTL;
+  const ttl =
+    channelType === channel_types.SINGLE
+      ? SINGLE_CHANNEL_TTL
+      : GROUP_CHANNEL_TTL;
   const myProfileId = await urlSafeRandomKey(9);
   const initiatorProfileId = myProfileId;
   const type = channelType;
