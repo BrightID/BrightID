@@ -7,6 +7,7 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_BLACK } from '@/theme/colors';
@@ -17,15 +18,7 @@ import { closeChannel } from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
 import { channel_states, channel_types } from '@/utils/constants';
 
-/**
- * My Code screen of BrightID
- *
- * USERA represents this user
- * ==================================================================
- * displays a qrcode
- *
- */
-const Timer = ({ channel }) => {
+const Timer = ({ channel }: { channel: Channel }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -61,7 +54,7 @@ const Timer = ({ channel }) => {
   );
 };
 
-export const QrCode = ({ channel }) => {
+export const QrCode = ({ channel }: { channel: Channel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const myName = useSelector((state) => state.user.name);
@@ -90,16 +83,35 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
       qrString,
     )}`;
+
+    const languageTag = i18next.resolvedLanguage;
+    const expirationDate = new Date(channel.timestamp + channel.ttl);
+    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    };
+    const expirationTimestamp = new Intl.DateTimeFormat(
+      languageTag,
+      dateTimeFormatOptions,
+    ).format(expirationDate);
+    console.log(expirationTimestamp);
+
     const clipboardMsg = __DEV__
       ? universalLink
       : channel?.type === channel_types.SINGLE
       ? t('qrcode.alert.connectSingle', {
           name: myName,
           link: universalLink,
+          expirationTimestamp,
         })
       : t('qrcode.alert.connectGroup', {
           name: myName,
           link: universalLink,
+          expirationTimestamp,
         });
 
     const alertMsg =
