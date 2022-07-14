@@ -645,7 +645,7 @@
   },
   "recovery": {
     "alert": {
-      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}",
+      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
       "text": "Teile diesen Link mit deinen Wiederherstellungsverbindungen.",
       "title": "Wiederherstellungslink"
     },

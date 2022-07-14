@@ -9,6 +9,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -218,6 +219,22 @@ const RecoveryCodeScreen = ({ route }) => {
       qrUrl.href,
     )}`;
 
+    const languageTag = i18next.resolvedLanguage;
+    const expirationDate = new Date(recoveryData.channel.expires);
+    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    };
+    const expirationTimestamp = new Intl.DateTimeFormat(
+      languageTag,
+      dateTimeFormatOptions,
+    ).format(expirationDate);
+    console.log(expirationTimestamp);
+
     let alertTitle: string;
     let alertText: string;
     let clipboardMsg: string;
@@ -229,8 +246,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Share this link with your recovery connections.',
         );
         clipboardMsg = t('recovery.clipboardmessage', {
-          defaultValue: 'Help me recover my BrightID: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       case 'import':
@@ -240,8 +257,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be imported.',
         );
         clipboardMsg = t('import.clipboardmessage', {
-          defaultValue: 'Export your BrightID to another device: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       case 'sync':
@@ -251,8 +268,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be synced.',
         );
         clipboardMsg = t('sync.clipboardmessage', {
-          defaultValue: 'Sync your BrightID data with another device: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       default:
