@@ -172,7 +172,7 @@ export const selectHydratedChannelIds = createSelector(
 );
 
 export const rejoinChannels =
-  (): AppThunk => (dispatch: AppDispatch, getState) => {
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const hydratedChannels = selectHydratedChannelIds(getState());
     console.log(
       `Rejoining hydrated channels: ${hydratedChannels.map(
@@ -180,7 +180,11 @@ export const rejoinChannels =
       )}`,
     );
     for (const channel of hydratedChannels) {
-      dispatch(joinChannel(channel));
+      try {
+        await dispatch(joinChannel(channel));
+      } catch (e) {
+        console.log(`Failed to rejoin channel ${channel.id}`);
+      }
     }
   };
 
