@@ -13,10 +13,12 @@ const X_TRANSFORM = DEVICE_LARGE ? 45 : 40;
 const ANIMATION_DURATION = 150;
 
 const ChannelSwitch = ({ value, onValueChange, onLongPress, testID }) => {
-  const toggleAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
-    .current;
-  const backgroundAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
-    .current;
+  const toggleAnim = useRef(
+    new Animated.Value(value ? 0 : X_TRANSFORM),
+  ).current;
+  const backgroundAnim = useRef(
+    new Animated.Value(value ? 0 : X_TRANSFORM),
+  ).current;
 
   const getPidded = () => {
     Animated.parallel([
@@ -38,8 +40,6 @@ const ChannelSwitch = ({ value, onValueChange, onLongPress, testID }) => {
       if (finished) onValueChange();
     });
   };
-
-  console.log('rendering channel switch');
 
   return (
     <TouchableWithoutFeedback
