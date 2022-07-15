@@ -159,6 +159,15 @@ export const leaveAllChannels =
     }
   };
 
+export const leaveChannelsByType =
+  (channelType: ChannelType): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
+    const channelIds = selectAllActiveChannelIdsByType(getState(), channelType);
+    for (const id of channelIds) {
+      dispatch(leaveChannel(id));
+    }
+  };
+
 export const subscribeToConnectionRequests =
   (channelId: string): AppThunk =>
   (dispatch: AppDispatch, getState) => {

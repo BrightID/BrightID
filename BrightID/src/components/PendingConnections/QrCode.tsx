@@ -14,9 +14,16 @@ import { LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
-import { closeChannel } from '@/components/PendingConnections/channelSlice';
+import {
+  closeChannel,
+  selectTotalChannels,
+} from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
-import { channel_states, channel_types } from '@/utils/constants';
+import {
+  channel_states,
+  channel_types,
+  MAX_TOTAL_CHANNELS,
+} from '@/utils/constants';
 
 const Timer = ({ channel }: { channel: Channel }) => {
   const navigation = useNavigation();
@@ -42,7 +49,7 @@ const Timer = ({ channel }: { channel: Channel }) => {
     if (seconds < 10) {
       seconds = `0${seconds}`;
     }
-    return `${hours}:${minutes}:${seconds}`;
+    return `${hours ? `${hours}:` : ''}${minutes}:${seconds}`;
   };
 
   return countdown > 0 ? (
@@ -61,6 +68,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
   const myName = useSelector((state) => state.user.name);
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
+  const totalChannels = useSelector(selectTotalChannels);
 
   // create QRCode from channel data
   useEffect(() => {
@@ -74,7 +82,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
         setQrString(newQrString);
         qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
       }
-    } else if (!channel || channel?.state !== channel_states.OPEN) {
+    } else if (!channel || channel.state !== channel_states.OPEN) {
       setQrString('');
       setQrsvg('');
     }
@@ -103,7 +111,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
 
     const clipboardMsg = __DEV__
       ? universalLink
-      : channel?.type === channel_types.SINGLE
+      : channel.type === channel_types.SINGLE
       ? t('qrcode.alert.connectSingle', {
           name: myName,
           link: universalLink,
@@ -116,7 +124,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
         });
 
     const alertMsg =
-      channel?.type === channel_types.SINGLE
+      channel.type === channel_types.SINGLE
         ? t('qrcode.alert.text.shareLinkSingle')
         : t('qrcode.alert.text.shareLinkGroup');
     Alert.alert(
@@ -127,18 +135,21 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
           text: t('common.button.copy'),
           onPress: () => {
             Clipboard.setString(clipboardMsg);
-            if (channel?.type === channel_types.SINGLE)
-              dispatch(
-                closeChannel({ channelId: channel?.id, background: true }),
-              );
+            // we want to replace this QRcode with a different one for single connections
+            if (channel.type === channel_types.SINGLE)
+              if (totalChannels < MAX_TOTAL_CHANNELS) {
+                dispatch(
+                  closeChannel({ channelId: channel.id, background: true }),
+                );
+              } else {
+                console.log(`Max channels reached, not creating new channel.`);
+              }
           },
         },
       ],
       { cancelable: false },
     );
   };
-
-  // we want to replace this QRcode with a different one for single connections
 
   const CopyQr = () => (
     <View style={styles.copyContainer}>
@@ -157,8 +168,6 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
       </TouchableOpacity>
     </View>
   );
-
-  console.log('RENDERING QR CODE');
 
   return qrsvg ? (
     <View style={styles.qrCodeContainer} testID="QRCodeContainer">
