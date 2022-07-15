@@ -27,18 +27,20 @@ export const operation_states = {
 };
 
 // CONNECTION CONSTANTS
-export const SINGLE_CHANNEL_TTL = 4 * hour;
+export const PROFILE_VERSION = 1;
+export const MAX_TOTAL_CHANNELS = 20; // max number of channels client can create
+export const SINGLE_CHANNEL_TTL = 24 * hour;
 export const GROUP_CHANNEL_TTL = 15 * minute;
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
-export const MIN_CHANNEL_JOIN_TTL = 5 * second;
+export const MIN_CHANNEL_JOIN_TTL = 5 * second; // minimum TTL a channel should still have when joining.
 export const PROFILE_POLL_INTERVAL = 2 * second;
-export const RECOVERY_COOLDOWN_DURATION = 7 * day;
-export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
-export const PROFILE_VERSION = 1;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
 export const MAX_CONNECTIONS_DUPLICATE_SEARCH = 1000;
 export const CONNECTION_STALE_AGE = 15 * minute;
+
+export const RECOVERY_COOLDOWN_DURATION = 7 * day;
+export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';

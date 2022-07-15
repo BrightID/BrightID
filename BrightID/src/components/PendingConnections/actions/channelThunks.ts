@@ -7,6 +7,8 @@ import {
   updateChannel,
   selectAllChannels,
   upsertChannel,
+  selectTotalChannels,
+  selectAllActiveChannelIdsByType,
 } from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -19,6 +21,7 @@ import {
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
   channel_types,
+  MAX_TOTAL_CHANNELS,
 } from '@/utils/constants';
 import {
   newPendingConnection,
@@ -31,6 +34,10 @@ import { getGlobalNodeApi } from '@/components/NodeApiGate';
 export const createChannel =
   (channelType: ChannelType): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
+    const numChannels = selectTotalChannels(getState());
+    if (numChannels >= MAX_TOTAL_CHANNELS) {
+      throw new Error(`Too many channels`);
+    }
     let channel: Channel | null | undefined;
     try {
       const baseUrl = selectBaseUrl(getState());

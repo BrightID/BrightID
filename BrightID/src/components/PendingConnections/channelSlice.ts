@@ -136,6 +136,7 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
   selectIds: selectAllChannelIds,
+  selectTotal: selectTotalChannels,
 } = channelsAdapter.getSelectors((state: RootState) => state.channels);
 
 // additional selectors
