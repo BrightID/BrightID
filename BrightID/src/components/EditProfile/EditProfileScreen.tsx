@@ -24,7 +24,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_IOS, DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
   BLACK,
@@ -66,9 +66,7 @@ import { getShareWithConnectionsValue } from '@/utils/socialUtils';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const prevPhotoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
   const { t } = useTranslation();
 
   const profileSource = profilePhoto
@@ -365,7 +363,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
 };
 
 const ShowEditPassword = () => {
-  const password = useSelector((state: State) => state.user.password);
+  const password = useSelector((state) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -477,11 +475,9 @@ export const EditProfileScreen = ({ navigation }) => {
   const isDrawerOpen = useIsDrawerOpen();
 
   // selectors
-  const id = useSelector((state: State) => state.user.id);
-  const prevPhotoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
-  const prevName = useSelector((state: State) => state.user.name);
+  const id = useSelector((state) => state.user.id);
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
+  const prevName = useSelector((state) => state.user.name);
   const prevPhoto = useRef(null);
   // state passed down to children
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, InteractionManager } from 'react-native';
 import { ApiResponse } from 'apisauce';
-import { RootState, useDispatch, useSelector } from '@/store';
 import {
   addNodeUrl,
   removeCurrentNodeUrl,
@@ -14,6 +13,7 @@ import { pollOperations } from '@/utils/operations';
 import chooseNode from '@/utils/nodeChooser';
 import { NodeApiGateScreen } from '@/components/NodeApiGateScreen';
 import { leaveAllChannels } from './PendingConnections/actions/channelThunks';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 type ApiContext = NodeApi | null;
 
@@ -27,6 +27,11 @@ export const ApiGateState = {
   ERROR_NO_NODE: 'ERROR_NO_NODE', // Failed to find a working node
 } as const;
 export type ApiGateState = typeof ApiGateState[keyof typeof ApiGateState];
+
+// some thunks require access to the current NodeAPI, so also
+// make it available as a global var.
+let globalNodeApi: ApiContext = null;
+export const getGlobalNodeApi = () => globalNodeApi;
 
 const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   const id = useSelector<string>((state: RootState) => state.user.id);
@@ -181,6 +186,11 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         clearInterval(timerId);
       };
     }
+  }, [api]);
+
+  // keep global NodeAPI object in sync
+  useEffect(() => {
+    globalNodeApi = api;
   }, [api]);
 
   /* Manually set node url */

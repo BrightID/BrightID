@@ -12,7 +12,7 @@ import {
   connection_levels,
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 import { firstRecoveryTimeSelector } from '@/reducer/connectionsSlice';

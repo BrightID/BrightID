@@ -4,7 +4,6 @@ import { any, find, propEq } from 'ramda';
 import { Alert } from 'react-native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { AppsRoute } from '@/components/Apps/types';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
@@ -18,6 +17,7 @@ import AppsScreen from '@/components/Apps/AppsScreen';
 import { fetchApps } from '@/actions';
 import { handleV5App, handleV6App } from '@/components/Apps/model';
 import { isVerified } from '@/utils/verifications';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 const AppsScreenController = () => {
   const { t } = useTranslation();
@@ -27,15 +27,13 @@ const AppsScreenController = () => {
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
   const isSponsored = useSelector(
-    (state: State) => state.user.isSponsored || state.user.isSponsoredv6,
+    (state) => state.user.isSponsored || state.user.isSponsoredv6,
   );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const pendingLink = useSelector(selectPendingLinkedContext);
-  const userVerifications = useSelector(
-    (state: State) => state.user.verifications,
-  );
+  const userVerifications = useSelector((state) => state.user.verifications);
 
   const [refreshing, setRefreshing] = useState(false);
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(

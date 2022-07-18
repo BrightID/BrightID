@@ -1,15 +1,22 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { Picker } from '@react-native-picker/picker';
 import i18next from 'i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { BLUE, DARK_ORANGE, LIGHT_GREY, WHITE } from '@/theme/colors';
+import { BLUE, DARK_ORANGE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { translations } from '@/i18n';
 import { setLanguageTag } from '@/reducer/settingsSlice';
-import { useDispatch } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
+import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
+import { selectTotalChannels } from '@/components/PendingConnections/channelSlice';
+import { clearRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
+import {
+  resetRecoveryData,
+  selectRecoveryData,
+} from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();
@@ -19,6 +26,8 @@ export const SettingsScreen = () => {
   const { t } = useTranslation();
   const languageTag = i18next.resolvedLanguage;
   const dispatch = useDispatch();
+  const numChannels = useSelector(selectTotalChannels);
+  const { channel, id } = useSelector(selectRecoveryData);
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
     await i18next.changeLanguage(itemValue);
@@ -56,7 +65,7 @@ export const SettingsScreen = () => {
         </Text>
       </View>
       <View style={styles.divider} />
-      <View style={styles.setLanguageContainer}>
+      <View style={styles.settingsItemContainer}>
         <Text style={styles.label}>
           {t('settings.language.label', 'Language')}
         </Text>
@@ -68,6 +77,43 @@ export const SettingsScreen = () => {
         >
           {availableLanguages}
         </Picker>
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.headerTextContainer}>
+        <Text style={styles.headerText}>Debug Settings</Text>
+      </View>
+      <Text>
+        These settings are for troubleshooting/debugginng. Usually you should
+        not need to modify anything here.
+      </Text>
+      <View style={styles.settingsItemContainer}>
+        <Text style={styles.label}>Connection channels</Text>
+        <View style={styles.debugSettingContainer}>
+          <Text>Open channels: {numChannels}</Text>
+          <TouchableOpacity
+            disabled={numChannels === 0}
+            style={styles.button}
+            onPress={() => dispatch(leaveAllChannels())}
+          >
+            <Text style={styles.buttonText}>close open channels</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.settingsItemContainer}>
+        <Text style={styles.label}>Recovery data</Text>
+        <View style={styles.debugSettingContainer}>
+          <Text>Recovery channel id: {channel.channelId || 'none'}</Text>
+          <Text>Recover data id: {id || 'none'}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              dispatch(clearRecoveryChannel());
+              dispatch(resetRecoveryData());
+            }}
+          >
+            <Text style={styles.buttonText}>close recovery/sync channel</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -96,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: DARK_ORANGE,
   },
-  setLanguageContainer: {
+  settingsItemContainer: {
     width: '100%',
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
@@ -110,5 +156,25 @@ const styles = StyleSheet.create({
     borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginTop: DEVICE_LARGE ? 16 : 12,
+  },
+  debugSettingContainer: {
+    marginLeft: 10,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 36 : 28,
+    backgroundColor: ORANGE,
+    borderRadius: 10,
+    marginBottom: 10,
+    marginTop: 10,
+    width: DEVICE_LARGE ? 240 : 200,
+  },
+  buttonText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[14],
+    color: WHITE,
+    marginLeft: 10,
   },
 });

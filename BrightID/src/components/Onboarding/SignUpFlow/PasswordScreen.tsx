@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -38,7 +38,7 @@ export const PasswordScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
-  const id = useSelector((state: State) => state.user.id);
+  const id = useSelector((state) => state.user.id);
 
   const checkPassword = () =>
     new Promise((res) => {

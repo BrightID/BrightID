@@ -3,32 +3,29 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
-import { useDispatch, useSelector } from '@/store';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import {
-  channel_states,
-  channel_types,
   closeChannel,
+  selectTotalChannels,
 } from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
+import {
+  channel_states,
+  channel_types,
+  MAX_TOTAL_CHANNELS,
+} from '@/utils/constants';
 
-/**
- * My Code screen of BrightID
- *
- * USERA represents this user
- * ==================================================================
- * displays a qrcode
- *
- */
-const Timer = ({ channel }) => {
+const Timer = ({ channel }: { channel: Channel }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -46,12 +43,13 @@ const Timer = ({ channel }) => {
   // start local timer to display countdown
   useInterval(timerTick, 1000);
   const displayTime = () => {
-    const minutes = Math.floor(countdown / 60000);
+    const minutes = Math.floor(countdown / 60000) % 60;
+    const hours = Math.floor(countdown / 3600000) || 0;
     let seconds: string | number = Math.trunc((countdown % 60000) / 1000);
     if (seconds < 10) {
       seconds = `0${seconds}`;
     }
-    return `${minutes}:${seconds}`;
+    return `${hours ? `${hours}:` : ''}${minutes}:${seconds}`;
   };
 
   return countdown > 0 ? (
@@ -64,12 +62,13 @@ const Timer = ({ channel }) => {
   );
 };
 
-export const QrCode = ({ channel }) => {
+export const QrCode = ({ channel }: { channel: Channel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const myName = useSelector((state: State) => state.user.name);
+  const myName = useSelector((state) => state.user.name);
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
+  const totalChannels = useSelector(selectTotalChannels);
 
   // create QRCode from channel data
   useEffect(() => {
@@ -83,7 +82,7 @@ export const QrCode = ({ channel }) => {
         setQrString(newQrString);
         qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
       }
-    } else if (!channel || channel?.state !== channel_states.OPEN) {
+    } else if (!channel || channel.state !== channel_states.OPEN) {
       setQrString('');
       setQrsvg('');
     }
@@ -93,20 +92,39 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
       qrString,
     )}`;
+
+    const languageTag = i18next.resolvedLanguage;
+    const expirationDate = new Date(channel.timestamp + channel.ttl);
+    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    };
+    const expirationTimestamp = new Intl.DateTimeFormat(
+      languageTag,
+      dateTimeFormatOptions,
+    ).format(expirationDate);
+    console.log(expirationTimestamp);
+
     const clipboardMsg = __DEV__
       ? universalLink
-      : channel?.type === channel_types.SINGLE
+      : channel.type === channel_types.SINGLE
       ? t('qrcode.alert.connectSingle', {
           name: myName,
           link: universalLink,
+          expirationTimestamp,
         })
       : t('qrcode.alert.connectGroup', {
           name: myName,
           link: universalLink,
+          expirationTimestamp,
         });
 
     const alertMsg =
-      channel?.type === channel_types.SINGLE
+      channel.type === channel_types.SINGLE
         ? t('qrcode.alert.text.shareLinkSingle')
         : t('qrcode.alert.text.shareLinkGroup');
     Alert.alert(
@@ -117,18 +135,21 @@ export const QrCode = ({ channel }) => {
           text: t('common.button.copy'),
           onPress: () => {
             Clipboard.setString(clipboardMsg);
-            if (channel?.type === channel_types.SINGLE)
-              dispatch(
-                closeChannel({ channelId: channel?.id, background: true }),
-              );
+            // we want to replace this QRcode with a different one for single connections
+            if (channel.type === channel_types.SINGLE)
+              if (totalChannels < MAX_TOTAL_CHANNELS) {
+                dispatch(
+                  closeChannel({ channelId: channel.id, background: true }),
+                );
+              } else {
+                console.log(`Max channels reached, not creating new channel.`);
+              }
           },
         },
       ],
       { cancelable: false },
     );
   };
-
-  // we want to replace this QRcode with a different one for single connections
 
   const CopyQr = () => (
     <View style={styles.copyContainer}>
@@ -147,8 +168,6 @@ export const QrCode = ({ channel }) => {
       </TouchableOpacity>
     </View>
   );
-
-  console.log('RENDERING QR CODE');
 
   return qrsvg ? (
     <View style={styles.qrCodeContainer} testID="QRCodeContainer">

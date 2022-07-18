@@ -3,7 +3,7 @@ import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import _ from 'lodash';
-import { useDispatch, useSelector, store } from '@/store';
+import { store } from '@/store';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -14,6 +14,7 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 import { updateConnections } from '@/actions';
 import ConnectionCard from './ConnectionCard';
 import { MAX_DISPLAY_CONNECTIONS } from '@/utils/constants';
+import { useDispatch, useSelector } from '@/store/hooks';
 
 /**
  * Connection screen of BrightID

@@ -9,7 +9,8 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import i18next from 'i18next';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -17,12 +18,13 @@ import { RecoveryErrorType } from './RecoveryError';
 import { setupRecovery } from './thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
-  clearChannel,
-  createChannel,
-  pollChannel,
+  createRecoveryChannel,
+  pollRecoveryChannel,
 } from './thunks/channelThunks';
 import {
   resetRecoveryData,
+  selectRecoveryStep,
+  setRecoverStep,
   uploadCompletedByOtherSide,
 } from './recoveryDataSlice';
 import {
@@ -31,26 +33,24 @@ import {
   pollImportChannel,
   clearImportChannel,
 } from '../ImportFlow/thunks/channelThunks';
+import { recover_steps } from '@/utils/constants';
+import { userSelector } from '@/reducer/userSlice';
 
 /**
  * Recovery Code screen of BrightID
  *
  * displays a qrcode
  */
-enum RecoverSteps {
-  NOT_STARTED,
-  RUNNING,
-  ERROR,
-}
 
 const RecoveryCodeScreen = ({ route }) => {
   const { action, urlType } = route.params;
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
-  const recoveryData = useSelector((state: State) => state.recoveryData);
+  const recoveryData = useSelector((state) => state.recoveryData);
+  const { id } = useSelector(userSelector);
   const isScanned = useSelector(
-    (state: State) =>
+    (state) =>
       uploadCompletedByOtherSide(state) ||
       state.recoveryData.recoveredConnections ||
       state.recoveryData.recoveredGroups ||
@@ -59,11 +59,28 @@ const RecoveryCodeScreen = ({ route }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [step, setStep] = useState<RecoverSteps>(RecoverSteps.NOT_STARTED);
+  const step = useSelector(selectRecoveryStep);
 
   const sigCount = recoveryData.sigs
     ? Object.values(recoveryData.sigs).length
     : 0;
+
+  // start polling recovery channel to get sig and mutual info
+  useEffect(() => {
+    if (
+      action === 'recovery' &&
+      recoveryData.recoverStep === recover_steps.POLLING_SIGS &&
+      !recoveryData.channel.pollTimerId
+    ) {
+      console.log(`Start polling recovery channel...`);
+      dispatch(pollRecoveryChannel());
+    }
+  }, [
+    action,
+    dispatch,
+    recoveryData.channel.pollTimerId,
+    recoveryData.recoverStep,
+  ]);
 
   // create recovery data and start polling channel
   useEffect(() => {
@@ -71,15 +88,13 @@ const RecoveryCodeScreen = ({ route }) => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to get signed by the scanner
-      await dispatch(createChannel());
-      // start polling channel to get sig and mutual info
-      dispatch(pollChannel());
+      await dispatch(createRecoveryChannel());
     };
     const runImportEffect = async () => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to be added as a new signing key by the scanner
-      await dispatch(createChannel());
+      await dispatch(createRecoveryChannel());
       // start polling channel to get connections/groups/blindsigs info
       dispatch(pollImportChannel());
     };
@@ -94,10 +109,15 @@ const RecoveryCodeScreen = ({ route }) => {
       dispatch(pollImportChannel());
     };
 
-    if (step === RecoverSteps.NOT_STARTED) {
+    if (step === recover_steps.NOT_STARTED) {
       if (action === 'recovery') {
-        console.log(`initializing recovery process`);
-        runRecoveryEffect();
+        if (!id) {
+          console.log(`initializing recovery process`);
+          dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
+          runRecoveryEffect();
+        } else {
+          console.log(`Not starting recovery process, user has id!`);
+        }
       } else if (action === 'import') {
         console.log(`initializing import process`);
         runImportEffect();
@@ -105,9 +125,8 @@ const RecoveryCodeScreen = ({ route }) => {
         console.log(`initializing sync process`);
         runSyncEffect();
       }
-      setStep(RecoverSteps.RUNNING);
     }
-  }, [action, dispatch, recoveryData.aesKey, step]);
+  }, [action, dispatch, id, step]);
 
   // set QRCode and SVG
   useEffect(() => {
@@ -157,12 +176,12 @@ const RecoveryCodeScreen = ({ route }) => {
         message,
       );
       if (action === 'recovery') {
-        clearChannel();
+        // dispatch(clearRecoveryChannel());
       } else if (action === 'import') {
         clearImportChannel();
       }
       dispatch(resetRecoveryData());
-      setStep(RecoverSteps.ERROR);
+      dispatch(setRecoverStep(recover_steps.ERROR));
       navigation.goBack();
     }
   }, [
@@ -184,19 +203,37 @@ const RecoveryCodeScreen = ({ route }) => {
         );
         setAlreadyNotified(true);
       } else if (action === 'recovery' && sigCount > 1) {
+        // we have enough sigs. Advance to next screen
+        dispatch(setRecoverStep(recover_steps.RESTORING));
         navigation.navigate('Restore');
       } else if (action === 'import' && isScanned) {
         navigation.navigate('Import');
       } else if (action === 'sync' && isScanned) {
         navigation.navigate('Devices', { syncing: true, asScanner: false });
       }
-    }, [action, alreadyNotified, sigCount, isScanned, t, navigation]),
+    }, [action, alreadyNotified, sigCount, isScanned, t, dispatch, navigation]),
   );
 
   const copyQr = () => {
     const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
+
+    const languageTag = i18next.resolvedLanguage;
+    const expirationDate = new Date(recoveryData.channel.expires);
+    const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    };
+    const expirationTimestamp = new Intl.DateTimeFormat(
+      languageTag,
+      dateTimeFormatOptions,
+    ).format(expirationDate);
+    console.log(expirationTimestamp);
 
     let alertTitle: string;
     let alertText: string;
@@ -209,8 +246,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Share this link with your recovery connections.',
         );
         clipboardMsg = t('recovery.clipboardmessage', {
-          defaultValue: 'Help me recover my BrightID: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       case 'import':
@@ -220,8 +257,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be imported.',
         );
         clipboardMsg = t('import.clipboardmessage', {
-          defaultValue: 'Export your BrightID to another device: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       case 'sync':
@@ -231,8 +268,8 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be synced.',
         );
         clipboardMsg = t('sync.clipboardmessage', {
-          defaultValue: 'Sync your BrightID data with another device: {{link}}',
           link: universalLink,
+          expirationTimestamp,
         });
         break;
       default:

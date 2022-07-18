@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import PhoneInput from 'react-native-phone-number-input';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -23,7 +24,6 @@ import {
 } from '@/utils/deviceConstants';
 import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from '@/store';
 import {
   selectExistingSocialMediaIds,
   selectSocialMediaById,
@@ -114,7 +114,7 @@ const SelectMediaModal = ({ route }: props) => {
     );
   }, [selectedId, socialMediaVariations]);
 
-  const prevProfile = useSelector((state: State) =>
+  const prevProfile = useSelector((state) =>
     selectSocialMediaById(state, selectedId),
   );
 

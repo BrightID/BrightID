@@ -56,7 +56,8 @@ export const removeActiveNotification = () => ({
 });
 
 export const updateNotifications =
-  (api?: NodeApi) => async (dispatch: dispatch, getState: () => State) => {
+  (api?: NodeApi): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
     // check for pending backup setup
     try {
       const { password } = getState().user;

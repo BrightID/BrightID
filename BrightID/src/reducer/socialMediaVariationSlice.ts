@@ -31,13 +31,13 @@ export const {
   selectById: selectSocialMediaVariationById,
   selectAll: selectAllSocialMediaVariations,
 } = socialMediaVariationAdapter.getSelectors(
-  (state: State) => state.socialMediaVariations,
+  (state: RootState) => state.socialMediaVariations,
 );
 
 export const selectAllSocialMediaVariationsByType = () =>
   createSelector(
     selectAllSocialMediaVariations,
-    (_: State, type: SocialMediaType) => type,
+    (_: RootState, type: SocialMediaType) => type,
     (socialMediaVariations, type) =>
       socialMediaVariations.filter((item) => item.type === type),
   );

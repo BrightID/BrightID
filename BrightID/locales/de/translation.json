@@ -60,7 +60,10 @@
     "header": {
       "text": "Geräteinformationen hinzufügen"
     },
+    "info": "Erlaube Nutzung deiner BrightID auf dem neuen Gerät",
     "steps": {
+      "adding": "Füge neuen Signaturschlüssel hinzu…",
+      "complete": "Neuer Signaturschlüssel hinzugefügt",
       "downloading": "Herunterladen von neuen Gerätedaten …",
       "error": "Hinzufügen des Signierschlüssels fehlgeschlagen"
     }
@@ -71,10 +74,14 @@
         "visitWebsite": "Ja"
       },
       "text": {
+        "blindSigAlreadyLinked": "Du bist bereits mit {{app}} als {{appUserId}} verknüpft",
+        "blindSigAlreadyLinkedDifferent": "Du versuchst dich mit {{app}} als {{appUserId}} zu verknüpfen. Du bist aber mit {{app}} schon als {{previousAppUserIds}} verknüpft. Dies kann zu Problemen bei der Nutzung der app führen.",
         "checkWebsite": "Besuche die Website von {{name}} für mehr Informationen!",
+        "invalidApp": "{{app}} ist ungültig!",
         "invalidContext": "{{context}} ist kein korrekter Kontext!",
         "linkApp": "Willst du dein {{context}}-Konto mit deiner BrightID verknüpfen?",
         "linkFailure": "Verknüpfen des Kontos {{context}} fehlgeschlagen.\n{{result}}",
+        "linkSigFailed": "Fehler beim Verknüpfen von {{verification}} mit app {{appId}}. Fehler: {{msg}}",
         "linkSuccess": "Dein {{context}}-Konto erfolgreich mit deiner BrightID verknüpft"
       },
       "title": {
@@ -232,7 +239,7 @@
       "levelJustMet": "Diese Person ist ein Fremder, den ich gerade getroffen habe",
       "levelRecovery": "Ich vertraue dieser Person, um meine BrightID für mich wiederherzustellen",
       "levelSuspicious": "Ich kenne diese Person überhaupt nicht",
-      "reportDuplicate": "Diese Person hat mehrere Konten erstellt",
+      "reportDuplicate": "Diese Person hat böswillig mehrere Konten erstellt",
       "reportOther": "Anderer Grund",
       "reportSpammer": "Diese Person hat mir eine unerwünschte Verbindungsanfrage gesendet",
       "unReportImpact": "Du hast bereits {{name}} als {{reportReason}} gemeldet. Möchtest du diese Meldung entfernen und deine Verbindung wiederherstellen?"
@@ -346,6 +353,14 @@
   "eula": {
     "header": {
       "title": "Lizenzvereinbarung"
+    }
+  },
+  "findFriends": {
+    "button": {
+      "invite": "einladen"
+    },
+    "text": {
+      "invitationNotAvailable": "Tut mir leid, das Senden von Einladungen ist derzeit für diese App nicht verfügbar."
     }
   },
   "graphExplorer": {
@@ -500,7 +515,7 @@
     "button": {
       "create": "Meine BrightID erstellen",
       "getStarted": "Los Gehts",
-      "recover": "BrightID wiederherstellen"
+      "recover": "Wiederherstellen"
     },
     "label": {
       "maintainPrivacy": "Schutz der Privatsphäre"
@@ -581,8 +596,8 @@
       "newPasswordAgain": "Passwort wiederholen",
       "password": "Passwort",
       "passwordAgain": "Passwort wiederholen",
-      "socialMediaLink": "Social Media Verknüpfung",
-      "phoneNumber": "Telefonnummer"
+      "phoneNumber": "Telefonnummer",
+      "socialMediaLink": "Social Media Verknüpfung"
     },
     "placeholder": {
       "name": "Namen eingeben",
@@ -601,8 +616,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Stelle eine Gruppenverbindung mit {{name}} auf BrightID her: {{link}}",
-      "connectSingle": "Verbinde dich mit {{name}} auf BrightID: {{link}}",
+      "connectGroup": "Erstelle eine Gruppenverbindung mit {{name}} auf BrightID: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
+      "connectSingle": "Verbinde dich mit {{name}} auf BrightID: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "Ein Gruppencode kann mehrmals gescannt werden für gleichzeitige Verbindung mit mehreren Personen.",
         "codeSingle": "Ein Einmalcode kann nur zur Verbindung mit jeweils einer Person genutzt werden.",
@@ -645,7 +660,7 @@
   },
   "recovery": {
     "alert": {
-      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}",
+      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
       "text": "Teile diesen Link mit deinen Wiederherstellungsverbindungen.",
       "title": "Wiederherstellungslink"
     },
@@ -785,14 +800,6 @@
       "gotIt": "Verstanden!",
       "setPassword": "Du kannst jederzeit dein\nBrightID-Passwort hier festlegen",
       "viewPassword": "Du kannst immer dein\nBrightID-Passwort hier sehen"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "einladen"
-    },
-    "text": {
-      "invitationNotAvailable": "Tut mir leid, das Senden von Einladungen ist derzeit für diese App nicht verfügbar."
     }
   }
 }

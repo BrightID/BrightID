@@ -9,62 +9,44 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { isEqual } from 'lodash';
-import { useDispatch, useSelector } from '@/store/hooks';
 import { LIGHT_BLACK, ORANGE, WHITE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import {
-  clearBaseUrl,
-  removeCurrentNodeUrl,
-  resetNodeUrls,
-  selectAllNodeUrls,
-  selectBaseUrl,
-  selectDefaultNodeUrls,
-} from '@/reducer/settingsSlice';
-import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
+import { qrCodeURL_types } from '@/utils/constants';
+import { resetRecoveryData } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import { useDispatch } from '@/store/hooks';
 
-const NodeModal = () => {
+const RecoverInProgressModal = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const currentBaseUrl = useSelector(selectBaseUrl);
-  const defaultNodeUrls = useSelector(selectDefaultNodeUrls);
-  const currentNodeUrls = useSelector(selectAllNodeUrls);
   const dispatch = useDispatch();
 
   const goBack = () => {
     navigation.goBack();
   };
 
-  const changeNodeHandler = () => {
-    navigation.goBack();
-    dispatch(leaveAllChannels());
-    dispatch(removeCurrentNodeUrl());
+  const restartRecoveryHandler = () => {
+    console.log(`Restarting recovery`);
+    dispatch(resetRecoveryData());
+    navigation.navigate('Restore', {
+      screen: 'RecoveryCode',
+      params: {
+        urlType: qrCodeURL_types.RECOVERY,
+        action: 'recovery',
+      },
+    });
   };
 
-  const resetHandler = () => {
-    dispatch(resetNodeUrls());
-    dispatch(leaveAllChannels());
-    dispatch(clearBaseUrl());
+  const continueRecoveryHandler = () => {
+    console.log(`Continue recovery`);
+    navigation.navigate('Restore', {
+      screen: 'RecoveryCode',
+      params: {
+        urlType: qrCodeURL_types.RECOVERY,
+        action: 'recovery',
+      },
+    });
   };
-
-  let resetContainer;
-  if (!isEqual(defaultNodeUrls, currentNodeUrls)) {
-    resetContainer = (
-      <>
-        <View style={styles.resetInfoContainer}>
-          <Text style={styles.resetInfoText}>
-            {t('nodeApiGate.reset.text')}
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.resetButton} onPress={resetHandler}>
-          <Text style={styles.resetButtonText}>
-            {t('nodeApiGate.reset.button')}
-          </Text>
-        </TouchableOpacity>
-      </>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -80,20 +62,32 @@ const NodeModal = () => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {t('nodeModal.currentNode.header')}
+            Account recovery already running
           </Text>
-          <Text style={styles.subHeaderText}>{currentBaseUrl}</Text>
+          <Text style={styles.infoText}>
+            It looks like you already started the recovery process. Click on
+            "Continue Recovery" to resume recovery.
+          </Text>
         </View>
         <TouchableOpacity
-          testID="SaveLevelBtn"
+          testID="ContinueRecoveryBtn"
           style={styles.switchNodeButton}
-          onPress={changeNodeHandler}
+          onPress={continueRecoveryHandler}
         >
-          <Text style={styles.switchNodeButtonText}>
-            {t('nodeModal.switchNodeButtonLabel')}
-          </Text>
+          <Text style={styles.switchNodeButtonText}>Continue recovery</Text>
         </TouchableOpacity>
-        {resetContainer}
+        <View style={styles.resetInfoContainer}>
+          <Text style={styles.infoText}>
+            If you have problems with the recovery process you can restart it by
+            clicking "Restart Recovery".
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.resetButton}
+          onPress={restartRecoveryHandler}
+        >
+          <Text style={styles.resetButtonText}>Restart recovery</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -131,12 +125,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: LIGHT_BLACK,
   },
-  subHeaderText: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[16],
-    textAlign: 'center',
-    color: LIGHT_BLACK,
-  },
   switchNodeButton: {
     width: '90%',
     paddingTop: 8,
@@ -155,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     marginTop: 25,
   },
-  resetInfoText: {
+  infoText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
     color: LIGHT_BLACK,
@@ -176,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NodeModal;
+export default RecoverInProgressModal;

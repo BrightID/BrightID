@@ -107,7 +107,7 @@ export const {
   hydrateUser,
 } = userSlice.actions;
 
-export const userSelector = (state: State): User => ({
+export const userSelector = (state: RootState): User => ({
   id: state.user.id,
   name: state.user.name,
   photo: state.user.photo,

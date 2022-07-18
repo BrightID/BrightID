@@ -112,7 +112,7 @@ describe('Connection details', () => {
 
     await navigateHome();
     await expectHomescreen();
-  }, 180000);
+  }, 250000);
 
   describe('Information', () => {
     beforeAll(async () => {

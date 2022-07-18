@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { navigate } from '@/NavigationService';
-import { useSelector } from '@/store';
+import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TWENTY_TWO, SIXTY } from '@/theme/sizes';
@@ -57,7 +57,7 @@ export const NavHome = () => (
 
 export const AnimatedHeaderTitle = ({ text }) => {
   const searchOpen = useSelector(
-    (state: State) => state.connections.searchOpen || state.groups.searchOpen,
+    (state) => state.connections.searchOpen || state.groups.searchOpen,
   );
   const fadeAnim = useRef(new Animated.Value(1)).current;
   useEffect(() => {

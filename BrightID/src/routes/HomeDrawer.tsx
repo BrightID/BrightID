@@ -15,7 +15,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
 import { SvgXml } from 'react-native-svg';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
@@ -101,10 +101,8 @@ const CustomItem = ({
 const CustomDrawerContent = (props) => {
   const { state, navigation } = props;
   // selectors
-  const photoFilename = useSelector(
-    (state: State) => state.user.photo.filename,
-  );
-  const name = useSelector((state: State) => state.user.name);
+  const photoFilename = useSelector((state) => state.user.photo.filename);
+  const name = useSelector((state) => state.user.name);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();

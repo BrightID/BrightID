@@ -16,7 +16,7 @@ import { decryptData } from '@/utils/cryptoHelper';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
-import { NodeApi } from '@/api/brightId';
+import { getGlobalNodeApi } from '@/components/NodeApiGate';
 
 const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>({
   selectId: (pendingConnection) => pendingConnection.profileId,
@@ -46,11 +46,11 @@ export enum pendingConnection_states {
 
 export const newPendingConnection = createAsyncThunk<
   PendingConnectionData,
-  { channelId: string; profileId: string; api: NodeApi },
-  { state: State }
+  { channelId: string; profileId: string },
+  { state: RootState }
 >(
   'pendingConnections/newPendingConnection',
-  async ({ channelId, profileId, api }, { getState }) => {
+  async ({ channelId, profileId }, { getState }) => {
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
 
     const channel = selectChannelById(getState(), channelId);
@@ -117,7 +117,7 @@ export const newPendingConnection = createAsyncThunk<
 
     let profileInfo: ProfileInfo;
     try {
-      profileInfo = await api.getProfile(sharedProfile.id);
+      profileInfo = await getGlobalNodeApi().getProfile(sharedProfile.id);
     } catch (err) {
       if (err instanceof BrightidError && err.errorNum === USER_NOT_FOUND) {
         // this must be a new user not yet existing on backend.
@@ -230,7 +230,7 @@ export const {
   selectById: selectPendingConnectionById,
   selectIds: selectAllPendingConnectionIds,
 } = pendingConnectionsAdapter.getSelectors(
-  (state: State) => state.pendingConnections,
+  (state: RootState) => state.pendingConnections,
 );
 
 export const selectAllUnconfirmedConnections = createSelector(

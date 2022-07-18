@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import store, { useDispatch, useSelector } from '@/store';
+import store from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -22,6 +22,8 @@ import { operation_states } from '@/utils/constants';
 import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey';
 import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
 import { loadRecoveryData } from '@/utils/recovery';
+import { useDispatch, useSelector } from '@/store/hooks';
+import { resetRecoveryData } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 /**
  * Screen for adding a new device
@@ -42,7 +44,7 @@ export enum UploadDataSteps {
   ERROR,
 }
 
-export const AddDeviceScreen = () => {
+const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -110,8 +112,9 @@ export const AddDeviceScreen = () => {
       uploadDataStep === UploadDataSteps.COMPLETE
     ) {
       console.log(`Completed add device workflow!`);
-      // add new device to local storage and navigate to device screen
+      // add new device to local storage
       dispatch(addDevice({ name: deviceName, signingKey, active: true }));
+      dispatch(resetRecoveryData());
       navigation.navigate('Devices');
     }
   }, [

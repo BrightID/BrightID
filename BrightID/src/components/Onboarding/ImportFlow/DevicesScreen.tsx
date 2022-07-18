@@ -12,7 +12,7 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useSelector, useDispatch } from '@/store';
+import { useSelector, useDispatch } from '@/store/hooks';
 import { selectActiveDevices } from '@/reducer/devicesSlice';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE, BLUE, BLACK } from '@/theme/colors';

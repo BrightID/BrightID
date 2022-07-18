@@ -55,3 +55,6 @@ jest.mock('react-native-keychain', () => {
     getGenericPassword: () => Promise.resolve(genericPassword),
   };
 });
+
+/* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
+jest.mock('react-native-modpow', () => {});

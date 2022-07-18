@@ -1,12 +1,7 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Alert,
+  AlertButton,
   InteractionManager,
   StatusBar,
   StyleSheet,
@@ -15,18 +10,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from '@/store';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from '@/store/hooks';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Camera from '@/components/Icons/Camera';
 import {
-  channel_states,
-  channel_types,
   closeChannel,
   selectAllActiveChannelIdsByType,
   selectChannelById,
@@ -36,17 +29,17 @@ import {
   selectAllPendingConnectionsByChannelIds,
   selectAllUnconfirmedConnectionsByChannelIds,
 } from '@/components/PendingConnections/pendingConnectionSlice';
-
-import { createChannel } from '@/components/PendingConnections/actions/channelThunks';
+import {
+  createChannel,
+  leaveChannelsByType,
+} from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
-import { NodeApiContext } from '@/components/NodeApiGate';
 import { QrCode } from './QrCode';
+import { channel_states, channel_types } from '@/utils/constants';
 
 /**
  * My Code screen of BrightID
  *
- * USERA represents this user
- * ==================================================================
  * displays a qrcode
  *
  */
@@ -77,30 +70,28 @@ export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
-
-  const [channelErr, setChannelErr] = useState(0);
+  const [creatingChannel, setCreatingChannel] = useState(false);
 
   // GROUP / SINGLE / STAR
   const displayChannelType = useSelector(
-    (state: State) => state.channels.displayChannelType,
+    (state) => state.channels.displayChannelType,
   );
   // current channel displayed by QRCode
   const myChannel = useSelector(
-    (state: State) =>
+    (state) =>
       selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
     (a, b) => a?.id === b?.id,
   );
 
   // All channels with current displayChannelType actively polling profile service
-  const activeChannelIds = useSelector((state: State) =>
+  const activeChannelIds = useSelector((state) =>
     selectAllActiveChannelIdsByType(state, displayChannelType),
   );
 
   console.log('activeChannelIds', activeChannelIds);
 
   // pending connections attached to active channel
-  const pendingConnectionSize = useSelector((state: State) => {
+  const pendingConnectionSize = useSelector((state) => {
     if (myChannel) {
       return selectAllPendingConnectionsByChannelIds(state, [myChannel.id])
         .length;
@@ -116,39 +107,60 @@ export const MyCodeScreen = () => {
   );
 
   // create channel if none exists
-  useFocusEffect(
-    useCallback(() => {
-      if (!navigation.isFocused()) return;
-      if (
-        (!myChannel || myChannel?.state !== channel_states.OPEN) &&
-        channelErr < 3
-      ) {
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(createChannel(displayChannelType, api)).catch((err) => {
-            console.log(`error creating channel: ${err.message}`);
-            if (channelErr === 2) {
-              Alert.alert(
-                t('common.alert.error'),
-                t('pendingConnection.alert.text.errorCreateChannel', {
-                  message: `${err.message}`,
-                }),
-              );
-            }
-            setChannelErr((c) => c + 1);
-          });
-        });
-      }
-      dispatch(setActiveNotification(null));
-    }, [
-      navigation,
-      myChannel,
-      channelErr,
-      dispatch,
-      displayChannelType,
-      api,
-      t,
-    ]),
-  );
+  useEffect(() => {
+    if (!navigation.isFocused()) return;
+    if (creatingChannel) return;
+    if (!myChannel || myChannel?.state !== channel_states.OPEN) {
+      setCreatingChannel(true);
+      console.log(`creating new channel of type ${displayChannelType}.`);
+      InteractionManager.runAfterInteractions(async () => {
+        try {
+          await dispatch(createChannel(displayChannelType));
+          setCreatingChannel(false);
+        } catch (err) {
+          console.log(`error creating channel: ${err.message}`);
+          let buttons: AlertButton[] = [
+            {
+              text: 'OK',
+              style: 'default',
+              onPress: () => {
+                setCreatingChannel(false);
+              },
+            },
+          ];
+          if (err.message === 'Too many channels') {
+            buttons = [
+              {
+                text: 'Wait',
+                style: 'default',
+                onPress: () => {
+                  navigation.goBack();
+                  setCreatingChannel(false);
+                },
+              },
+              {
+                text: 'Close single-use channels',
+                style: 'destructive',
+                onPress: () => {
+                  dispatch(leaveChannelsByType(channel_types.SINGLE));
+                  dispatch(createChannel(displayChannelType));
+                  setCreatingChannel(false);
+                },
+              },
+            ];
+          }
+          Alert.alert(
+            t('common.alert.error'),
+            t('pendingConnection.alert.text.errorCreateChannel', {
+              message: `${err.message}`,
+            }),
+            buttons,
+          );
+        }
+      });
+    }
+    dispatch(setActiveNotification(null));
+  }, [navigation, myChannel, dispatch, displayChannelType, t, creatingChannel]);
 
   // Navigate to next screen if QRCode has been scanned
   useEffect(() => {
@@ -256,9 +268,7 @@ export const MyCodeScreen = () => {
     t,
   ]);
 
-  // when
   const toggleChannelType = () => {
-    // toggle switch
     dispatch(
       setDisplayChannelType(
         displayChannelType === channel_types.SINGLE

@@ -193,7 +193,7 @@ export const {
   selectAll: selectAllConnections,
   selectTotal: connectionTotal,
 } = connectionsAdapter.getSelectors(
-  (state: State) => state.connections.connections,
+  (state: RootState) => state.connections.connections,
 );
 
 export const verifiedConnectionsSelector = createSelector(
@@ -212,7 +212,7 @@ export const recoveryConnectionsSelector = createSelector(
   },
 );
 
-export const firstRecoveryTimeSelector = (state: State) =>
+export const firstRecoveryTimeSelector = (state: RootState) =>
   state.connections.firstRecoveryTime;
 
 // Export reducer

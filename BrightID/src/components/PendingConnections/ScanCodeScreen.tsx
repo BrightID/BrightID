@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useContext } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Linking,
   StyleSheet,
@@ -19,21 +19,17 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  channel_types,
-  closeChannel,
-} from '@/components/PendingConnections/channelSlice';
+import { closeChannel } from '@/components/PendingConnections/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnections/pendingConnectionSlice';
 import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
-import { qrCodeURL_types } from '@/utils/constants';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { channel_types, qrCodeURL_types } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,
@@ -71,11 +67,10 @@ export const ScanCodeScreen = () => {
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
-  const name = useSelector((state: State) => state.user.name);
+  const name = useSelector((state) => state.user.name);
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
 
-  const pendingConnectionSizeForChannel = useSelector((state: State) => {
+  const pendingConnectionSizeForChannel = useSelector((state) => {
     if (channel) {
       return selectAllUnconfirmedConnectionsByChannelIds(state, [channel.id])
         .length;
@@ -180,7 +175,7 @@ export const ScanCodeScreen = () => {
               );
               const channel = await parseChannelQrURL(channelURL);
               setChannel(channel);
-              await dispatch(joinChannel(channel, api));
+              await dispatch(joinChannel(channel));
               break;
             }
           }
@@ -201,7 +196,7 @@ export const ScanCodeScreen = () => {
     if (qrData) {
       handleQrData(qrData);
     }
-  }, [api, dispatch, navigation, qrData]);
+  }, [dispatch, navigation, qrData]);
 
   const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
     console.log(`Scanned QRCode: ${data}`);

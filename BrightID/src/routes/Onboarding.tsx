@@ -10,6 +10,8 @@ import SuccessScreen from '@/components/Onboarding/SignUpFlow/SuccessScreen';
 import Restore from './Restore';
 import Import from './Import';
 import { headerOptions } from './helpers';
+import RecoverInProgressModal from '@/components/Helpers/RecoverInProgressModal';
+import { modalOptions } from '@/routes/Modals';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +53,11 @@ const Onboarding = () => {
         name="Import"
         component={Import}
         options={{ title: t('import.header.title') }}
+      />
+      <Stack.Screen
+        name="RecoverInProgress"
+        options={modalOptions}
+        component={RecoverInProgressModal}
       />
     </Stack.Navigator>
   );
