@@ -12,6 +12,11 @@ import { setLanguageTag } from '@/reducer/settingsSlice';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
 import { selectTotalChannels } from '@/components/PendingConnections/channelSlice';
+import { clearRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
+import {
+  resetRecoveryData,
+  selectRecoveryData,
+} from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();
@@ -22,6 +27,7 @@ export const SettingsScreen = () => {
   const languageTag = i18next.resolvedLanguage;
   const dispatch = useDispatch();
   const numChannels = useSelector(selectTotalChannels);
+  const { channel, id } = useSelector(selectRecoveryData);
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
     await i18next.changeLanguage(itemValue);
@@ -90,6 +96,22 @@ export const SettingsScreen = () => {
             onPress={() => dispatch(leaveAllChannels())}
           >
             <Text style={styles.buttonText}>close open channels</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.settingsItemContainer}>
+        <Text style={styles.label}>Recovery data</Text>
+        <View style={styles.debugSettingContainer}>
+          <Text>Recovery channel id: {channel.channelId || 'none'}</Text>
+          <Text>Recover data id: {id || 'none'}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              dispatch(clearRecoveryChannel());
+              dispatch(resetRecoveryData());
+            }}
+          >
+            <Text style={styles.buttonText}>close recovery/sync channel</Text>
           </TouchableOpacity>
         </View>
       </View>

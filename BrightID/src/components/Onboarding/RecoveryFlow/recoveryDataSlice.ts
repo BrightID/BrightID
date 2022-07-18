@@ -160,6 +160,8 @@ export const uploadCompletedByOtherSide = (state: RootState) => {
 export const selectRecoveryChannel = (state: RootState) =>
   state.recoveryData.channel;
 
+export const selectRecoveryData = (state: RootState) => state.recoveryData;
+
 export const selectRecoveryStep = (state) => state.recoveryData.recoverStep;
 
 // Export channel actions
