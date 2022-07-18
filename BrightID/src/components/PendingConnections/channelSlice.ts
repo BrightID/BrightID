@@ -1,12 +1,14 @@
 import {
+  createEntityAdapter,
   createSelector,
   createSlice,
-  createEntityAdapter,
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
-
 import { Draft } from 'immer';
+import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
+import { RESET_STORE } from '@/actions';
+import { channel_states, channel_types } from '@/utils/constants';
 /*
 
   What is a channel:
@@ -27,18 +29,6 @@ import { Draft } from 'immer';
   in a larger group session.
 
  */
-
-export enum channel_types {
-  GROUP = 'GROUP',
-  SINGLE = 'SINGLE',
-  STAR = 'STAR',
-}
-
-export enum channel_states {
-  OPEN = 'OPEN',
-  CLOSED = 'CLOSED',
-  BACKGROUND = 'BACKGROUND',
-}
 
 export const channelsAdapter = createEntityAdapter<Channel>();
 
@@ -121,6 +111,12 @@ const channelSlice = createSlice({
       const channelType = action.payload;
       state.displayChannelType = channelType;
     },
+    upsertChannel: channelsAdapter.upsertOne,
+  },
+  extraReducers: {
+    [RESET_STORE]: () => {
+      return initialState;
+    },
   },
 });
 
@@ -128,6 +124,7 @@ const channelSlice = createSlice({
 export const {
   addChannel,
   updateChannel,
+  upsertChannel,
   removeChannel,
   setMyChannel,
   closeChannel,
@@ -139,6 +136,7 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
   selectIds: selectAllChannelIds,
+  selectTotal: selectTotalChannels,
 } = channelsAdapter.getSelectors((state: RootState) => state.channels);
 
 // additional selectors
@@ -163,6 +161,33 @@ export const selectAllActiveChannelIdsByType = createSelector(
       )
       .map((pc) => pc.id),
 );
+
+/* Select all channels that are rehydrated. Can be identified by missing timerIDs. */
+export const selectHydratedChannelIds = createSelector(
+  selectAllChannels,
+  (channels) => {
+    return channels.filter((channel: Channel) => {
+      return !(channel.pollTimerId || channel.timeoutId);
+    });
+  },
+);
+
+export const rejoinChannels =
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+    const hydratedChannels = selectHydratedChannelIds(getState());
+    console.log(
+      `Rejoining hydrated channels: ${hydratedChannels.map(
+        (channel) => channel.id,
+      )}`,
+    );
+    for (const channel of hydratedChannels) {
+      try {
+        await dispatch(joinChannel(channel));
+      } catch (e) {
+        console.log(`Failed to rejoin channel ${channel.id}`);
+      }
+    }
+  };
 
 // Export reducer
 export default channelSlice.reducer;

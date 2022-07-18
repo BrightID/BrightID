@@ -16,7 +16,7 @@ import NodeModal from '@/components/Helpers/NodeModal';
 
 const Stack = createStackNavigator<ModalStackParamList>();
 
-const modalOptions: StackNavigationOptions = {
+export const modalOptions: StackNavigationOptions = {
   headerShown: false,
   cardOverlayEnabled: true,
   gestureEnabled: true,

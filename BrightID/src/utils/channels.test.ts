@@ -3,11 +3,8 @@ import {
   createChannelInfo,
   buildChannelQrUrl,
 } from '@/utils/channels';
-import {
-  channel_types,
-  channel_states,
-} from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import { channel_states, channel_types } from '@/utils/constants';
 
 describe('Test channel data', () => {
   const url = new URL(`https://some.node.org/profile`);

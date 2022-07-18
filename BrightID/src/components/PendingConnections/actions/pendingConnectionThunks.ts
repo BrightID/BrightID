@@ -1,7 +1,4 @@
-import {
-  channel_types,
-  selectChannelById,
-} from '@/components/PendingConnections/channelSlice';
+import { selectChannelById } from '@/components/PendingConnections/channelSlice';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import {
@@ -19,7 +16,7 @@ import {
   encryptAndUploadProfileToChannel,
 } from '@/components/PendingConnections/actions/channelThunks';
 import { NodeApi } from '@/api/brightId';
-import { connection_levels } from '@/utils/constants';
+import { channel_types, connection_levels } from '@/utils/constants';
 
 export const confirmPendingConnectionThunk =
   (
@@ -27,7 +24,7 @@ export const confirmPendingConnectionThunk =
     level: ConnectionLevel,
     api: NodeApi,
     reportReason?: ReportReason,
-  ) =>
+  ): AppThunk =>
   async (dispatch: AppDispatch, getState) => {
     const connection: PendingConnection = selectPendingConnectionById(
       getState(),

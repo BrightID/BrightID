@@ -235,8 +235,6 @@ export const HomeScreen = (props) => {
     </View>
   ) : null;
 
-  console.log('RENDERING HOME PAGE');
-
   return (
     <View style={[styles.container, { marginTop: headerHeight }]}>
       <StatusBar

@@ -8,7 +8,6 @@ import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks
 import {
   pendingConnection_states,
   selectPendingConnectionById,
-  updatePendingConnection,
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';

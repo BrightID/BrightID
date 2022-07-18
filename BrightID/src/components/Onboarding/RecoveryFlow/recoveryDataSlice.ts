@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
+import { recover_steps, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 import { RESET_STORE } from '@/actions';
+import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export const initialState: RecoveryData = {
+  recoverStep: recover_steps.NOT_STARTED,
   publicKey: '',
   secretKey: new Uint8Array(),
   aesKey: '',
@@ -27,6 +29,7 @@ export const initialState: RecoveryData = {
     channelId: '',
     url: null,
     expires: 0,
+    pollTimerId: null,
   },
 };
 
@@ -59,6 +62,7 @@ const recoveryData = createSlice({
       state.recoveredBlindSigs = 0;
       state.sigs = {};
       state.uploadCompletedBy = {};
+      state.recoverStep = recover_steps.NOT_STARTED;
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
@@ -104,7 +108,7 @@ const recoveryData = createSlice({
       state.sigs = {};
     },
     resetRecoveryData() {
-      return initialState;
+      return { ...initialState };
     },
     setRecoveryError(
       state,
@@ -135,6 +139,12 @@ const recoveryData = createSlice({
     setRecoveryId(state, action: PayloadAction<string>) {
       state.id = action.payload;
     },
+    setRecoverStep(state, action: PayloadAction<RecoverStep_Type>) {
+      state.recoverStep = action.payload;
+    },
+    setChannelIntervalId(state, action: PayloadAction<IntervalId>) {
+      state.channel.pollTimerId = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -143,9 +153,16 @@ const recoveryData = createSlice({
   },
 });
 
-export const uploadCompletedByOtherSide = (state) => {
+export const uploadCompletedByOtherSide = (state: RootState) => {
   return Object.keys(state.recoveryData.uploadCompletedBy).length > 0;
 };
+
+export const selectRecoveryChannel = (state: RootState) =>
+  state.recoveryData.channel;
+
+export const selectRecoveryData = (state: RootState) => state.recoveryData;
+
+export const selectRecoveryStep = (state) => state.recoveryData.recoverStep;
 
 // Export channel actions
 export const {
@@ -163,7 +180,18 @@ export const {
   setRecoveryError,
   setUploadCompletedBy,
   setRecoveryId,
+  setRecoverStep,
+  setChannelIntervalId,
 } = recoveryData.actions;
+
+export const rejoinRecoveryChannel =
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
+    const channel = selectRecoveryChannel(getState());
+    if (channel?.channelId) {
+      console.log(`Rejoining recovery channel ${channel.channelId}`);
+      dispatch(pollRecoveryChannel());
+    }
+  };
 
 // Export reducer
 export default recoveryData.reducer;

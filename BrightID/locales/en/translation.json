@@ -197,6 +197,8 @@
       "levelJustMet": "This person is a stranger I just met",
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
+      "removeConnection": "Disconnect from {{name}}",
+      "reportConnection": "Report {{name}}",
       "reportDuplicate": "This user is maliciously creating multiple accounts",
       "reportOther": "Other reason",
       "reportReplaced": "The user has lost access to this old account and established a new one",
@@ -205,10 +207,8 @@
       "unkownRecoveryConnection": "Unknown",
       "unReportConnection": "Restore connection",
       "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
-      "removeConnection": "Disconnect from {{name}}",
-      "reportConnection": "Report {{name}}",
-      "whyReport": "Please tell us why you are suspicious of this connection",
-      "whyRemove": "Please tell us why you want to remove this connection"
+      "whyRemove": "Please tell us why you want to remove this connection",
+      "whyReport": "Please tell us why you are suspicious of this connection"
     }
   },
   "connections": {
@@ -444,7 +444,7 @@
       "text": "Open this link with the BrightID app that should be imported.",
       "title": "Import BrightID link"
     },
-    "clipboardmessage": "Export your BrightID to another device: {{link}}",
+    "clipboardmessage": "Export your BrightID to another device: {{link}}. This link is valid until {{expirationTimestamp}}.",
     "header": {
       "title": "Import Account"
     },
@@ -621,8 +621,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}",
-      "connectSingle": "Connect with {{name}} on BrightID: {{link}}",
+      "connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}. This link is valid until {{expirationTimestamp}}.",
+      "connectSingle": "Connect with {{name}} on BrightID: {{link}}. This link is valid until {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
         "codeSingle": "This QR code can be used to connect with a single user before it expires.",
@@ -667,7 +667,7 @@
       "text": "Share this link with your recovery connections.",
       "title": "Recovery link"
     },
-    "clipboardmessage": "Help me recover my BrightID: {{link}}",
+    "clipboardmessage": "Help me recover my BrightID: {{link}}. This link is valid until {{expirationTimestamp}}.",
     "error": {
       "mismatchId": "Your recovery connections selected different accounts",
       "title": "Account recovery failed",
@@ -780,7 +780,7 @@
       "text": "Open this link with the BrightID app that should be synced.",
       "title": "Sync user data"
     },
-    "clipboardmessage": "Sync your BrightID data with another device: {{link}}",
+    "clipboardmessage": "Sync your BrightID data with another device: {{link}}. This link is valid until {{expirationTimestamp}}.",
     "text": {
       "additionalInfo": "This QR code should be scanned using your other device to sync data between them",
       "askScanning": "Please scan this QR code using your other device"

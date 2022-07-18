@@ -6,13 +6,14 @@ import {
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
+import ChannelAPI from '@/api/channelService';
+import { store } from '@/store';
 import {
   channel_states,
   channel_types,
-} from '@/components/PendingConnections/channelSlice';
-import ChannelAPI from '@/api/channelService';
-import { store } from '@/store';
-import { connection_levels, report_reasons } from '@/utils/constants';
+  connection_levels,
+  report_reasons,
+} from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
   SocialMediaType,
@@ -193,19 +194,17 @@ declare global {
     uploadCompletedBy: { [uploader: string]: boolean };
     sigs: { [sig: string]: Signature };
     qrcode: string;
-    channel: {
-      channelId: string;
-      url: URL;
-      expires: number;
-    };
+    channel: RecoveryChannel;
     errorType: RecoveryErrorType;
     errorMessage: string;
+    recoverStep: RecoverStep_Type;
   };
 
   type RecoveryChannel = {
-    aesKey: string;
+    channelId: string;
     url: URL;
-    t: QrCodeURL_Type;
+    expires: number;
+    pollTimerId: IntervalId;
   };
   type QrCodeURL_Type = typeof qrCodeURL_types[keyof typeof qrCodeURL_types];
 
@@ -377,4 +376,6 @@ declare global {
     lastSyncTime?: number;
     isPrimaryDevice: boolean;
   };
+
+  type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
 }

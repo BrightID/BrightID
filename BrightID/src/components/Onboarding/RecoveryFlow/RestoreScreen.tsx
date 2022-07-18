@@ -15,7 +15,10 @@ import {
   setRecoveryKeys,
   socialRecovery,
 } from './thunks/recoveryThunks';
-import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
+import {
+  CHANNEL_POLL_INTERVAL,
+  clearRecoveryChannel,
+} from './thunks/channelThunks';
 import { selectOperationByHash } from '@/reducer/operationsSlice';
 import { operation_states } from '@/utils/constants';
 
@@ -69,7 +72,7 @@ const RestoreScreen = () => {
     useCallback(() => {
       // wait 3 passes of the the poll channel to make sure all data is downloaded
       const t = setTimeout(() => {
-        clearChannel();
+        dispatch(clearRecoveryChannel());
         setAccountStep(AccountSteps.DOWNLOAD_COMPLETE);
       }, channelTimeout);
 

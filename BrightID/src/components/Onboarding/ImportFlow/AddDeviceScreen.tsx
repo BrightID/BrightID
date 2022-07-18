@@ -23,6 +23,7 @@ import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey'
 import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
 import { loadRecoveryData } from '@/utils/recovery';
 import { useDispatch, useSelector } from '@/store/hooks';
+import { resetRecoveryData } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 /**
  * Screen for adding a new device
@@ -43,7 +44,7 @@ export enum UploadDataSteps {
   ERROR,
 }
 
-export const AddDeviceScreen = () => {
+const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -111,8 +112,9 @@ export const AddDeviceScreen = () => {
       uploadDataStep === UploadDataSteps.COMPLETE
     ) {
       console.log(`Completed add device workflow!`);
-      // add new device to local storage and navigate to device screen
+      // add new device to local storage
       dispatch(addDevice({ name: deviceName, signingKey, active: true }));
+      dispatch(resetRecoveryData());
       navigation.navigate('Devices');
     }
   }, [

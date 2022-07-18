@@ -10,6 +10,7 @@ import KeychainStorage from './storage/keychainAdapter';
 import getStoredState from './getStoredState';
 import { appsMigrate } from './migrations/apps';
 import { connectionsMigrate } from './migrations/connections';
+import { ChannelsTransform, RecoveryDataTransform } from '@/store/transforms';
 
 // update this in async migrate if changed to prevent require cycle
 
@@ -91,6 +92,18 @@ const keypairPersistConfig = {
   deserialize: false,
 };
 
+const channelsPersistConfig = {
+  ...fsPersistConfig,
+  key: 'channels',
+  transforms: [ChannelsTransform],
+};
+
+const recoveryDataPersistConfig = {
+  ...fsPersistConfig,
+  key: 'recoveryData',
+  transforms: [RecoveryDataTransform],
+};
+
 const rootReducer = combineReducers({
   ...reducers,
   apps: persistReducer(
@@ -110,6 +123,14 @@ const rootReducer = combineReducers({
   settings: persistReducer(settingsPersistConfig, reducers.settings),
   operations: persistReducer(operationsPersistConfig, reducers.operations),
   devices: persistReducer(devicesPersistConfig, reducers.devices),
+  channels: persistReducer(
+    channelsPersistConfig,
+    reducers.channels,
+  ) as typeof reducers.channels,
+  recoveryData: persistReducer(
+    recoveryDataPersistConfig,
+    reducers.recoveryData,
+  ) as typeof reducers.recoveryData,
 });
 
 export const store = configureStore({

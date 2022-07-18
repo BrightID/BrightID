@@ -5,9 +5,10 @@ import {
   removeChannel,
   setMyChannel,
   updateChannel,
-  selectAllChannelIds,
-  channel_types,
   selectAllChannels,
+  upsertChannel,
+  selectTotalChannels,
+  selectAllActiveChannelIdsByType,
 } from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -19,18 +20,24 @@ import {
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
+  channel_types,
+  MAX_TOTAL_CHANNELS,
 } from '@/utils/constants';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
-import { NodeApi } from '@/api/brightId';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { getGlobalNodeApi } from '@/components/NodeApiGate';
 
 export const createChannel =
-  (channelType: ChannelType, api: NodeApi) =>
+  (channelType: ChannelType): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
+    const numChannels = selectTotalChannels(getState());
+    if (numChannels >= MAX_TOTAL_CHANNELS) {
+      throw new Error(`Too many channels`);
+    }
     let channel: Channel | null | undefined;
     try {
       const baseUrl = selectBaseUrl(getState());
@@ -61,7 +68,7 @@ export const createChannel =
       // upload my profile
       await dispatch(encryptAndUploadProfileToChannel(channel.id));
       // start polling for profiles
-      dispatch(subscribeToConnectionRequests(channel.id, api));
+      dispatch(subscribeToConnectionRequests(channel.id));
     } catch (e) {
       // Something went wrong while creating channel.
       if (channel && channel.id) {
@@ -74,12 +81,13 @@ export const createChannel =
   };
 
 export const joinChannel =
-  (channel: Channel, api: NodeApi) =>
+  (channel: Channel): AppThunk =>
   async (dispatch: AppDispatch, getState) => {
     console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
+
     // check to see if channel exists
-    const channelIds = selectAllChannelIds(getState());
-    if (channelIds.includes(channel.id)) {
+    const existingChannel = selectChannelById(getState(), channel.id);
+    if (existingChannel && existingChannel.timeoutId) {
       console.log(`Channel ${channel.id} already joined`);
       return;
     }
@@ -117,19 +125,21 @@ export const joinChannel =
 
       // add channel to store
       // we need channel to exist prior to uploadingProfileToChannel
-      dispatch(addChannel(channel));
+      dispatch(upsertChannel(channel));
 
       // start polling for profiles
-      dispatch(subscribeToConnectionRequests(channel.id, api));
+      dispatch(subscribeToConnectionRequests(channel.id));
     } catch (e) {
       // Something went wrong while trying to join channel.
+      console.log(`Error joining channel ${channel.id}: ${e}`);
       dispatch(leaveChannel(channel.id));
       throw e;
     }
   };
 
 export const leaveChannel =
-  (channelId: string) => (dispatch: AppDispatch, getState) => {
+  (channelId: string): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
     const channel: Channel = selectChannelById(getState(), channelId);
     if (channel) {
       clearTimeout(channel.timeoutId);
@@ -138,18 +148,29 @@ export const leaveChannel =
     }
   };
 
-export const leaveAllChannels = () => (dispatch: AppDispatch, getState) => {
-  const channels = selectAllChannels(getState());
-  for (const channel of channels) {
-    console.log(`Leaving channel ${channel.id}`);
-    clearTimeout(channel.timeoutId);
-    dispatch(unsubscribeFromConnectionRequests(channel.id));
-    dispatch(removeChannel(channel.id));
-  }
-};
+export const leaveAllChannels =
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
+    const channels = selectAllChannels(getState());
+    for (const channel of channels) {
+      console.log(`Leaving channel ${channel.id}`);
+      clearTimeout(channel.timeoutId);
+      dispatch(unsubscribeFromConnectionRequests(channel.id));
+      dispatch(removeChannel(channel.id));
+    }
+  };
+
+export const leaveChannelsByType =
+  (channelType: ChannelType): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
+    const channelIds = selectAllActiveChannelIdsByType(getState(), channelType);
+    for (const id of channelIds) {
+      dispatch(leaveChannel(id));
+    }
+  };
 
 export const subscribeToConnectionRequests =
-  (channelId: string, api: NodeApi) => (dispatch: AppDispatch, getState) => {
+  (channelId: string): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
     let { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -163,7 +184,7 @@ export const subscribeToConnectionRequests =
 
     pollTimerId = setInterval(() => {
       // fetch all profileIDs in channel
-      dispatch(fetchChannelProfiles(channelId, api));
+      dispatch(fetchChannelProfiles(channelId));
     }, PROFILE_POLL_INTERVAL);
 
     console.log(
@@ -181,7 +202,8 @@ export const subscribeToConnectionRequests =
   };
 
 export const unsubscribeFromConnectionRequests =
-  (channelId: string) => (dispatch: AppDispatch, getState) => {
+  (channelId: string): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
     const { pollTimerId } = selectChannelById(getState(), channelId);
 
     if (pollTimerId) {
@@ -199,8 +221,15 @@ export const unsubscribeFromConnectionRequests =
   };
 
 export const fetchChannelProfiles =
-  (channelId: string, api: NodeApi): AppThunk =>
+  (channelId: string): AppThunk =>
   async (dispatch: AppDispatch, getState) => {
+    // don't try to fetch profiles if there is no node API available. Can happen if node goes down or
+    // when rejoining hydrated channels at app startup
+    if (!getGlobalNodeApi()) {
+      console.log(`Skipping channel poll cycle - no NodeAPI available`);
+      return;
+    }
+
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
 
@@ -243,7 +272,6 @@ export const fetchChannelProfiles =
                 newPendingConnection({
                   channelId,
                   profileId,
-                  api,
                 }),
               );
             }
@@ -269,7 +297,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId: channel.initiatorProfileId,
-                api,
               }),
             );
           }
@@ -288,7 +315,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId,
-                api,
               }),
             );
           }
@@ -307,7 +333,6 @@ export const fetchChannelProfiles =
               newPendingConnection({
                 channelId,
                 profileId,
-                api,
               }),
             );
           }
@@ -330,6 +355,13 @@ export const encryptAndUploadProfileToChannel =
   async (dispatch: AppDispatch, getState) => {
     // get channel
     const channel = selectChannelById(getState(), channelId);
+
+    // prevent duplicate upload of my data. Could happen when rejoining hydrated channels after app restart.
+    // Existence of myProfileTimestamp indicates that I already uploaded my profile.
+    if (channel.myProfileTimestamp) {
+      return;
+    }
+
     // get user data
     const {
       id,

@@ -601,8 +601,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Stelle eine Gruppenverbindung mit {{name}} auf BrightID her: {{link}}",
-      "connectSingle": "Verbinde dich mit {{name}} auf BrightID: {{link}}",
+      "connectGroup": "Erstelle eine Gruppenverbindung mit {{name}} auf BrightID: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
+      "connectSingle": "Verbinde dich mit {{name}} auf BrightID: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "Ein Gruppencode kann mehrmals gescannt werden für gleichzeitige Verbindung mit mehreren Personen.",
         "codeSingle": "Ein Einmalcode kann nur zur Verbindung mit jeweils einer Person genutzt werden.",
@@ -645,7 +645,7 @@
   },
   "recovery": {
     "alert": {
-      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}",
+      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}. Dieser Link ist gültig bis {{expirationTimestamp}}.",
       "text": "Teile diesen Link mit deinen Wiederherstellungsverbindungen.",
       "title": "Wiederherstellungslink"
     },
