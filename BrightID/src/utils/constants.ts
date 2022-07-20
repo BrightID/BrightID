@@ -31,6 +31,7 @@ export const PROFILE_VERSION = 1;
 export const MAX_TOTAL_CHANNELS = 20; // max number of channels client can create
 export const SINGLE_CHANNEL_TTL = 24 * hour;
 export const GROUP_CHANNEL_TTL = 15 * minute;
+export const STAR_CHANNEL_TTL = 30 * minute;
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
 export const MIN_CHANNEL_JOIN_TTL = 5 * second; // minimum TTL a channel should still have when joining.
 export const PROFILE_POLL_INTERVAL = 2 * second;

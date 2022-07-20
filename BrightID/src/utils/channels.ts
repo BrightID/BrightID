@@ -10,6 +10,7 @@ import {
   channel_states,
   channel_types,
   GROUP_CHANNEL_TTL,
+  STAR_CHANNEL_TTL,
 } from '@/utils/constants';
 import ChannelAPI from '@/api/channelService';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -22,10 +23,19 @@ export const generateChannelData = async (
   const aesKey = await urlSafeRandomKey(16);
   const id = await urlSafeRandomKey(9);
   const timestamp = Date.now();
-  const ttl =
-    channelType === channel_types.SINGLE
-      ? SINGLE_CHANNEL_TTL
-      : GROUP_CHANNEL_TTL;
+  let ttl;
+  switch (channelType) {
+    case 'GROUP':
+      ttl = GROUP_CHANNEL_TTL;
+      break;
+    case 'STAR':
+      ttl = STAR_CHANNEL_TTL;
+      break;
+    case 'SINGLE':
+    default:
+      ttl = SINGLE_CHANNEL_TTL;
+      break;
+  }
   const myProfileId = await urlSafeRandomKey(9);
   const initiatorProfileId = myProfileId;
   const type = channelType;

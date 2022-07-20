@@ -199,14 +199,16 @@
       "levelSuspicious": "Ik ken deze persoon niet",
       "removeConnection": "Loskoppelen van {{name}}",
       "reportConnection": "Melding maken over {{name}}",
-      "reportDuplicate": "Deze koppeling is een duplicaat",
+      "reportDuplicate": "Deze gebruiker maakt wellens en wetens meerdere accounts aan",
       "reportOther": "Andere reden",
-      "reportReplaced": "Deze koppeling is verouderd en vervangen door een ander account",
+      "reportReplaced": "Deze gebruiker heeft geen toegang meer tot dit account en daarom een nieuw account aangemaakt",
       "reportSpammer": "Deze persoon bleef me ongewenste verzoeken sturen",
       "reportSuspicious": "Dit account behoorde eerst toe aan een ander persoon",
       "unReportConnection": "Herstellen",
       "unReportImpact": "Je hebt {{name}} gemeld als ‘{{reportReason}}’. Weet je zeker dat je dit wilt intrekken en de koppeling wilt herstellen?",
       "unkownRecoveryConnection": "Onbekend",
+      "whyRemove": "Vertel ons waarom je deze koppeling wilt verwijderen",
+      "whyReport": "Vertel ons waarom je deze koppeling niet vertrouwt",
       "whyremove": "Vertel ons waarom je deze koppeling wilt verwijderen",
       "whyreport": "Vertel ons waarom je deze connectie niet vertrouwt"
     }
@@ -330,7 +332,8 @@
       "editProfile": "Profiel bewerken",
       "findFriends": "Vrienden zoeken",
       "groups": "Groepen",
-      "home": "Startpagina"
+      "home": "Startpagina",
+      "settings": "Instellingen"
     }
   },
   "eula": {
@@ -443,7 +446,7 @@
       "text": "Open deze link in de te importeren BrightID-app.",
       "title": "BrightID-link importeren"
     },
-    "clipboardmessage": "Exporteer je BrightID naar een ander apparaat: {{link}}",
+    "clipboardmessage": "Exporteer je BrightID naar een ander apparaat: {{link}} Deze link is tot {{expirationTimestamp}} geldig.",
     "header": {
       "title": "Account importeren"
     },
@@ -620,8 +623,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Word lid van een groep met {{name}} op BrightID: {{link}}",
-      "connectSingle": "Leg contact met {{name}} op BrightID: {{link}}",
+      "connectGroup": "Word lid van een groep met {{name}} op BrightID: {{link}} Deze link is tot {{expirationTimestamp}} geldig.",
+      "connectSingle": "Leg contact met {{name}} op BrightID: {{link}} Deze link is tot {{expirationTimestamp}} geldig.",
       "text": {
         "codeGroup": "Deze QR-code is ontworpen om contact te leggen met meerdere personen tegelijk.",
         "codeSingle": "Deze QR-code is ontworpen om contact te leggen met één gebruiker.",
@@ -666,7 +669,7 @@
       "text": "Deel deze link met al je herstelconnecties.",
       "title": "Herstellink"
     },
-    "clipboardmessage": "Help me om mijn BrightID te herstellen: {{link}}",
+    "clipboardmessage": "Help me om mijn BrightID te herstellen: {{link}} Deze link is tot {{expirationTimestamp}} geldig.",
     "error": {
       "mismatchId": "Je herstelconnecties hebben andere accounts gekozen",
       "title": "Accountherstel mislukt",
@@ -747,6 +750,11 @@
       "chooseConnectionToHelp": "Kies de connectie die je wilt helpen."
     }
   },
+  "settings": {
+    "language": {
+      "label": "Taal"
+    }
+  },
   "signup": {
     "button": {
       "skip": "Overslaan en later doen",
@@ -774,7 +782,7 @@
       "text": "Open deze link in de te synchroniseren BrightID-app.",
       "title": "Gegevens synchroniseren"
     },
-    "clipboardmessage": "Synchroniseer je BrightID-gegevens met een andere apparaat: {{link}}",
+    "clipboardmessage": "Synchroniseer je BrightID-gegevens met een andere apparaat: {{link}} Deze link is tot {{expirationTimestamp}} geldig.",
     "text": {
       "additionalInfo": "Scan deze QR-code met je andere apparaat om de synchronisatie te starten",
       "askScanning": "Scan deze QR-code met je andere apparaat"
