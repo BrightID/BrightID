@@ -251,14 +251,16 @@
       "levelSuspicious": "Je ne connais pas du tout cette personne",
       "removeConnection": "Déconnecter de {{name}}",
       "reportConnection": "Signaler {{name}}",
-      "reportDuplicate": "Cette connexion est un doublon",
+      "reportDuplicate": "Cet utilisateur crée malicieusement plusieurs comptes",
       "reportOther": "Autre raison",
-      "reportReplaced": "Cette connexion est ancienne et remplacée par un autre compte",
+      "reportReplaced": "L'utilisateur a perdu l'accès à cet ancien compte et en a créé un nouveau",
       "reportSpammer": "Cette personne m'a envoyé une demande de connexion non désirée",
       "reportSuspicious": "Ce compte appartenait à une personne différente avant",
       "unReportConnection": "Rétablir la connexion",
       "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
       "unkownRecoveryConnection": "Inconnu",
+      "whyRemove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion",
+      "whyReport": "Veuillez nous dire pourquoi vous soupçonnez cette connexion",
       "whyremove": "Veuillez nous dire pourquoi vous voulez supprimer cette connexion",
       "whyreport": "Veuillez nous dire pourquoi vous soupçonnez cette connexion"
     }
@@ -385,7 +387,8 @@
       "editProfile": "Modifier le profil",
       "findFriends": "inviter",
       "groups": "Groupes",
-      "home": "Accueil"
+      "home": "Accueil",
+      "settings": "Paramètres"
     }
   },
   "eula": {
@@ -504,7 +507,7 @@
       "text": "Ouvrez ce lien avec l'application BrightID qui doit être importée.",
       "title": "Importer un lien BrightID"
     },
-    "clipboardmessage": "Exporter votre BrightID vers un autre appareil : {{link}}",
+    "clipboardmessage": "Exportez votre BrightID vers un autre appareil : {{link}}. Ce lien est valable jusqu'à {{expirationTimestamp}}.",
     "header": {
       "title": "Importer un compte"
     },
@@ -692,8 +695,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Établissez une connexion de groupe avec {{name}} sur BrightID : {{link}}",
-      "connectSingle": "Connectez-vous avec {{name}} sur BrightID : {{link}}",
+      "connectGroup": "Faites une connexion de groupe avec {{name}} sur BrightID : {{link}}. Ce lien est valable jusqu'à {{expirationTimestamp}}.",
+      "connectSingle": "Connectez-vous avec {{name}} sur BrightID : {{link}}. Ce lien est valable jusqu'à {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
         "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration.",
@@ -740,7 +743,7 @@
       "text": "Partagez ce lien avec vos connexions de récupération.",
       "title": "Lien de récupération"
     },
-    "clipboardmessage": "Aidez-moi à récupérer mon BrightID : {{link}}",
+    "clipboardmessage": "Aidez-moi à récupérer mon BrightID : {{link}}. Ce lien est valable jusqu'à {{expirationTimestamp}}.",
     "error": {
       "mismatchId": "Vos connexions de récupération ont sélectionné différents comptes",
       "title": "La récupération du compte a échoué",
@@ -841,6 +844,11 @@
       "chooseConnection": "Choissez la Connexion"
     }
   },
+  "settings": {
+    "language": {
+      "label": "Langue"
+    }
+  },
   "signup": {
     "alert": {
       "nameMissing": "Veuillez renseigner votre nom",
@@ -878,7 +886,7 @@
       "text": "Ouvrez ce lien avec l'application BrightID qui doit être synchronisée.",
       "title": "Synchroniser les données des utilisateurs"
     },
-    "clipboardmessage": "Synchronisez vos données BrightID avec un autre appareil : {{link}}",
+    "clipboardmessage": "Synchronisez vos données BrightID avec un autre appareil : {{link}}. Ce lien est valable jusqu'à {{expirationTimestamp}}.",
     "text": {
       "additionalInfo": "Ce code QR doit être scanné à l'aide de votre autre appareil pour synchroniser les données entre eux",
       "askScanning": "Veuillez scanner ce code QR en utilisant votre autre appareil"

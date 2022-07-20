@@ -180,6 +180,7 @@
     "button": {
       "cancel": "Abbrechen",
       "copy": "Kopieren",
+      "retry": "Erneut versuchen",
       "save": "Speichern"
     },
     "camera": {
@@ -207,6 +208,7 @@
       "reportedByUser": "von dir gemeldet"
     },
     "text": {
+      "noConnection": "Verbindung zum Server konnte nicht hergestellt werden",
       "progress": "{{completed}}/{{total}} abgeschlossen",
       "uploadingData": "Hochladen verschlüsselter Daten auf den Sicherungsserver …"
     }
@@ -215,6 +217,7 @@
     "button": {
       "levelSave": "Speichern",
       "ok": "OK",
+      "report": "Diese Verbindung entfernen",
       "reportCancel": "Abbrechen",
       "reportSubmit": "Einreichen",
       "undoReport": "Meldung rückgängig machen"
@@ -226,6 +229,8 @@
       "connectionLevel": "Verbindungsstufe",
       "mutualConnections": "Gemeinsame Verbindungen",
       "mutualGroups": "Gemeinsame Gruppen",
+      "possibleDuplicates": "Mögliche Duplikate",
+      "recoveryConnections": "Wiederherstellungsverbindungen",
       "socialMedia": "Sozialen Medien"
     },
     "tags": {
@@ -239,9 +244,11 @@
       "levelJustMet": "Diese Person ist ein Fremder, den ich gerade getroffen habe",
       "levelRecovery": "Ich vertraue dieser Person, um meine BrightID für mich wiederherzustellen",
       "levelSuspicious": "Ich kenne diese Person überhaupt nicht",
+      "reportConnection": "{{name}} melden",
       "reportDuplicate": "Diese Person hat böswillig mehrere Konten erstellt",
       "reportOther": "Anderer Grund",
       "reportSpammer": "Diese Person hat mir eine unerwünschte Verbindungsanfrage gesendet",
+      "unReportConnection": "Verbindung wiederherstellen",
       "unReportImpact": "Du hast bereits {{name}} als {{reportReason}} gemeldet. Möchtest du diese Meldung entfernen und deine Verbindung wiederherstellen?"
     }
   },
@@ -761,6 +768,11 @@
     },
     "title": {
       "chooseConnection": "Wähle eine Verbindung"
+    }
+  },
+  "settings": {
+    "language": {
+      "label": "Sprache"
     }
   },
   "signup": {
