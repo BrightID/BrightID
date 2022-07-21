@@ -15,6 +15,7 @@
  */
 import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import {
+  CHANNEL_TTL_HEADER,
   CHANNEL_UPLOAD_RETRY_COUNT,
   CHANNEL_UPLOAD_RETRY_INTERVAL,
 } from '@/utils/constants';
@@ -28,10 +29,24 @@ type UploadParams = {
   requestedTtl?: number;
 };
 
+type UploadResult = {
+  newTTL: number;
+};
+
 type DownloadParams = {
   channelId: string;
   dataId: string;
   deleteAfterDownload?: boolean;
+};
+
+type DownloadResult = {
+  data: any;
+  newTTL: number;
+};
+
+type ListResult = {
+  entries: Array<string>;
+  newTTL: number;
 };
 
 class ChannelAPI {
@@ -54,7 +69,7 @@ class ChannelAPI {
     throw new Error(response.problem);
   }
 
-  async upload(params: UploadParams) {
+  async upload(params: UploadParams): Promise<UploadResult> {
     const { channelId, data, dataId, requestedTtl } = params;
 
     // convert TTL from ms to seconds
@@ -83,17 +98,22 @@ class ChannelAPI {
       await new Promise((r) => setTimeout(r, retryDelay));
       result = await this.api.post(`/upload/${channelId}`, body);
     }
-
     ChannelAPI.throwOnError(result);
+    const newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
+    return { newTTL };
   }
 
-  async list(channelId: string) {
+  async list(channelId: string): Promise<ListResult> {
     const result = await this.api.get<{ profileIds: string[] }>(
       `/list/${channelId}`,
     );
     ChannelAPI.throwOnError(result);
+    const newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
     if (result.data && result.data.profileIds) {
-      return result.data.profileIds;
+      return {
+        entries: result.data.profileIds,
+        newTTL,
+      };
     } else {
       throw new Error(
         `list for channel ${channelId}: Unexpected response format`,
@@ -101,15 +121,17 @@ class ChannelAPI {
     }
   }
 
-  async download(params: DownloadParams) {
+  async download(params: DownloadParams): Promise<DownloadResult> {
     const { channelId, dataId, deleteAfterDownload } = params;
     const result = await this.api.get<{ data: any }>(
       `/download/${channelId}/${dataId}`,
     );
     ChannelAPI.throwOnError(result);
+    let newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
     if (deleteAfterDownload) {
       try {
-        await this.api.delete(`/${channelId}/${dataId}`);
+        const deleteResult = await this.api.delete(`/${channelId}/${dataId}`);
+        newTTL = parseInt(deleteResult.headers[CHANNEL_TTL_HEADER]);
       } catch (e) {
         console.log(
           `Ignoring error while deleting ${dataId} from channel ${channelId}: ${e}`,
@@ -117,7 +139,10 @@ class ChannelAPI {
       }
     }
     if (result.data && result.data.data) {
-      return result.data.data;
+      return {
+        data: result.data.data,
+        newTTL,
+      };
     } else {
       throw new Error(
         `download ${dataId} from channel ${channelId}: Unexpected response format`,

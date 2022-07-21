@@ -28,7 +28,7 @@ const downloadConnection = async ({
 }): Promise<SyncConnection> => {
   try {
     console.log(channelId, dataId);
-    const encrypted = await channelApi.download({
+    const { data: encrypted, newTTL } = await channelApi.download({
       channelId,
       dataId,
       deleteAfterDownload: true,
@@ -186,7 +186,7 @@ const downloadGroup = async ({
   channelId: string;
 }) => {
   try {
-    const encrypted = await channelApi.download({
+    const { data: encrypted, newTTL } = await channelApi.download({
       channelId,
       dataId,
       deleteAfterDownload: true,
@@ -284,7 +284,11 @@ export const downloadSigs =
 
       for (const dataId of sigDataIds) {
         const signer = sigId(dataId);
-        const sig: Signature = await channelApi.download({ channelId, dataId });
+        const { data: sig, newTTL }: { data: Signature; newTTL: number } =
+          await channelApi.download({
+            channelId,
+            dataId,
+          });
         if (id && sig.id !== id) {
           // recovery connections disagree on which account is being recovered!
           throw new RecoveryError(RecoveryErrorType.MISMATCH_ID);

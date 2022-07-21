@@ -97,7 +97,6 @@ declare global {
     version: number;
     type: ChannelType;
     timestamp: number;
-    ttl: number;
     initiatorProfileId: string;
   };
 

@@ -47,15 +47,17 @@ export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
 export const CHANNEL_INFO_VERSION_1 = 1; // Initial channel info format
 export const CHANNEL_INFO_VERSION_2 = 2; // Adds STAR channel type
+export const CHANNEL_INFO_VERSION_3 = 3; // removes TTL from channel info
 // the oldest channel info format the client understands.
 export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
 // the newest channel info format the client understands.
-export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
+export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_3;
 // TODO: Set dedicated prefix for importing once node backends are updated
 export const IMPORT_PREFIX = 'sig_';
 export const CHANNEL_UPLOAD_RETRY_COUNT = 5; // max number of upload retries when upload failed
 export const CHANNEL_UPLOAD_RETRY_INTERVAL = 5 * second; // ms to wait between retries
 export const RECOVERY_CHANNEL_TTL = day;
+export const CHANNEL_TTL_HEADER = 'x-ttl';
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';

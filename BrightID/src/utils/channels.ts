@@ -11,6 +11,7 @@ import {
   channel_types,
   GROUP_CHANNEL_TTL,
   STAR_CHANNEL_TTL,
+  CHANNEL_INFO_VERSION_3,
 } from '@/utils/constants';
 import ChannelAPI from '@/api/channelService';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -57,27 +58,10 @@ export const generateChannelData = async (
 };
 
 export const createChannelInfo = (channel: Channel) => {
-  /*
-    Channel types "SINGLE" and "GROUP" are compatible with CHANNEL_INFO_VERSION 1.
-    Channel type "STAR" requires CHANNEL_INFO_VERSION 2
-   */
-  let version;
-  switch (channel.type) {
-    case channel_types.SINGLE:
-    case channel_types.GROUP:
-      version = CHANNEL_INFO_VERSION_1;
-      break;
-    case channel_types.STAR:
-      version = CHANNEL_INFO_VERSION_2;
-      break;
-    default:
-      throw new Error(`Unhandled channel type ${channel.type}`);
-  }
   const obj: ChannelInfo = {
-    version,
+    version: CHANNEL_INFO_VERSION_3,
     type: channel.type,
     timestamp: channel.timestamp,
-    ttl: channel.ttl,
     initiatorProfileId: channel.initiatorProfileId,
   };
   return obj;
@@ -100,8 +84,9 @@ export const parseChannelQrURL = async (url: URL) => {
 
   // create channelAPI
   const channelApi = new ChannelAPI(url.href);
-  // download channelInfo
-  const channelInfo = await channelApi.download({
+
+  // download channelInfo and remaining TTL
+  const { data: channelInfo, newTTL } = await channelApi.download({
     channelId: id,
     dataId: CHANNEL_INFO_NAME,
   });
@@ -132,7 +117,7 @@ export const parseChannelQrURL = async (url: URL) => {
     myProfileId,
     state: channel_states.OPEN,
     timestamp: channelInfo.timestamp,
-    ttl: channelInfo.ttl,
+    ttl: newTTL,
     type: channelInfo.type,
     url,
   };

@@ -70,7 +70,7 @@ export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
   } = store.getState();
   const channelApi = new ChannelAPI(url.href);
   try {
-    const dataString = await channelApi.download({
+    const { data: dataString, newTTL } = await channelApi.download({
       channelId,
       dataId: `${IMPORT_PREFIX}data`,
       deleteAfterDownload: true,
@@ -133,7 +133,7 @@ export const checkImportChannel =
       settings: { isPrimaryDevice },
     } = getState();
     const channelApi = new ChannelAPI(url.href);
-    const dataIds = await channelApi.list(channelId);
+    const { entries: dataIds, newTTL } = await channelApi.list(channelId);
     await dispatch(downloadUserInfo({ channelApi, dataIds }));
     await dispatch(downloadConnections({ channelApi, dataIds }));
     await dispatch(downloadGroups({ channelApi, dataIds }));

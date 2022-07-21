@@ -106,7 +106,7 @@ export const joinChannel =
 
       // don't join channel if it already has maximum allowed number of entries.
       // Note that this is a client-side limitation in order to keep the UI usable.
-      const entries = await channel.api.list(channel.id);
+      const { entries, newTTL } = await channel.api.list(channel.id);
       // channel.api.list() will include the channelInfo.json file.
       // Remove it from list as I don't want to download and interpret it as a profile.
       const channelInfoIndex = entries.indexOf(CHANNEL_INFO_NAME);
@@ -231,7 +231,7 @@ export const fetchChannelProfiles =
     }
 
     const channel = selectChannelById(getState(), channelId);
-    let profileIds = await channel.api.list(channelId);
+    let { entries: profileIds, newTTL } = await channel.api.list(channelId);
 
     // channel.api.list() will include the channelInfo.json file.
     // Remove it from list as I don't want to download and interpret it as a profile.
