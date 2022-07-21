@@ -15,7 +15,7 @@
  */
 import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import {
-  CHANNEL_TTL_HEADER,
+  CHANNEL_EXPIRES_HEADER,
   CHANNEL_UPLOAD_RETRY_COUNT,
   CHANNEL_UPLOAD_RETRY_INTERVAL,
 } from '@/utils/constants';
@@ -30,7 +30,7 @@ type UploadParams = {
 };
 
 type UploadResult = {
-  newTTL: number;
+  expires: number;
 };
 
 type DownloadParams = {
@@ -41,12 +41,12 @@ type DownloadParams = {
 
 type DownloadResult = {
   data: any;
-  newTTL: number;
+  expires: number;
 };
 
 type ListResult = {
   entries: Array<string>;
-  newTTL: number;
+  expires: number;
 };
 
 class ChannelAPI {
@@ -99,8 +99,8 @@ class ChannelAPI {
       result = await this.api.post(`/upload/${channelId}`, body);
     }
     ChannelAPI.throwOnError(result);
-    const newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
-    return { newTTL };
+    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
+    return { expires };
   }
 
   async list(channelId: string): Promise<ListResult> {
@@ -108,11 +108,11 @@ class ChannelAPI {
       `/list/${channelId}`,
     );
     ChannelAPI.throwOnError(result);
-    const newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
+    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
     if (result.data && result.data.profileIds) {
       return {
         entries: result.data.profileIds,
-        newTTL,
+        expires,
       };
     } else {
       throw new Error(
@@ -127,11 +127,11 @@ class ChannelAPI {
       `/download/${channelId}/${dataId}`,
     );
     ChannelAPI.throwOnError(result);
-    let newTTL = parseInt(result.headers[CHANNEL_TTL_HEADER]);
+    let expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
     if (deleteAfterDownload) {
       try {
         const deleteResult = await this.api.delete(`/${channelId}/${dataId}`);
-        newTTL = parseInt(deleteResult.headers[CHANNEL_TTL_HEADER]);
+        expires = parseInt(deleteResult.headers[CHANNEL_EXPIRES_HEADER]);
       } catch (e) {
         console.log(
           `Ignoring error while deleting ${dataId} from channel ${channelId}: ${e}`,
@@ -141,7 +141,7 @@ class ChannelAPI {
     if (result.data && result.data.data) {
       return {
         data: result.data.data,
-        newTTL,
+        expires,
       };
     } else {
       throw new Error(

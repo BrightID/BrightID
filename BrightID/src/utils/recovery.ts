@@ -39,7 +39,7 @@ export const loadRecoveryData = async (
   channelApi: ChannelAPI,
   aesKey: string,
 ): Promise<{ signingKey: string; timestamp: number }> => {
-  const { data: dataString, newTTL } = await channelApi.download({
+  const { data: dataString } = await channelApi.download({
     channelId: hash(aesKey),
     dataId: 'data',
   });

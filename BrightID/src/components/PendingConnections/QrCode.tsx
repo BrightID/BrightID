@@ -16,6 +16,7 @@ import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import {
   closeChannel,
+  selectChannelById,
   selectTotalChannels,
 } from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
@@ -25,18 +26,17 @@ import {
   MAX_TOTAL_CHANNELS,
 } from '@/utils/constants';
 
-const Timer = ({ channel }: { channel: Channel }) => {
+const Timer = ({ channelId }: { channelId: string }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-
+  const channel = useSelector((state) => selectChannelById(state, channelId));
   const [countdown, setCountdown] = useState(
-    channel ? channel.ttl - (Date.now() - channel.timestamp) : 0,
+    channel ? channel.expires * 1000 - Date.now() : 0,
   );
 
   const timerTick = () => {
     if (channel && navigation.isFocused()) {
-      const countDown = channel.ttl - (Date.now() - channel.timestamp);
-      setCountdown(countDown);
+      setCountdown(channel.expires * 1000 - Date.now());
     }
   };
 
@@ -94,7 +94,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
     )}`;
 
     const languageTag = i18next.resolvedLanguage;
-    const expirationDate = new Date(channel.timestamp + channel.ttl);
+    const expirationDate = new Date(channel.expires * 1000);
     const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
       month: 'short',
       day: 'numeric',
@@ -169,9 +169,9 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
     </View>
   );
 
-  return qrsvg ? (
+  return qrsvg && channel ? (
     <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-      <Timer channel={channel} />
+      <Timer channelId={channel.id} />
       <Svg
         height={DEVICE_LARGE ? '260' : '200'}
         width={DEVICE_LARGE ? '260' : '200'}

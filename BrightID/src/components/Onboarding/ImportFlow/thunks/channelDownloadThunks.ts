@@ -42,7 +42,7 @@ export const downloadContextInfo =
       );
 
       for (const dataId of contextInfoDataIds) {
-        const { data: encrypted, newTTL } = await channelApi.download({
+        const { data: encrypted } = await channelApi.download({
           channelId,
           dataId,
           deleteAfterDownload: true,
@@ -80,7 +80,7 @@ export const downloadBlindSigs =
       const blindSigDataIds = dataIds.filter((dataId) => isBlindSig(dataId));
 
       for (const dataId of blindSigDataIds) {
-        const { data: encrypted, newTTL } = await channelApi.download({
+        const { data: encrypted } = await channelApi.download({
           channelId,
           dataId,
           deleteAfterDownload: true,
@@ -125,7 +125,7 @@ export const downloadUserInfo =
         return false;
       }
 
-      const { data: encrypted, newTTL } = await channelApi.download({
+      const { data: encrypted } = await channelApi.download({
         channelId,
         dataId: userInfoDataId,
         deleteAfterDownload: true,

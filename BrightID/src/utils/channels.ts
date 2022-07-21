@@ -4,11 +4,8 @@ import {
   SINGLE_CHANNEL_TTL,
   CHANNEL_INFO_NAME,
   MIN_CHANNEL_INFO_VERSION,
-  CHANNEL_INFO_VERSION_1,
-  CHANNEL_INFO_VERSION_2,
   MAX_CHANNEL_INFO_VERSION,
   channel_states,
-  channel_types,
   GROUP_CHANNEL_TTL,
   STAR_CHANNEL_TTL,
   CHANNEL_INFO_VERSION_3,
@@ -51,9 +48,9 @@ export const generateChannelData = async (
     myProfileId,
     state,
     timestamp,
-    ttl,
     type,
     url,
+    expires: Math.floor((Date.now() + ttl) / 1000),
   };
 };
 
@@ -85,8 +82,8 @@ export const parseChannelQrURL = async (url: URL) => {
   // create channelAPI
   const channelApi = new ChannelAPI(url.href);
 
-  // download channelInfo and remaining TTL
-  const { data: channelInfo, newTTL } = await channelApi.download({
+  // download channelInfo and expiration timestamp
+  const { data: channelInfo, expires } = await channelApi.download({
     channelId: id,
     dataId: CHANNEL_INFO_NAME,
   });
@@ -117,9 +114,9 @@ export const parseChannelQrURL = async (url: URL) => {
     myProfileId,
     state: channel_states.OPEN,
     timestamp: channelInfo.timestamp,
-    ttl: newTTL,
     type: channelInfo.type,
     url,
+    expires,
   };
   return channel;
 };

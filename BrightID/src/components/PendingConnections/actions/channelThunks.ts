@@ -48,9 +48,9 @@ export const createChannel =
 
       // Set timeout to expire channel
       channel.timeoutId = setTimeout(() => {
-        console.log(`timer expired for channel ${channel.id}`);
-        dispatch(leaveChannel(channel.id));
-      }, channel.ttl);
+        dispatch(checkExpiration(channel.id));
+      }, channel.expires * 1000 - Date.now());
+
       dispatch(addChannel(channel));
       dispatch(
         setMyChannel({ channelId: channel.id, channelType: channel.type }),
@@ -62,7 +62,7 @@ export const createChannel =
         channelId: channel.id,
         data: channelInfo,
         dataId: CHANNEL_INFO_NAME,
-        requestedTtl: channel.ttl,
+        requestedTtl: channel.expires * 1000 - Date.now(),
       });
 
       // upload my profile
@@ -85,46 +85,44 @@ export const joinChannel =
   async (dispatch: AppDispatch, getState) => {
     console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
 
-    // check to see if channel exists
+    // check if channel is already joined
     const existingChannel = selectChannelById(getState(), channel.id);
     if (existingChannel && existingChannel.timeoutId) {
       console.log(`Channel ${channel.id} already joined`);
       return;
     }
 
-    // calc remaining lifetime of channel
-    const ttl_remain = channel.timestamp + channel.ttl - Date.now();
-
     try {
-      // don't join channel if it is/is about to expired
-      if (ttl_remain < MIN_CHANNEL_JOIN_TTL) {
+      const { entries, expires } = await channel.api.list(channel.id);
+
+      // don't join channel if it is/is about to expire
+      const remainingTTL = expires * 1000 - Date.now();
+      if (remainingTTL < MIN_CHANNEL_JOIN_TTL) {
         console.log(
-          `Remaining ttl ${ttl_remain} of channel ${channel.id} too low. Aborting join.`,
+          `Remaining ttl ${remainingTTL} of channel ${channel.id} too low. Aborting join.`,
         );
         throw new Error('Channel expired');
       }
 
-      // don't join channel if it already has maximum allowed number of entries.
-      // Note that this is a client-side limitation in order to keep the UI usable.
-      const { entries, newTTL } = await channel.api.list(channel.id);
-      // channel.api.list() will include the channelInfo.json file.
-      // Remove it from list as I don't want to download and interpret it as a profile.
+      // channel.api.list() will include the channelInfo.json file. Remove it from
+      // list as I don't want to download and interpret it as a profile.
       const channelInfoIndex = entries.indexOf(CHANNEL_INFO_NAME);
       if (channelInfoIndex > -1) {
         entries.splice(channelInfoIndex, 1);
       }
+
+      // don't join channel if it already has maximum allowed number of entries.
+      // Note that this is a client-side limitation in order to keep the UI usable.
       if (entries.length >= CHANNEL_CONNECTION_LIMIT) {
         throw new Error(`Channel is full`);
       }
 
       // Start timer to expire channel
       channel.timeoutId = setTimeout(() => {
-        console.log(`timer expired for channel ${channel.id}`);
-        dispatch(leaveChannel(channel.id));
-      }, ttl_remain);
+        dispatch(checkExpiration(channel.id));
+      }, remainingTTL);
 
       // add channel to store
-      // we need channel to exist prior to uploadingProfileToChannel
       dispatch(upsertChannel(channel));
 
       // start polling for profiles
@@ -134,6 +132,39 @@ export const joinChannel =
       console.log(`Error joining channel ${channel.id}: ${e}`);
       dispatch(leaveChannel(channel.id));
       throw e;
+    }
+  };
+
+export const checkExpiration =
+  (channelId: string): AppThunk =>
+  (dispatch: AppDispatch, getState) => {
+    const channel: Channel = selectChannelById(getState(), channelId);
+    clearTimeout(channel.timeoutId);
+    if (channel) {
+      if (channel.expires >= Math.floor(Date.now() / 1000)) {
+        console.log(`Channel ${channelId} is expired. Leaving...`);
+        dispatch(unsubscribeFromConnectionRequests(channelId));
+        dispatch(removeChannel(channelId));
+      } else {
+        // check again at current expiration date
+        const waitms = channel.expires * 1000 - Date.now();
+        console.log(
+          `Channel ${channelId} not yet expired. Checking again in ${waitms}ms.`,
+        );
+        const timeoutId = setTimeout(() => {
+          console.log(`timer expired for channel ${channel.id}`);
+          dispatch(leaveChannel(channel.id));
+        }, waitms);
+
+        dispatch(
+          updateChannel({
+            id: channelId,
+            changes: {
+              timeoutId,
+            },
+          }),
+        );
+      }
     }
   };
 
@@ -188,7 +219,7 @@ export const subscribeToConnectionRequests =
     }, PROFILE_POLL_INTERVAL);
 
     console.log(
-      `Start polling channel ${channelId}, pollTImerId ${pollTimerId}`,
+      `Start polling channel ${channelId}, pollTimerId ${pollTimerId}`,
     );
 
     dispatch(
@@ -231,7 +262,19 @@ export const fetchChannelProfiles =
     }
 
     const channel = selectChannelById(getState(), channelId);
-    let { entries: profileIds, newTTL } = await channel.api.list(channelId);
+    let profileIds: string[];
+    let expires: number;
+    try {
+      const result = await channel.api.list(channelId);
+      profileIds = result.entries;
+      expires = result.expires;
+    } catch (e) {
+      console.log(`Error listing channel ${channelId}:`);
+      console.log(e);
+      console.log(`Leaving channel ${channelId}`);
+      dispatch(leaveChannel(channelId));
+      return;
+    }
 
     // channel.api.list() will include the channelInfo.json file.
     // Remove it from list as I don't want to download and interpret it as a profile.
@@ -348,6 +391,18 @@ export const fetchChannelProfiles =
       );
       dispatch(unsubscribeFromConnectionRequests(channel.id));
     }
+
+    // update channel expiration timestamp based on server response
+    if (expires !== channel.expires) {
+      dispatch(
+        updateChannel({
+          id: channelId,
+          changes: {
+            expires,
+          },
+        }),
+      );
+    }
   };
 
 export const encryptAndUploadProfileToChannel =
@@ -400,7 +455,7 @@ export const encryptAndUploadProfileToChannel =
     console.log(`Encrypting profile data with key ${channel.aesKey}`);
     const encrypted = encryptData(dataObj, channel.aesKey);
     console.log(`Posting profile data...`);
-    await channel.api.upload({
+    const { expires } = await channel.api.upload({
       channelId,
       data: encrypted,
       dataId: channel.myProfileId,
@@ -410,6 +465,7 @@ export const encryptAndUploadProfileToChannel =
         id: channelId,
         changes: {
           myProfileTimestamp: profileTimestamp,
+          expires,
         },
       }),
     );

@@ -60,11 +60,10 @@ export const newPendingConnection = createAsyncThunk<
     }
 
     // download profile
-    const { data: profileData, newTTL }: { data: string; newTTL: number } =
-      await channel.api.download({
-        channelId,
-        dataId: profileId,
-      });
+    const { data: profileData }: { data: string } = await channel.api.download({
+      channelId,
+      dataId: profileId,
+    });
 
     const sharedProfile = decryptData(
       profileData,

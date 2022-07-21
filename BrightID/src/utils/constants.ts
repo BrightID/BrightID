@@ -33,7 +33,7 @@ export const SINGLE_CHANNEL_TTL = 24 * hour;
 export const GROUP_CHANNEL_TTL = 15 * minute;
 export const STAR_CHANNEL_TTL = 30 * minute;
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
-export const MIN_CHANNEL_JOIN_TTL = 5 * second; // minimum TTL a channel should still have when joining.
+export const MIN_CHANNEL_JOIN_TTL = 5 * second; // minimum TTL in ms a channel should still have when joining.
 export const PROFILE_POLL_INTERVAL = 2 * second;
 export const POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE = 0.6;
 export const MAX_DISPLAY_CONNECTIONS = 200;
@@ -57,7 +57,7 @@ export const IMPORT_PREFIX = 'sig_';
 export const CHANNEL_UPLOAD_RETRY_COUNT = 5; // max number of upload retries when upload failed
 export const CHANNEL_UPLOAD_RETRY_INTERVAL = 5 * second; // ms to wait between retries
 export const RECOVERY_CHANNEL_TTL = day;
-export const CHANNEL_TTL_HEADER = 'x-ttl';
+export const CHANNEL_EXPIRES_HEADER = 'x-expires';
 
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';

@@ -86,7 +86,7 @@ export const checkRecoveryChannel =
       },
     } = getState();
     const channelApi = new ChannelAPI(url.href);
-    const { entries: dataIds, newTTL } = await channelApi.list(channelId);
+    const { entries: dataIds } = await channelApi.list(channelId);
 
     if (recoveryId) {
       // process connections uploaded to the channel

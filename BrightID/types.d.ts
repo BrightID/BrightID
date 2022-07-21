@@ -83,7 +83,7 @@ declare global {
     myProfileId: string;
     aesKey: string;
     timestamp: number;
-    ttl: number;
+    expires: number; // unix timestamp (seconds)
     pollTimerId?: IntervalId;
     timeoutId?: TimeoutId;
     type: ChannelType;

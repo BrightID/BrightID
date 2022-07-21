@@ -48,7 +48,7 @@ describe('Test channel data', () => {
         version: expectedVersion,
         type: originalChannel.type,
         timestamp: originalChannel.timestamp,
-        ttl: originalChannel.ttl,
+        expires: originalChannel.expires,
         initiatorProfileId: originalChannel.myProfileId,
       });
     });

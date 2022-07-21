@@ -72,7 +72,7 @@ export const uploadMutualInfo = async ({
     groups: { groups },
     user,
   } = store.getState();
-  const { entries: dataIds, newTTL } = await channelApi.list(hash(aesKey));
+  const { entries: dataIds } = await channelApi.list(hash(aesKey));
   if (
     !dataIds.includes(`connection_${conn.id}:${b64ToUrlSafeB64(signingKey)}`)
   ) {
