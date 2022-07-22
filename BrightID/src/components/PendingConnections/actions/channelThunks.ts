@@ -13,7 +13,11 @@ import {
 import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import { generateChannelData, createChannelInfo } from '@/utils/channels';
+import {
+  generateChannelData,
+  createChannelInfo,
+  updateExpiration,
+} from '@/utils/channels';
 import {
   CHANNEL_CONNECTION_LIMIT,
   MIN_CHANNEL_JOIN_TTL,
@@ -58,12 +62,14 @@ export const createChannel =
 
       // upload channel info
       const channelInfo: ChannelInfo = createChannelInfo(channel);
-      await channel.api.upload({
+      const { expires } = await channel.api.upload({
         channelId: channel.id,
         data: channelInfo,
         dataId: CHANNEL_INFO_NAME,
         requestedTtl: channel.expires * 1000 - Date.now(),
       });
+
+      updateExpiration({ channel, expires, dispatch });
 
       // upload my profile
       await dispatch(encryptAndUploadProfileToChannel(channel.id));
@@ -268,6 +274,7 @@ export const fetchChannelProfiles =
       const result = await channel.api.list(channelId);
       profileIds = result.entries;
       expires = result.expires;
+      updateExpiration({ channel, expires, dispatch });
     } catch (e) {
       console.log(`Error listing channel ${channelId}:`);
       console.log(e);
@@ -390,18 +397,6 @@ export const fetchChannelProfiles =
         `Got expected profiles for channel ${channel.id}. Unsubscribing.`,
       );
       dispatch(unsubscribeFromConnectionRequests(channel.id));
-    }
-
-    // update channel expiration timestamp based on server response
-    if (expires !== channel.expires) {
-      dispatch(
-        updateChannel({
-          id: channelId,
-          changes: {
-            expires,
-          },
-        }),
-      );
     }
   };
 

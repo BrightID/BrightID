@@ -13,6 +13,7 @@ import {
 import ChannelAPI from '@/api/channelService';
 import { encryptData } from '@/utils/cryptoHelper';
 import { retrieveImage } from '@/utils/filesystem';
+import { updateChannel } from '@/components/PendingConnections/channelSlice';
 
 export const generateChannelData = async (
   channelType: ChannelType,
@@ -274,5 +275,26 @@ export const uploadContextInfo = async ({
     });
   } catch (err) {
     console.error(`uploadContextInfo: ${err.message}`);
+  }
+};
+
+export const updateExpiration = ({
+  channel,
+  expires,
+  dispatch,
+}: {
+  channel: Channel;
+  expires: number;
+  dispatch: AppDispatch;
+}) => {
+  if (expires !== channel.expires) {
+    dispatch(
+      updateChannel({
+        id: channel.id,
+        changes: {
+          expires,
+        },
+      }),
+    );
   }
 };

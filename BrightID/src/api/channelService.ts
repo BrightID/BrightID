@@ -99,7 +99,7 @@ class ChannelAPI {
       result = await this.api.post(`/upload/${channelId}`, body);
     }
     ChannelAPI.throwOnError(result);
-    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
+    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
     return { expires };
   }
 
@@ -108,7 +108,7 @@ class ChannelAPI {
       `/list/${channelId}`,
     );
     ChannelAPI.throwOnError(result);
-    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
+    const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
     if (result.data && result.data.profileIds) {
       return {
         entries: result.data.profileIds,
@@ -127,11 +127,11 @@ class ChannelAPI {
       `/download/${channelId}/${dataId}`,
     );
     ChannelAPI.throwOnError(result);
-    let expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER]);
+    let expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
     if (deleteAfterDownload) {
       try {
         const deleteResult = await this.api.delete(`/${channelId}/${dataId}`);
-        expires = parseInt(deleteResult.headers[CHANNEL_EXPIRES_HEADER]);
+        expires = parseInt(deleteResult.headers[CHANNEL_EXPIRES_HEADER], 10);
       } catch (e) {
         console.log(
           `Ignoring error while deleting ${dataId} from channel ${channelId}: ${e}`,
