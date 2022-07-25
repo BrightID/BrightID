@@ -100,6 +100,9 @@ class ChannelAPI {
     }
     ChannelAPI.throwOnError(result);
     const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
+    if (!expires) {
+      throw new Error(`No expiration timestamp provided by profile service`);
+    }
     return { expires };
   }
 
@@ -109,6 +112,9 @@ class ChannelAPI {
     );
     ChannelAPI.throwOnError(result);
     const expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
+    if (!expires) {
+      throw new Error(`No expiration timestamp provided by profile service`);
+    }
     if (result.data && result.data.profileIds) {
       return {
         entries: result.data.profileIds,
@@ -128,6 +134,9 @@ class ChannelAPI {
     );
     ChannelAPI.throwOnError(result);
     let expires = parseInt(result.headers[CHANNEL_EXPIRES_HEADER], 10);
+    if (!expires) {
+      throw new Error(`No expiration timestamp provided by profile service`);
+    }
     if (deleteAfterDownload) {
       try {
         const deleteResult = await this.api.delete(`/${channelId}/${dataId}`);
