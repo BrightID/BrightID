@@ -12,8 +12,12 @@ import {
   uploadGroup,
 } from '@/utils/channels';
 import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
+import { setRecoveryChannelExpiration } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
-export const uploadAllInfoAfter = async (after) => {
+export const uploadAllInfoAfter = async (
+  after: number,
+  dispatch: AppDispatch,
+) => {
   const {
     user,
     keypair: { publicKey: signingKey },
@@ -24,6 +28,9 @@ export const uploadAllInfoAfter = async (after) => {
     },
     settings: { isPrimaryDevice },
   } = store.getState();
+
+  let prevExpires = store.getState().recoveryData.channel.expires;
+
   // use keypair for sync and recovery for import
   const channelApi = new ChannelAPI(url.href);
 
@@ -44,34 +51,47 @@ export const uploadAllInfoAfter = async (after) => {
   const userDataId = `${IMPORT_PREFIX}userinfo_${user.id}:${b64ToUrlSafeB64(
     signingKey,
   )}`;
-  await channelApi.upload({
+  const { expires } = await channelApi.upload({
     channelId,
     dataId: userDataId,
     data: encrypted,
   });
+
+  if (prevExpires !== expires) {
+    dispatch(setRecoveryChannelExpiration(expires));
+    prevExpires = expires;
+  }
 
   console.log('uploading connections');
   const connections = selectAllConnections(store.getState()).filter(
     (conn) => conn.timestamp > after,
   );
   for (const conn of connections) {
-    await uploadConnection({
+    const expires = await uploadConnection({
       conn,
       channelApi,
       aesKey,
       signingKey,
     });
+    if (expires && prevExpires !== expires) {
+      dispatch(setRecoveryChannelExpiration(expires));
+      prevExpires = expires;
+    }
   }
 
   console.log('uploading groups');
   for (const group of groups) {
     if (group.joined > after) {
-      await uploadGroup({
+      const expires = await uploadGroup({
         group,
         channelApi,
         aesKey,
         signingKey,
       });
+      if (expires && prevExpires !== expires) {
+        dispatch(setRecoveryChannelExpiration(expires));
+        prevExpires = expires;
+      }
     }
   }
 
@@ -81,13 +101,17 @@ export const uploadAllInfoAfter = async (after) => {
       linkedContext.dateAdded > after && linkedContext.state === 'applied',
   );
   for (const contextInfo of linkedContexts) {
-    await uploadContextInfo({
+    const expires = await uploadContextInfo({
       contextInfo,
       channelApi,
       aesKey,
       signingKey,
       prefix: IMPORT_PREFIX,
     });
+    if (expires && prevExpires !== expires) {
+      dispatch(setRecoveryChannelExpiration(expires));
+      prevExpires = expires;
+    }
   }
 
   console.log('uploading blind sigs');
@@ -95,13 +119,17 @@ export const uploadAllInfoAfter = async (after) => {
     const sigs = selectAllSigs(store.getState());
     for (const sig of sigs) {
       if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
-        await uploadBlindSig({
+        const expires = await uploadBlindSig({
           sig,
           channelApi,
           aesKey,
           signingKey,
           prefix: IMPORT_PREFIX,
         });
+        if (expires && prevExpires !== expires) {
+          dispatch(setRecoveryChannelExpiration(expires));
+          prevExpires = expires;
+        }
       }
     }
   }
@@ -117,7 +145,7 @@ export const uploadAllInfoAfter = async (after) => {
   });
 };
 
-export const uploadDeviceInfo = async () => {
+export const uploadDeviceInfo = async (): Promise<number> => {
   const {
     recoveryData: {
       channel: { url, channelId },
@@ -128,10 +156,11 @@ export const uploadDeviceInfo = async () => {
   const dataObj: SyncDeviceInfo = { signingKey, lastSyncTime, isPrimaryDevice };
   const data = JSON.stringify(dataObj);
   const channelApi = new ChannelAPI(url.href);
-  await channelApi.upload({
+  const { expires } = await channelApi.upload({
     channelId,
     data,
     dataId: `${IMPORT_PREFIX}data`,
     requestedTtl: RECOVERY_CHANNEL_TTL,
   });
+  return expires;
 };

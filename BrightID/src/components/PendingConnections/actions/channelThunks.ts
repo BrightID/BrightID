@@ -158,8 +158,7 @@ export const checkExpiration =
           `Channel ${channelId} not yet expired. Checking again in ${waitms}ms.`,
         );
         const timeoutId = setTimeout(() => {
-          console.log(`timer expired for channel ${channel.id}`);
-          dispatch(leaveChannel(channel.id));
+          dispatch(checkExpiration(channel.id));
         }, waitms);
 
         dispatch(

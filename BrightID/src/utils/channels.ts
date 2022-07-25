@@ -156,13 +156,15 @@ export const uploadConnection = async ({
 
     const encrypted = encryptData(dataObj, aesKey);
     console.log(`Posting profile data of ${id} ...`);
-    await channelApi.upload({
+    const { expires } = await channelApi.upload({
       channelId: hash(aesKey),
       data: encrypted,
       dataId: `connection_${id}:${b64ToUrlSafeB64(signingKey)}`,
     });
+    return expires;
   } catch (err) {
     console.error(`uploadConnection: ${err.message}`);
+    return 0;
   }
 };
 
@@ -183,13 +185,13 @@ export const uploadGroup = async ({
   channelApi: ChannelAPI;
   aesKey: string;
   signingKey: string;
-}) => {
+}): Promise<number> => {
   try {
     const { id, name, photo, aesKey: groupKey, members, admins } = group;
     let photoString = '';
     if (!groupKey) {
       // not worth uploading group data is missing
-      return;
+      return 0;
     }
     // retrieve photo
     if (photo?.filename) {
@@ -207,13 +209,15 @@ export const uploadGroup = async ({
 
     const encrypted = encryptData(dataObj, aesKey);
     console.log(`Posting group data of ${id} ...`);
-    await channelApi.upload({
+    const { expires } = await channelApi.upload({
       channelId: hash(aesKey),
       data: encrypted,
       dataId: `group_${id}:${b64ToUrlSafeB64(signingKey)}`,
     });
+    return expires;
   } catch (err) {
     console.error(`uploadGroup: ${err.message}`);
+    return 0;
   }
 };
 
@@ -229,13 +233,13 @@ export const uploadBlindSig = async ({
   aesKey: string;
   signingKey: string;
   prefix: string;
-}) => {
+}): Promise<number> => {
   try {
     const encrypted = encryptData(sig, aesKey);
     console.log(
       `Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`,
     );
-    await channelApi.upload({
+    const { expires } = await channelApi.upload({
       channelId: hash(aesKey),
       data: encrypted,
       // use hash of sig.uid to avoid revealing it
@@ -243,8 +247,10 @@ export const uploadBlindSig = async ({
         signingKey,
       )}`,
     });
+    return expires;
   } catch (err) {
     console.error(`uploadBlindSig: ${err.message}`);
+    return 0;
   }
 };
 
@@ -260,21 +266,23 @@ export const uploadContextInfo = async ({
   aesKey: string;
   signingKey: string;
   prefix: string;
-}) => {
+}): Promise<number> => {
   try {
     const encrypted = encryptData(contextInfo, aesKey);
     console.log(
       `Posting ContextInfo: ${contextInfo.context} - ${contextInfo.contextId}...`,
     );
-    await channelApi.upload({
+    const { expires } = await channelApi.upload({
       channelId: hash(aesKey),
       data: encrypted,
       dataId: `${prefix}contextInfo_${hash(
         contextInfo.context,
       )}:${b64ToUrlSafeB64(signingKey)}`,
     });
+    return expires;
   } catch (err) {
     console.error(`uploadContextInfo: ${err.message}`);
+    return 0;
   }
 };
 

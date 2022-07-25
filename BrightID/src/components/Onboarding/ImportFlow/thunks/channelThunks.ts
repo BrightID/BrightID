@@ -3,7 +3,11 @@ import { store } from '@/store';
 import ChannelAPI from '@/api/channelService';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { CHANNEL_POLL_INTERVAL } from '../../RecoveryFlow/thunks/channelThunks';
-import { init, setRecoveryChannel } from '../../RecoveryFlow/recoveryDataSlice';
+import {
+  init,
+  setRecoveryChannel,
+  setRecoveryChannelExpiration,
+} from '../../RecoveryFlow/recoveryDataSlice';
 import {
   downloadConnections,
   downloadGroups,
@@ -15,7 +19,7 @@ import {
   downloadUserInfo,
 } from './channelDownloadThunks';
 import { uploadAllInfoAfter, uploadDeviceInfo } from './channelUploadThunks';
-import { IMPORT_PREFIX } from '@/utils/constants';
+import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 export const setupSync =
   (): AppThunk => async (dispatch: AppDispatch, getState) => {
@@ -39,11 +43,17 @@ export const createSyncChannel =
     // const url = new URL(`http://10.0.2.2:3000/`);
     const channelId = hash(aesKey);
     console.log(`created channel ${channelId} for sync data`);
-    dispatch(setRecoveryChannel({ channelId, url }));
+    const requestedExpiration = Date.now() + RECOVERY_CHANNEL_TTL;
+    dispatch(
+      setRecoveryChannel({ channelId, url, expires: requestedExpiration }),
+    );
     const { settings } = getState();
     let lastSyncTime = 0;
     if (!settings.isPrimaryDevice) {
-      await uploadDeviceInfo();
+      const expires = await uploadDeviceInfo();
+      if (expires !== requestedExpiration) {
+        dispatch(setRecoveryChannelExpiration(expires));
+      }
       console.log(
         `Finished uploading last sync time to the channel ${channelId}`,
       );
@@ -57,9 +67,8 @@ export const createSyncChannel =
     const after = settings.isPrimaryDevice
       ? lastSyncTime
       : settings.lastSyncTime;
-    uploadAllInfoAfter(after).then(() => {
-      console.log(`Finished uploading sync data to the channel ${channelId}`);
-    });
+    await uploadAllInfoAfter(after, dispatch);
+    console.log(`Finished uploading sync data to the channel ${channelId}`);
   };
 
 export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {

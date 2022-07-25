@@ -69,15 +69,12 @@ const recoveryData = createSlice({
     },
     setRecoveryChannel(
       state,
-      action: PayloadAction<{ channelId: string; url: URL }>,
+      action: PayloadAction<{ channelId: string; url: URL; expires: number }>,
     ) {
-      const { channelId, url } = action.payload;
+      const { channelId, url, expires } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
-      state.channel.expires = Date.now() + RECOVERY_CHANNEL_TTL;
-    },
-    resetChannelExpiration(state) {
-      state.channel.expires = Date.now() + RECOVERY_CHANNEL_TTL;
+      state.channel.expires = expires;
     },
     setSig(state, action: PayloadAction<{ sig: Signature; signer: string }>) {
       const { signer, sig } = action.payload;
@@ -145,6 +142,9 @@ const recoveryData = createSlice({
     setChannelIntervalId(state, action: PayloadAction<IntervalId>) {
       state.channel.pollTimerId = action.payload;
     },
+    setRecoveryChannelExpiration(state, action: PayloadAction<number>) {
+      state.channel.expires = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -174,10 +174,10 @@ export const {
   setRecoveryChannel,
   setSig,
   updateNamePhoto,
-  resetChannelExpiration,
   resetRecoverySigs,
   resetRecoveryData,
   setRecoveryError,
+  setRecoveryChannelExpiration,
   setUploadCompletedBy,
   setRecoveryId,
   setRecoverStep,

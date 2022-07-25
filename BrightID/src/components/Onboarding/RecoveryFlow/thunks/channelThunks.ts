@@ -11,8 +11,10 @@ import {
   selectRecoveryChannel,
   setChannelIntervalId,
   setRecoveryChannel,
+  setRecoveryChannelExpiration,
 } from '../recoveryDataSlice';
 import { uploadRecoveryData } from '@/utils/recovery';
+import { RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 // CONSTANTS
 
@@ -24,15 +26,21 @@ export const createRecoveryChannel =
   (): AppThunk => async (dispatch: AppDispatch, getState) => {
     try {
       const { recoveryData } = getState();
-      const baseUrl = selectBaseUrl(getState());
-      const url = new URL(`${baseUrl}/profile`);
+      // const baseUrl = selectBaseUrl(getState());
+      // const url = new URL(`${baseUrl}/profile`);
       // use this for local running profile service
-      // const url = new URL(`http://10.0.2.2:3000/`);
+      const url = new URL(`http://10.0.2.2:3000/`);
       const channelApi = new ChannelAPI(url.href);
       const channelId = hash(recoveryData.aesKey);
       console.log(`created channel ${channelId} for recovery data`);
-      dispatch(setRecoveryChannel({ channelId, url }));
-      await uploadRecoveryData(recoveryData, channelApi);
+      const requestedExpiration = Date.now() + RECOVERY_CHANNEL_TTL;
+      dispatch(
+        setRecoveryChannel({ channelId, url, expires: requestedExpiration }),
+      );
+      const expires = await uploadRecoveryData(recoveryData, channelApi);
+      if (expires !== requestedExpiration) {
+        dispatch(setRecoveryChannelExpiration(expires));
+      }
       console.log(`Finished uploading recovery data to channel ${channelId}`);
     } catch (e) {
       const msg = 'Profile data already exists in channel';
@@ -82,11 +90,14 @@ export const checkRecoveryChannel =
       recoveryData: {
         id: recoveryId,
         name,
-        channel: { channelId, url },
+        channel: { channelId, url, expires: oldExpires },
       },
     } = getState();
     const channelApi = new ChannelAPI(url.href);
-    const { entries: dataIds } = await channelApi.list(channelId);
+    const { entries: dataIds, expires } = await channelApi.list(channelId);
+    if (expires !== oldExpires) {
+      dispatch(setRecoveryChannelExpiration(expires));
+    }
 
     if (recoveryId) {
       // process connections uploaded to the channel

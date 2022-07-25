@@ -20,19 +20,20 @@ export const buildRecoveryChannelQrUrl = ({
 export const uploadRecoveryData = async (
   recoveryData: RecoveryData,
   channelApi: ChannelAPI,
-) => {
+): Promise<number> => {
   const channelId = hash(recoveryData.aesKey);
   const dataObj = {
     signingKey: recoveryData.publicKey,
     timestamp: recoveryData.timestamp,
   };
   const data = JSON.stringify(dataObj);
-  await channelApi.upload({
+  const { expires } = await channelApi.upload({
     channelId,
     data,
     dataId: 'data',
     requestedTtl: RECOVERY_CHANNEL_TTL,
   });
+  return expires;
 };
 
 export const loadRecoveryData = async (
