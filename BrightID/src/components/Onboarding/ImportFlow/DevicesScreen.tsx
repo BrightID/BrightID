@@ -87,7 +87,7 @@ export const DevicesScreen = ({ route }) => {
       const after = settings.isPrimaryDevice
         ? lastSyncTime
         : settings.lastSyncTime;
-      await uploadAllInfoAfter(after);
+      await uploadAllInfoAfter(after, dispatch);
       dispatch(pollImportChannel());
     };
     const showConfirmDialog = () => {

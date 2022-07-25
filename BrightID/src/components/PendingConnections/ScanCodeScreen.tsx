@@ -29,7 +29,11 @@ import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
-import { channel_types, qrCodeURL_types } from '@/utils/constants';
+import {
+  channel_types,
+  qrCodeURL_types,
+  RECOVERY_CHANNEL_TTL,
+} from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,
@@ -150,6 +154,8 @@ export const ScanCodeScreen = () => {
                 setRecoveryChannel({
                   channelId,
                   url: channelURL,
+                  /* assume default expiration time until we get real value from channel service */
+                  expires: Date.now() + RECOVERY_CHANNEL_TTL,
                 }),
               );
               if (urlType === qrCodeURL_types.RECOVERY) {

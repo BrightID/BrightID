@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import store from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -72,7 +71,7 @@ const AddDeviceScreen = () => {
       console.log(`adding new signing key`);
       setSigningKey(signingKey);
       const op = await api.addSigningKey(signingKey);
-      store.dispatch(addOperation(op));
+      dispatch(addOperation(op));
       setSigningKeyOpHash(op.hash);
       setAddSigningKeyStep(AddSigningKeySteps.WAITING_OPERATION);
     } catch (err) {
@@ -88,7 +87,7 @@ const AddDeviceScreen = () => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await uploadAllInfoAfter(0);
+        await uploadAllInfoAfter(0, dispatch);
         setUploadDataStep(UploadDataSteps.COMPLETE);
         console.log(`Finished upload of local info`);
       } catch (err) {
@@ -103,7 +102,7 @@ const AddDeviceScreen = () => {
     ) {
       runEffect();
     }
-  }, [addSigningKeyStep, uploadDataStep]);
+  }, [addSigningKeyStep, dispatch, uploadDataStep]);
 
   // track overall progress
   useEffect(() => {
