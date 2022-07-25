@@ -299,7 +299,7 @@ export const updateExpiration = ({
   expires: number;
   dispatch: AppDispatch;
 }) => {
-  if (expires !== channel.expires) {
+  if (expires && expires !== channel.expires) {
     dispatch(
       updateChannel({
         id: channel.id,
