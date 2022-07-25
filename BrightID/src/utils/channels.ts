@@ -91,6 +91,10 @@ export const parseChannelQrURL = async (url: URL) => {
   console.log(`Got ChannelInfo:`);
   console.log(channelInfo);
 
+  if (!expires) {
+    throw new Error(`Profile service did not provide expiration timestamp!`);
+  }
+
   if (channelInfo.version > MAX_CHANNEL_INFO_VERSION) {
     const msg = i18next.t(
       'channel.alert.text.localOutdated',
