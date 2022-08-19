@@ -60,7 +60,7 @@ if (__DEV__) {
         testID="fakeConnectionBtn"
         style={{ marginRight: 11 }}
         onPress={() => {
-          for (let i = 0; i < 10; i++) dispatch(addFakeConnection());
+          dispatch(addFakeConnection());
         }}
       >
         <Material name="ghost" size={32} color={WHITE} />
