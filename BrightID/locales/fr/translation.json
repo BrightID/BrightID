@@ -718,8 +718,8 @@
       "showCode": "Afficher votre code QR"
     },
     "header": {
-      "connections": "{{count}} / 30 connexions",
-      "connections_plural": "{{count}} / 30 connexions"
+      "connections": "{{count}} / {{max}} connexions",
+      "connections_plural": "{{count}} / {{max}} connexions"
     },
     "label": {
       "connectionType": "Type de connexion :"

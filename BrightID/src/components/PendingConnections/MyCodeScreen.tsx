@@ -35,7 +35,12 @@ import {
 } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
-import { channel_states, channel_types } from '@/utils/constants';
+import {
+  channel_states,
+  channel_types,
+  GROUP_CHANNEL_CONNECTION_LIMIT,
+  STAR_CHANNEL_CONNECTION_LIMIT,
+} from '@/utils/constants';
 
 /**
  * My Code screen of BrightID
@@ -55,7 +60,7 @@ if (__DEV__) {
         testID="fakeConnectionBtn"
         style={{ marginRight: 11 }}
         onPress={() => {
-          dispatch(addFakeConnection());
+          for (let i = 0; i < 10; i++) dispatch(addFakeConnection());
         }}
       >
         <Material name="ghost" size={32} color={WHITE} />
@@ -234,6 +239,10 @@ export const MyCodeScreen = () => {
           <Text style={styles.headerTitle}>
             {t('qrcode.header.connections', {
               count: pendingConnectionSize + 1,
+              max:
+                myChannel?.type === channel_types.STAR
+                  ? STAR_CHANNEL_CONNECTION_LIMIT
+                  : GROUP_CHANNEL_CONNECTION_LIMIT,
             })}
           </Text>
         );

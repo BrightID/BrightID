@@ -646,8 +646,8 @@
       "showCode": "Deinen Code anzeigen"
     },
     "header": {
-      "connections": "{{count}} / 30 Verbindungen",
-      "connections_plural": "{{count}} / 30 Verbindungen"
+      "connections": "{{count}} / {{max}} Verbindungen",
+      "connections_plural": "{{count}} / {{max}} Verbindungen"
     },
     "label": {
       "connectionType": "Verbindungstyp:"

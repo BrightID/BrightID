@@ -593,8 +593,8 @@
       "showCode": "Muestra tu codigo Qr"
     },
     "header": {
-      "connections": "{{count}} / 30 Conexiones",
-      "connections_plural": "{{count}} / 30 Conexiones"
+      "connections": "{{count}} / {{max}} Conexiones",
+      "connections_plural": "{{count}} / {{max}} Conexiones"
     },
     "label": {
       "connectionType": "Tipo de conexión:"

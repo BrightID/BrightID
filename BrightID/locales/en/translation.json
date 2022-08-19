@@ -643,8 +643,8 @@
       "showCode": "Show your QR code"
     },
     "header": {
-      "connections": "{{count}} / 30 Connections",
-      "connections_plural": "{{count}} / 30 Connections"
+      "connections": "{{count}} / {{max}} Connections",
+      "connections_plural": "{{count}} / {{max}} Connections"
     },
     "label": {
       "connectionType": "Connection Type:"
