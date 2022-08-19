@@ -645,8 +645,8 @@
       "showCode": "Toon je QR-code"
     },
     "header": {
-      "connections": "{{count}}/30 koppelingen",
-      "connections_plural": "{{count}}/30 koppelingen"
+      "connections": "{{count}}/{{max}} koppelingen",
+      "connections_plural": "{{count}}/{{max}} koppelingen"
     },
     "label": {
       "connectionType": "Soort koppeling:"
