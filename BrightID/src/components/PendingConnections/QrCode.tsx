@@ -114,12 +114,12 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
       : channel.type === channel_types.SINGLE
       ? t('qrcode.alert.connectSingle', {
           name: myName,
-          link: universalLink,
+          link: `${universalLink} `, // enforce trailing space to fix #1066
           expirationTimestamp,
         })
       : t('qrcode.alert.connectGroup', {
           name: myName,
-          link: universalLink,
+          link: `${universalLink} `, // enforce trailing space to fix #1066
           expirationTimestamp,
         });
 

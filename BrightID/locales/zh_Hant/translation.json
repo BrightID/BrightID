@@ -559,7 +559,7 @@
       "showCode": "展示您的二維碼"
     },
     "header": {
-      "connections": "{{count}} / 30 個連接"
+      "connections": "{{count}} / {{max}} 個連接"
     },
     "label": {
       "connectionType": "連接類型："

@@ -15,13 +15,14 @@ import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData, createChannelInfo } from '@/utils/channels';
 import {
-  CHANNEL_CONNECTION_LIMIT,
+  GROUP_CHANNEL_CONNECTION_LIMIT,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
   channel_types,
   MAX_TOTAL_CHANNELS,
+  STAR_CHANNEL_CONNECTION_LIMIT,
 } from '@/utils/constants';
 import {
   newPendingConnection,
@@ -113,7 +114,11 @@ export const joinChannel =
       if (channelInfoIndex > -1) {
         entries.splice(channelInfoIndex, 1);
       }
-      if (entries.length >= CHANNEL_CONNECTION_LIMIT) {
+      const max_entries =
+        channel.type === channel_types.STAR
+          ? STAR_CHANNEL_CONNECTION_LIMIT
+          : GROUP_CHANNEL_CONNECTION_LIMIT;
+      if (entries.length >= max_entries) {
         throw new Error(`Channel is full`);
       }
 
@@ -241,7 +246,12 @@ export const fetchChannelProfiles =
     }
 
     // Only get up to CHANNEL_CONNECTION_LIMIT profiles
-    profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
+    const max_entries =
+      channel.type === channel_types.STAR
+        ? STAR_CHANNEL_CONNECTION_LIMIT
+        : GROUP_CHANNEL_CONNECTION_LIMIT;
+
+    profileIds = profileIds.slice(0, max_entries);
     const knownProfileIds = selectAllPendingConnectionIds(getState());
     if (__DEV__ && profileIds.length > knownProfileIds.length + 1) {
       console.log(`Got ${profileIds.length} profileIds:`, profileIds);
@@ -277,7 +287,7 @@ export const fetchChannelProfiles =
             }
           }
           // stop polling when channel limit is reached
-          stopPolling = profileIds.length >= CHANNEL_CONNECTION_LIMIT;
+          stopPolling = profileIds.length >= STAR_CHANNEL_CONNECTION_LIMIT;
         } else {
           // other participant: Only load initiator profile
           console.log(
@@ -320,7 +330,7 @@ export const fetchChannelProfiles =
           }
         }
         // stop polling only when channel limit is reached
-        stopPolling = profileIds.length >= CHANNEL_CONNECTION_LIMIT;
+        stopPolling = profileIds.length >= GROUP_CHANNEL_CONNECTION_LIMIT;
         break;
       case channel_types.SINGLE:
         // there should be only 2 profiles in the channel. Just load all.

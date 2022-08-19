@@ -246,7 +246,7 @@ const RecoveryCodeScreen = ({ route }) => {
           'Share this link with your recovery connections.',
         );
         clipboardMsg = t('recovery.clipboardmessage', {
-          link: universalLink,
+          link: `${universalLink} `, // enforce trailing space to fix #1066
           expirationTimestamp,
         });
         break;
@@ -257,7 +257,7 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be imported.',
         );
         clipboardMsg = t('import.clipboardmessage', {
-          link: universalLink,
+          link: `${universalLink} `, // enforce trailing space to fix #1066
           expirationTimestamp,
         });
         break;
@@ -268,7 +268,7 @@ const RecoveryCodeScreen = ({ route }) => {
           'Open this link with the BrightID app that should be synced.',
         );
         clipboardMsg = t('sync.clipboardmessage', {
-          link: universalLink,
+          link: `${universalLink} `, // enforce trailing space to fix #1066
           expirationTimestamp,
         });
         break;

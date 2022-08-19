@@ -18,7 +18,7 @@ import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
 
 // max time to wait for app to respond to sponsoring request
-const sponsorTimeout = 1000 * 60; // 60 seconds
+const sponsorTimeout = 1000 * 120; // 120 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
 
