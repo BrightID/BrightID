@@ -1,5 +1,8 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "更多的细节"
+    },
     "getSponsored": {
       "description": "与提供赞助的应用程序链接获得支持",
       "title": "获得支持"
@@ -44,6 +47,16 @@
       "title": "设置账号恢复"
     }
   },
+  "addSigningKey": {
+    "header": {
+      "text": "添加设备信息"
+    },
+    "steps": {
+      "adding": "正在添加签名密钥...",
+      "complete": "添加了签名密钥",
+      "error": "添加签名密钥失败"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
@@ -51,12 +64,14 @@
       },
       "text": {
         "checkWebsite": "了解更多 {{name}}, 查看他们的网站!",
+        "invalidApp": "{{app}}不是有效的应用程序！",
         "invalidContext": "{{context}} 无效!",
         "linkApp": "想要将您的 {{context}}账号链接到您的BrightID吗？",
         "linkFailure": "{{result}}{{result}}无法将您的 {{context}}账号链接到您的BrightID \n{{result}}",
         "linkSuccess": "成功将您的{{context}}账号链接到您的BrightID"
       },
       "title": {
+        "invalidApp": "失败",
         "invalidContext": "失败",
         "linkApp": "链接APP？",
         "linkFailure": "失败",
@@ -321,6 +336,14 @@
       "title": "许可协议"
     }
   },
+  "findFriends": {
+    "button": {
+      "invite": "邀请"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此应用目前无法发送邀请。"
+    }
+  },
   "graphExplorer": {
     "alert": {
       "text": {
@@ -529,8 +552,8 @@
       },
       "text": {
         "discardChanges": "您有未储存的更改。确定放弃更改并离开此页吗？",
-        "passwordMatch": "当前密码不匹配。",
-        "invalidPhoneNumber": "输入有效的电话号码"
+        "invalidPhoneNumber": "输入有效的电话号码",
+        "passwordMatch": "当前密码不匹配。"
       },
       "title": {
         "discardChanges": "放弃更改？",
@@ -547,8 +570,8 @@
       "newPassword": "新密码",
       "newPasswordAgain": "请再次输入密码",
       "password": "密码",
-      "socialMediaLink": "社交媒体账号链接",
-      "phoneNumber": "电话号码"
+      "phoneNumber": "电话号码",
+      "socialMediaLink": "社交媒体账号链接"
     },
     "placeholder": {
       "name": "输入姓名",
@@ -735,14 +758,6 @@
       "gotIt": "知道了!",
       "setPassword": "您可以随时在此处设置\n您的BrightID密码",
       "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "邀请"
-    },
-    "text": {
-      "invitationNotAvailable": "抱歉，此应用目前无法发送邀请。"
     }
   }
 }
