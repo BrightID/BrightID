@@ -132,7 +132,8 @@ export const selectBlindSigApps = (state: RootState) =>
 
 export const selectExpireableBlindSigApps = createSelector(
   selectBlindSigApps,
-  (apps) => apps.filter((app) => app.verificationExpirationLength),
+  (apps) =>
+    apps.filter((app) => app.verificationExpirationLength && !app.testing),
 );
 
 // Export reducer
