@@ -1,15 +1,16 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-  Alert,
 } from 'react-native';
+import { NetworkInfo } from 'react-native-network-info';
 import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
@@ -20,14 +21,14 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
+  selectActiveDevices,
   setActiveNotification,
   updateBlindSigs,
-  selectActiveDevices,
 } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
-import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
+import { BLACK, BLUE, DARKER_GREY, GREEN, ORANGE, WHITE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
@@ -36,15 +37,15 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import {
+  removeCurrentNodeUrl,
   selectBaseUrl,
   selectIsPrimaryDevice,
-  removeCurrentNodeUrl,
 } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
-  selectTaskIds,
   selectCompletedTaskIds,
+  selectTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
 import { version as app_version } from '../../package.json';
@@ -53,6 +54,8 @@ import {
   syncAndLinkSocialMedias,
   updateSocialMediaVariations,
 } from '@/components/EditProfile/socialMediaThunks';
+import { getUserInfo } from '@/components/Onboarding/ImportFlow/thunks/channelUploadThunks';
+import GraphQl from '@/components/Icons/GraphQl';
 
 /**
  * Home screen of BrightID
@@ -66,6 +69,9 @@ export const verificationPatchesSelector = createSelector(
   (state: RootState) => state.user.verifications,
   getVerificationPatches,
 );
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const httpBridge = require('react-native-http-bridge');
 
 /** HomeScreen Component */
 
@@ -235,6 +241,41 @@ export const HomeScreen = (props) => {
     </View>
   ) : null;
 
+  const [httpServerUrl, setHttpServerUrl] = useState('');
+  const toggleHttpServer = useCallback(async () => {
+    const port = 9025;
+    if (!httpServerUrl) {
+      httpBridge.start(port, 'http_service', async (request) => {
+        // you can use request.url, request.type and request.postData here
+        if (request.type === 'GET' && request.url.split('/')[1] === 'info') {
+          httpBridge.respond(
+            request.requestId,
+            200,
+            'application/json',
+            JSON.stringify(await getUserInfo()),
+          );
+        } else {
+          httpBridge.respond(
+            request.requestId,
+            400,
+            'application/json',
+            '{"message": "Bad Request"}',
+          );
+        }
+      });
+      const ip = await NetworkInfo.getIPAddress();
+      setHttpServerUrl(`${ip}:${port}`);
+    } else {
+      httpBridge.stop();
+      setHttpServerUrl('');
+    }
+  }, [httpServerUrl]);
+  useEffect(() => {
+    return () => {
+      httpBridge.stop();
+    };
+  }, []);
+
   return (
     <View style={[styles.container, { marginTop: headerHeight }]}>
       <StatusBar
@@ -394,6 +435,36 @@ export const HomeScreen = (props) => {
               height={DEVICE_LARGE ? 25 : 20}
             />
             <Text style={styles.connectText}>{t('home.button.scanCode')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="httpServerBtn"
+            style={[
+              styles.connectButton,
+              styles.httpServerButton,
+              {
+                backgroundColor: httpServerUrl ? GREEN : WHITE,
+              },
+            ]}
+            onPress={toggleHttpServer}
+            accessible={true}
+            accessibilityLabel={t('home.button.httpServer')}
+          >
+            <GraphQl
+              width={DEVICE_LARGE ? 25 : 20}
+              height={DEVICE_LARGE ? 25 : 20}
+            />
+            {httpServerUrl ? (
+              <View style={styles.httpServerInfo}>
+                <Text style={styles.connectText}>
+                  {httpServerUrl || t('home.button.httpServer')}
+                </Text>
+                <Text style={styles.passwordText}>password: IAqjfsf</Text>
+              </View>
+            ) : (
+              <Text style={styles.connectText}>
+                {t('home.button.httpServer')}
+              </Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             testID="JoinCommunityBtn"
@@ -593,6 +664,21 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 1,
     marginBottom: DEVICE_LARGE ? 16 : 11,
+  },
+  httpServerButton: {
+    marginTop: DEVICE_LARGE ? 8 : 6,
+  },
+  httpServerInfo: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  passwordText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[10],
+    color: BLACK,
+    marginLeft: DEVICE_LARGE ? 10 : 8,
+    lineHeight: DEVICE_LARGE ? 14 : 12,
   },
   connectText: {
     fontFamily: 'Poppins-Bold',

@@ -426,6 +426,7 @@
       "apps": "Apps",
       "connections": "Connections",
       "myCode": "My Code",
+      "httpServer": "Local BrightID Server",
       "scanCode": "Scan a Code"
     },
     "chatActionSheet": {
