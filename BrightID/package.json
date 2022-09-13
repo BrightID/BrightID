@@ -78,7 +78,7 @@
     "react-native-country-picker-modal": "2.0.0",
     "react-native-dropdownalert": "4.5.1",
     "react-native-gesture-handler": "1.10.3",
-    "react-native-http-bridge": "^0.6.1",
+    "react-native-http-bridge": "https://github.com/babeone/react-native-http-bridge.git",
     "react-native-image-crop-picker": "0.37.3",
     "react-native-keyboard-aware-scroll-view": "0.9.5",
     "react-native-keychain": "8.0.0",

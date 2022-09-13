@@ -18,6 +18,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import httpBridge from 'react-native-http-bridge';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
@@ -69,9 +70,6 @@ export const verificationPatchesSelector = createSelector(
   (state: RootState) => state.user.verifications,
   getVerificationPatches,
 );
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-const httpBridge = require('react-native-http-bridge');
 
 /** HomeScreen Component */
 
