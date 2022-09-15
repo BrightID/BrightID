@@ -256,9 +256,9 @@ export const HomeScreen = (props) => {
         } else {
           httpBridge.respond(
             request.requestId,
-            400,
+            404,
             'application/json',
-            '{"message": "Bad Request"}',
+            '{"message": "not found"}',
           );
         }
       });
