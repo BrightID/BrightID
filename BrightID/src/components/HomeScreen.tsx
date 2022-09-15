@@ -270,7 +270,7 @@ export const HomeScreen = (props) => {
           .get('/')
           .catch(console.error);
       }
-      const ip = await NetworkInfo.getIPAddress();
+      const ip = await NetworkInfo.getIPV4Address();
       setHttpServerUrl(`${ip}:${port}`);
     } else {
       httpBridge.stop();
@@ -282,6 +282,8 @@ export const HomeScreen = (props) => {
       httpBridge.stop();
     };
   }, []);
+
+  const password = useSelector((state) => state.user.password);
 
   return (
     <View style={[styles.container, { marginTop: headerHeight }]}>
@@ -465,7 +467,9 @@ export const HomeScreen = (props) => {
                 <Text style={styles.connectText}>
                   {httpServerUrl || t('home.button.httpServer')}
                 </Text>
-                <Text style={styles.passwordText}>password: IAqjfsf</Text>
+                <Text style={styles.passwordText}>
+                  {password && `password: ${password}`}
+                </Text>
               </View>
             ) : (
               <Text style={styles.connectText}>
