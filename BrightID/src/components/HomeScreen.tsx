@@ -19,6 +19,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import httpBridge from 'react-native-http-bridge';
+import { create } from 'apisauce';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
@@ -34,7 +35,7 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import {
@@ -261,6 +262,14 @@ export const HomeScreen = (props) => {
           );
         }
       });
+      if (DEVICE_IOS) {
+        // to keep the server alive
+        create({
+          baseURL: `http://localhost:${port}`,
+        })
+          .get('/')
+          .catch(console.error);
+      }
       const ip = await NetworkInfo.getIPAddress();
       setHttpServerUrl(`${ip}:${port}`);
     } else {

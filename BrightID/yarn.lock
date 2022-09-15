@@ -9252,9 +9252,9 @@ react-native-gesture-handler@1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-"react-native-http-bridge@https://github.com/babeone/react-native-http-bridge.git":
+"react-native-http-bridge@https://github.com/BrightID/react-native-http-bridge":
   version "0.6.1"
-  resolved "https://github.com/babeone/react-native-http-bridge.git#3e8bd0d001db403c8ff81cef05ab281ce0b17161"
+  resolved "https://github.com/BrightID/react-native-http-bridge#f9d9b05f33f960f8044a635db22642b01a10d569"
 
 react-native-image-crop-picker@0.37.3:
   version "0.37.3"
