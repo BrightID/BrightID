@@ -247,25 +247,35 @@ export const HomeScreen = (props) => {
     if (!httpServerUrl) {
       httpBridge.start(port, 'http_service', async (request) => {
         // you can use request.url, request.type and request.postData here
-        if (
-          request.type === 'GET' &&
-          request.url.split('/')[1] === '/v1/info'
-        ) {
+        const headers = {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Methods': '*',
+        };
+        const url = request.url.slice(request.url.indexOf('/'));
+        if (request.type === 'OPTIONS') {
+          httpBridge.respond(
+            request.requestId,
+            200,
+            'text/html; charset=utf-8',
+            undefined,
+            headers,
+          );
+        } else if (request.type === 'GET' && url === '/v1/info') {
           httpBridge.respond(
             request.requestId,
             200,
             'application/json',
             JSON.stringify(await getUserInfo()),
+            headers,
           );
-        } else if (
-          request.type === 'GET' &&
-          request.url.split('/')[1] === '/v1/explorer-code'
-        ) {
+        } else if (request.type === 'GET' && url === '/v1/explorer-code') {
           httpBridge.respond(
             request.requestId,
             200,
             'application/json',
             getExplorerCode(),
+            headers,
           );
         } else {
           httpBridge.respond(
@@ -273,6 +283,7 @@ export const HomeScreen = (props) => {
             404,
             'application/json',
             '{"message": "not found"}',
+            headers,
           );
         }
       });
