@@ -58,6 +58,7 @@ import {
 } from '@/components/EditProfile/socialMediaThunks';
 import { getUserInfo } from '@/components/Onboarding/ImportFlow/thunks/channelUploadThunks';
 import GraphQl from '@/components/Icons/GraphQl';
+import { getExplorerCode } from '@/utils/explorer';
 
 /**
  * Home screen of BrightID
@@ -246,12 +247,25 @@ export const HomeScreen = (props) => {
     if (!httpServerUrl) {
       httpBridge.start(port, 'http_service', async (request) => {
         // you can use request.url, request.type and request.postData here
-        if (request.type === 'GET' && request.url.split('/')[1] === 'info') {
+        if (
+          request.type === 'GET' &&
+          request.url.split('/')[1] === '/v1/info'
+        ) {
           httpBridge.respond(
             request.requestId,
             200,
             'application/json',
             JSON.stringify(await getUserInfo()),
+          );
+        } else if (
+          request.type === 'GET' &&
+          request.url.split('/')[1] === '/v1/explorer-code'
+        ) {
+          httpBridge.respond(
+            request.requestId,
+            200,
+            'application/json',
+            getExplorerCode(),
           );
         } else {
           httpBridge.respond(
@@ -271,7 +285,10 @@ export const HomeScreen = (props) => {
           .catch(console.error);
       }
       const ip = await NetworkInfo.getIPV4Address();
-      setHttpServerUrl(`${ip}:${port}`);
+      const serverUrl = `${ip}:${port}`;
+      Clipboard.setString(serverUrl);
+      Alert.alert(t('home.alert.text.copied'));
+      setHttpServerUrl(serverUrl);
     } else {
       httpBridge.stop();
       setHttpServerUrl('');

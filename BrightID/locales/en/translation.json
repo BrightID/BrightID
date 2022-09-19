@@ -438,6 +438,11 @@
     },
     "link": {
       "community": "Join the Community"
+    },
+    "alert": {
+      "text": {
+        "copied": "Server url copied to clipboard!"
+      }
     }
   },
   "import": {
