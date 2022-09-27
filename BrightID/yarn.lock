@@ -9254,7 +9254,7 @@ react-native-gesture-handler@1.10.3:
 
 "react-native-http-bridge@https://github.com/BrightID/react-native-http-bridge":
   version "0.6.1"
-  resolved "https://github.com/BrightID/react-native-http-bridge#642e39767f016190972ecd839e6c9b5736504cd3"
+  resolved "https://github.com/BrightID/react-native-http-bridge#51b9c0197e10b905185525ab12534eec5a3f4a80"
 
 react-native-image-crop-picker@0.37.3:
   version "0.37.3"
