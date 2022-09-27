@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
   StyleSheet,
@@ -144,11 +144,6 @@ const NodeModal = () => {
       setHttpServerUrl('');
     }
   }, [httpServerUrl, password, t]);
-  useEffect(() => {
-    return () => {
-      httpBridge.stop();
-    };
-  }, []);
 
   return (
     <View style={styles.container}>
