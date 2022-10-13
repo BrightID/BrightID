@@ -1,5 +1,8 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "Más detalles"
+    },
     "getSponsored": {
       "description": "Obtenga patrocinio vinculándose con una aplicación que ofrece patrocinio",
       "title": "Consigue patrocinio"
@@ -322,6 +325,14 @@
       "title": "Acuerdo de Licencia"
     }
   },
+  "findFriends": {
+    "button": {
+      "invite": "invitación"
+    },
+    "text": {
+      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
+    }
+  },
   "graphExplorer": {
     "alert": {
       "text": {
@@ -533,8 +544,8 @@
       },
       "text": {
         "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
-        "passwordMatch": "La contraseña actual no coincide.",
-        "invalidPhoneNumber": "Introduce un número de teléfono válido"
+        "invalidPhoneNumber": "Introduce un número de teléfono válido",
+        "passwordMatch": "La contraseña actual no coincide."
       },
       "title": {
         "discardChanges": "¿Descartar los cambios?",
@@ -552,8 +563,8 @@
       "newPasswordAgain": "Repita la contraseña",
       "password": "Contraseña",
       "passwordAgain": "Repita la contraseña",
-      "socialMediaLink": "Enlace de redes sociales",
-      "phoneNumber": "Número de teléfono"
+      "phoneNumber": "Número de teléfono",
+      "socialMediaLink": "Enlace de redes sociales"
     },
     "placeholder": {
       "name": "Ingrese su Nombre",
@@ -572,8 +583,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Haga una conexión de grupo con {{name}} en BrightID: {{link}}",
-      "connectSingle": "Conectar con {{name}} en BrightID: {{link}}",
+      "connectGroup": "Establezca una conexión de grupo con {{name}} en BrightID: {{link}}. Este enlace es válido hasta {{expirationTimestamp}}.",
+      "connectSingle": "Conéctese con {{name}} en BrightID: {{link}}. Este enlace es válido hasta el {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente.",
         "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire.",
@@ -630,7 +641,7 @@
     "state": "Conexiones recuperadas {{recoveredConnections}}, grupos {{recoveredGroups}}",
     "steps": {
       "complete": "Recuperación de la cuenta completa",
-      "downloading": "Descargando datos de las conexiones de recuperación ...",
+      "downloading": "Descargando datos de conexiones de recuperación…",
       "error": "Falló la recuperación de la cuenta",
       "recovering": "Recuperando cuenta ..."
     },
@@ -698,7 +709,7 @@
     "steps": {
       "complete": "Restauración completa",
       "error": "La restauración ha fallado. ¿Contraseña incorrecta?",
-      "restoring": "Restaurando datos ...",
+      "restoring": "Restaurando datos…",
       "skipped": "Restauración omitida",
       "waitingAccount": "Esperando la recuperación de la cuenta",
       "waitingPassword": "Ingrese contraseña u omita"
@@ -753,14 +764,6 @@
       "gotIt": "¡Entendido!",
       "setPassword": "Siempre puede establecer su\ncontraseña de BrightID aquí",
       "viewPassword": "Siempre podrá ver su\ncontraseña de BrightID aquí"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "invitación"
-    },
-    "text": {
-      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
     }
   }
 }
