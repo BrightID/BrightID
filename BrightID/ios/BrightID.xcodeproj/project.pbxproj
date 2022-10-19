@@ -517,7 +517,7 @@
 					"$(SDKROOT)/usr/lib/swift",
 					"$(inherited)",
 				);
-				MARKETING_VERSION = 4.19.0;
+				MARKETING_VERSION = 4.22.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -554,7 +554,7 @@
 					"$(SDKROOT)/usr/lib/swift",
 					"$(inherited)",
 				);
-				MARKETING_VERSION = 4.19.0;
+				MARKETING_VERSION = 4.22.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -780,7 +780,7 @@
 					"$(SDKROOT)/usr/lib/swift",
 					"$(inherited)",
 				);
-				MARKETING_VERSION = 4.19.0;
+				MARKETING_VERSION = 4.22.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -6,11 +6,15 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 30
         targetSdkVersion = 30
-        ext.kotlinVersion = '1.5.31'
+        ext.kotlinVersion = '1.5.32'
         firebaseMessagingVersion = "21.1.0"
     }
     repositories {
         google()
+        maven {
+            // All of Detox' artifacts are provided via the npm module
+            url "$rootDir/../node_modules/detox/Detox-android"
+        }
         mavenCentral()
         maven { url "https://maven.google.com" }
         maven { url "https://www.jitpack.io" }
