@@ -4,7 +4,7 @@
 
 ## Unique Human Identity
 
-BrightID allows you to prove to applications that you're only using account.
+BrightID allows you to prove to applications that you're only using one account.
 
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
 * Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized--nonintrusive).
@@ -16,7 +16,7 @@ The network consists of volunteers [running nodes](https://github.com/BrightID/B
 
 ## Mobile App
 
-ID creation and connectons to people and apps are managed through the BrightID mobile app.
+ID creation and connections to people and apps are managed through the BrightID mobile app.
 
 ## Contribute
 
