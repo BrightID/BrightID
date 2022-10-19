@@ -9252,6 +9252,10 @@ react-native-gesture-handler@1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+"react-native-http-bridge@https://github.com/BrightID/react-native-http-bridge":
+  version "0.6.1"
+  resolved "https://github.com/BrightID/react-native-http-bridge#51b9c0197e10b905185525ab12534eec5a3f4a80"
+
 react-native-image-crop-picker@0.37.3:
   version "0.37.3"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.37.3.tgz#f260e40b6a6ba8e98f4db3dde25a8f09e0936385"
@@ -9291,6 +9295,11 @@ react-native-modpow@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-modpow/-/react-native-modpow-1.1.0.tgz#14867fc678daeb74ce678df15a8abc5955115e5c"
   integrity sha512-pEXAecjrp06UG2B1gy+yNuU7laoe7gjMWT63bfsH/V9lIHrwQLqQKTz073AgJsWWVBArVVC0wRI2jjqiTCf61w==
+
+react-native-network-info@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-network-info/-/react-native-network-info-5.2.1.tgz#b701f10d4ed1aeadcfe77b197328d1ae846f6d3a"
+  integrity sha512-iam74xXtrSqqZurCl1/bSjZ9jXcsJY84g7brx1/4uVGCY26c6m+4CArHNSHOsz5ATg2NQT+81sjNy0KlCPyK4g==
 
 react-native-phone-number-input@2.1.0:
   version "2.1.0"
