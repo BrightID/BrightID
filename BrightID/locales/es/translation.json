@@ -187,6 +187,7 @@
     "button": {
       "levelSave": "Guardar",
       "ok": "OK",
+      "report": "Eliminar esta conexión",
       "reportCancel": "Cancelar",
       "reportSubmit": "Enviar",
       "undoReport": "Deshacer Reporte"
@@ -212,9 +213,11 @@
       "levelJustMet": "Esta persona es un extraño que acabo de conocer",
       "levelRecovery": "Confío en esta persona como para recuperar mi BrightID",
       "levelSuspicious": "No conozco a esta persona en absoluto",
-      "reportDuplicate": "Esta persona creó varias cuentas",
+      "reportConnection": "Denunciar {{name}}",
+      "reportDuplicate": "Este usuario está creando maliciosamente varias cuentas",
       "reportOther": "Otra razon",
-      "reportSpammer": "Esta persona me envió una solicitud de conexión no deseada",
+      "reportSpammer": "Esta persona me envió spam con una solicitud de conexión no deseada",
+      "unReportConnection": "Restaurar la conexión",
       "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?"
     }
   },
@@ -264,7 +267,7 @@
       "website": "Sitio web"
     },
     "text": {
-      "meet": "¡Únete a una reunion de verificación de BrightID!",
+      "meet": "¡Únase a una reunión de BrightID!",
       "openSource": "¡Codigo abierto!",
       "weAre": "Nosotros somos "
     },
@@ -483,7 +486,7 @@
     "button": {
       "create": "Crear Mi BrightID",
       "getStarted": "Empezar",
-      "recover": "Recuperar BrightID"
+      "recover": "Recuperar"
     },
     "label": {
       "maintainPrivacy": "Mantener Privacidad"
@@ -604,7 +607,7 @@
       "showCode": "Muestra tu codigo Qr"
     },
     "header": {
-      "connections": "{{count}} / {{max}} Conexiones",
+      "connections": "{{count}} / {{max}} Conexión",
       "connections_plural": "{{count}} / {{max}} Conexiones"
     },
     "label": {
@@ -648,8 +651,8 @@
     "text": {
       "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
-      "signatures": "{{count}} / 2 firmas",
-      "signatures_plural": "{{count}} / 2 firmas"
+      "signatures": "{{count}} / firma",
+      "signatures_plural": "{{count}} / firmas"
     }
   },
   "recoveryConnections": {
@@ -663,7 +666,7 @@
       "currentRecoveryConnections": "Tus conexiones de recuperación actuales",
       "emptyList": "Por favor, agregue conexiones de recuperación para habilitar la recuperación social",
       "pleaseMakeSomeConnections": "Por favor, haga algunas conexiones :)",
-      "threeMore": "Necesitas {{amount}} conexion(es) conocida(s) más para habilitar la recuperación social"
+      "threeMore": "Necesitas {{amount}} conexiones más ya conocidas para habilitar la recuperación social"
     }
   },
   "recoveryCooldownModal": {
