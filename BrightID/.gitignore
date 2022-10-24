@@ -29,6 +29,7 @@ local.properties
 *.iml
 *.hprof
 .secret
+.log
 
 # node.js
 #
