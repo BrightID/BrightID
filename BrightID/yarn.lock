@@ -4302,10 +4302,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-detox@^19.0.0:
-  version "19.4.5"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-19.4.5.tgz#81b1cadaec5c0f7dc53798d65242ff19f4da8412"
-  integrity sha512-kMHxNn3I9uTxOzIX4CTymI9qHRLn90xzuM/QhqHNeUH3AEDFtUmlJpcL86GmPO/VLWafcJScia9jqUiKveNAqg==
+detox@^19.12.6:
+  version "19.12.6"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-19.12.6.tgz#39cf99c23944a3d1a3724fb1e67f92f05e90753a"
+  integrity sha512-Mf9ZaJLHsgCDLJnFZg50h/HwqZHXnc+yRQkqU1Rw7ZNdICkeg8mJDJY/mN+A2GkA8zdFRARrZ3PoAKtQpVPEFg==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -4331,6 +4331,7 @@ detox@^19.0.0:
     which "^1.3.1"
     ws "^7.0.0"
     yargs "^16.0.3"
+    yargs-parser "^20.2.2"
     yargs-unparser "^2.0.0"
 
 devtools-protocol@0.0.901419:
