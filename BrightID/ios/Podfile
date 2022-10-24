@@ -46,6 +46,7 @@ target 'BrightID' do
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+        config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
        end
     end
 
@@ -54,5 +55,5 @@ target 'BrightID' do
     # https://github.com/facebook/flipper/issues/834 - 84 comments and still going...
     `sed -i -e  $'s/__IPHONE_10_0/__IPHONE_12_0/' #{installer.sandbox.root}/RCT-Folly/folly/portability/Time.h`
   end
-
+  
 end
