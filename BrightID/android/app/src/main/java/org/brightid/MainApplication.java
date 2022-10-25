@@ -10,9 +10,11 @@ import com.reactnativemodpow.ModpowPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import org.brightid.newarchitecture.MainApplicationReactNativeHost;
 import com.microsoft.codepush.react.CodePush;
 import com.oblador.keychain.KeychainModuleBuilder;
 import com.oblador.keychain.KeychainPackage;
@@ -57,15 +59,24 @@ public class MainApplication
     }
   };
 
+  private final ReactNativeHost mNewArchitectureNativeHost =
+    new MainApplicationReactNativeHost(this);
+
   @Override
   public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      return mNewArchitectureNativeHost;
+    } else {
+      return mReactNativeHost;
+    }
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */false);
+    // If you opted-in for the New Architecture, we enable the TurboModule system
+    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 

@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import Contacts from '@/utils/ContactsProvider';

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';

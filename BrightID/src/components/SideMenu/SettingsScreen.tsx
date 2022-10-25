@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { Picker } from '@react-native-picker/picker';
 import i18next from 'i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
