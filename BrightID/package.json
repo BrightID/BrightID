@@ -20,7 +20,8 @@
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
     "build:staging": "cd android && ./gradlew assembleStaging && cd ..",
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
-    "m1-install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 yarn install"
+    "check-dependencies": "rnx-dep-check",
+    "fix-dependencies": "rnx-dep-check --write"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "3.12.0",
@@ -117,6 +118,7 @@
     "@react-native-community/eslint-plugin": "^1.0.0",
     "@testing-library/jest-native": "^5.3.3",
     "@testing-library/react-native": "^11.5.0",
+    "@rnx-kit/dep-check": "^1.13.2",
     "@types/jest": "^27.4.1",
     "@types/ramda": "^0.27.38",
     "@types/react": "^17.0.34",
@@ -163,5 +165,28 @@
   },
   "optionalDependencies": {
     "@mermaid-js/mermaid-cli": "^8.9.0"
+  },
+  "rnx-kit": {
+    "reactNativeVersion": "^0.70.3",
+    "kitType": "app",
+    "capabilities": [
+      "animation",
+      "babel-preset-react-native",
+      "checkbox",
+      "core",
+      "core-android",
+      "core-ios",
+      "gestures",
+      "jest",
+      "navigation/native",
+      "navigation/stack",
+      "react",
+      "react-dom",
+      "react-test-renderer",
+      "safe-area",
+      "screens",
+      "storage",
+      "svg"
+    ]
   }
 }

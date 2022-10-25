@@ -1725,6 +1725,11 @@
     redux-thunk "^2.3.0"
     reselect "^4.0.0"
 
+"@rnx-kit/dep-check@^1.13.2":
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/@rnx-kit/dep-check/-/dep-check-1.13.2.tgz#e82ab409098d5f597a2b40fb57e81b29d76e3cce"
+  integrity sha512-T6XnDyVQORHi9qvD0aF3GF3cGe3LtgRrnIhhzD25xw8kCdyZMZ/Jb2IgSvdv1NMyd6h6dvp932PAJngjxRAkog==
+
 "@sideway/address@^4.1.0":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.2.tgz#811b84333a335739d3969cfc434736268170cad1"
