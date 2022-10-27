@@ -435,18 +435,19 @@ export const HomeDrawer = () => {
 
   return (
     <Drawer.Navigator
-      drawerType="front"
-      sceneContainerStyle={[styles.sceneContainer]}
-      drawerStyle={[styles.drawer, { marginTop: headerHeight }]}
-      drawerContentOptions={{
-        activeTintColor: WHITE,
-        inactiveTintColor: BLACK,
-        activeBackgroundColor: ORANGE,
-        inactiveBackgroundColor: WHITE,
-        itemStyle: styles.drawerItem,
-        labelStyle: styles.labelStyle,
+      screenOptions={{
+        headerShown: false,
+        drawerType: 'front',
+        sceneContainerStyle: [styles.sceneContainer],
+        drawerStyle: [styles.drawer, { marginTop: headerHeight }],
+        drawerActiveTintColor: WHITE,
+        drawerInactiveTintColor: BLACK,
+        drawerActiveBackgroundColor: ORANGE,
+        drawerInactiveBackgroundColor: WHITE,
+        drawerItemStyle: styles.drawerItem,
+        drawerLabelStyle: styles.labelStyle,
+        overlayColor: 'transparent',
       }}
-      overlayColor="transparent"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />

@@ -24,6 +24,7 @@ import {
   toggleDrawer,
   resetHome,
   resetNotifications,
+  navigate,
 } from '@/NavigationService';
 import { HomeDrawer } from './HomeDrawer';
 
@@ -63,7 +64,8 @@ const NotificationBell = () => {
       style={{ marginRight: 25 }}
       onPress={() => {
         Keyboard.dismiss();
-        resetNotifications();
+        // resetNotifications();
+        navigate('Notifications');
       }}
     >
       <Bell color={BLACK} alert={!!displayBadge} />
@@ -134,7 +136,7 @@ const Home = () => {
   return (
     <>
       <Stack.Screen
-        name="Home"
+        name="Main"
         component={HomeDrawer}
         options={homeScreenOptions}
       />

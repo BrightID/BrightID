@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import Contacts from '@/utils/ContactsProvider';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -70,7 +70,7 @@ export const FindFriendsScreen = function () {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   const emailSocialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, SocialMediaVariationIds.EMAIL),
@@ -274,7 +274,7 @@ export const FindFriendsScreen = function () {
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="findFriendsScreen"
     >

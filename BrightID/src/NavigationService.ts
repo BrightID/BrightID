@@ -1,52 +1,70 @@
 // NavigationService.js
 
-import * as React from 'react';
 import {
   DrawerActions,
-  NavigationContainerRef,
+  createNavigationContainerRef,
 } from '@react-navigation/native';
 
-export const navigationRef = React.createRef<NavigationContainerRef>();
+export const navigationRef = createNavigationContainerRef();
 
 export const navigate = (name: string, params = {}) => {
-  navigationRef.current?.navigate(name, params);
+  if (navigationRef.isReady()) {
+    // @ts-ignore
+    navigationRef.navigate(name, params);
+  }
 };
 
 export const goBack = () => {
-  navigationRef.current?.goBack();
+  if (navigationRef.isReady()) {
+    navigationRef.goBack();
+  }
 };
 
 export const toggleDrawer = () => {
-  navigationRef.current?.dispatch(DrawerActions.toggleDrawer());
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(DrawerActions.toggleDrawer());
+  }
 };
 
 export const openDrawer = () => {
-  navigationRef.current?.dispatch(DrawerActions.openDrawer());
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(DrawerActions.openDrawer());
+  }
 };
 
 export const closeDrawer = () => {
-  navigationRef.current?.dispatch(DrawerActions.closeDrawer());
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(DrawerActions.closeDrawer());
+  }
 };
 
 export const resetHome = () => {
-  navigationRef.current?.reset({
-    index: 0,
-    routes: [{ name: 'Home' }],
-  });
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
+  }
 };
 
 export const resetNotifications = () => {
-  navigationRef.current?.reset({
-    index: 1,
-    routes: [{ name: 'Home' }, { name: 'Notifications' }],
-  });
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 1,
+      routes: [{ name: 'Home' }, { name: 'Notifications' }],
+    });
+  }
 };
 
 export const dispatch = (action) => {
-  navigationRef.current?.dispatch(action);
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(action);
+  }
 };
 
 export const getRoute = () => {
-  const route = navigationRef.current?.getCurrentRoute();
-  return route;
+  if (navigationRef.isReady()) {
+    const route = navigationRef.getCurrentRoute();
+    return route;
+  }
 };

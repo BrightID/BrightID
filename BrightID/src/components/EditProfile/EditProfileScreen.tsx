@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -53,9 +53,9 @@ import {
 } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
+  setDiscoverable,
   saveSocialMedia,
   selectExistingSocialMedia,
-  setDiscoverable,
   setProfileDisplayWidth,
 } from '@/reducer/socialMediaSlice';
 import {
@@ -63,7 +63,6 @@ import {
   selectSocialMediaVariationById,
   selectSocialMediaVariationsWithBrightIDApp,
 } from '@/reducer/socialMediaVariationSlice';
-import { SocialMediaType } from './socialMediaVariations';
 import {
   allowDiscovery,
   linkSocialMediaApp,
@@ -74,6 +73,7 @@ import {
 import { getShareWithConnectionsValue } from '@/utils/socialUtils';
 import { app_linking_steps } from '@/utils/constants';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
+import { SocialMediaType } from './socialMediaVariations';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -557,7 +557,7 @@ export const EditProfileScreen = ({ navigation }) => {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   // selectors
   const id = useSelector((state) => state.user.id);
@@ -693,7 +693,7 @@ export const EditProfileScreen = ({ navigation }) => {
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="editProfileScreen"
     >

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { DARK_ORANGE, BLUE, WHITE, BLACK } from '@/theme/colors';
@@ -46,14 +46,14 @@ export const ContactUsScreen = function () {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   return (
     <View
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="contactUsScreen"
     >
