@@ -260,10 +260,11 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Groups' }],
-          });
+          navigation.navigate('Groups');
+          // navigation.reset({
+          //   index: 1,
+          //   routes: [{ name: 'Home' }, { name: 'Groups' }],
+          // });
         }}
       />
       <CustomItem
