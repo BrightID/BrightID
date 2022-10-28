@@ -196,7 +196,7 @@ export const reconnectFakeConnection =
       // use existing photo and name
       name = fakeUser1.name;
       // retrieve photo
-      photo = await retrieveImage(fakeUser1.photo.filename);
+      photo = await retrieveImage(fakeUser1?.photo?.filename);
     }
 
     const dataObj = {

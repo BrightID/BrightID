@@ -86,7 +86,7 @@ const InviteCard = (props) => {
       );
       if (backupCompleted) {
         await dispatch(backupUser());
-        if (invite.group.photo && invite.group.photo.filename) {
+        if (invite?.group?.photo && invite?.group?.photo?.filename) {
           await dispatch(
             backupPhoto(invite.group.id, invite.group.photo.filename),
           );

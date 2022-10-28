@@ -13,9 +13,9 @@ import {
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 import { useSelector } from '@/store/hooks';
+import { firstRecoveryTimeSelector } from '@/reducer/connectionsSlice';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
-import { firstRecoveryTimeSelector } from '@/reducer/connectionsSlice';
 
 // percentage determines reported warning
 const REPORTED_PERCENTAGE = 0.1;
@@ -41,7 +41,7 @@ export const ReconnectView = ({
   const navigation = useNavigation();
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const [connectionLevel, setConnectionLevel] = useState(
-    existingConnection.level,
+    existingConnection?.level,
   );
   const { t } = useTranslation();
   const { id } = useSelector((state) => state.user);
@@ -55,15 +55,16 @@ export const ReconnectView = ({
       REPORTED_PERCENTAGE;
 
   useEffect(() => {
+    if (!existingConnection) return;
     const compareProfiles = async () => {
-      if (sharedProfile.name !== existingConnection.name) {
+      if (sharedProfile?.name !== existingConnection?.name) {
         setIdenticalProfile(false);
         return;
       }
       const existingPhoto = await retrieveImage(
-        existingConnection.photo.filename,
+        existingConnection?.photo?.filename,
       );
-      if (existingPhoto !== sharedProfile.photo) {
+      if (existingPhoto !== sharedProfile?.photo) {
         setIdenticalProfile(false);
         return;
       }
@@ -146,7 +147,7 @@ export const ReconnectView = ({
             <TrustlevelSlider
               currentLevel={connectionLevel}
               changeLevelHandler={setConnectionLevel}
-              incomingLevel={existingConnection.incomingLevel}
+              incomingLevel={existingConnection?.incomingLevel}
               verbose={false}
             />
           </View>
@@ -193,8 +194,8 @@ export const ReconnectView = ({
               </Text>
             </View>
             <ProfileCard
-              name={existingConnection.name}
-              photo={existingConnection.photo.filename}
+              name={existingConnection?.name}
+              photo={existingConnection?.photo?.filename}
               photoSize="small"
               photoType="file"
               photoTouchHandler={photoTouchHandler}

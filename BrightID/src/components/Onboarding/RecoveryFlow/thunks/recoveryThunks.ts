@@ -164,7 +164,7 @@ export const recoverData =
     // fetch group images
     for (const group of groups) {
       setCurrentItem(currentItem++);
-      if (group.photo?.filename) {
+      if (group?.photo?.filename) {
         try {
           const decrypted = await fetchBackupData(group.id, id, pass);
           await saveImage({
