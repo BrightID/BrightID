@@ -1,17 +1,17 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-  Alert,
 } from 'react-native';
 import {
   useFocusEffect,
-  useRoute,
   useNavigation,
+  useRoute,
 } from '@react-navigation/native';
 import { Trans, useTranslation } from 'react-i18next';
 import BarcodeMask from 'react-native-barcode-mask';
@@ -21,7 +21,7 @@ import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
+import { GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { closeChannel } from '@/components/PendingConnections/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnections/pendingConnectionSlice';
@@ -140,6 +140,10 @@ export const ScanCodeScreen = () => {
               const aesKey = channelURL.searchParams.get('aes');
               channelURL.searchParams.delete('aes');
 
+              const changePrimaryDevice =
+                channelURL.searchParams.get('p') === 'true';
+              channelURL.searchParams.delete('p');
+
               const channelId = hash(aesKey);
               console.log(
                 `handleQrData: Got type ${urlType} recovery channel ${channelId} at ${channelURL.href}`,
@@ -160,7 +164,9 @@ export const ScanCodeScreen = () => {
                   asScanner: true,
                 });
               } else if (urlType === qrCodeURL_types.IMPORT) {
-                navigation.navigate('Add Device');
+                navigation.navigate('Add Device', {
+                  changePrimaryDevice,
+                });
               }
               break;
             }

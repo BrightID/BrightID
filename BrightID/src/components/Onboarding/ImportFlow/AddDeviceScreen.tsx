@@ -14,7 +14,12 @@ import store from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { addDevice, addOperation, selectOperationByHash } from '@/actions';
+import {
+  addDevice,
+  addOperation,
+  selectOperationByHash,
+  setPrimaryDevice,
+} from '@/actions';
 import ChannelAPI from '@/api/channelService';
 import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
 import { NodeApiContext } from '@/components/NodeApiGate';
@@ -44,7 +49,7 @@ export enum UploadDataSteps {
   ERROR,
 }
 
-const AddDeviceScreen = () => {
+const AddDeviceScreen = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -63,6 +68,8 @@ const AddDeviceScreen = () => {
   );
   const [uploadDataStep, setUploadDataStep] = useState(UploadDataSteps.WAITING);
   const [uploadDataError, setUploadDataError] = useState('');
+
+  const changePrimaryDevice = !!route.params.changePrimaryDevice;
 
   const handleSubmit = async () => {
     try {
@@ -90,6 +97,7 @@ const AddDeviceScreen = () => {
         setUploadDataStep(UploadDataSteps.UPLOADING);
         await uploadAllInfoAfter(0);
         setUploadDataStep(UploadDataSteps.COMPLETE);
+        dispatch(setPrimaryDevice(!changePrimaryDevice));
         console.log(`Finished upload of local info`);
       } catch (err) {
         console.log(`Error uploading data: ${err.message}`);
@@ -103,7 +111,7 @@ const AddDeviceScreen = () => {
     ) {
       runEffect();
     }
-  }, [addSigningKeyStep, uploadDataStep]);
+  }, [addSigningKeyStep, changePrimaryDevice, dispatch, uploadDataStep]);
 
   // track overall progress
   useEffect(() => {
@@ -165,7 +173,9 @@ const AddDeviceScreen = () => {
     const showConfirmDialog = () => {
       return Alert.alert(
         t('common.alert.title.pleaseConfirm'),
-        t('devices.alert.confirmAdd'),
+        changePrimaryDevice
+          ? t('devices.alert.confirmAdd')
+          : t('devices.alert.confirmAddPrimary'),
         [
           {
             text: t('common.alert.yes'),
