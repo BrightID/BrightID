@@ -222,11 +222,20 @@ const RecoveryCodeScreen = ({ route }) => {
         dispatch(setRecoverStep(recover_steps.RESTORING));
         navigation.navigate('Restore');
       } else if (action === 'import' && isScanned) {
-        navigation.navigate('Import');
+        navigation.navigate('Import', { changePrimaryDevice });
       } else if (action === 'sync' && isScanned) {
         navigation.navigate('Devices', { syncing: true, asScanner: false });
       }
-    }, [action, alreadyNotified, sigCount, isScanned, t, dispatch, navigation]),
+    }, [
+      action,
+      alreadyNotified,
+      sigCount,
+      isScanned,
+      t,
+      dispatch,
+      navigation,
+      changePrimaryDevice,
+    ]),
   );
 
   const copyQr = () => {

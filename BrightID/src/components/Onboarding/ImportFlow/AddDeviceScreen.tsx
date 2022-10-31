@@ -17,6 +17,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   addDevice,
   addOperation,
+  selectIsPrimaryDevice,
   selectOperationByHash,
   setPrimaryDevice,
 } from '@/actions';
@@ -69,7 +70,8 @@ const AddDeviceScreen = ({ route }) => {
   const [uploadDataStep, setUploadDataStep] = useState(UploadDataSteps.WAITING);
   const [uploadDataError, setUploadDataError] = useState('');
 
-  const changePrimaryDevice = !!route.params.changePrimaryDevice;
+  const isPrimary = selectIsPrimaryDevice(store.getState());
+  const changePrimaryDevice = isPrimary && route.params.changePrimaryDevice;
 
   const handleSubmit = async () => {
     try {
@@ -97,7 +99,9 @@ const AddDeviceScreen = ({ route }) => {
         setUploadDataStep(UploadDataSteps.UPLOADING);
         await uploadAllInfoAfter(0);
         setUploadDataStep(UploadDataSteps.COMPLETE);
-        dispatch(setPrimaryDevice(!changePrimaryDevice));
+        if (isPrimary) {
+          dispatch(setPrimaryDevice(!changePrimaryDevice));
+        }
         console.log(`Finished upload of local info`);
       } catch (err) {
         console.log(`Error uploading data: ${err.message}`);
@@ -174,8 +178,8 @@ const AddDeviceScreen = ({ route }) => {
       return Alert.alert(
         t('common.alert.title.pleaseConfirm'),
         changePrimaryDevice
-          ? t('devices.alert.confirmAdd')
-          : t('devices.alert.confirmAddPrimary'),
+          ? t('devices.alert.confirmAddPrimary')
+          : t('devices.alert.confirmAdd'),
         [
           {
             text: t('common.alert.yes'),

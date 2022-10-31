@@ -15,7 +15,7 @@ import {
 import { clearImportChannel } from './thunks/channelThunks';
 
 /* Component to track import restore */
-const ImportScreen = () => {
+const ImportScreen = ({ route }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const recoveryData = useSelector((state) => state.recoveryData);
@@ -24,7 +24,7 @@ const ImportScreen = () => {
   useEffect(() => {
     if (importCompleted) {
       clearImportChannel();
-      dispatch(setPrimaryDevice(false));
+      dispatch(setPrimaryDevice(!!route.params.changePrimaryDevice));
       dispatch(setRecoveryKeys());
       dispatch(resetRecoveryData());
       dispatch(setUserId(recoveryData.id));
