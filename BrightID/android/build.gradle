@@ -19,11 +19,11 @@ buildscript {
     }
     repositories {
         google()
+        mavenCentral()
         maven {
             // All of Detox' artifacts are provided via the npm module
             url "$rootDir/../node_modules/detox/Detox-android"
         }
-        mavenCentral()
         maven { url "https://maven.google.com" }
         maven { url "https://www.jitpack.io" }
     }
@@ -61,12 +61,12 @@ allprojects {
             url("$rootDir/../node_modules/react-native/android")
         }
         maven {
-            // All of Detox' artifacts are provided via the npm module
-            url "$rootDir/../node_modules/detox/Detox-android"
-        }
-        maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        maven {
+            // All of Detox' artifacts are provided via the npm module
+            url "$rootDir/../node_modules/detox/Detox-android"
         }
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
@@ -76,7 +76,7 @@ allprojects {
             }
         }
         // included for react-native blur view
-        jcenter()
+        // jcenter()
         google()
         maven { url 'https://maven.google.com' }
         maven { url "https://www.jitpack.io" }

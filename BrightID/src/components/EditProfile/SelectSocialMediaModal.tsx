@@ -24,18 +24,22 @@ import {
 } from '@/utils/deviceConstants';
 import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import {
-  selectExistingSocialMediaIds,
-  selectSocialMediaById,
-} from '../../reducer/socialMediaSlice';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
+import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
+import {
+  saveAndSyncSocialMedia,
+} from '@/components/EditProfile/socialMediaThunks';
+import {
+\  DEFAULT_SHARE_WITH_CONNECTIONS_VALUE,
+} from '@/utils/constants';
 import {
   SocialMediaShareType,
   SocialMediaVariationIds,
 } from './socialMediaVariations';
-import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
-import { saveAndSyncSocialMedia } from '@/components/EditProfile/socialMediaThunks';
-import { DEFAULT_SHARE_WITH_CONNECTIONS_VALUE } from '@/utils/constants';
+import {
+  selectExistingSocialMediaIds,
+  selectSocialMediaById,
+} from '../../reducer/socialMediaSlice';
 
 /** Helper functions */
 
@@ -256,7 +260,6 @@ const SelectMediaModal = ({ route }: props) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
-              navigation.navigate('Eula');
               // if initial page is 1, users only want to edit text
               page === 1 && initialPage !== 1
                 ? setPage(0)

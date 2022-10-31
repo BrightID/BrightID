@@ -26,7 +26,7 @@
   "dependencies": {
     "@expo/react-native-action-sheet": "4.0.0",
     "@react-native-async-storage/async-storage": "1.17.10",
-    "@react-native-community/blur": "4.2.0",
+    "@react-native-community/blur": "https://github.com/BrightID/react-native-blur",
     "@react-native-community/checkbox": "0.5.12",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/push-notification-ios": "1.10.1",

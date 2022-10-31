@@ -7,10 +7,10 @@ const Stack = createStackNavigator();
 
 const Import = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <>
       <Stack.Screen name="ImportCode" component={RecoveryCodeScreen} />
       <Stack.Screen name="Import" component={ImportScreen} />
-    </Stack.Navigator>
+    </>
   );
 };
 

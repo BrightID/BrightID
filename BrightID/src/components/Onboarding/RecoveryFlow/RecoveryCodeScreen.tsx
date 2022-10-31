@@ -22,9 +22,11 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
+import { recover_steps } from '@/utils/constants';
+import { userSelector } from '@/reducer/userSlice';
 import { RecoveryErrorType } from './RecoveryError';
 import { setupRecovery } from './thunks/recoveryThunks';
-import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
   createRecoveryChannel,
   pollRecoveryChannel,
@@ -41,8 +43,6 @@ import {
   pollImportChannel,
   setupSync,
 } from '../ImportFlow/thunks/channelThunks';
-import { recover_steps } from '@/utils/constants';
-import { userSelector } from '@/reducer/userSlice';
 
 /**
  * Recovery Code screen of BrightID

@@ -22,6 +22,8 @@ export const modalOptions: StackNavigationOptions = {
   gestureEnabled: true,
   ...TransitionPresets.FadeFromBottomAndroid,
   cardStyle: { backgroundColor: 'transparent' },
+  presentation: 'transparentModal',
+  // detachPreviousScreen: false,
 };
 
 const Modals = () => {

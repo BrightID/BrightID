@@ -22,11 +22,10 @@ import MissingKeysScreen from '@/routes/MissingKeysScreen';
 import { verifyKeypair } from '@/utils/cryptoHelper';
 
 const TopStack = createStackNavigator();
-const Stack = createStackNavigator();
 
-const MainTabs = () => {
+const MainTabs = (id: string) => {
   return (
-    <Stack.Navigator screenOptions={{ headerMode: 'screen' }}>
+    <TopStack.Group navigationKey={id || 'nope'}>
       {Home()}
       {PendingConnections()}
       {Connections()}
@@ -37,7 +36,7 @@ const MainTabs = () => {
       {Apps()}
       {Modals()}
       {RecoveringConnection()}
-    </Stack.Navigator>
+    </TopStack.Group>
   );
 };
 

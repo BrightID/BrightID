@@ -28,7 +28,7 @@ const getItem = async (key) => {
   } catch (err) {
     let data = await AsyncStorage.getItem(key);
     if (data) {
-      console.error(`react-native-keychain is not accessible`);
+      console.log(`react-native-keychain is not accessible`);
       let { publicKey, secretKey, _persist } = JSON.parse(data);
       secretKey = b64ToUint8Array(secretKey);
       return { publicKey, secretKey, _persist };
@@ -73,7 +73,7 @@ const setItem = async (key, keypair) => {
     );
     return true;
   } catch (err) {
-    console.error(err.message);
+    console.log(err.message);
     await AsyncStorage.setItem(
       key,
       JSON.stringify({
