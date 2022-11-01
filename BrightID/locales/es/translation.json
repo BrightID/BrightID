@@ -1,7 +1,8 @@
 {
   "achievements": {
     "bituVerification": {
-      "description": "Más detalles"
+      "description": "Más detalles",
+      "title": "Verificación bitu"
     },
     "getSponsored": {
       "description": "Obtenga patrocinio vinculándose con una aplicación que ofrece patrocinio",
