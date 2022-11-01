@@ -136,7 +136,7 @@ const Home = () => {
   return (
     <>
       <Stack.Screen
-        name="Main"
+        name="Home"
         component={HomeDrawer}
         options={homeScreenOptions}
       />

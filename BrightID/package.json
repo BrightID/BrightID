@@ -30,7 +30,7 @@
     "@react-native-community/checkbox": "0.5.12",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/push-notification-ios": "1.10.1",
-    "@react-native-community/slider": "4.3.2",
+    "@react-native-community/slider": "4.2.4",
     "@react-native-community/viewpager": "4.2.2",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-native-picker/picker": "2.4.8",

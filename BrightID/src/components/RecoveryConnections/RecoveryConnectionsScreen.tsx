@@ -75,20 +75,25 @@ export const RecoveryConnectionsScreen = (props) => {
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
-        setLoading(true);
-        if (pendingOpsCount > 0) {
-          console.log('waiting for pending operations to apply');
-          return;
+        try {
+          setLoading(true);
+          if (pendingOpsCount > 0) {
+            console.log('waiting for pending operations to apply');
+            return;
+          }
+          console.log(`fetching own recovery connections`);
+          const profile: ProfileInfo = await api.getProfile(me.id);
+          setConnectionProfile(profile);
+          const recoveryConnections = profile.recoveryConnections.map((rc) => {
+            const conn = myConnections.find((c) => rc.id === c.id);
+            return conn || { id: rc.id };
+          });
+          setRecoveryConnections(recoveryConnections);
+          setLoading(false);
+        } catch (err) {
+          console.log(err.message);
+          setLoading(false);
         }
-        console.log(`fetching own recovery connections`);
-        const profile: ProfileInfo = await api.getProfile(me.id);
-        setConnectionProfile(profile);
-        const recoveryConnections = profile.recoveryConnections.map((rc) => {
-          const conn = myConnections.find((c) => rc.id === c.id);
-          return conn || { id: rc.id };
-        });
-        setRecoveryConnections(recoveryConnections);
-        setLoading(false);
       };
       fetchData();
     }, [api, me.id, myConnections, pendingOpsCount]),

@@ -96,7 +96,7 @@ const TrustlevelSlider = ({
       <Slider
         testID="ConnectionLevelSlider"
         style={styles.slider}
-        value={initialValue}
+        value={initialValue === -1 ? 0 : initialValue}
         minimumValue={minValue}
         maximumValue={maxValue}
         step={1}
