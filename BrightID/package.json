@@ -75,7 +75,7 @@
     "react-i18next": "12.0.0",
     "react-native": "0.70.4",
     "react-native-barcode-mask": "1.2.4",
-    "react-native-camera": "4.2.1",
+    "react-native-camera": "https://github.com/BrightID/react-native-camera",
     "react-native-code-push": "7.0.5",
     "react-native-contacts": "7.0.5",
     "react-native-country-picker-modal": "2.0.0",
