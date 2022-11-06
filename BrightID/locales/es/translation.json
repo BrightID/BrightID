@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "Más detalles",
+      "title": "Verificación bitu"
+    },
     "getSponsored": {
       "description": "Obtenga patrocinio vinculándose con una aplicación que ofrece patrocinio",
       "title": "Consigue patrocinio"
@@ -184,6 +188,7 @@
     "button": {
       "levelSave": "Guardar",
       "ok": "OK",
+      "report": "Eliminar esta conexión",
       "reportCancel": "Cancelar",
       "reportSubmit": "Enviar",
       "undoReport": "Deshacer Reporte"
@@ -209,9 +214,11 @@
       "levelJustMet": "Esta persona es un extraño que acabo de conocer",
       "levelRecovery": "Confío en esta persona como para recuperar mi BrightID",
       "levelSuspicious": "No conozco a esta persona en absoluto",
-      "reportDuplicate": "Esta persona creó varias cuentas",
+      "reportConnection": "Denunciar {{name}}",
+      "reportDuplicate": "Este usuario está creando maliciosamente varias cuentas",
       "reportOther": "Otra razon",
-      "reportSpammer": "Esta persona me envió una solicitud de conexión no deseada",
+      "reportSpammer": "Esta persona me envió spam con una solicitud de conexión no deseada",
+      "unReportConnection": "Restaurar la conexión",
       "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?"
     }
   },
@@ -261,7 +268,7 @@
       "website": "Sitio web"
     },
     "text": {
-      "meet": "¡Únete a una reunion de verificación de BrightID!",
+      "meet": "¡Únase a una reunión de BrightID!",
       "openSource": "¡Codigo abierto!",
       "weAre": "Nosotros somos "
     },
@@ -320,6 +327,14 @@
   "eula": {
     "header": {
       "title": "Acuerdo de Licencia"
+    }
+  },
+  "findFriends": {
+    "button": {
+      "invite": "invitación"
+    },
+    "text": {
+      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
     }
   },
   "graphExplorer": {
@@ -472,7 +487,7 @@
     "button": {
       "create": "Crear Mi BrightID",
       "getStarted": "Empezar",
-      "recover": "Recuperar BrightID"
+      "recover": "Recuperar"
     },
     "label": {
       "maintainPrivacy": "Mantener Privacidad"
@@ -533,8 +548,8 @@
       },
       "text": {
         "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
-        "passwordMatch": "La contraseña actual no coincide.",
-        "invalidPhoneNumber": "Introduce un número de teléfono válido"
+        "invalidPhoneNumber": "Introduce un número de teléfono válido",
+        "passwordMatch": "La contraseña actual no coincide."
       },
       "title": {
         "discardChanges": "¿Descartar los cambios?",
@@ -552,8 +567,8 @@
       "newPasswordAgain": "Repita la contraseña",
       "password": "Contraseña",
       "passwordAgain": "Repita la contraseña",
-      "socialMediaLink": "Enlace de redes sociales",
-      "phoneNumber": "Número de teléfono"
+      "phoneNumber": "Número de teléfono",
+      "socialMediaLink": "Enlace de redes sociales"
     },
     "placeholder": {
       "name": "Ingrese su Nombre",
@@ -572,8 +587,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Haga una conexión de grupo con {{name}} en BrightID: {{link}}",
-      "connectSingle": "Conectar con {{name}} en BrightID: {{link}}",
+      "connectGroup": "Establezca una conexión de grupo con {{name}} en BrightID: {{link}}. Este enlace es válido hasta {{expirationTimestamp}}.",
+      "connectSingle": "Conéctese con {{name}} en BrightID: {{link}}. Este enlace es válido hasta el {{expirationTimestamp}}.",
       "text": {
         "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente.",
         "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire.",
@@ -593,7 +608,7 @@
       "showCode": "Muestra tu codigo Qr"
     },
     "header": {
-      "connections": "{{count}} / {{max}} Conexiones",
+      "connections": "{{count}} / {{max}} Conexión",
       "connections_plural": "{{count}} / {{max}} Conexiones"
     },
     "label": {
@@ -630,15 +645,15 @@
     "state": "Conexiones recuperadas {{recoveredConnections}}, grupos {{recoveredGroups}}",
     "steps": {
       "complete": "Recuperación de la cuenta completa",
-      "downloading": "Descargando datos de las conexiones de recuperación ...",
+      "downloading": "Descargando datos de conexiones de recuperación…",
       "error": "Falló la recuperación de la cuenta",
       "recovering": "Recuperando cuenta ..."
     },
     "text": {
       "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
-      "signatures": "{{count}} / 2 firmas",
-      "signatures_plural": "{{count}} / 2 firmas"
+      "signatures": "{{count}} / firma",
+      "signatures_plural": "{{count}} / firmas"
     }
   },
   "recoveryConnections": {
@@ -652,7 +667,7 @@
       "currentRecoveryConnections": "Tus conexiones de recuperación actuales",
       "emptyList": "Por favor, agregue conexiones de recuperación para habilitar la recuperación social",
       "pleaseMakeSomeConnections": "Por favor, haga algunas conexiones :)",
-      "threeMore": "Necesitas {{amount}} conexion(es) conocida(s) más para habilitar la recuperación social"
+      "threeMore": "Necesitas {{amount}} conexiones más ya conocidas para habilitar la recuperación social"
     }
   },
   "recoveryCooldownModal": {
@@ -698,7 +713,7 @@
     "steps": {
       "complete": "Restauración completa",
       "error": "La restauración ha fallado. ¿Contraseña incorrecta?",
-      "restoring": "Restaurando datos ...",
+      "restoring": "Restaurando datos…",
       "skipped": "Restauración omitida",
       "waitingAccount": "Esperando la recuperación de la cuenta",
       "waitingPassword": "Ingrese contraseña u omita"
@@ -753,14 +768,6 @@
       "gotIt": "¡Entendido!",
       "setPassword": "Siempre puede establecer su\ncontraseña de BrightID aquí",
       "viewPassword": "Siempre podrá ver su\ncontraseña de BrightID aquí"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "invitación"
-    },
-    "text": {
-      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
     }
   }
 }
