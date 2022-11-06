@@ -10,7 +10,7 @@ type GroupPhotoProps = {
 };
 
 export const GroupPhoto = ({ group }: GroupPhotoProps) => {
-  if (group.photo?.filename) {
+  if (group?.photo?.filename) {
     return (
       <View style={styles.container}>
         <Image
@@ -24,7 +24,7 @@ export const GroupPhoto = ({ group }: GroupPhotoProps) => {
   } else {
     const circlePhotos = groupCirclePhotos(group).map(
       (item: { photo: Photo; source: any }) => {
-        if (item.photo?.filename) {
+        if (item?.photo?.filename) {
           item.source = {
             uri: `file://${photoDirectory()}/${item.photo?.filename}`,
           };

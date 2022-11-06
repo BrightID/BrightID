@@ -41,7 +41,7 @@ export const BituVerificationScreen = function ({ route }) {
   const renderItem = (item, index, section) => {
     let score, reportedBy;
     if (section === 'reportedConnections') {
-      score = bituVerification.reportedConnections[item].length * -1;
+      score = bituVerification.reportedConnections[item]?.length * -1;
       reportedBy = getBituReportedByText(bituVerification, connections, item);
     } else {
       score = bituVerification.directReports[item];
