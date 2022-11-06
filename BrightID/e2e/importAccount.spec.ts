@@ -181,6 +181,9 @@ describe('Import BrightID', () => {
       // Pop 'aes' parameter from url
       const aesKey = channelURL.searchParams.get('aes');
       channelURL.searchParams.delete('aes');
+      // Pop 'p' parameter from url
+      channelURL.searchParams.delete('p');
+
       // calculate channelId based on aeskey
       const channelId = hash(aesKey);
       console.log(`ChannelID: ${channelId}`);
