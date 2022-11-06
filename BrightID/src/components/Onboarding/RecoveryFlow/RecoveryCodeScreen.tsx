@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
@@ -10,8 +10,16 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18next from 'i18next';
+import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
+import {
+  BLACK,
+  DARKER_GREY,
+  GREY,
+  LIGHT_BLACK,
+  ORANGE,
+  WHITE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { RecoveryErrorType } from './RecoveryError';
@@ -28,10 +36,10 @@ import {
   uploadCompletedByOtherSide,
 } from './recoveryDataSlice';
 import {
-  setupSync,
+  clearImportChannel,
   createSyncChannel,
   pollImportChannel,
-  clearImportChannel,
+  setupSync,
 } from '../ImportFlow/thunks/channelThunks';
 import { recover_steps } from '@/utils/constants';
 import { userSelector } from '@/reducer/userSlice';
@@ -128,6 +136,7 @@ const RecoveryCodeScreen = ({ route }) => {
     }
   }, [action, dispatch, id, step]);
 
+  const [changePrimaryDevice, setChangePrimaryDevice] = useState(true);
   // set QRCode and SVG
   useEffect(() => {
     if (recoveryData.channel.url && recoveryData.aesKey) {
@@ -135,6 +144,7 @@ const RecoveryCodeScreen = ({ route }) => {
         aesKey: recoveryData.aesKey,
         url: recoveryData.channel.url,
         t: urlType,
+        changePrimaryDevice,
       });
       console.log(`new qrCode url: ${newQrUrl.href}`);
       setQrUrl(newQrUrl);
@@ -149,7 +159,12 @@ const RecoveryCodeScreen = ({ route }) => {
         parseString(qr, parseQrString);
       });
     }
-  }, [recoveryData.aesKey, recoveryData.channel.url, urlType]);
+  }, [
+    changePrimaryDevice,
+    recoveryData.aesKey,
+    recoveryData.channel.url,
+    urlType,
+  ]);
 
   // track errors
   useEffect(() => {
@@ -207,11 +222,20 @@ const RecoveryCodeScreen = ({ route }) => {
         dispatch(setRecoverStep(recover_steps.RESTORING));
         navigation.navigate('Restore');
       } else if (action === 'import' && isScanned) {
-        navigation.navigate('Import');
+        navigation.navigate('Import', { changePrimaryDevice });
       } else if (action === 'sync' && isScanned) {
         navigation.navigate('Devices', { syncing: true, asScanner: false });
       }
-    }, [action, alreadyNotified, sigCount, isScanned, t, dispatch, navigation]),
+    }, [
+      action,
+      alreadyNotified,
+      sigCount,
+      isScanned,
+      t,
+      dispatch,
+      navigation,
+      changePrimaryDevice,
+    ]),
   );
 
   const copyQr = () => {
@@ -312,6 +336,25 @@ const RecoveryCodeScreen = ({ route }) => {
                 ? t('recovery.text.signatures', { count: sigCount })
                 : ''}
             </Text>
+            {action === 'import' && (
+              <View style={styles.changePrimaryDeviceSwitchContainer}>
+                <Text
+                  style={styles.changePrimaryDeviceSwitchLabel}
+                  onPress={() => {
+                    setChangePrimaryDevice(!changePrimaryDevice);
+                  }}
+                >
+                  set as primary device
+                </Text>
+                <CheckBox
+                  tintColors={{ false: GREY, true: ORANGE }}
+                  onValueChange={(value) => {
+                    setChangePrimaryDevice(value);
+                  }}
+                  value={changePrimaryDevice}
+                />
+              </View>
+            )}
             <Svg
               height={DEVICE_LARGE ? '240' : '200'}
               width={DEVICE_LARGE ? '240' : '200'}
@@ -384,6 +427,17 @@ const styles = StyleSheet.create({
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
+  },
+  changePrimaryDeviceSwitchContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  changePrimaryDeviceSwitchLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[14],
+    textAlign: 'center',
+    color: DARKER_GREY,
   },
   qrsvgContainer: {
     flex: 1,
