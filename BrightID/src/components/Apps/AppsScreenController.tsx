@@ -34,6 +34,7 @@ const AppsScreenController = () => {
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const pendingLink = useSelector(selectPendingLinkedContext);
   const userVerifications = useSelector((state) => state.user.verifications);
+  const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
 
   const [refreshing, setRefreshing] = useState(false);
   const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
@@ -188,6 +189,7 @@ const AppsScreenController = () => {
       filteredApps={filteredApps}
       refreshApps={refreshApps}
       refreshing={refreshing}
+      sigsUpdating={sigsUpdating}
     />
   );
 };
