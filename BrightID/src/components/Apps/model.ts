@@ -10,12 +10,14 @@ import {
   setIsSponsoredv6,
   updateBlindSig,
   updateSig,
+  fetchApps,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
+import { getGlobalNodeApi } from '@/components/NodeApiGate';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 120; // 120 seconds
@@ -142,10 +144,18 @@ export const linkAppId = async (
   silent = false,
 ) => {
   const {
-    apps: { apps },
+    apps: { apps, sigsUpdating },
     user: { id },
     keypair: { secretKey },
   } = store.getState();
+
+  if (sigsUpdating) {
+    console.log('waiting for blind sigs updating to be finished...');
+    await new Promise(r => setTimeout(r, 1000));
+    return await linkAppId(appId, appUserId, silent);
+  }
+  // ensure recent changes applied to the app info is applied
+  await store.dispatch(fetchApps(getGlobalNodeApi()));
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;

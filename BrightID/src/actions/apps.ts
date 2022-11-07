@@ -9,6 +9,7 @@ import {
   upsertSig,
   removeSig,
   updateSig,
+  setSigsUpdating,
   selectAllSigs,
   selectExpireableBlindSigApps,
 } from '@/reducer/appsSlice';
@@ -154,9 +155,17 @@ export const updateBlindSigs =
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
+        await dispatch(setSigsUpdating(true));
+        console.log('getting blind sigs started');
         for (const app of expireableBlindSigApps) {
-          await dispatch(updateBlindSig(app));
+          try {
+            await dispatch(updateBlindSig(app));
+          } catch {
+            console.log(`error in getting blind sig for ${app}`);
+          }
         }
+        await dispatch(setSigsUpdating(false));
+        console.log('getting blind sigs finished');
       });
     });
   };

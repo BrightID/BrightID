@@ -88,7 +88,8 @@
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
       "pendingLink": "Linking your account in {{context}} to your BrightID…",
-      "sponsoring": "{{app}} is sponsoring you…"
+      "sponsoring": "{{app}} is sponsoring you…",
+      "sigsUpdating": "Updating blind signatures for apps…"
     }
   },
   "channel": {
