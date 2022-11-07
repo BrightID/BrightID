@@ -319,6 +319,10 @@ export const linkAppId = async (
   const linkedTimestamp = Date.now();
   let linkSuccess = false;
   for (const sig of sigs) {
+    if (!sig.sig) {
+      // ignore invalid signatures
+      continue;
+    }
     try {
       await api.linkAppId(sig, appUserId);
       // mark sig as linked with app
