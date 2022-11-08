@@ -33,6 +33,7 @@ type Props = {
   setSearch: (term: string) => void;
   filteredApps: AppInfo[];
   refreshing: boolean;
+  sigsUpdating: boolean;
   refreshApps: () => void;
 };
 
@@ -49,6 +50,7 @@ export const AppsScreen = ({
   setSearch,
   filteredApps,
   refreshing,
+  sigsUpdating,
   refreshApps,
 }: Props) => {
   const headerHeight = useHeaderHeight();
@@ -115,6 +117,9 @@ export const AppsScreen = ({
       waiting = true;
     } else if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
+      waiting = true;
+    } else if (sigsUpdating) {
+      msg = t('apps.text.sigsUpdating');
       waiting = true;
     } else if (!isSponsored) {
       msg = t('apps.text.notSponsored');

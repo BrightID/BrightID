@@ -95,29 +95,31 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      if (isPrimaryDevice) {
-        dispatch(updateBlindSigs());
-      }
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
-      dispatch(updateSocialMediaVariations());
-      dispatch(syncAndLinkSocialMedias());
       const timeoutId = setTimeout(() => {
         setLoading(false);
       }, 3000);
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [api, dispatch, isPrimaryDevice, photoFilename]),
+    }, [api, dispatch, photoFilename]),
   );
 
   useEffect(() => {
     if (api) {
       console.log(`updating apps...`);
       dispatch(fetchApps(api));
+      if (isPrimaryDevice) {
+        console.log(`updating blind sigs...`);
+        dispatch(updateBlindSigs());
+      }
+      console.log(`linking social media...`);
+      dispatch(updateSocialMediaVariations());
+      dispatch(syncAndLinkSocialMedias());
     }
-  }, [api, dispatch]);
+  }, [api, dispatch, isPrimaryDevice]);
 
   useEffect(() => {
     if (activeDevices.length) {
