@@ -12,13 +12,28 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import CheckBox from '@react-native-community/checkbox';
 import { useSelector, useDispatch } from '@/store/hooks';
 import { selectActiveDevices } from '@/reducer/devicesSlice';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, ORANGE, BLUE, BLACK } from '@/theme/colors';
+import {
+  WHITE,
+  ORANGE,
+  BLUE,
+  BLACK,
+  GREY,
+  DARK_ORANGE,
+  DARKER_GREY,
+  RED,
+} from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { removeDevice, setLastSyncTime } from '@/actions';
+import {
+  removeDevice,
+  selectIsPrimaryDevice,
+  setLastSyncTime,
+  setPrimaryDevice,
+} from '@/actions';
 import { qrCodeURL_types } from '@/utils/constants';
 import {
   pollImportChannel,
@@ -33,6 +48,8 @@ import {
   resetRecoveryData,
   uploadCompletedByOtherSide,
 } from '../RecoveryFlow/recoveryDataSlice';
+import { setSyncSocialMediaEnabledThunk } from '@/components/EditProfile/socialMediaThunks';
+import store from '@/store';
 
 /* Description */
 
@@ -201,6 +218,8 @@ export const DevicesScreen = ({ route }) => {
     </View>
   );
 
+  const isPrimary = selectIsPrimaryDevice(store.getState());
+
   return (
     <>
       <StatusBar
@@ -247,6 +266,31 @@ export const DevicesScreen = ({ route }) => {
               </View>
             </TouchableOpacity>
           )}
+          <View style={styles.primaryDeviceSwitchContainer}>
+            <Text
+              style={styles.primaryDeviceSwitchLabel}
+              onPress={() => {
+                dispatch(setPrimaryDevice(!isPrimary));
+              }}
+            >
+              Use current device as primary device
+            </Text>
+            <CheckBox
+              style={styles.primaryDeviceSwitch}
+              tintColors={{ false: GREY, true: ORANGE }}
+              onValueChange={(value) => {
+                dispatch(setPrimaryDevice(value));
+              }}
+              value={isPrimary}
+            />
+          </View>
+          <Text style={styles.infoText}>
+            <Text style={styles.noticeText}>Notice:</Text> Only one of your
+            active devices should be set as a primary device, or you will
+            encounter problems while syncing devices. Before setting your
+            current device as primary, make sure you are synced with your old
+            primary device and delete that device.
+          </Text>
         </View>
       </View>
     </>
@@ -344,6 +388,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[14],
     color: BLUE,
+  },
+  primaryDeviceSwitchContainer: {
+    marginTop: DEVICE_LARGE ? 10 : 8,
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  primaryDeviceSwitchLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: DARK_ORANGE,
+  },
+  primaryDeviceSwitch: {
+    flex: 1,
+  },
+  noticeText: {
+    fontSize: fontSize[13],
+    color: RED,
+  },
+  infoText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
 });
 
