@@ -7,6 +7,7 @@ import {
   View,
   FlatList,
   Alert,
+  ScrollView,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-spinkit';
@@ -228,7 +229,7 @@ export const DevicesScreen = ({ route }) => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container} testID="DevicesScreen">
+      <ScrollView style={styles.container} testID="DevicesScreen">
         <View style={styles.devicesContainer}>
           <Text style={styles.description}>
             {t('devices.text.listDescription')}
@@ -273,7 +274,7 @@ export const DevicesScreen = ({ route }) => {
                 dispatch(setPrimaryDevice(!isPrimary));
               }}
             >
-              Use current device as primary device
+              {t('devices.text.switchPrimaryLabel')}
             </Text>
             <CheckBox
               style={styles.primaryDeviceSwitch}
@@ -285,14 +286,11 @@ export const DevicesScreen = ({ route }) => {
             />
           </View>
           <Text style={styles.infoText}>
-            <Text style={styles.noticeText}>Notice:</Text> Only one of your
-            active devices should be set as a primary device, or you will
-            encounter problems while syncing devices. Before setting your
-            current device as primary, make sure you are synced with your old
-            primary device and delete that device.
+            <Text style={styles.noticeText}>{t('devices.text.notice')}</Text>
+            {t('devices.text.primaryDeviceNotice')}
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
