@@ -18,9 +18,8 @@ import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { SPONSOR_WAIT_TIME } from '@/utils/constants';
 
-// max time to wait for app to respond to sponsoring request
-const sponsorTimeout = 1000 * 120; // 120 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
 
@@ -410,7 +409,7 @@ const sponsor = async (
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   const sp = await getSponsorship(appUserId, api);
-  // ignore spending if spend requseted before to prevent getting error
+  // ignore spending if spend requested before to prevent getting error
   if (!sp || !sp.spendRequested) {
     console.log(`Sending spend sponsorship op...`);
     const op = await api.spendSponsorship(appId, appUserId);
@@ -423,7 +422,7 @@ const sponsor = async (
       const startTime = Date.now();
       const intervalId = setInterval(async () => {
         const timeElapsed = Date.now() - startTime;
-        if (timeElapsed > sponsorTimeout) {
+        if (timeElapsed > SPONSOR_WAIT_TIME) {
           clearInterval(intervalId);
           reject(new Error(`Timeout waiting for sponsorship`));
         } else {
