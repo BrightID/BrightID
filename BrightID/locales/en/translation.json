@@ -311,7 +311,10 @@
       "listDescription": "Your BrightID is available on following devices:",
       "syncCompleted": "Your device synced successfully.",
       "waitSyncing": "Syncing devices, please wait ...",
-      "whatsDeviceName": "Please choose a name for the new device"
+      "whatsDeviceName": "Please choose a name for the new device",
+      "switchPrimaryLabel": "Use current device as primary device",
+      "notice": "Notice:",
+      "primaryDeviceNotice": "Only one of your active devices should be set as a primary device, or you will encounter problems while syncing devices. Before setting your current device as primary, make sure you are synced with your old primary device and delete that device."
     }
   },
   "drawer": {

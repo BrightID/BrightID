@@ -4,7 +4,7 @@ import {
   recoveryConnectionsSelector,
 } from '@/reducer/connectionsSlice';
 import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
-import { linkedContextTotal } from '@/reducer/appsSlice';
+import { linkedContextTotal, selectAllLinkedSigs } from '@/reducer/appsSlice';
 
 export const UserTasks = {
   make_first_connection: {
@@ -26,7 +26,9 @@ export const UserTasks = {
     checkFn(state: RootState) {
       // is there at least one linked context?
       const linkedContexts = linkedContextTotal(state);
-      return linkedContexts > 0;
+      // or at least one linked blind sig?
+      const linkedSigs = selectAllLinkedSigs(state);
+      return linkedContexts > 0 || linkedSigs.length > 0;
     },
   },
   get_sponsored: {
