@@ -49,8 +49,6 @@ import {
   resetRecoveryData,
   uploadCompletedByOtherSide,
 } from '../RecoveryFlow/recoveryDataSlice';
-import { setSyncSocialMediaEnabledThunk } from '@/components/EditProfile/socialMediaThunks';
-import store from '@/store';
 
 /* Description */
 
@@ -74,6 +72,7 @@ export const DevicesScreen = ({ route }) => {
   );
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
+  const isPrimary = useSelector(selectIsPrimaryDevice);
 
   const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const isCurrentDevice = (d) => d.signingKey === signingKey;
@@ -83,15 +82,16 @@ export const DevicesScreen = ({ route }) => {
 
   useEffect(() => {
     const runEffect = async () => {
-      const { isPrimaryDevice, lastSyncTime } = await getOtherSideDeviceInfo();
-      if (isPrimaryDevice && settings.isPrimaryDevice) {
+      const { isPrimaryDevice: otherPrimary, lastSyncTime } =
+        await getOtherSideDeviceInfo();
+      if (otherPrimary && isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
           t('common.alert.error'),
           t('devices.alert.bothPrimary'),
         );
-      } else if (!isPrimaryDevice && !settings.isPrimaryDevice) {
+      } else if (!otherPrimary && !isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
@@ -99,12 +99,10 @@ export const DevicesScreen = ({ route }) => {
           t('devices.alert.noPrimary'),
         );
       }
-      if (!settings.isPrimaryDevice) {
+      if (!isPrimary) {
         await uploadDeviceInfo();
       }
-      const after = settings.isPrimaryDevice
-        ? lastSyncTime
-        : settings.lastSyncTime;
+      const after = isPrimary ? lastSyncTime : settings.lastSyncTime;
       await uploadAllInfoAfter(after);
       dispatch(pollImportChannel());
     };
@@ -135,7 +133,7 @@ export const DevicesScreen = ({ route }) => {
     dispatch,
     navigation,
     route.params?.asScanner,
-    settings.isPrimaryDevice,
+    isPrimary,
     settings.lastSyncTime,
     t,
   ]);
@@ -150,7 +148,7 @@ export const DevicesScreen = ({ route }) => {
       Alert.alert(t('common.alert.info'), t('devices.text.syncCompleted'));
       clearImportChannel();
       setWaiting(false);
-      if (!settings.isPrimaryDevice) {
+      if (!isPrimary) {
         dispatch(setLastSyncTime(Date.now()));
       }
       dispatch(resetRecoveryData());
@@ -191,7 +189,7 @@ export const DevicesScreen = ({ route }) => {
           <Text style={styles.deviceNameText}>{getName(device)}</Text>
           {isCurrentDevice(device) && (
             <Text style={styles.devicePrimaryText}>
-              &nbsp;({settings.isPrimaryDevice ? 'Primary' : 'Secondary'})
+              &nbsp;({isPrimary ? 'Primary' : 'Secondary'})
             </Text>
           )}
         </View>
@@ -218,8 +216,6 @@ export const DevicesScreen = ({ route }) => {
       )}
     </View>
   );
-
-  const isPrimary = selectIsPrimaryDevice(store.getState());
 
   return (
     <>
