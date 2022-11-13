@@ -106,6 +106,7 @@
       "noApps": "Pas d'application",
       "notSponsored": "Vous n'êtes pas parrainé·e.\nVeuillez trouver une application ci-dessous pour vous parrainer.",
       "pendingLink": "Compte BrightID en cours de liaison avec {{context}}…",
+      "sigsUpdating": "Mise à jour des signatures aveugles pour les applis…",
       "sponsoring": "{{app}} vous parraine…"
     }
   },
@@ -352,6 +353,7 @@
     "alert": {
       "bothPrimary": "Les deux appareils sont configurés comme appareils primaires. Vous ne pouvez avoir qu'un seul appareil primaire. Configurez l'un des appareils comme secondaire pour pouvoir les synchroniser.",
       "confirmAdd": "Êtes-vous sûr(e) de vouloir exporter votre BrightID vers un autre appareil ?",
+      "confirmAddPrimary": "Êtes-vous sûr·e de vouloir exporter votre BrightID vers un autre appareil et de le définir comme votre appareil principal ?",
       "confirmRemove": "Êtes-vous sûr(e) de vouloir supprimer votre BrightID de « {{name}} » ?",
       "confirmSync": "Êtes-vous sûr(e) de vouloir partager et synchroniser vos données BrightID avec cet appareil ?",
       "noPrimary": "Vos appareils ne peuvent être synchronisés que par l'appareil principal."
@@ -364,6 +366,9 @@
     },
     "text": {
       "listDescription": "Votre BrightID est disponible sur les appareils suivants :",
+      "notice": "Avis :",
+      "primaryDeviceNotice": "Un seul de vos appareils actifs doit être défini comme appareil principal, sinon vous rencontrerez des problèmes lors de la synchronisation des appareils. Avant de définir votre appareil actuel comme appareil principal, assurez-vous que vous êtes synchronisé avec votre ancien appareil principal et supprimez cet appareil.",
+      "switchPrimaryLabel": "Utiliser l'appareil actuel comme appareil principal",
       "syncCompleted": "Votre appareil s'est synchronisé avec succès.",
       "waitSyncing": "Synchronisation des appareils, veuillez patienter…",
       "whatsDeviceName": "Veuillez choisir un nom pour le nouvel appareil"
