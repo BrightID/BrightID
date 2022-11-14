@@ -88,6 +88,7 @@
       "noApps": "Geen apps",
       "notSponsored": "Je wordt niet gesponsord.\nZoek hieronder een app die jou kan sponsoren.",
       "pendingLink": "Je account in {{context}} wordt gekoppeld…",
+      "sigsUpdating": "Bezig met bijwerken van appondertekeningen…",
       "sponsoring": "{{app}} sponsort je…"
     }
   },
@@ -297,6 +298,7 @@
     "alert": {
       "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren.",
       "confirmAdd": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat?",
+      "confirmAddPrimary": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat en dat als primair apparaat instellen?",
       "confirmRemove": "Weet je zeker dat je je BrightID wilt verwijderen van ‘{{name}}’?",
       "confirmSync": "Weet je zeker dat je je BrightID-gegevens wilt delen en synchroniseren met dit apparaat?",
       "noPrimary": "Je apparaten kunnen alleen worden gesynchroniseerd door det primaire apparaat."
@@ -309,6 +311,9 @@
     },
     "text": {
       "listDescription": "Je BrightID is beschikbaar op de volgende apparaten:",
+      "notice": "Let op:",
+      "primaryDeviceNotice": "Slechts een van je actieve apparaten kan als primair apparaat worden gebruikt, anders kunnen er synchronisatieproblemen optreden. Zorg er dus voor dat dit apparaat gesynchroniseerd is met het oude en verwijder dat apparaat nadien.",
+      "switchPrimaryLabel": "Huidig apparaat gebruiken als primair apparaat",
       "syncCompleted": "Je apparaat is gesynchroniseerd.",
       "waitSyncing": "Bezig met synchroniseren…",
       "whatsDeviceName": "Geef het nieuwe apparaat een naam"
