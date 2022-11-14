@@ -87,7 +87,7 @@ export const PendingConnectionsScreen = () => {
     } else if (confirmed > total) {
       setTotal(confirmed);
     }
-  }, [pendingConnections, total, confirmed]);
+  }, [pendingConnections.length, total, confirmed]);
 
   // NAVIGATION
 
