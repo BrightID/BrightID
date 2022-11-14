@@ -27,6 +27,7 @@ import { fontSize } from '@/theme/fonts';
 import { setActiveNotification } from '@/actions';
 import { PreviewConnectionController } from './PreviewConnectionController';
 import BackArrow from '../Icons/BackArrow';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -41,10 +42,9 @@ export const PendingConnectionsScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const viewPagerRef = useRef<ViewPager>(null);
+  const pendingConnections = useSelector(selectAllUnconfirmedConnections);
+  const { backupCompleted } = useSelector((state) => state.user);
 
-  const pendingConnections = useSelector((state) => {
-    return selectAllUnconfirmedConnections(state);
-  });
   // pending connections to display
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState<
     Array<PendingConnection>
@@ -87,7 +87,7 @@ export const PendingConnectionsScreen = () => {
     } else if (confirmed > total) {
       setTotal(confirmed);
     }
-  }, [pendingConnections, total, confirmed]);
+  }, [pendingConnections.length, total, confirmed]);
 
   // NAVIGATION
 
@@ -125,6 +125,10 @@ export const PendingConnectionsScreen = () => {
   useEffect(() => {
     let timeout;
     if (pendingConnections.length === 0) {
+      // Trigger backup of connections when when all pending connections are handled
+      if (backupCompleted) {
+        dispatch(backupUser());
+      }
       setLoading(true);
       timeout = setTimeout(() => {
         navigation.navigate('Connections');
