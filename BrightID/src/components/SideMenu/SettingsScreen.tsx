@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -18,6 +18,14 @@ import {
   selectRecoveryData,
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
+const ComponentWithError = () => {
+  useEffect(() => {
+    throw new Error('This is a test error thrown by ComponentWithError.');
+  }, []);
+
+  return null;
+};
+
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
@@ -28,6 +36,7 @@ export const SettingsScreen = () => {
   const dispatch = useDispatch();
   const numChannels = useSelector(selectTotalChannels);
   const { channel, id } = useSelector(selectRecoveryData);
+  const [isErrorComponentVisible, setIsErrorComponentVisible] = useState(false);
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
     await i18next.changeLanguage(itemValue);
@@ -113,6 +122,24 @@ export const SettingsScreen = () => {
           >
             <Text style={styles.buttonText}>close recovery/sync channel</Text>
           </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.settingsItemContainer}>
+        <Text style={styles.label}>Error Boundary</Text>
+        <View style={styles.debugSettingContainer}>
+          <Text>Test error boundary</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setIsErrorComponentVisible(true);
+              // @ts-ignore
+              // const x = something.length;
+              // throw new Error(`Oh noes!`);
+            }}
+          >
+            <Text style={styles.buttonText}>make an error</Text>
+          </TouchableOpacity>
+          {isErrorComponentVisible && <ComponentWithError />}
         </View>
       </View>
     </View>
