@@ -33,6 +33,11 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     // Just return null, parent components will take care of moving to a different screen.
     return null;
   }
+  if (!pendingConnection.pendingConnectionData) {
+    // pending connection exists but attached data is missing. Theoretically this can not happen,
+    // but appcenter crash reports say it happens :-(
+    return null;
+  }
 
   let isReconnect =
     !!pendingConnection.pendingConnectionData.existingConnection;
