@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { Alert, Linking } from 'react-native';
+import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
 import { store, persistor } from './store';
