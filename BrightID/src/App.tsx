@@ -66,13 +66,13 @@ export const App = () => {
 
   return (
     <Provider store={store}>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <PersistGate
-          loading={<InitialLoading app={true} />}
-          persistor={persistor}
-        >
-          <ActionSheetProvider>
-            <SafeAreaProvider>
+      <PersistGate
+        loading={<InitialLoading app={true} />}
+        persistor={persistor}
+      >
+        <ActionSheetProvider>
+          <SafeAreaProvider>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
               <NotificationBanner />
               <NavigationContainer
                 linking={linking}
@@ -81,10 +81,10 @@ export const App = () => {
               >
                 <MainApp />
               </NavigationContainer>
-            </SafeAreaProvider>
-          </ActionSheetProvider>
-        </PersistGate>
-      </ErrorBoundary>
+            </ErrorBoundary>
+          </SafeAreaProvider>
+        </ActionSheetProvider>
+      </PersistGate>
     </Provider>
   );
 };
