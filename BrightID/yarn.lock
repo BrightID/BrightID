@@ -9242,6 +9242,11 @@ react-native-dropdownalert@4.5.1:
   dependencies:
     prop-types "15.5.10"
 
+react-native-error-boundary@^1.1.16:
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/react-native-error-boundary/-/react-native-error-boundary-1.1.16.tgz#a95334b932982965fcab33d4f1a7d2aa75bcf551"
+  integrity sha512-yCbKhjGo2kMJBoUdy503L3oaInrLo1gychGr5e/IrezfPhfUGhfr8EtG2EKgZDcSfmvodBXvARq942hWis5sUA==
+
 react-native-gesture-handler@1.10.3:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"

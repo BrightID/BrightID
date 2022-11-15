@@ -2,17 +2,16 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {
-  getStateFromPath,
-  NavigationContainer,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import ErrorBoundary from 'react-native-error-boundary';
 import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
 import MainApp from '@/routes';
+import ErrorFallback from '@/components/ErrorFallback';
 
 /**
  * Central part of the application
@@ -73,14 +72,16 @@ export const App = () => {
       >
         <ActionSheetProvider>
           <SafeAreaProvider>
-            <NotificationBanner />
-            <NavigationContainer
-              linking={linking}
-              ref={navigationRef}
-              fallback={<InitialLoading app={false} />}
-            >
-              <MainApp />
-            </NavigationContainer>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <NotificationBanner />
+              <NavigationContainer
+                linking={linking}
+                ref={navigationRef}
+                fallback={<InitialLoading app={false} />}
+              >
+                <MainApp />
+              </NavigationContainer>
+            </ErrorBoundary>
           </SafeAreaProvider>
         </ActionSheetProvider>
       </PersistGate>
