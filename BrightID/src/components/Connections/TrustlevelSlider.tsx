@@ -87,7 +87,7 @@ const TrustlevelSlider = ({
       {verbose && (
         <View style={styles.description}>
           <Text style={styles.descriptionText}>
-            "{trustLevelDetails[currentLevel].description}"
+            "{trustLevelDetails[currentLevel]?.description}"
           </Text>
         </View>
       )}

@@ -139,7 +139,7 @@ export const PendingConnectionsScreen = () => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [pendingConnections.length, navigation]);
+  }, [pendingConnections.length, navigation, backupCompleted, dispatch]);
 
   /**
     the list should only re render sparingly for performance and continuity

@@ -16,6 +16,10 @@
       "description": "Invita a familiares o amigos a una reunion de verificación en BrightID",
       "title": "Reunion de verificación con amigos o familiares"
     },
+    "joinMeet": {
+      "description": "Únase a una reunión de BrightID",
+      "title": "Reunión de BrightID"
+    },
     "linkApp": {
       "description": "Vincula tu BrightID con una aplicación",
       "title": "Vincula con una aplicación"
@@ -42,6 +46,9 @@
     "setupBackup": {
       "description": "Establezca la contraseña para habilitar la copia de seguridad cifrada de sus datos",
       "title": "Establecer la contraseña de la copia de seguridad"
+    },
+    "setupRecoveryConnections": {
+      "description": "Configurar las conexiones de recuperación para permitir la recuperación de las cuentas sociales"
     },
     "setupTrustedConnections": {
       "description": "Configure sus conexiones de recuperación para habilitar la recuperación social de cuentas",
