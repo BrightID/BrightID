@@ -26,7 +26,7 @@ export const GroupPhoto = ({ group }: GroupPhotoProps) => {
       (item: { photo: Photo; source: any }) => {
         if (item?.photo?.filename) {
           item.source = {
-            uri: `file://${photoDirectory()}/${item.photo?.filename}`,
+            uri: `file://${photoDirectory()}/${item.photo.filename}`,
           };
         } else {
           item.source = require('@/static/default_profile.jpg');

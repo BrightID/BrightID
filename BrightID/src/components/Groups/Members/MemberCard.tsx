@@ -130,7 +130,7 @@ export const MemberCard = ({
   const imageSource =
     photo?.filename && !imgErr
       ? {
-          uri: `file://${photoDirectory()}/${photo?.filename}`,
+          uri: `file://${photoDirectory()}/${photo.filename}`,
         }
       : require('@/static/default_profile.jpg');
 
