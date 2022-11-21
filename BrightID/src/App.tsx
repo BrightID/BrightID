@@ -28,8 +28,13 @@ export const App = () => {
         App: {
           screens: {
             Apps: {
-              path: 'link-verification/:baseUrl?/:context/:contextId/',
+              path: 'link-verification/:baseUrl?/:appId/:appUserId/',
               exact: true,
+              parse: {
+                baseUrl: (baseUrl) => {
+                  return decodeURIComponent(baseUrl);
+                },
+              },
             },
             ScanCode: {
               path: 'connection-code/:qrcode',
