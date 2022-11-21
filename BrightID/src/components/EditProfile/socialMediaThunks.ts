@@ -1,6 +1,6 @@
 import { find, propEq } from 'ramda';
 import { SOCIAL_API_AUTHENTICATION_ERROR } from '@/api/socialMediaService';
-import { getSignedTimestamp, linkAppId } from '@/components/Apps/model';
+import { getSignedTimestamp } from '@/components/Apps/model';
 import store from '@/store';
 import { selectAllApps } from '@/reducer/appsSlice';
 import {
@@ -13,16 +13,15 @@ import {
   upsertSocialMediaVariations,
 } from '@/reducer/socialMediaVariationSlice';
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
-import { SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
+import { BrightIdNetwork, SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
 import {
   selectSyncSocialMediaEnabled,
   setSyncSocialMediaEnabled,
 } from '@/reducer/settingsSlice';
-import { BrightIdNetwork } from '@/components/Apps/types.d';
 import socialMediaService from '@/utils/socialMediaServiceProvider';
 
 export async function linkSocialMediaApp(appId: string, appUserId: string) {
-  let linked = false;
+  const linked = false;
   const apps = selectAllApps(store.getState());
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   if (appInfo && appInfo.usingBlindSig) {
@@ -32,7 +31,8 @@ export async function linkSocialMediaApp(appId: string, appUserId: string) {
       Date.now() - signedTimestamp > SOCIAL_MEDIA_SIG_WAIT_TIME
     ) {
       try {
-        linked = await linkAppId(appId, appUserId, true);
+        // TODO
+        // linked = await linkAppId(appId, appUserId, true);
       } catch (e) {
         console.log(e);
       }

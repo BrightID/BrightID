@@ -8,6 +8,7 @@ import {
   b64ToUint8Array,
 } from '@/utils/encoding';
 import BrightidError from '@/api/brightidError';
+import { operation_states } from '@/utils/constants';
 
 const v = 6;
 
@@ -436,7 +437,7 @@ export class NodeApi {
     return (res.data as UserInvitesRes).data?.invites;
   }
 
-  async getOperationState(opHash: string) {
+  async getOperationState(opHash: string): Promise<OperationInfo> {
     const res = await this.api.get<OperationRes, ErrRes>(
       `/operations/${opHash}`,
     );
@@ -444,7 +445,7 @@ export class NodeApi {
       // operation is not existing on server. Don't throw an error, as a client might try to check
       // operations sent by other clients without knowing if they have been submitted already.
       return {
-        state: 'unknown',
+        state: operation_states.UNKNOWN,
         result: '',
       };
     }

@@ -13,9 +13,9 @@ import {
   socialMediaVariations,
 } from '@/components/EditProfile/socialMediaVariations';
 import { CreateSocialMediaResponse } from '@/api/socialMediaService_types.d';
-import { BrightIdNetwork } from '@/components/Apps/types.d';
 import { saveSocialMedia } from '@/reducer/socialMediaSlice';
 import socialMediaService from '../../utils/socialMediaServiceProvider';
+import { BrightIdNetwork } from '@/utils/constants';
 
 const mockApp: AppInfo = {
   id: 'phoneRegistry',
@@ -127,6 +127,7 @@ describe('linkSocialMediaApp', () => {
 
   it('links when current time is SIG_WAIT_TIME ahead of blindSig time', async () => {
     mockRightLinkingTime();
+    // @ts-ignore
     const spy = jest.spyOn(AppModule, 'linkAppId');
     const ret = await linkSocialMediaApp(appId, appUserId);
     expect(ret).toBe(true);
@@ -135,6 +136,7 @@ describe('linkSocialMediaApp', () => {
 
   it('does not link when current time is SIG_WAIT_TIME before blindSig time', async () => {
     mockWrongLinkingTime();
+    // @ts-ignore
     const spy = jest.spyOn(AppModule, 'linkAppId');
     const ret = await linkSocialMediaApp(appId, appUserId);
     expect(ret).toBe(false);

@@ -18,7 +18,7 @@ import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import backupApi from '@/api/backupService';
 import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
-import { BrightIdNetwork } from '@/components/Apps/types.d';
+import { BrightIdNetwork } from '@/utils/constants';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -155,16 +155,16 @@ export const updateBlindSigs =
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
-        await dispatch(setSigsUpdating(true));
+        dispatch(setSigsUpdating(true));
         console.log('getting blind sigs started');
         for (const app of expireableBlindSigApps) {
           try {
-            await dispatch(updateBlindSig(app));
+            dispatch(updateBlindSig(app));
           } catch {
             console.log(`error in getting blind sig for ${app}`);
           }
         }
-        await dispatch(setSigsUpdating(false));
+        dispatch(setSigsUpdating(false));
         console.log('getting blind sigs finished');
       });
     });
@@ -188,7 +188,7 @@ export const fetchApps =
   async (dispatch: AppDispatch, _) => {
     try {
       const apps = await api.getApps();
-      await dispatch(setApps(apps));
+      dispatch(setApps(apps));
     } catch (err) {
       console.log(err);
     }

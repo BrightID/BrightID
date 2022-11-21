@@ -13,6 +13,7 @@ import {
   channel_types,
   connection_levels,
   report_reasons,
+  sponsoring_steps,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -100,7 +101,6 @@ declare global {
     ttl: number;
     initiatorProfileId: string;
   };
-
   /* Profile information shared P2P via channel when making connections */
   type SharedProfile = {
     requestProof?: string;
@@ -378,4 +378,14 @@ declare global {
   };
 
   type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
+
+  type AppLinkInfo = {
+    baseUrl?: string;
+    appId: string;
+    appUserId: string;
+    v: number;
+  };
+
+  type SponsoringStep_Type =
+    typeof sponsoring_steps[keyof typeof sponsoring_steps];
 }

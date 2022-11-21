@@ -6,6 +6,7 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
+import { sponsoring_steps } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 
@@ -22,6 +23,10 @@ const initialState: AppsState = {
   linkedContexts: linkedContextsAdapter.getInitialState(),
   sigs: sigsAdapter.getInitialState(),
   sigsUpdating: false,
+  sponsoringStep: sponsoring_steps.IDLE,
+  linkingAppInfo: undefined,
+  linkingAppStartTime: 0,
+  sponsorOperationHash: undefined,
 };
 
 const appsSlice = createSlice({
@@ -68,6 +73,21 @@ const appsSlice = createSlice({
     setSigsUpdating(state, action: PayloadAction<boolean>) {
       state.sigsUpdating = action.payload;
     },
+    setSponsoringStep(state, action: PayloadAction<SponsoringStep_Type>) {
+      state.sponsoringStep = action.payload;
+    },
+    setLinkingAppInfo(
+      state,
+      action: PayloadAction<LinkingAppInfo | undefined>,
+    ) {
+      state.linkingAppInfo = action.payload;
+    },
+    setLinkingAppStarttime(state, action: PayloadAction<number>) {
+      state.linkingAppStartTime = action.payload;
+    },
+    setSponsorOperationHash(state, action: PayloadAction<string>) {
+      state.sponsorOperationHash = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -87,6 +107,10 @@ export const {
   removeAllSigs,
   updateSig,
   setSigsUpdating,
+  setSponsoringStep,
+  setLinkingAppInfo,
+  setLinkingAppStarttime,
+  setSponsorOperationHash,
 } = appsSlice.actions;
 
 export const {
@@ -140,6 +164,18 @@ export const selectExpireableBlindSigApps = createSelector(
   (apps) =>
     apps.filter((app) => app.verificationExpirationLength && !app.testing),
 );
+
+export const selectSponsoringStep = (state: RootState) =>
+  state.apps.sponsoringStep;
+
+export const selectLinkingAppInfo = (state: RootState) =>
+  state.apps.linkingAppInfo;
+
+export const selectLinkingAppStartTime = (state: RootState) =>
+  state.apps.linkingAppStartTime;
+
+export const selectSponsorOperationHash = (state: RootState) =>
+  state.apps.sponsorOperationHash;
 
 // Export reducer
 export default appsSlice.reducer;

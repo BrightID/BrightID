@@ -1,27 +1,7 @@
-import { Alert } from 'react-native';
-import { find, propEq } from 'ramda';
-import i18next from 'i18next';
-import { create } from 'apisauce';
-import { Dispatch, SetStateAction } from 'react';
-import {
-  addLinkedContext,
-  addOperation,
-  selectIsPrimaryDevice,
-  setIsSponsoredv6,
-  updateBlindSig,
-  updateSig,
-  fetchApps,
-} from '@/actions';
 import store from '@/store';
-import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
-import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
-import { SPONSOR_WAIT_TIME } from '@/utils/constants';
-
-// Interval to poll for sponsor op
-const sponsorPollInterval = 3000; // 5 seconds
+import { NodeApi } from '@/api/brightId';
 
 export const getSignedTimestamp = (app: AppInfo) => {
   const sigs = selectAllSigs(store.getState());
@@ -41,6 +21,20 @@ export const getSignedTimestamp = (app: AppInfo) => {
   return null;
 };
 
+export const getSponsorship = async (appUserId: string, api: NodeApi) => {
+  try {
+    return await api.getSponsorship(appUserId);
+  } catch (e) {
+    if (e instanceof BrightidError && e.errorNum === APP_ID_NOT_FOUND) {
+      // node has not yet registered the sponsor request -> Ignore
+      console.log(`sponsor request for ${appUserId} not yet existing`);
+    } else {
+      throw e;
+    }
+  }
+};
+
+/*
 export const handleV5App = async (
   params: Params,
   setSponsoringApp: Dispatch<SetStateAction<AppInfo>>,
@@ -74,6 +68,8 @@ export const handleV5App = async (
   );
 };
 
+ */
+/*
 export const handleV6App = async (
   params: Params,
   setSponsoringApp,
@@ -100,43 +96,9 @@ export const handleV6App = async (
     ],
   );
 };
+*/
 
-const linkContextId = async (
-  baseUrl: string,
-  context: string,
-  contextId: string,
-) => {
-  // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
-  const { id } = store.getState().user;
-  const { secretKey } = store.getState().keypair;
-  const api = new NodeApi({ url: baseUrl, id, secretKey });
-  try {
-    const op = await api.linkContextId(context, contextId);
-    op.apiUrl = baseUrl;
-    store.dispatch(addOperation(op));
-    store.dispatch(
-      addLinkedContext({
-        context,
-        contextId,
-        dateAdded: Date.now(),
-        state: 'pending',
-      }),
-    );
-  } catch (e) {
-    Alert.alert(
-      i18next.t('apps.alert.title.linkingFailed'),
-      `${(e as Error).message}`,
-      [
-        {
-          text: i18next.t('common.alert.dismiss'),
-          style: 'cancel',
-          onPress: () => null,
-        },
-      ],
-    );
-  }
-};
-
+/*
 export const linkAppId = async (
   appId: string,
   appUserId: string,
@@ -150,8 +112,8 @@ export const linkAppId = async (
 
   if (sigsUpdating) {
     console.log('waiting for blind sigs updating to be finished...');
-    await new Promise(r => setTimeout(r, 1000));
-    return await linkAppId(appId, appUserId, silent);
+    await new Promise((r) => setTimeout(r, 1000));
+    return linkAppId(appId, appUserId, silent);
   }
   // ensure recent changes applied to the app info is applied
   await store.dispatch(fetchApps(getGlobalNodeApi()));
@@ -369,20 +331,9 @@ export const linkAppId = async (
   }
   return false;
 };
+*/
 
-const getSponsorship = async (appUserId: string, api: NodeApi) => {
-  try {
-    return await api.getSponsorship(appUserId);
-  } catch (e) {
-    if (e instanceof BrightidError && e.errorNum === APP_ID_NOT_FOUND) {
-      // node has not yet registered the sponsor request -> Ignore
-      console.log(`sponsor request for ${appUserId} not yet existing`);
-    } else {
-      throw e;
-    }
-  }
-};
-
+/*
 const sponsor = async (
   appId: string,
   appUserId: string,
@@ -406,6 +357,7 @@ const sponsor = async (
   5. check GET /sponsorships/{appId} to see if it really got sponsored.
   6. proceed with posting the verification to the node under the appId.
    */
+/*
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   const sp = await getSponsorship(appUserId, api);
@@ -453,3 +405,4 @@ const sponsor = async (
     ]);
   }
 };
+*/

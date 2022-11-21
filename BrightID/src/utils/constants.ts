@@ -46,6 +46,9 @@ export const CONNECTION_STALE_AGE = 15 * minute;
 export const RECOVERY_COOLDOWN_DURATION = 7 * day;
 export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
 
+// App linking and sponsoring
+export const SPONSORING_POLL_INTERVAL = 5 * second;
+
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
 export const CHANNEL_INFO_VERSION_1 = 1; // Initial channel info format
@@ -130,4 +133,25 @@ export enum channel_states {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
   BACKGROUND = 'BACKGROUND',
+}
+
+export enum sponsoring_steps {
+  IDLE,
+  ERROR_APPINFO, // Apinfo invalid or appId/context not found
+  ERROR_INVALIDAPP, // App info invalid
+  PRECHECK_APP, // Check if sponsoring was already requested
+  WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
+  ERROR_OP, // Op did not confirm
+  WAITING_APP, // waiting for app to actually execute sponsoring
+  ERROR_APP, // App failed to sponsor
+  SUCCESS,
+  LINK_WAITING_V5, // Waiting for link operation to confirm (v5 app)
+  LINK_WAITING_V6, // Waiting for link function to complete (v6 app)
+  LINK_SUCCESS,
+  LINK_ERROR,
+}
+
+export enum BrightIdNetwork {
+  TEST = 'test',
+  NODE = 'node',
 }

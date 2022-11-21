@@ -19,6 +19,9 @@ import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
 import AnimatedLinearGradient from './AnimatedLinearGradient';
 import AppsScreenFilter from '@/components/Apps/AppsScreenFilter';
+import { selectSponsoringStep } from '@/reducer/appsSlice';
+import { useSelector } from '@/store/hooks';
+import { sponsoring_steps } from '@/utils/constants';
 
 type Props = {
   sponsoringApp: AppInfo | undefined;
@@ -56,7 +59,7 @@ export const AppsScreen = ({
   const headerHeight = useHeaderHeight();
   const { t } = useTranslation();
   useFocusEffect(refreshApps);
-
+  const sponsoringStep = useSelector(selectSponsoringStep);
   const scrollViewRef = useRef(null);
 
   // Animation
@@ -112,6 +115,53 @@ export const AppsScreen = ({
 
     showView.start();
 
+    switch (sponsoringStep) {
+      case sponsoring_steps.WAITING_OP:
+        msg = `Waiting for request-sponsor operation to confirm (WAITING_OP)`;
+        waiting = true;
+        break;
+      case sponsoring_steps.ERROR_OP:
+        msg = `request-sponsor operation did not confirm (ERROR_OP)`;
+        waiting = false;
+        break;
+      case sponsoring_steps.WAITING_APP:
+        msg = `Waiting for app to execute sponsorship (WAITING_APP)`;
+        waiting = true;
+        break;
+      case sponsoring_steps.ERROR_APP:
+        msg = `App failed to execute sponsorship (ERROR_APP)`;
+        waiting = false;
+        break;
+      case sponsoring_steps.LINK_WAITING_V5:
+        msg = `Linking v5 app... (LINK_WAITING_V5)`;
+        waiting = true;
+        break;
+      case sponsoring_steps.LINK_WAITING_V6:
+        msg = `Linking v6 app... (LINK_WAITING_V6)`;
+        waiting = true;
+        break;
+      case sponsoring_steps.LINK_ERROR:
+        msg = `Error while linking app (LINK_ERROR)`;
+        waiting = false;
+        break;
+      case sponsoring_steps.LINK_SUCCESS:
+        msg = `Success linking app (LINK_SUCCESS)`;
+        waiting = false;
+        break;
+      case sponsoring_steps.SUCCESS:
+      case sponsoring_steps.IDLE:
+        if (!isSponsored) {
+          msg = t('apps.text.notSponsored');
+          waiting = false;
+        }
+        break;
+      default:
+        waiting = false;
+        msg = '';
+        closeView.start();
+    }
+
+    /*
     if (sponsoringApp) {
       msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
       waiting = true;
@@ -129,6 +179,7 @@ export const AppsScreen = ({
       waiting = false;
       closeView.start();
     }
+     */
 
     return (
       <AnimatedLinearGradient

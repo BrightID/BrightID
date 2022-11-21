@@ -1,23 +1,50 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { any, find, propEq } from 'ramda';
 import { Alert } from 'react-native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { AppsRoute } from '@/components/Apps/types';
+import i18next from 'i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   linkedContextTotal,
   selectAllApps,
   selectAllLinkedContexts,
   selectAllLinkedSigs,
+  selectLinkingAppInfo,
+  selectLinkingAppStartTime,
   selectPendingLinkedContext,
+  selectSponsoringStep,
+  selectSponsorOperationHash,
+  setSponsoringStep,
+  setSponsorOperationHash,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
-import { fetchApps } from '@/actions';
-import { handleV5App, handleV6App } from '@/components/Apps/model';
+import { fetchApps, selectIsSponsored, selectOperationByHash } from '@/actions';
+import { getSponsorship } from '@/components/Apps/model';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
+import {
+  linkAppId,
+  linkContextId,
+  startLinking,
+} from '@/components/Apps/appThunks';
+import {
+  operation_states,
+  SPONSOR_WAIT_TIME,
+  SPONSORING_POLL_INTERVAL,
+  sponsoring_steps,
+} from '@/utils/constants';
+
+// get app linking details from route params
+const decodeRouteParams = (params: Params): AppLinkInfo => {
+  const { appId, appUserId, baseUrl } = params;
+  return {
+    baseUrl,
+    appId,
+    appUserId,
+    v: baseUrl ? 5 : 6, // apps providing baseUrl use v5 api
+  };
+};
 
 const AppsScreenController = () => {
   const { t } = useTranslation();
@@ -26,20 +53,23 @@ const AppsScreenController = () => {
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
-  const isSponsored = useSelector(
-    (state) => state.user.isSponsored || state.user.isSponsoredv6,
-  );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const pendingLink = useSelector(selectPendingLinkedContext);
+  const sponsoringStep = useSelector(selectSponsoringStep);
+  const linkingAppInfo = useSelector(selectLinkingAppInfo);
+  const linkingAppStarttime = useSelector(selectLinkingAppStartTime);
+  const sponsorOpHash = useSelector(selectSponsorOperationHash);
+  const sponsorOp = useSelector((state) =>
+    selectOperationByHash(state, sponsorOpHash),
+  );
+  const isSponsored = useSelector(selectIsSponsored);
+
   const userVerifications = useSelector((state) => state.user.verifications);
   const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
-    undefined,
-  );
   const [totalApps, setTotalApps] = useState(0);
   const [totalVerifiedApps, setTotalVerifiedApps] = useState(0);
 
@@ -47,6 +77,9 @@ const AppsScreenController = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setFilter] = useState(0);
   const [filteredApps, setFilteredApps] = useState(apps);
+
+  // parse route params for app linking
+  const appLinkInfo = decodeRouteParams(route.params);
 
   // handle filter
   useEffect(() => {
@@ -115,52 +148,142 @@ const AppsScreenController = () => {
     userVerifications,
   ]);
 
-  const handleV5DeepLink = useCallback(() => {
-    const context = route.params?.context;
-    const isValidApp = any(propEq('id', context))(apps);
-    const isValidContext = any(propEq('context', context))(apps);
-    // legacy apps send context in the deep link but soulbound apps send app
-    if (isValidApp || isValidContext) {
-      handleV5App(route.params, setSponsoringApp, api);
-    } else {
-      Alert.alert(
-        t('apps.alert.title.invalidContext'),
-        t('apps.alert.text.invalidContext', { context: `${context}` }),
-      );
-    }
-    // reset params
-    navigation.setParams({
-      baseUrl: '',
-      context: '',
-      contextId: '',
-    });
-  }, [navigation, route.params, apps, api, t]);
-
-  const handleV6DeepLink = useCallback(() => {
-    const appId = route.params?.context;
-    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-    if (api && appInfo && appInfo.usingBlindSig) {
-      handleV6App(route.params, setSponsoringApp, api);
-    } else {
-      Alert.alert(
-        t('apps.alert.title.invalidApp'),
-        t('apps.alert.text.invalidApp', { app: `${appId}` }),
-      );
-    }
-    // reset params
-    navigation.setParams({
-      context: '',
-      contextId: '',
-    });
-  }, [route.params, apps, navigation, api, t]);
-
+  // start process to link app/context if according route parameters were set
   useEffect(() => {
-    if (apps.length > 0 && route.params?.baseUrl) {
-      handleV5DeepLink();
-    } else if (apps.length > 0 && route.params?.context) {
-      handleV6DeepLink();
+    // can only start linking if api is available and apps are known
+    if (appLinkInfo.appId && api && apps.length) {
+      // reset route params
+      navigation.setParams({
+        baseUrl: '',
+        appId: '',
+        appUserId: '',
+      });
+      // start linking
+      dispatch(startLinking({ appLinkInfo }));
     }
-  }, [apps, handleV5DeepLink, handleV6DeepLink, route.params]);
+  }, [api, appLinkInfo, appLinkInfo.appId, apps.length, dispatch, navigation]);
+
+  // track "spend sponsorship" operation progress
+  if (
+    sponsorOp &&
+    (sponsorOp.state === operation_states.FAILED ||
+      sponsorOp.state === operation_states.EXPIRED)
+  ) {
+    dispatch(setSponsoringStep(sponsoring_steps.ERROR_OP));
+  }
+
+  // track sponsor by app progress
+  useEffect(() => {
+    if (
+      sponsoringStep === sponsoring_steps.WAITING_APP &&
+      appLinkInfo.appUserId
+    ) {
+      // Op to request sponsoring is submitted. Now wait for app to actually perform it.
+      const intervalId = setInterval(async () => {
+        const timeElapsed = Date.now() - linkingAppStarttime;
+        let sponsorshipInfo: SponsorshipInfo | undefined;
+        try {
+          sponsorshipInfo = await getSponsorship(appLinkInfo.appUserId, api);
+        } catch (error) {
+          console.log(`Error getting sponsorship info:`);
+          console.log(`${error}`);
+        }
+        console.log(
+          `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized} spendRequested: ${sponsorshipInfo.spendRequested}`,
+        );
+        if (
+          sponsorshipInfo &&
+          sponsorshipInfo.appHasAuthorized &&
+          sponsorshipInfo.spendRequested
+        ) {
+          console.log(`Sponsorship complete!`);
+          clearInterval(intervalId);
+          dispatch(setSponsoringStep(sponsoring_steps.SUCCESS));
+        } else if (timeElapsed > SPONSOR_WAIT_TIME) {
+          console.log(`Timeout waiting for sponsoring!`);
+          clearInterval(intervalId);
+          dispatch(setSponsoringStep(sponsoring_steps.ERROR_APP));
+        }
+      }, SPONSORING_POLL_INTERVAL);
+      console.log(`Started pollSponsorship ${intervalId}`);
+
+      return () => {
+        console.log(`Stop pollSponsorship ${intervalId}`);
+        clearInterval(intervalId);
+      };
+    }
+  }, [
+    api,
+    appLinkInfo?.appUserId,
+    dispatch,
+    linkingAppStarttime,
+    sponsoringStep,
+  ]);
+
+  // track linking progress
+  useEffect(() => {
+    if (sponsoringStep === sponsoring_steps.SUCCESS) {
+      if (sigsUpdating) {
+        console.log(`Waiting for updating sigs before linking...`);
+        return;
+      }
+      // sponsoring ok, now start linking.
+      const { v } = appLinkInfo;
+      switch (v) {
+        case 5:
+          // v5 app
+          dispatch(linkContextId());
+          break;
+        case 6:
+          // v6 app
+          dispatch(linkAppId({ silent: false }));
+          break;
+        default:
+          console.log(`Unhandled app version v: ${v}`);
+          throw new Error(`Unhandled app version v: ${v}`);
+      }
+    }
+  }, [appLinkInfo, dispatch, sigsUpdating, sponsoringStep]);
+
+  // Error handler
+  // TODO Create extra component, probably modal popup
+  const errorCases = [
+    sponsoring_steps.ERROR_APPINFO,
+    sponsoring_steps.ERROR_INVALIDAPP,
+    sponsoring_steps.ERROR_APP,
+    sponsoring_steps.ERROR_OP,
+    sponsoring_steps.LINK_ERROR,
+  ];
+
+  const resetAppLinkingState = () => {
+    dispatch(setSponsoringStep(sponsoring_steps.IDLE));
+    dispatch(setSponsorOperationHash(undefined));
+  };
+
+  if (errorCases.includes(sponsoringStep)) {
+    let msg = `Unknown Error`;
+    switch (sponsoringStep) {
+      case sponsoring_steps.ERROR_APPINFO:
+        msg = t('apps.alert.text.invalidContext', {
+          context: `${appLinkInfo.appId}`,
+        });
+        break;
+      case sponsoring_steps.ERROR_INVALIDAPP:
+        msg = t('apps.alert.text.invalidApp', {
+          app: `${appLinkInfo.appId}`,
+        });
+        break;
+      default:
+        msg = `Sponsoring step: ${sponsoringStep}`;
+    }
+    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), msg, [
+      {
+        text: i18next.t('common.alert.dismiss'),
+        style: 'cancel',
+        onPress: resetAppLinkingState,
+      },
+    ]);
+  }
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -176,7 +299,7 @@ const AppsScreenController = () => {
 
   return (
     <AppsScreen
-      sponsoringApp={sponsoringApp}
+      sponsoringApp={linkingAppInfo?.appInfo}
       pendingLink={pendingLink}
       isSponsored={isSponsored}
       totalApps={totalApps}
