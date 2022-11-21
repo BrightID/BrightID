@@ -115,5 +115,8 @@ export const userSelector = (state: RootState): User => ({
   secretKey: state.user.secretKey,
 });
 
+export const selectIsSponsored = (state: RootState) =>
+  state.user.isSponsored || state.user.isSponsoredv6;
+
 // Export reducer
 export default userSlice.reducer;
