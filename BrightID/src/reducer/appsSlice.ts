@@ -88,6 +88,12 @@ const appsSlice = createSlice({
     setSponsorOperationHash(state, action: PayloadAction<string>) {
       state.sponsorOperationHash = action.payload;
     },
+    resetLinkingAppState(state) {
+      state.sponsoringStep = sponsoring_steps.IDLE;
+      state.linkingAppInfo = undefined;
+      state.linkingAppStartTime = 0;
+      state.sponsorOperationHash = undefined;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -111,6 +117,7 @@ export const {
   setLinkingAppInfo,
   setLinkingAppStarttime,
   setSponsorOperationHash,
+  resetLinkingAppState,
 } = appsSlice.actions;
 
 export const {

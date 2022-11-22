@@ -379,13 +379,6 @@ declare global {
 
   type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
 
-  type AppLinkInfo = {
-    baseUrl?: string;
-    appId: string;
-    appUserId: string;
-    v: number;
-  };
-
   type SponsoringStep_Type =
     typeof sponsoring_steps[keyof typeof sponsoring_steps];
 }

@@ -22,13 +22,18 @@ import {
   sponsoring_steps,
 } from '@/utils/constants';
 import { addOperation } from '@/reducer/operationsSlice';
-import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectIsSponsored, userSelector } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice } from '@/actions';
 
+type startLinkingParams = {
+  appId: string;
+  appUserId: string;
+  baseUrl?: string;
+  v: number;
+};
 export const startLinking =
-  ({ appLinkInfo }: { appLinkInfo: AppLinkInfo }): AppThunk<Promise<void>> =>
+  (params: startLinkingParams): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const sponsoringStep = selectSponsoringStep(getState());
     if (sponsoringStep !== sponsoring_steps.IDLE) {
@@ -43,11 +48,11 @@ export const startLinking =
     // look up app info. Legacy apps send 'context' in the deep link but soulbound
     // apps send 'id', so look in both places
     const appInfo =
-      (find(propEq('id', appLinkInfo.appId))(apps) as AppInfo) ||
-      (find(propEq('context', appLinkInfo.appId))(apps) as AppInfo);
+      (find(propEq('id', params.appId))(apps) as AppInfo) ||
+      (find(propEq('context', params.appId))(apps) as AppInfo);
 
     // store app linking details
-    dispatch(setLinkingAppInfo({ appInfo, ...appLinkInfo }));
+    dispatch(setLinkingAppInfo({ appInfo, ...params }));
 
     if (!appInfo) {
       // The app that should be linked is not known
@@ -56,7 +61,7 @@ export const startLinking =
     }
 
     // v6 apps HAVE to use blind sigs!
-    if (appLinkInfo.v === 6 && !appInfo.usingBlindSig) {
+    if (params.v === 6 && !appInfo.usingBlindSig) {
       dispatch(setSponsoringStep(sponsoring_steps.ERROR_INVALIDAPP));
       return;
     }
@@ -116,11 +121,21 @@ export const handleSponsorOpUpdate =
       return;
     }
 
-    if (state === operation_states.APPLIED) {
-      dispatch(setSponsoringStep(sponsoring_steps.WAITING_APP));
-      dispatch(setLinkingAppStarttime(Date.now()));
-    } else if (state === operation_states.FAILED) {
-      dispatch(setSponsoringStep(sponsoring_steps.ERROR_OP));
+    switch (state) {
+      case operation_states.APPLIED:
+        dispatch(setSponsoringStep(sponsoring_steps.WAITING_APP));
+        dispatch(setLinkingAppStarttime(Date.now()));
+        break;
+      case operation_states.FAILED:
+      case operation_states.EXPIRED:
+        dispatch(setSponsoringStep(sponsoring_steps.ERROR_OP));
+        break;
+      case operation_states.UNKNOWN:
+      case operation_states.INIT:
+      case operation_states.SENT:
+      default:
+        // keep waiting
+        break;
     }
   };
 
@@ -133,12 +148,12 @@ export const linkContextId =
       );
       return;
     }
+    dispatch(setSponsoringStep(sponsoring_steps.LINK_WAITING_V5));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
     const { id } = userSelector(getState());
     const { secretKey } = getState().keypair;
     const api = new NodeApi({ url: baseUrl, id, secretKey });
-    dispatch(setSponsoringStep(sponsoring_steps.LINK_WAITING_V5));
     try {
       const op = await api.linkContextId(appId, appUserId);
       op.apiUrl = baseUrl;
@@ -187,12 +202,12 @@ export const linkAppId =
 
     // TODO - do we need this here?:
     // ensure recent changes applied to the app info is applied
-    // await store.dispatch(fetchApps(getGlobalNodeApi()));
+    // await dispatch(fetchApps(getGlobalNodeApi()));
 
     // TODO - do we need this here?:
     // generate blind sig for apps with no verification expiration at linking time
     // and also ensure blind sig is not missed because of delay in generation for all apps
-    // await store.dispatch(updateBlindSig(appInfo));
+    // await dispatch(updateBlindSig(appInfo));
 
     const vel = appInfo.verificationExpirationLength;
     const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
@@ -356,7 +371,7 @@ export const linkAppId =
       try {
         await api.linkAppId(sig, appUserId);
         // mark sig as linked with app
-        store.dispatch(
+        dispatch(
           updateSig({
             id: sig.uid,
             changes: { linked: true, linkedTimestamp, appUserId },
