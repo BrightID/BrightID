@@ -136,11 +136,9 @@ const NodeModal = () => {
     );
     if (DEVICE_IOS) {
       // to keep the server alive
-      create({
+      await create({
         baseURL: `http://localhost:${LOCAL_HTTP_SERVER_PORT}`,
-      })
-        .get('/')
-        .catch(console.error);
+      }).get('/');
     }
     const ip = await NetworkInfo.getIPV4Address();
     const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
