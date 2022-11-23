@@ -21,6 +21,7 @@ const initialState: AppsState = {
   apps: [],
   linkedContexts: linkedContextsAdapter.getInitialState(),
   sigs: sigsAdapter.getInitialState(),
+  sigsUpdating: false,
 };
 
 const appsSlice = createSlice({
@@ -64,6 +65,9 @@ const appsSlice = createSlice({
     updateSig(state, action: PayloadAction<Update<SigInfo>>) {
       state.sigs = sigsAdapter.updateOne(state.sigs, action.payload);
     },
+    setSigsUpdating(state, action: PayloadAction<boolean>) {
+      state.sigsUpdating = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -82,6 +86,7 @@ export const {
   removeSig,
   removeAllSigs,
   updateSig,
+  setSigsUpdating,
 } = appsSlice.actions;
 
 export const {

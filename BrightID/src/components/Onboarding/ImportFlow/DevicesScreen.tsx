@@ -7,18 +7,34 @@ import {
   View,
   FlatList,
   Alert,
+  ScrollView,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import CheckBox from '@react-native-community/checkbox';
 import { useSelector, useDispatch } from '@/store/hooks';
 import { selectActiveDevices } from '@/reducer/devicesSlice';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, ORANGE, BLUE, BLACK } from '@/theme/colors';
+import {
+  WHITE,
+  ORANGE,
+  BLUE,
+  BLACK,
+  GREY,
+  DARK_ORANGE,
+  DARKER_GREY,
+  RED,
+} from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { removeDevice, setLastSyncTime } from '@/actions';
+import {
+  removeDevice,
+  selectIsPrimaryDevice,
+  setLastSyncTime,
+  setPrimaryDevice,
+} from '@/actions';
 import { qrCodeURL_types } from '@/utils/constants';
 import {
   pollImportChannel,
@@ -56,6 +72,7 @@ export const DevicesScreen = ({ route }) => {
   );
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
+  const isPrimary = useSelector(selectIsPrimaryDevice);
 
   const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const isCurrentDevice = (d) => d.signingKey === signingKey;
@@ -65,15 +82,16 @@ export const DevicesScreen = ({ route }) => {
 
   useEffect(() => {
     const runEffect = async () => {
-      const { isPrimaryDevice, lastSyncTime } = await getOtherSideDeviceInfo();
-      if (isPrimaryDevice && settings.isPrimaryDevice) {
+      const { isPrimaryDevice: otherPrimary, lastSyncTime } =
+        await getOtherSideDeviceInfo();
+      if (otherPrimary && isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
           t('common.alert.error'),
           t('devices.alert.bothPrimary'),
         );
-      } else if (!isPrimaryDevice && !settings.isPrimaryDevice) {
+      } else if (!otherPrimary && !isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
         return Alert.alert(
@@ -81,12 +99,10 @@ export const DevicesScreen = ({ route }) => {
           t('devices.alert.noPrimary'),
         );
       }
-      if (!settings.isPrimaryDevice) {
+      if (!isPrimary) {
         await uploadDeviceInfo();
       }
-      const after = settings.isPrimaryDevice
-        ? lastSyncTime
-        : settings.lastSyncTime;
+      const after = isPrimary ? lastSyncTime : settings.lastSyncTime;
       await uploadAllInfoAfter(after);
       dispatch(pollImportChannel());
     };
@@ -117,7 +133,7 @@ export const DevicesScreen = ({ route }) => {
     dispatch,
     navigation,
     route.params?.asScanner,
-    settings.isPrimaryDevice,
+    isPrimary,
     settings.lastSyncTime,
     t,
   ]);
@@ -132,7 +148,7 @@ export const DevicesScreen = ({ route }) => {
       Alert.alert(t('common.alert.info'), t('devices.text.syncCompleted'));
       clearImportChannel();
       setWaiting(false);
-      if (!settings.isPrimaryDevice) {
+      if (!isPrimary) {
         dispatch(setLastSyncTime(Date.now()));
       }
       dispatch(resetRecoveryData());
@@ -173,7 +189,7 @@ export const DevicesScreen = ({ route }) => {
           <Text style={styles.deviceNameText}>{getName(device)}</Text>
           {isCurrentDevice(device) && (
             <Text style={styles.devicePrimaryText}>
-              &nbsp;({settings.isPrimaryDevice ? 'Primary' : 'Secondary'})
+              &nbsp;({isPrimary ? 'Primary' : 'Secondary'})
             </Text>
           )}
         </View>
@@ -209,7 +225,7 @@ export const DevicesScreen = ({ route }) => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container} testID="DevicesScreen">
+      <ScrollView style={styles.container} testID="DevicesScreen">
         <View style={styles.devicesContainer}>
           <Text style={styles.description}>
             {t('devices.text.listDescription')}
@@ -247,8 +263,30 @@ export const DevicesScreen = ({ route }) => {
               </View>
             </TouchableOpacity>
           )}
+          <View style={styles.primaryDeviceSwitchContainer}>
+            <Text
+              style={styles.primaryDeviceSwitchLabel}
+              onPress={() => {
+                dispatch(setPrimaryDevice(!isPrimary));
+              }}
+            >
+              {t('devices.text.switchPrimaryLabel')}
+            </Text>
+            <CheckBox
+              style={styles.primaryDeviceSwitch}
+              tintColors={{ false: GREY, true: ORANGE }}
+              onValueChange={(value) => {
+                dispatch(setPrimaryDevice(value));
+              }}
+              value={isPrimary}
+            />
+          </View>
+          <Text style={styles.infoText}>
+            <Text style={styles.noticeText}>{t('devices.text.notice')}</Text>
+            {t('devices.text.primaryDeviceNotice')}
+          </Text>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -344,6 +382,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[14],
     color: BLUE,
+  },
+  primaryDeviceSwitchContainer: {
+    marginTop: DEVICE_LARGE ? 10 : 8,
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  primaryDeviceSwitchLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: DARK_ORANGE,
+  },
+  primaryDeviceSwitch: {
+    flex: 1,
+  },
+  noticeText: {
+    fontSize: fontSize[13],
+    color: RED,
+  },
+  infoText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
 });
 

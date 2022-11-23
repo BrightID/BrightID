@@ -10,15 +10,16 @@ import {
   setIsSponsoredv6,
   updateBlindSig,
   updateSig,
+  fetchApps,
 } from '@/actions';
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork, Params } from '@/components/Apps/types.d';
+import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { SPONSOR_WAIT_TIME } from '@/utils/constants';
 
-// max time to wait for app to respond to sponsoring request
-const sponsorTimeout = 1000 * 120; // 120 seconds
 // Interval to poll for sponsor op
 const sponsorPollInterval = 3000; // 5 seconds
 
@@ -142,10 +143,18 @@ export const linkAppId = async (
   silent = false,
 ) => {
   const {
-    apps: { apps },
+    apps: { apps, sigsUpdating },
     user: { id },
     keypair: { secretKey },
   } = store.getState();
+
+  if (sigsUpdating) {
+    console.log('waiting for blind sigs updating to be finished...');
+    await new Promise(r => setTimeout(r, 1000));
+    return await linkAppId(appId, appUserId, silent);
+  }
+  // ensure recent changes applied to the app info is applied
+  await store.dispatch(fetchApps(getGlobalNodeApi()));
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
@@ -309,6 +318,10 @@ export const linkAppId = async (
   const linkedTimestamp = Date.now();
   let linkSuccess = false;
   for (const sig of sigs) {
+    if (!sig.sig) {
+      // ignore invalid signatures
+      continue;
+    }
     try {
       await api.linkAppId(sig, appUserId);
       // mark sig as linked with app
@@ -396,7 +409,7 @@ const sponsor = async (
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   const sp = await getSponsorship(appUserId, api);
-  // ignore spending if spend requseted before to prevent getting error
+  // ignore spending if spend requested before to prevent getting error
   if (!sp || !sp.spendRequested) {
     console.log(`Sending spend sponsorship op...`);
     const op = await api.spendSponsorship(appId, appUserId);
@@ -409,7 +422,7 @@ const sponsor = async (
       const startTime = Date.now();
       const intervalId = setInterval(async () => {
         const timeElapsed = Date.now() - startTime;
-        if (timeElapsed > sponsorTimeout) {
+        if (timeElapsed > SPONSOR_WAIT_TIME) {
           clearInterval(intervalId);
           reject(new Error(`Timeout waiting for sponsorship`));
         } else {

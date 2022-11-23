@@ -29,7 +29,7 @@ export const backupPhoto =
   async (dispatch: AppDispatch) => {
     try {
       const data = await retrieveImage(filename);
-      await dispatch(encryptAndBackup(id, data));
+      dispatch(encryptAndBackup(id, data));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
@@ -79,7 +79,7 @@ export const backupUser =
         connections,
         groups,
       });
-      await dispatch(encryptAndBackup('data', dataStr));
+      dispatch(encryptAndBackup('data', dataStr));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }

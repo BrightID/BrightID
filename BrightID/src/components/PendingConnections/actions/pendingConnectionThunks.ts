@@ -122,7 +122,7 @@ export const confirmPendingConnectionThunk =
       if (!reported) {
         // upload profile to channel only *after* accepting the connection with creator
         // to prevent leaking my profile info to unwanted connections
-        await dispatch(encryptAndUploadProfileToChannel(channel.id));
+        dispatch(encryptAndUploadProfileToChannel(channel.id));
       } else if (channel.type === channel_types.GROUP) {
         // immediately leave group connection channel if initiator got reported
         console.log(
@@ -142,7 +142,6 @@ export const confirmPendingConnectionThunk =
     }
 
     if (backupCompleted) {
-      await dispatch(backupPhoto(sharedProfile.id, filename));
-      await dispatch(backupUser());
+      dispatch(backupPhoto(sharedProfile.id, filename));
     }
   };

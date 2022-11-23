@@ -28,6 +28,7 @@ const appsPersistConfig = {
   ...fsPersistConfig,
   key: 'apps',
   migrate: appsMigrate,
+  blacklist: ['sigsUpdating'],
 };
 
 const connectionsPersistConfig = {
