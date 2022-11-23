@@ -6,12 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
-import { store, persistor } from './store';
+import MainApp from '@/routes';
+import ErrorFallback from '@/components/ErrorFallback';
+import { persistor, store } from './store';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
-import MainApp from '@/routes';
-import ErrorFallback from '@/components/ErrorFallback';
 
 /**
  * Central part of the application
@@ -27,8 +27,8 @@ export const App = () => {
       screens: {
         App: {
           screens: {
-            Apps: {
-              path: 'link-verification/:baseUrl?/:context/:contextId/',
+            NodeModal: {
+              path: 'local-server',
               exact: true,
             },
             ScanCode: {

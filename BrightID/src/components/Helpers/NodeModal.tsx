@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import { create } from 'apisauce';
@@ -31,8 +32,13 @@ import { leaveAllChannels } from '@/components/PendingConnections/actions/channe
 import GraphQl from '@/components/Icons/GraphQl';
 import { getUserInfo } from '@/components/Onboarding/ImportFlow/thunks/channelUploadThunks';
 import { getExplorerCode } from '@/utils/explorer';
+import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
 
 const NodeModal = () => {
+  const route = useRoute() as {
+    params?: { next: string; run: boolean };
+  };
+
   const navigation = useNavigation();
   const { t } = useTranslation();
   const currentBaseUrl = useSelector(selectBaseUrl);
@@ -78,10 +84,11 @@ const NodeModal = () => {
 
   const password = useSelector((state) => state.user.password);
 
-  const toggleHttpServer = useCallback(async () => {
-    const port = 9025;
-    if (!httpServerUrl) {
-      httpBridge.start(port, 'http_service', async (request) => {
+  const startHttpServer = useCallback(async () => {
+    httpBridge.start(
+      LOCAL_HTTP_SERVER_PORT,
+      'http_service',
+      async (request) => {
         // you can use request.url, request.type and request.postData here
         const headers = {
           'Access-Control-Allow-Origin': '*',
@@ -125,25 +132,43 @@ const NodeModal = () => {
             headers,
           );
         }
-      });
-      if (DEVICE_IOS) {
-        // to keep the server alive
-        create({
-          baseURL: `http://localhost:${port}`,
-        })
-          .get('/')
-          .catch(console.error);
-      }
-      const ip = await NetworkInfo.getIPV4Address();
-      const serverUrl = `${ip}:${port}`;
+      },
+    );
+    if (DEVICE_IOS) {
+      // to keep the server alive
+      create({
+        baseURL: `http://localhost:${LOCAL_HTTP_SERVER_PORT}`,
+      })
+        .get('/')
+        .catch(console.error);
+    }
+    const ip = await NetworkInfo.getIPV4Address();
+    const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
+    setHttpServerUrl(serverUrl);
+    return serverUrl;
+  }, [password]);
+
+  const toggleHttpServer = useCallback(async () => {
+    if (!httpServerUrl) {
+      const serverUrl = await startHttpServer();
       Clipboard.setString(serverUrl);
       Alert.alert(t('home.alert.text.copied'));
-      setHttpServerUrl(serverUrl);
     } else {
       httpBridge.stop();
       setHttpServerUrl('');
     }
-  }, [httpServerUrl, password, t]);
+  }, [httpServerUrl, startHttpServer, t]);
+
+  useEffect(() => {
+    if (route.params?.run) {
+      startHttpServer().then((_serverUrl) => {
+        const next = route.params?.next;
+        if (next) {
+          Linking.openURL(next);
+        }
+      });
+    }
+  }, [route?.params?.run, startHttpServer]);
 
   return (
     <View style={styles.container}>

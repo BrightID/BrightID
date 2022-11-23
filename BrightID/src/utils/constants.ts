@@ -1,5 +1,7 @@
 /** ** INVITE CONSTANTS  *** */
 
+export const LOCAL_HTTP_SERVER_PORT = 9025;
+
 export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
