@@ -27,6 +27,10 @@ export const App = () => {
       screens: {
         App: {
           screens: {
+            Apps: {
+              path: 'link-verification/:baseUrl?/:context/:contextId/',
+              exact: true,
+            },
             NodeModal: {
               path: 'local-server',
               exact: true,
