@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-spinkit';
+import { useTranslation } from 'react-i18next';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -16,17 +17,18 @@ import {
   resetLinkingAppState,
   selectLinkingAppInfo,
   selectSponsoringStep,
+  selectSponsoringStepText,
 } from '@/reducer/appsSlice';
 import { sponsoring_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
 
-const SponsoringView = ({ sponsoringStep, appName }) => {
+const SponsoringView = ({ sponsoringStep, appName, text }) => {
   const isSponsored = useSelector(selectIsSponsored);
 
   let isError: boolean;
   let iconData: { color: string; name: string };
   let stateDescription: string;
-  let stateDetails: string;
+  const stateDetails = text;
   switch (sponsoringStep) {
     case sponsoring_steps.PRECHECK_APP:
       stateDescription = `Checking for prior sponsoring request (${sponsoringStep})`;
@@ -93,11 +95,12 @@ const SponsoringView = ({ sponsoringStep, appName }) => {
   );
 };
 
-const LinkingView = ({ sponsoringStep }) => {
+const LinkingView = ({ sponsoringStep, text }) => {
+  const { t } = useTranslation();
   let isError: boolean;
   let iconData: { color: string; name: string };
   let stateDescription: string;
-  let stateDetails: string;
+  const stateDetails = text;
 
   switch (sponsoringStep) {
     case sponsoring_steps.LINK_WAITING_V5:
@@ -109,7 +112,7 @@ const LinkingView = ({ sponsoringStep }) => {
     case sponsoring_steps.LINK_ERROR:
       isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = `Failed to link app! (${sponsoringStep})`;
+      stateDescription = t('apps.alert.title.linkingFailed');
       break;
     case sponsoring_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
@@ -154,7 +157,9 @@ const LinkingView = ({ sponsoringStep }) => {
 
 const AppLinkingScreen = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const sponsoringStep = useSelector(selectSponsoringStep);
+  const sponsoringStepText = useSelector(selectSponsoringStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
 
   const error_states = [
@@ -174,12 +179,14 @@ const AppLinkingScreen = () => {
           <View style={styles.resultTextContainer}>
             {isSuccess && (
               <Text style={styles.resultContainerSuccessText}>
-                Successfully linked!
+                {t('apps.alert.text.linkSuccess', {
+                  context: linkingAppInfo.appInfo.name,
+                })}
               </Text>
             )}
             {isError && (
               <Text style={styles.resultContainerErrorText}>
-                Linking failed.
+                {t('apps.alert.title.linkingFailed')}
               </Text>
             )}
           </View>
@@ -191,7 +198,7 @@ const AppLinkingScreen = () => {
                 dispatch(resetLinkingAppState());
               }}
             >
-              <Text style={styles.resetText}>Dismiss</Text>
+              <Text style={styles.resetText}>{t('common.alert.dismiss')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -216,13 +223,16 @@ const AppLinkingScreen = () => {
             </Text>
           </Text>
         </View>
-        <View style={styles.divider} />
         <SponsoringView
           sponsoringStep={sponsoringStep}
+          text={sponsoringStepText}
           appName={linkingAppInfo.appInfo.name}
         />
         <View style={styles.divider} />
-        <LinkingView sponsoringStep={sponsoringStep} />
+        <LinkingView
+          sponsoringStep={sponsoringStep}
+          text={sponsoringStepText}
+        />
         {resultContainer}
       </View>
     </>

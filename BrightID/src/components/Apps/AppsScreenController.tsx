@@ -224,13 +224,13 @@ const AppsScreenController = () => {
           ) {
             console.log(`Sponsorship complete!`);
             clearInterval(intervalId);
-            dispatch(setSponsoringStep(sponsoring_steps.SUCCESS));
+            dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
           }
         }
         if (timeElapsed > SPONSOR_WAIT_TIME) {
           console.log(`Timeout waiting for sponsoring!`);
           clearInterval(intervalId);
-          dispatch(setSponsoringStep(sponsoring_steps.ERROR_APP));
+          dispatch(setSponsoringStep({ step: sponsoring_steps.ERROR_APP }));
         }
       }, SPONSORING_POLL_INTERVAL);
       console.log(`Started pollSponsorship ${intervalId}`);

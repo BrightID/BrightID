@@ -38,22 +38,17 @@ const handleOpUpdate = (
         }),
       );
       if (state === operation_states.APPLIED) {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkSuccess'),
-          i18next.t('apps.alert.text.linkSuccess', {
-            context: `${op.context}`,
-          }),
+        store.dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS }),
         );
-        store.dispatch(setSponsoringStep(sponsoring_steps.LINK_SUCCESS));
       } else {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkFailure'),
-          i18next.t('apps.alert.text.linkFailure', {
-            context: `${op.context}`,
-            result: `${result.message}`,
-          }),
+        const text = i18next.t('apps.alert.text.linkFailure', {
+          context: `${op.context}`,
+          result: `${result.message}`,
+        });
+        store.dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
         );
-        store.dispatch(setSponsoringStep(sponsoring_steps.LINK_ERROR));
       }
       break;
 

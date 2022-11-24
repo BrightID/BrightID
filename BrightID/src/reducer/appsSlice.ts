@@ -24,6 +24,7 @@ const initialState: AppsState = {
   sigs: sigsAdapter.getInitialState(),
   sigsUpdating: false,
   sponsoringStep: sponsoring_steps.IDLE,
+  sponsoringStepText: undefined,
   linkingAppInfo: undefined,
   linkingAppStartTime: 0,
   sponsorOperationHash: undefined,
@@ -73,8 +74,13 @@ const appsSlice = createSlice({
     setSigsUpdating(state, action: PayloadAction<boolean>) {
       state.sigsUpdating = action.payload;
     },
-    setSponsoringStep(state, action: PayloadAction<SponsoringStep_Type>) {
-      state.sponsoringStep = action.payload;
+    setSponsoringStep(
+      state,
+      action: PayloadAction<{ step: SponsoringStep_Type; text?: string }>,
+    ) {
+      const { step, text } = action.payload;
+      state.sponsoringStep = step;
+      state.sponsoringStepText = text;
     },
     setLinkingAppInfo(
       state,
@@ -90,6 +96,7 @@ const appsSlice = createSlice({
     },
     resetLinkingAppState(state) {
       state.sponsoringStep = sponsoring_steps.IDLE;
+      state.sponsoringStepText = undefined;
       state.linkingAppInfo = undefined;
       state.linkingAppStartTime = 0;
       state.sponsorOperationHash = undefined;
@@ -174,6 +181,9 @@ export const selectExpireableBlindSigApps = createSelector(
 
 export const selectSponsoringStep = (state: RootState) =>
   state.apps.sponsoringStep;
+
+export const selectSponsoringStepText = (state: RootState) =>
+  state.apps.sponsoringStepText;
 
 export const selectLinkingAppInfo = (state: RootState) =>
   state.apps.linkingAppInfo;

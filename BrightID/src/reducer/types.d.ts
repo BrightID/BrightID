@@ -16,6 +16,7 @@ type AppsState = {
   sigs: EntityState<SigInfo>;
   sigsUpdating: boolean;
   sponsoringStep: SponsoringStep_Type;
+  sponsoringStepText?: string;
   sponsorOperationHash?: string;
   linkingAppInfo?: LinkingAppInfo;
   linkingAppStartTime: number;

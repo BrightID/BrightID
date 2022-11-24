@@ -1,12 +1,10 @@
 import { Alert } from 'react-native';
 import i18next from 'i18next';
 import { create } from 'apisauce';
-import { find, propEq } from 'ramda';
 import { getSponsorship } from '@/components/Apps/model';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
 import {
   addLinkedContext,
-  selectAllApps,
   selectAllSigs,
   selectLinkingAppInfo,
   selectSponsoringStep,
@@ -24,7 +22,7 @@ import {
 import { addOperation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
 import { selectIsSponsored, userSelector } from '@/reducer/userSlice';
-import { selectIsPrimaryDevice } from '@/actions';
+import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
 
 type startLinkingParams = {
   appInfo: AppInfo;
@@ -59,7 +57,7 @@ export const startLinking =
     } else {
       // trigger app linking
       console.log(`Already sponsored, proceed with linking`);
-      dispatch(setSponsoringStep(sponsoring_steps.SUCCESS));
+      dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
     }
   };
 
@@ -78,17 +76,17 @@ export const requestSponsoring =
     const api = getGlobalNodeApi();
 
     // Check if sponsoring was already requested
-    dispatch(setSponsoringStep(sponsoring_steps.PRECHECK_APP));
+    dispatch(setSponsoringStep({ step: sponsoring_steps.PRECHECK_APP }));
     const sp = await getSponsorship(appUserId, api);
     if (!sp || !sp.spendRequested) {
       console.log(`Sending spend sponsorship op...`);
       const op = await api.spendSponsorship(appId, appUserId);
       dispatch(addOperation(op));
-      dispatch(setSponsoringStep(sponsoring_steps.WAITING_OP));
+      dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_OP }));
       return op.hash;
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
-      dispatch(setSponsoringStep(sponsoring_steps.WAITING_APP));
+      dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
       dispatch(setLinkingAppStarttime(Date.now()));
     }
   };
@@ -106,12 +104,24 @@ export const handleSponsorOpUpdate =
 
     switch (state) {
       case operation_states.APPLIED:
-        dispatch(setSponsoringStep(sponsoring_steps.WAITING_APP));
+        dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
         dispatch(setLinkingAppStarttime(Date.now()));
         break;
       case operation_states.FAILED:
+        dispatch(
+          setSponsoringStep({
+            step: sponsoring_steps.ERROR_OP,
+            text: 'spend sponsor operation failed',
+          }),
+        );
+        break;
       case operation_states.EXPIRED:
-        dispatch(setSponsoringStep(sponsoring_steps.ERROR_OP));
+        dispatch(
+          setSponsoringStep({
+            step: sponsoring_steps.ERROR_OP,
+            text: 'spend sponsor operation timed out',
+          }),
+        );
         break;
       case operation_states.UNKNOWN:
       case operation_states.INIT:
@@ -131,8 +141,9 @@ export const linkContextId =
       );
       return;
     }
-    dispatch(setSponsoringStep(sponsoring_steps.LINK_WAITING_V5));
+    dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_WAITING_V5 }));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
+
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
     const { id } = userSelector(getState());
     const { secretKey } = getState().keypair;
@@ -150,17 +161,10 @@ export const linkContextId =
         }),
       );
     } catch (e) {
-      Alert.alert(
-        i18next.t('apps.alert.title.linkingFailed'),
-        `${(e as Error).message}`,
-        [
-          {
-            text: i18next.t('common.alert.dismiss'),
-            style: 'cancel',
-            onPress: () => null,
-          },
-        ],
-      );
+      setSponsoringStep({
+        step: sponsoring_steps.LINK_ERROR,
+        text: `${(e as Error).message}`,
+      });
     }
   };
 
@@ -181,16 +185,11 @@ export const linkAppId =
     const { appId, appUserId, appInfo } = selectLinkingAppInfo(getState());
     const isPrimary = selectIsPrimaryDevice(getState());
 
-    dispatch(setSponsoringStep(sponsoring_steps.LINK_WAITING_V6));
+    dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_WAITING_V6 }));
 
-    // TODO - do we need this here?:
-    // ensure recent changes applied to the app info is applied
-    // await dispatch(fetchApps(getGlobalNodeApi()));
-
-    // TODO - do we need this here?:
     // generate blind sig for apps with no verification expiration at linking time
     // and also ensure blind sig is not missed because of delay in generation for all apps
-    // await dispatch(updateBlindSig(appInfo));
+    await dispatch(updateBlindSig(appInfo));
 
     const vel = appInfo.verificationExpirationLength;
     const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
@@ -219,22 +218,19 @@ export const linkAppId =
         }
       }
       if (previousAppUserIds.size) {
-        if (!silent) {
-          Alert.alert(
-            i18next.t('apps.alert.title.linkingFailed'),
-            i18next.t(
-              'apps.alert.text.blindSigAlreadyLinkedDifferent',
-              'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
-              {
-                app: appId,
-                appUserId,
-                previousAppUserIds: Array.from(previousAppUserIds).join(', '),
-              },
-            ),
-          );
-        }
         // don't link app when userId is different
-        dispatch(setSponsoringStep(sponsoring_steps.LINK_ERROR));
+        const text = i18next.t(
+          'apps.alert.text.blindSigAlreadyLinkedDifferent',
+          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
+          {
+            app: appInfo.name,
+            appUserId,
+            previousAppUserIds: Array.from(previousAppUserIds).join(', '),
+          },
+        );
+        dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
+        );
         return;
       }
 
@@ -248,18 +244,17 @@ export const linkAppId =
         },
       );
       if (allVerificationsLinked) {
-        if (!silent) {
-          Alert.alert(
-            i18next.t('apps.alert.title.linkingFailed'),
-            i18next.t(
-              'apps.alert.text.blindSigAlreadyLinked',
-              'You are already linked with {{app}} with id {{appUserId}}',
-              { app: appId, appUserId },
-            ),
-          );
-        }
-        // TODO: Is this really SUCCESS or rather ERROR?
-        dispatch(setSponsoringStep(sponsoring_steps.LINK_SUCCESS));
+        const text = i18next.t(
+          'apps.alert.text.blindSigAlreadyLinked',
+          'You are already linked with {{app}} with id {{appUserId}}',
+          {
+            app: appInfo.name,
+            appUserId,
+          },
+        );
+        dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS, text }),
+        );
         return;
       }
     }
@@ -294,28 +289,16 @@ export const linkAppId =
     const linkedVerifications = previousSigs.map((sig) => sig.verification);
 
     if (sigs.length === 0) {
-      if (!silent) {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkingFailed'),
-          i18next.t(
-            'apps.alert.text.missingBlindSig',
-            'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
-            {
-              appId,
-              missingVerifications: missingVerifications.join(),
-              linkedVerifications: linkedVerifications.join(),
-            },
-          ),
-          [
-            {
-              text: i18next.t('common.alert.dismiss'),
-              style: 'cancel',
-              onPress: () => null,
-            },
-          ],
-        );
-      }
-      dispatch(setSponsoringStep(sponsoring_steps.LINK_ERROR));
+      const text = i18next.t(
+        'apps.alert.text.missingBlindSig',
+        'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
+        {
+          appId: appInfo.name,
+          missingVerifications: missingVerifications.join(),
+          linkedVerifications: linkedVerifications.join(),
+        },
+      );
+      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
       return;
     }
 
@@ -323,17 +306,14 @@ export const linkAppId =
     if (!isPrimary) {
       const missingSigs = sigs.filter((sig) => sig.sig === undefined);
       if (missingSigs.length) {
-        if (!silent) {
-          Alert.alert(
-            i18next.t('apps.alert.title.notPrimary', 'Linking not possible'),
-            i18next.t(
-              'apps.alert.text.notPrimary',
-              'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
-              { app: `${appId}` },
-            ),
-          );
-        }
-        dispatch(setSponsoringStep(sponsoring_steps.LINK_ERROR));
+        const text = i18next.t(
+          'apps.alert.text.notPrimary',
+          'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
+          { app: appInfo.name },
+        );
+        dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
+        );
         return;
       }
     }
@@ -344,10 +324,13 @@ export const linkAppId =
     const url = appInfo.nodeUrl || `http://${network}.brightid.org`;
     const api = new NodeApi({ url, id, secretKey });
     const linkedTimestamp = Date.now();
-    let linkSuccess = false;
+    const sigErrors = [];
     for (const sig of sigs) {
       if (!sig.sig) {
         // ignore invalid signatures
+        sigErrors.push(
+          `Error linking verification ${sig.verification}. Blind sig is missing.`,
+        );
         // eslint-disable-next-line no-continue
         continue;
       }
@@ -360,74 +343,63 @@ export const linkAppId =
             changes: { linked: true, linkedTimestamp, appUserId },
           }),
         );
-        linkSuccess = true;
       } catch (err) {
         console.log(err);
         const msg = err instanceof Error ? err.message : err;
-        if (!silent) {
-          Alert.alert(
-            i18next.t('apps.alert.title.linkingFailed'),
-            i18next.t(
-              'apps.alert.text.linkSigFailed',
-              'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
-              { verification: sig.verification, appId, msg },
-            ),
-            [
-              {
-                text: i18next.t('common.alert.dismiss'),
-                style: 'cancel',
-                onPress: () => null,
-              },
-            ],
-          );
-        }
+        const text = i18next.t(
+          'apps.alert.text.linkSigFailed',
+          'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
+          { verification: sig.verification, appId: appInfo.name, msg },
+        );
+        sigErrors.push(text);
       }
     }
 
-    if (linkSuccess) {
-      // prepare success handler
-      const onSuccess = async () => {
-        if (appInfo.callbackUrl) {
-          const api = create({
-            baseURL: appInfo.callbackUrl,
-          });
-          await api.post('/', {
-            network,
-            appUserId,
-          });
-        }
-      };
-
-      if (!silent) {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkSuccess'),
-          i18next.t('apps.alert.text.linkSuccess', {
-            context: appInfo.name,
-          }),
-        );
-      }
-      try {
-        await onSuccess();
-      } catch (e) {
-        if (!silent) {
-          Alert.alert(
-            i18next.t(
-              'apps.alert.title.callbackError',
-              'Error while executing app callback',
-            ),
-            i18next.t(
-              'apps.alert.text.callbackError',
-              `App {{context}} reported an error: {{error}}`,
-              {
-                context: appInfo.name,
-                error: (e as Error).message,
-              },
-            ),
-          );
-        }
-      }
-      dispatch(setSponsoringStep(sponsoring_steps.LINK_SUCCESS));
+    if (sigErrors.length) {
+      // At least one of the required verifications could not be linked
+      const text = sigErrors.join(`, `);
+      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
     } else {
-      dispatch(setSponsoringStep(sponsoring_steps.LINK_ERROR));
+      const text = i18next.t('apps.alert.text.linkSuccess', {
+        context: appInfo.name,
+      });
+      dispatch(
+        setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS, text }),
+      );
+
+      if (appInfo.callbackUrl) {
+        const onSuccess = async () => {
+          if (appInfo.callbackUrl) {
+            const api = create({
+              baseURL: appInfo.callbackUrl,
+            });
+            await api.post('/', {
+              network,
+              appUserId,
+            });
+          }
+        };
+
+        try {
+          await onSuccess();
+        } catch (e) {
+          if (!silent) {
+            Alert.alert(
+              i18next.t(
+                'apps.alert.title.callbackError',
+                'Error while executing app callback',
+              ),
+              i18next.t(
+                'apps.alert.text.callbackError',
+                `App {{context}} reported an error: {{error}}`,
+                {
+                  context: appInfo.name,
+                  error: (e as Error).message,
+                },
+              ),
+            );
+          }
+        }
+      }
     }
   };
