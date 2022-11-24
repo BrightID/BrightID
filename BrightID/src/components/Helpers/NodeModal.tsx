@@ -158,15 +158,21 @@ const NodeModal = () => {
   }, [httpServerUrl, startHttpServer, t]);
 
   useEffect(() => {
+    const openNext = async () => {
+      const next = route.params?.next;
+      if (next) {
+        await Linking.openURL(next);
+      }
+    };
     if (route.params?.run) {
-      startHttpServer().then((_serverUrl) => {
-        const next = route.params?.next;
-        if (next) {
-          Linking.openURL(next);
-        }
-      });
+      if (!httpServerUrl) {
+        startHttpServer().then(openNext);
+      } else {
+        openNext();
+      }
     }
-  }, [route?.params?.run, startHttpServer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
