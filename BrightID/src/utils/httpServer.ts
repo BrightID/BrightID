@@ -2,22 +2,12 @@ import { create } from 'apisauce';
 import httpBridge from 'react-native-http-bridge';
 import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
 import { getUserInfo } from '@/components/Onboarding/ImportFlow/thunks/channelUploadThunks';
-import { getExplorerCode } from '@/utils/explorer';
 import { DEVICE_IOS } from '@/utils/deviceConstants';
-import store from '@/store';
 
 const getResponse = async (url: string) => {
-  if (url === '/v1/info') {
+  if (url === '/v1/user-info') {
     return JSON.stringify(await getUserInfo());
   }
-  if (url === '/v1/explorer-code') {
-    const { user } = store.getState();
-    return JSON.stringify({
-      explorerCode: getExplorerCode(),
-      password: user.password,
-    });
-  }
-  return null;
 };
 
 const requestHandler = async (request) => {
