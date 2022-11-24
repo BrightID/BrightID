@@ -12,13 +12,11 @@ import { BlurView } from '@react-native-community/blur';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
-import { create } from 'apisauce';
 import { NetworkInfo } from 'react-native-network-info';
 import Clipboard from '@react-native-community/clipboard';
-import httpBridge from 'react-native-http-bridge';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { BLACK, GREEN, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
-import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
   clearBaseUrl,
@@ -30,9 +28,8 @@ import {
 } from '@/reducer/settingsSlice';
 import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
 import GraphQl from '@/components/Icons/GraphQl';
-import { getUserInfo } from '@/components/Onboarding/ImportFlow/thunks/channelUploadThunks';
-import { getExplorerCode } from '@/utils/explorer';
 import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
+import { startHttpServer, stopHttpServer } from '@/utils/httpServer';
 
 const NodeModal = () => {
   const route = useRoute() as {
@@ -82,80 +79,24 @@ const NodeModal = () => {
 
   const [httpServerUrl, setHttpServerUrl] = useState('');
 
-  const password = useSelector((state) => state.user.password);
-
-  const startHttpServer = useCallback(async () => {
-    httpBridge.start(
-      LOCAL_HTTP_SERVER_PORT,
-      'http_service',
-      async (request) => {
-        // you can use request.url, request.type and request.postData here
-        const headers = {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Methods': '*',
-        };
-        const url = request.url.slice(request.url.indexOf('/'));
-        if (request.type === 'OPTIONS') {
-          httpBridge.respond(
-            request.requestId,
-            200,
-            'text/html; charset=utf-8',
-            undefined,
-            headers,
-          );
-        } else if (request.type === 'GET' && url === '/v1/info') {
-          httpBridge.respond(
-            request.requestId,
-            200,
-            'application/json',
-            JSON.stringify(await getUserInfo()),
-            headers,
-          );
-        } else if (request.type === 'GET' && url === '/v1/explorer-code') {
-          httpBridge.respond(
-            request.requestId,
-            200,
-            'application/json',
-            JSON.stringify({
-              explorerCode: getExplorerCode(),
-              password,
-            }),
-            headers,
-          );
-        } else {
-          httpBridge.respond(
-            request.requestId,
-            404,
-            'text/html; charset=utf-8',
-            '<html><body><a href="/v1/explorer-code" target="_blank">/v1/explorer-code</a></body></html>',
-            headers,
-          );
-        }
-      },
-    );
-    if (DEVICE_IOS) {
-      // to keep the server alive
-      await create({
-        baseURL: `http://localhost:${LOCAL_HTTP_SERVER_PORT}`,
-      }).get('/');
-    }
+  const startHttpServerCallback = useCallback(async () => {
+    await startHttpServer();
     const ip = await NetworkInfo.getIPV4Address();
     const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
     setHttpServerUrl(serverUrl);
     return serverUrl;
-  }, [password]);
+  }, []);
 
   const toggleHttpServer = useCallback(async () => {
     if (!httpServerUrl) {
-      const serverUrl = await startHttpServer();
+      const serverUrl = await startHttpServerCallback();
       Clipboard.setString(serverUrl);
       Alert.alert(t('home.alert.text.copied'));
     } else {
-      httpBridge.stop();
+      stopHttpServer();
       setHttpServerUrl('');
     }
-  }, [httpServerUrl, startHttpServer, t]);
+  }, [httpServerUrl, startHttpServerCallback, t]);
 
   useEffect(() => {
     const openNext = async () => {
@@ -166,7 +107,7 @@ const NodeModal = () => {
     };
     if (route.params?.run) {
       if (!httpServerUrl) {
-        startHttpServer().then(openNext);
+        startHttpServerCallback().then(openNext);
       } else {
         openNext();
       }
