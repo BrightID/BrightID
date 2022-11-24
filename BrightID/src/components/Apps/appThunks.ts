@@ -325,6 +325,7 @@ export const linkAppId =
     const api = new NodeApi({ url, id, secretKey });
     const linkedTimestamp = Date.now();
     const sigErrors = [];
+    let linkSuccess = false;
     for (const sig of sigs) {
       if (!sig.sig) {
         // ignore invalid signatures
@@ -343,6 +344,7 @@ export const linkAppId =
             changes: { linked: true, linkedTimestamp, appUserId },
           }),
         );
+        linkSuccess = true;
       } catch (err) {
         console.log(err);
         const msg = err instanceof Error ? err.message : err;
@@ -355,14 +357,12 @@ export const linkAppId =
       }
     }
 
-    if (sigErrors.length) {
-      // At least one of the required verifications could not be linked
-      const text = sigErrors.join(`, `);
-      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
-    } else {
+    if (linkSuccess) {
+      // at least one verification successfully linked
       const text = i18next.t('apps.alert.text.linkSuccess', {
         context: appInfo.name,
       });
+      // TODO If there were errors with other verifications (sigErrors array), how to show in the UI?
       dispatch(
         setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS, text }),
       );
@@ -401,5 +401,9 @@ export const linkAppId =
           }
         }
       }
+    } else {
+      // No verification could be linked
+      const text = sigErrors.join(`, `);
+      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
     }
   };
