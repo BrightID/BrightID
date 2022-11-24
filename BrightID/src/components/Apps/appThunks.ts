@@ -27,6 +27,7 @@ import { selectIsSponsored, userSelector } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice } from '@/actions';
 
 type startLinkingParams = {
+  appInfo: AppInfo;
   appId: string;
   appUserId: string;
   baseUrl?: string;
@@ -42,29 +43,10 @@ export const startLinking =
       );
       return;
     }
-    const apps = selectAllApps(getState());
     const isSponsored = selectIsSponsored(getState());
 
-    // look up app info. Legacy apps send 'context' in the deep link but soulbound
-    // apps send 'id', so look in both places
-    const appInfo =
-      (find(propEq('id', params.appId))(apps) as AppInfo) ||
-      (find(propEq('context', params.appId))(apps) as AppInfo);
-
     // store app linking details
-    dispatch(setLinkingAppInfo({ appInfo, ...params }));
-
-    if (!appInfo) {
-      // The app that should be linked is not known
-      dispatch(setSponsoringStep(sponsoring_steps.ERROR_APPINFO));
-      return;
-    }
-
-    // v6 apps HAVE to use blind sigs!
-    if (params.v === 6 && !appInfo.usingBlindSig) {
-      dispatch(setSponsoringStep(sponsoring_steps.ERROR_INVALIDAPP));
-      return;
-    }
+    dispatch(setLinkingAppInfo(params));
 
     if (!isSponsored) {
       // trigger sponsoring workflow
@@ -107,6 +89,7 @@ export const requestSponsoring =
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
       dispatch(setSponsoringStep(sponsoring_steps.WAITING_APP));
+      dispatch(setLinkingAppStarttime(Date.now()));
     }
   };
 

@@ -344,9 +344,9 @@ export const HomeScreen = (props) => {
           onPress={() => {
             dispatch(setActiveNotification(null));
             navigation.navigate('Apps', {
-              baseUrl: '',
-              context: '',
-              contextId: '',
+              baseUrl: undefined,
+              appId: undefined,
+              appUserId: undefined,
             });
           }}
         >

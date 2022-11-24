@@ -2,12 +2,12 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
+import { find, propEq } from 'ramda';
+import { useTranslation } from 'react-i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   linkedContextTotal,
-  resetLinkingAppState,
   selectAllApps,
   selectAllLinkedContexts,
   selectAllLinkedSigs,
@@ -32,6 +32,7 @@ import {
   SPONSORING_POLL_INTERVAL,
   sponsoring_steps,
 } from '@/utils/constants';
+import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 
 // get app linking details from route params
 const parseRouteParams = (params: Params) => {
@@ -47,7 +48,6 @@ const parseRouteParams = (params: Params) => {
 const AppsScreenController = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
@@ -142,18 +142,61 @@ const AppsScreenController = () => {
   useEffect(() => {
     // can only start linking if api is available and apps are known
     if (route.params.appId && api && apps.length) {
+      // hold back if apps are currently being refreshed
+      if (refreshing) return;
+
       // get all app linking details from route params
       const linkingParams = parseRouteParams(route.params);
-      // reset route params
-      navigation.setParams({
-        appId: '',
-        appUserId: '',
-        baseUrl: '',
-      });
-      // start linking
-      dispatch(startLinking(linkingParams));
+
+      // First check if provided data is valid
+      // look up app info. Legacy apps send 'context' in the deep link but soulbound
+      // apps send 'id', so look in both places
+      const appInfo =
+        (find(propEq('id', linkingParams.appId))(apps) as AppInfo) ||
+        (find(propEq('context', linkingParams.appId))(apps) as AppInfo);
+
+      if (!appInfo) {
+        // The app that should be linked is not known
+        Alert.alert(
+          t('apps.alert.title.invalidContext'),
+          t('apps.alert.text.invalidContext', {
+            context: `${linkingParams.appId}`,
+          }),
+        );
+        return;
+      }
+
+      if (linkingParams.v === 6 && !appInfo.usingBlindSig) {
+        // v6 apps HAVE to use blind sigs!
+        Alert.alert(
+          t('apps.alert.title.invalidApp'),
+          t('apps.alert.text.invalidApp', { app: `${linkingParams.appId}` }),
+        );
+        return;
+      }
+
+      // Get user confirmation to link.
+      // TODO: Don't use Alert
+      Alert.alert(
+        i18next.t('apps.alert.title.linkApp'),
+        i18next.t('apps.alert.text.linkApp', {
+          context: `${linkingParams.appId}`,
+        }),
+        [
+          {
+            text: i18next.t('common.alert.yes'),
+            onPress: () =>
+              dispatch(startLinking({ ...linkingParams, appInfo })),
+          },
+          {
+            text: i18next.t('common.alert.no'),
+            style: 'cancel',
+            onPress: () => null,
+          },
+        ],
+      );
     }
-  }, [api, apps.length, dispatch, navigation, route.params]);
+  }, [t, api, apps, dispatch, route.params, refreshing]);
 
   // track sponsor by app progress
   useEffect(() => {
@@ -171,18 +214,20 @@ const AppsScreenController = () => {
           console.log(`Error getting sponsorship info:`);
           console.log(`${error}`);
         }
-        console.log(
-          `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
-        );
-        if (
-          sponsorshipInfo &&
-          sponsorshipInfo.appHasAuthorized &&
-          sponsorshipInfo.spendRequested
-        ) {
-          console.log(`Sponsorship complete!`);
-          clearInterval(intervalId);
-          dispatch(setSponsoringStep(sponsoring_steps.SUCCESS));
-        } else if (timeElapsed > SPONSOR_WAIT_TIME) {
+        if (sponsorshipInfo) {
+          console.log(
+            `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
+          );
+          if (
+            sponsorshipInfo.appHasAuthorized &&
+            sponsorshipInfo.spendRequested
+          ) {
+            console.log(`Sponsorship complete!`);
+            clearInterval(intervalId);
+            dispatch(setSponsoringStep(sponsoring_steps.SUCCESS));
+          }
+        }
+        if (timeElapsed > SPONSOR_WAIT_TIME) {
           console.log(`Timeout waiting for sponsoring!`);
           clearInterval(intervalId);
           dispatch(setSponsoringStep(sponsoring_steps.ERROR_APP));
@@ -228,43 +273,6 @@ const AppsScreenController = () => {
     }
   }, [dispatch, linkingAppInfo, sigsUpdating, sponsoringStep]);
 
-  // Error handler
-  // TODO Create extra component, probably modal popup
-  useEffect(() => {
-    const errorCases = [
-      sponsoring_steps.ERROR_APPINFO,
-      sponsoring_steps.ERROR_INVALIDAPP,
-      sponsoring_steps.ERROR_APP,
-      sponsoring_steps.ERROR_OP,
-      sponsoring_steps.LINK_ERROR,
-    ];
-
-    if (errorCases.includes(sponsoringStep)) {
-      let msg = `Unknown Error`;
-      switch (sponsoringStep) {
-        case sponsoring_steps.ERROR_APPINFO:
-          msg = t('apps.alert.text.invalidContext', {
-            context: `${linkingAppInfo.appId}`,
-          });
-          break;
-        case sponsoring_steps.ERROR_INVALIDAPP:
-          msg = t('apps.alert.text.invalidApp', {
-            app: `${linkingAppInfo.appId}`,
-          });
-          break;
-        default:
-          msg = `Sponsoring step: ${sponsoringStep}`;
-      }
-      Alert.alert(i18next.t('apps.alert.title.linkingFailed'), msg, [
-        {
-          text: i18next.t('common.alert.dismiss'),
-          style: 'cancel',
-          onPress: () => dispatch(resetLinkingAppState()),
-        },
-      ]);
-    }
-  }, [dispatch, linkingAppInfo?.appId, sponsoringStep, t]);
-
   const refreshApps = useCallback(() => {
     setRefreshing(true);
     dispatch(fetchApps(api))
@@ -277,7 +285,7 @@ const AppsScreenController = () => {
       });
   }, [api, dispatch]);
 
-  return (
+  return sponsoringStep === sponsoring_steps.IDLE ? (
     <AppsScreen
       sponsoringApp={linkingAppInfo?.appInfo}
       pendingLink={pendingLink}
@@ -294,6 +302,8 @@ const AppsScreenController = () => {
       refreshing={refreshing}
       sigsUpdating={sigsUpdating}
     />
+  ) : (
+    <AppLinkingScreen />
   );
 };
 
