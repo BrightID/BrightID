@@ -18,7 +18,7 @@ import {
   setSponsoringStep,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
-import { fetchApps, selectIsSponsored } from '@/actions';
+import { fetchApps, selectIsSponsored, setIsSponsoredv6 } from '@/actions';
 import { getSponsorship } from '@/components/Apps/model';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -225,6 +225,7 @@ const AppsScreenController = () => {
             console.log(`Sponsorship complete!`);
             clearInterval(intervalId);
             dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
+            dispatch(setIsSponsoredv6(true));
           }
         }
         if (timeElapsed > SPONSOR_WAIT_TIME) {
