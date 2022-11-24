@@ -14,17 +14,7 @@ import {
 import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
 export const getUserInfo = async () => {
-  const {
-    user,
-    keypair: { publicKey: signingKey },
-    groups: { groups },
-    recoveryData: {
-      channel: { url, channelId },
-      aesKey,
-    },
-    settings: { isPrimaryDevice },
-  } = store.getState();
-
+  const { user } = store.getState();
   const photo = await retrieveImage(user.photo.filename);
   return {
     id: user.id,
