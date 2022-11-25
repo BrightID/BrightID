@@ -12,6 +12,7 @@ import {
   setLinkingAppStarttime,
   setSponsoringStep,
   setSponsorOperationHash,
+  updateLinkedContext,
   updateSig,
 } from '@/reducer/appsSlice';
 import {
@@ -19,7 +20,7 @@ import {
   operation_states,
   sponsoring_steps,
 } from '@/utils/constants';
-import { addOperation } from '@/reducer/operationsSlice';
+import { addOperation, Operation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
 import { selectIsSponsored, userSelector } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
@@ -165,6 +166,48 @@ export const linkContextId =
         step: sponsoring_steps.LINK_ERROR,
         text: `${(e as Error).message}`,
       });
+    }
+  };
+
+export const handleLinkContextOpUpdate =
+  ({
+    op,
+    state,
+    result,
+  }: {
+    op: Operation;
+    state: OperationStateType;
+    result: string;
+  }): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
+    if (op.name !== 'Link ContextId') {
+      // This should never happen, but helps to satisfy typescript :)
+      return;
+    }
+
+    dispatch(
+      updateLinkedContext({
+        context: op.context,
+        contextId: op.contextId,
+        state,
+      }),
+    );
+
+    // Update local state only if UI is in app linking workflow and waiting for the operation.
+    // The operation update might come in anytime when the app is not in the linking workflow
+    const sponsoringStep = selectSponsoringStep(getState());
+    if (sponsoringStep === sponsoring_steps.LINK_WAITING_V5) {
+      if (state === operation_states.APPLIED) {
+        dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS }));
+      } else {
+        const text = i18next.t('apps.alert.text.linkFailure', {
+          context: `${op.context}`,
+          result: `${result}`,
+        });
+        dispatch(
+          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
+        );
+      }
     }
   };
 

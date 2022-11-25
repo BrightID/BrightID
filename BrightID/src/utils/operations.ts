@@ -5,19 +5,16 @@ import {
   addConnection,
   Operation,
   selectPendingOperations,
-  setSponsoringStep,
-  updateLinkedContext,
   updateMemberships,
   updateOperation,
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
-import {
-  operation_states,
-  OPERATION_TRACE_TIME,
-  sponsoring_steps,
-} from '@/utils/constants';
+import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
 import { NodeApi } from '@/api/brightId';
-import { handleSponsorOpUpdate } from '@/components/Apps/appThunks';
+import {
+  handleLinkContextOpUpdate,
+  handleSponsorOpUpdate,
+} from '@/components/Apps/appThunks';
 
 const handleOpUpdate = (
   store,
@@ -29,27 +26,8 @@ const handleOpUpdate = (
   let showDefaultError = false;
   switch (op.name) {
     case 'Link ContextId':
-      // TODO Move to appThunks!
-      store.dispatch(
-        updateLinkedContext({
-          context: op.context,
-          contextId: op.contextId,
-          state,
-        }),
-      );
-      if (state === operation_states.APPLIED) {
-        store.dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS }),
-        );
-      } else {
-        const text = i18next.t('apps.alert.text.linkFailure', {
-          context: `${op.context}`,
-          result: `${result.message}`,
-        });
-        store.dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
-        );
-      }
+      store.dispatch(handleLinkContextOpUpdate({ op, state, result }));
+      showDefaultError = true;
       break;
 
     case 'Connect':
