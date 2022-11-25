@@ -176,11 +176,12 @@ const AppLinkingScreen = () => {
   const isError = error_states.includes(sponsoringStep);
   const isSuccess = sponsoringStep === sponsoring_steps.LINK_SUCCESS;
 
+  const showSponsoring = sponsoringStep <= sponsoring_steps.SUCCESS;
+
   let resultContainer;
   if (isError || isSuccess) {
     resultContainer = (
       <>
-        <View style={styles.divider} />
         <View style={styles.resultContainer}>
           <View style={styles.resultTextContainer}>
             {isSuccess && (
@@ -239,16 +240,18 @@ const AppLinkingScreen = () => {
               </Text>
             </View>
 
-            <SponsoringView
-              sponsoringStep={sponsoringStep}
-              text={sponsoringStepText}
-              appName={linkingAppInfo.appInfo.name}
-            />
-            <View style={styles.divider} />
-            <LinkingView
-              sponsoringStep={sponsoringStep}
-              text={sponsoringStepText}
-            />
+            {showSponsoring ? (
+              <SponsoringView
+                sponsoringStep={sponsoringStep}
+                text={sponsoringStepText}
+                appName={linkingAppInfo.appInfo.name}
+              />
+            ) : (
+              <LinkingView
+                sponsoringStep={sponsoringStep}
+                text={sponsoringStepText}
+              />
+            )}
             {resultContainer}
           </>
         )}
