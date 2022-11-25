@@ -18,11 +18,17 @@ import {
 import {
   BrightIdNetwork,
   operation_states,
+  SPONSOR_WAIT_TIME,
+  SPONSORING_POLL_INTERVAL,
   sponsoring_steps,
 } from '@/utils/constants';
 import { addOperation, Operation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
-import { selectIsSponsored, userSelector } from '@/reducer/userSlice';
+import {
+  selectIsSponsored,
+  setIsSponsoredv6,
+  userSelector,
+} from '@/reducer/userSlice';
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
 
 type startLinkingParams = {
@@ -59,6 +65,39 @@ export const startLinking =
       // trigger app linking
       console.log(`Already sponsored, proceed with linking`);
       dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
+      dispatch(linkAppOrContext());
+    }
+  };
+
+export const linkAppOrContext =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const sponsoringStep = selectSponsoringStep(getState());
+    if (sponsoringStep !== sponsoring_steps.SUCCESS) {
+      console.log(
+        `Can't start linkApp when not in SUCCESS state. Current state: ${sponsoringStep}`,
+      );
+    }
+    // TODO How to handle below condition?
+    /*
+     if (sigsUpdating) {
+     console.log(`Waiting for updating sigs before linking...`);
+     return;
+     }
+     */
+    // sponsoring ok, now start linking.
+    const { v } = selectLinkingAppInfo(getState());
+    switch (v) {
+      case 5:
+        // v5 app
+        dispatch(linkContextId());
+        break;
+      case 6:
+        // v6 app
+        dispatch(linkAppId({ silent: false }));
+        break;
+      default:
+        console.log(`Unhandled app version v: ${v}`);
+        throw new Error(`Unhandled app version v: ${v}`);
     }
   };
 
@@ -88,8 +127,56 @@ export const requestSponsoring =
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
       dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
-      dispatch(setLinkingAppStarttime(Date.now()));
+      dispatch(waitForAppSponsoring());
     }
+  };
+
+export const waitForAppSponsoring =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const sponsoringStep = selectSponsoringStep(getState());
+    if (sponsoringStep !== sponsoring_steps.WAITING_APP) {
+      console.log(
+        `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${sponsoringStep}`,
+      );
+    }
+
+    const linkingAppStarttime = Date.now();
+    dispatch(setLinkingAppStarttime(linkingAppStarttime));
+    const { appUserId } = selectLinkingAppInfo(getState());
+    const api = getGlobalNodeApi();
+
+    // Op to request sponsoring is submitted. Now wait for app to actually perform it.
+    const intervalId = setInterval(async () => {
+      const timeElapsed = Date.now() - linkingAppStarttime;
+      let sponsorshipInfo: SponsorshipInfo | undefined;
+      try {
+        sponsorshipInfo = await getSponsorship(appUserId, api);
+      } catch (error) {
+        console.log(`Error getting sponsorship info:`);
+        console.log(`${error}`);
+      }
+      if (sponsorshipInfo) {
+        console.log(
+          `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
+        );
+        if (
+          sponsorshipInfo.appHasAuthorized &&
+          sponsorshipInfo.spendRequested
+        ) {
+          console.log(`Sponsorship complete!`);
+          clearInterval(intervalId);
+          dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
+          dispatch(setIsSponsoredv6(true));
+          dispatch(linkAppOrContext());
+        }
+      }
+      if (timeElapsed > SPONSOR_WAIT_TIME) {
+        console.log(`Timeout waiting for sponsoring!`);
+        clearInterval(intervalId);
+        dispatch(setSponsoringStep({ step: sponsoring_steps.ERROR_APP }));
+      }
+    }, SPONSORING_POLL_INTERVAL);
+    console.log(`Started pollSponsorship ${intervalId}`);
   };
 
 export const handleSponsorOpUpdate =
@@ -106,7 +193,7 @@ export const handleSponsorOpUpdate =
     switch (state) {
       case operation_states.APPLIED:
         dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
-        dispatch(setLinkingAppStarttime(Date.now()));
+        dispatch(waitForAppSponsoring());
         break;
       case operation_states.FAILED:
         dispatch(
@@ -181,7 +268,7 @@ export const handleLinkContextOpUpdate =
   }): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     if (op.name !== 'Link ContextId') {
-      // This should never happen, but helps to satisfy typescript :)
+      // make sure this is called with the correct operation
       return;
     }
 

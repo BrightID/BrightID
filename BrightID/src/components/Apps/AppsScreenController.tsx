@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import _ from 'lodash';
 import i18next from 'i18next';
@@ -12,26 +12,15 @@ import {
   selectAllLinkedContexts,
   selectAllLinkedSigs,
   selectLinkingAppInfo,
-  selectLinkingAppStartTime,
   selectPendingLinkedContext,
   selectSponsoringStep,
-  setSponsoringStep,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
-import { fetchApps, selectIsSponsored, setIsSponsoredv6 } from '@/actions';
-import { getSponsorship } from '@/components/Apps/model';
+import { fetchApps, selectIsSponsored } from '@/actions';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
-import {
-  linkAppId,
-  linkContextId,
-  startLinking,
-} from '@/components/Apps/appThunks';
-import {
-  SPONSOR_WAIT_TIME,
-  SPONSORING_POLL_INTERVAL,
-  sponsoring_steps,
-} from '@/utils/constants';
+import { startLinking } from '@/components/Apps/appThunks';
+import { sponsoring_steps } from '@/utils/constants';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 
 // get app linking details from route params
@@ -57,7 +46,6 @@ const AppsScreenController = () => {
   const pendingLink = useSelector(selectPendingLinkedContext);
   const sponsoringStep = useSelector(selectSponsoringStep);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
-  const linkingAppStarttime = useSelector(selectLinkingAppStartTime);
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector((state) => state.user.verifications);
   const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
@@ -197,82 +185,6 @@ const AppsScreenController = () => {
       );
     }
   }, [t, api, apps, dispatch, route.params, refreshing]);
-
-  // track sponsor by app progress
-  useEffect(() => {
-    if (
-      sponsoringStep === sponsoring_steps.WAITING_APP &&
-      linkingAppInfo?.appUserId
-    ) {
-      // Op to request sponsoring is submitted. Now wait for app to actually perform it.
-      const intervalId = setInterval(async () => {
-        const timeElapsed = Date.now() - linkingAppStarttime;
-        let sponsorshipInfo: SponsorshipInfo | undefined;
-        try {
-          sponsorshipInfo = await getSponsorship(linkingAppInfo.appUserId, api);
-        } catch (error) {
-          console.log(`Error getting sponsorship info:`);
-          console.log(`${error}`);
-        }
-        if (sponsorshipInfo) {
-          console.log(
-            `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
-          );
-          if (
-            sponsorshipInfo.appHasAuthorized &&
-            sponsorshipInfo.spendRequested
-          ) {
-            console.log(`Sponsorship complete!`);
-            clearInterval(intervalId);
-            dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
-            dispatch(setIsSponsoredv6(true));
-          }
-        }
-        if (timeElapsed > SPONSOR_WAIT_TIME) {
-          console.log(`Timeout waiting for sponsoring!`);
-          clearInterval(intervalId);
-          dispatch(setSponsoringStep({ step: sponsoring_steps.ERROR_APP }));
-        }
-      }, SPONSORING_POLL_INTERVAL);
-      console.log(`Started pollSponsorship ${intervalId}`);
-
-      return () => {
-        console.log(`Stop pollSponsorship ${intervalId}`);
-        clearInterval(intervalId);
-      };
-    }
-  }, [
-    api,
-    dispatch,
-    linkingAppInfo?.appUserId,
-    linkingAppStarttime,
-    sponsoringStep,
-  ]);
-
-  // trigger linking when sponsoring is complete
-  useEffect(() => {
-    if (sponsoringStep === sponsoring_steps.SUCCESS) {
-      if (sigsUpdating) {
-        console.log(`Waiting for updating sigs before linking...`);
-        return;
-      }
-      // sponsoring ok, now start linking.
-      const { v } = linkingAppInfo;
-      switch (v) {
-        case 5:
-          // v5 app
-          dispatch(linkContextId());
-          break;
-        case 6:
-          // v6 app
-          dispatch(linkAppId({ silent: false }));
-          break;
-        default:
-          console.log(`Unhandled app version v: ${v}`);
-          throw new Error(`Unhandled app version v: ${v}`);
-      }
-    }
-  }, [dispatch, linkingAppInfo, sigsUpdating, sponsoringStep]);
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
