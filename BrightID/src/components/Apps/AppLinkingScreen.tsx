@@ -18,6 +18,7 @@ import {
   selectLinkingAppInfo,
   selectSponsoringStep,
   selectSponsoringStepText,
+  setSponsoringStep,
 } from '@/reducer/appsSlice';
 import { sponsoring_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
@@ -31,27 +32,30 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
   const stateDetails = text;
   switch (sponsoringStep) {
     case sponsoring_steps.PRECHECK_APP:
-      stateDescription = `Checking for prior sponsoring request (${sponsoringStep})`;
+      stateDescription = `Checking for prior sponsoring request`;
       break;
     case sponsoring_steps.WAITING_OP:
-      stateDescription = `Requesting sponsorship from app (${sponsoringStep})`;
+      stateDescription = `Requesting sponsorship from app`;
       break;
     case sponsoring_steps.WAITING_APP:
-      stateDescription = `Waiting for ${appName} to sponsor you (${sponsoringStep})`;
+      stateDescription = `Waiting for ${appName} to sponsor you`;
       break;
     case sponsoring_steps.ERROR_OP:
       isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = `Error submitting request sponsorship operation! (${sponsoringStep})`;
+      stateDescription = `Error submitting request sponsorship operation!`;
       break;
     case sponsoring_steps.ERROR_APP:
       isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = `Timeout waiting for ${appName} to sponsor you! (${sponsoringStep})`;
+      stateDescription = `Timeout waiting for ${appName} to sponsor you!`;
       break;
     case sponsoring_steps.SUCCESS:
+    case sponsoring_steps.LINK_WAITING_V5:
+    case sponsoring_steps.LINK_WAITING_V6:
+    case sponsoring_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully sponsored! (${sponsoringStep})`;
+      stateDescription = `Successfully sponsored!`;
       break;
     default:
       if (isSponsored) {
@@ -88,7 +92,9 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
         </View>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>{stateDescription}</Text>
-          <Text style={styles.infoSubText}>{stateDetails}</Text>
+          {stateDetails && (
+            <Text style={styles.infoSubText}>{stateDetails}</Text>
+          )}
         </View>
       </View>
     </View>
@@ -104,10 +110,10 @@ const LinkingView = ({ sponsoringStep, text }) => {
 
   switch (sponsoringStep) {
     case sponsoring_steps.LINK_WAITING_V5:
-      stateDescription = `Waiting for link operation to confirm (${sponsoringStep})`;
+      stateDescription = `Waiting for link operation to confirm`;
       break;
     case sponsoring_steps.LINK_WAITING_V6:
-      stateDescription = `Waiting for link function to complete (${sponsoringStep})`;
+      stateDescription = `Waiting for link function to complete`;
       break;
     case sponsoring_steps.LINK_ERROR:
       isError = true;
@@ -116,11 +122,11 @@ const LinkingView = ({ sponsoringStep, text }) => {
       break;
     case sponsoring_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully linked! (${sponsoringStep})`;
+      stateDescription = `Successfully linked!`;
       break;
     default:
       iconData = { color: DARKER_GREY, name: 'information-circle-outline' };
-      stateDescription = `Waiting for sponsoring before linking phase can start. (${sponsoringStep})`;
+      stateDescription = `Waiting for sponsoring before linking phase can start.`;
   }
 
   return (
@@ -148,7 +154,9 @@ const LinkingView = ({ sponsoringStep, text }) => {
         </View>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>{stateDescription}</Text>
-          <Text style={styles.infoSubText}>{stateDetails}</Text>
+          {stateDetails && (
+            <Text style={styles.infoSubText}>{stateDetails}</Text>
+          )}
         </View>
       </View>
     </View>
@@ -264,8 +272,8 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: DEVICE_LARGE ? 240 : 200,
-    marginTop: 15,
-    marginBottom: 15,
+    marginTop: 20,
+    marginBottom: 25,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: BLACK,
   },
@@ -324,6 +332,7 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   resultContainer: {
+    width: '75%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
