@@ -286,25 +286,26 @@ const AppsScreenController = () => {
       });
   }, [api, dispatch]);
 
-  return sponsoringStep === sponsoring_steps.IDLE ? (
-    <AppsScreen
-      sponsoringApp={linkingAppInfo?.appInfo}
-      pendingLink={pendingLink}
-      isSponsored={isSponsored}
-      totalApps={totalApps}
-      linkedContextsCount={linkedContextsCount}
-      totalVerifiedApps={totalVerifiedApps}
-      activeFilter={activeFilter}
-      searchTerm={searchTerm}
-      setFilter={setFilter}
-      setSearch={setSearchTerm}
-      filteredApps={filteredApps}
-      refreshApps={refreshApps}
-      refreshing={refreshing}
-      sigsUpdating={sigsUpdating}
-    />
-  ) : (
-    <AppLinkingScreen />
+  return (
+    <>
+      <AppsScreen
+        sponsoringApp={linkingAppInfo?.appInfo}
+        pendingLink={pendingLink}
+        isSponsored={isSponsored}
+        totalApps={totalApps}
+        linkedContextsCount={linkedContextsCount}
+        totalVerifiedApps={totalVerifiedApps}
+        activeFilter={activeFilter}
+        searchTerm={searchTerm}
+        setFilter={setFilter}
+        setSearch={setSearchTerm}
+        filteredApps={filteredApps}
+        refreshApps={refreshApps}
+        refreshing={refreshing}
+        sigsUpdating={sigsUpdating}
+      />
+      {sponsoringStep !== sponsoring_steps.IDLE && <AppLinkingScreen />}
+    </>
   );
 };
 

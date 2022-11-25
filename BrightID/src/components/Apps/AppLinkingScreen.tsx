@@ -1,14 +1,16 @@
 import React from 'react';
 import {
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
+import { BlurView } from '@react-native-community/blur';
+import { useNavigation } from '@react-navigation/native';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -26,7 +28,6 @@ import { selectIsSponsored } from '@/reducer/userSlice';
 const SponsoringView = ({ sponsoringStep, appName, text }) => {
   const isSponsored = useSelector(selectIsSponsored);
 
-  let isError: boolean;
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
@@ -41,12 +42,10 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
       stateDescription = `Waiting for ${appName} to sponsor you`;
       break;
     case sponsoring_steps.ERROR_OP:
-      isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
       stateDescription = `Error submitting request sponsorship operation!`;
       break;
     case sponsoring_steps.ERROR_APP:
-      isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
       stateDescription = `Timeout waiting for ${appName} to sponsor you!`;
       break;
@@ -103,7 +102,6 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
 
 const LinkingView = ({ sponsoringStep, text }) => {
   const { t } = useTranslation();
-  let isError: boolean;
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
@@ -116,7 +114,6 @@ const LinkingView = ({ sponsoringStep, text }) => {
       stateDescription = `Waiting for link function to complete`;
       break;
     case sponsoring_steps.LINK_ERROR:
-      isError = true;
       iconData = { color: RED, name: 'alert-circle-outline' };
       stateDescription = t('apps.alert.title.linkingFailed');
       break;
@@ -166,6 +163,7 @@ const LinkingView = ({ sponsoringStep, text }) => {
 const AppLinkingScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const sponsoringStep = useSelector(selectSponsoringStep);
   const sponsoringStepText = useSelector(selectSponsoringStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
@@ -214,61 +212,98 @@ const AppLinkingScreen = () => {
     );
   }
 
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
-        animated={true}
+    <View style={styles.container}>
+      <BlurView
+        style={styles.blurView}
+        blurType="dark"
+        blurAmount={5}
+        reducedTransparencyFallbackColor={BLACK}
       />
-      <View style={styles.orangeTop} />
-      <View style={styles.container}>
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.headerText}>
-            Linking with{' '}
-            <Text style={styles.headerTextAppname}>
-              {linkingAppInfo.appInfo.name}
-            </Text>
-          </Text>
+      <TouchableWithoutFeedback onPress={goBack}>
+        <View style={styles.blurView} />
+      </TouchableWithoutFeedback>
+      <View style={styles.modalContainer}>
+        {sponsoringStep !== sponsoring_steps.IDLE && (
+          <>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerText}>
+                Linking with{' '}
+                <Text style={styles.headerTextAppname}>
+                  {linkingAppInfo.appInfo.name}
+                </Text>
+              </Text>
+            </View>
+
+            <SponsoringView
+              sponsoringStep={sponsoringStep}
+              text={sponsoringStepText}
+              appName={linkingAppInfo.appInfo.name}
+            />
+            <View style={styles.divider} />
+            <LinkingView
+              sponsoringStep={sponsoringStep}
+              text={sponsoringStepText}
+            />
+            {resultContainer}
+          </>
+        )}
+        <View style={{ marginBottom: 2 }}>
+          <TouchableOpacity
+            disabled={sponsoringStep >= sponsoring_steps.LINK_SUCCESS}
+            onPress={() =>
+              dispatch(setSponsoringStep({ step: sponsoringStep + 1 }))
+            }
+          >
+            <Text>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={sponsoringStep <= sponsoring_steps.IDLE}
+            onPress={() =>
+              dispatch(setSponsoringStep({ step: sponsoringStep - 1 }))
+            }
+          >
+            <Text>-</Text>
+          </TouchableOpacity>
         </View>
-        <SponsoringView
-          sponsoringStep={sponsoringStep}
-          text={sponsoringStepText}
-          appName={linkingAppInfo.appInfo.name}
-        />
-        <View style={styles.divider} />
-        <LinkingView
-          sponsoringStep={sponsoringStep}
-          text={sponsoringStepText}
-        />
-        {resultContainer}
       </View>
-    </>
+    </View>
   );
 };
 
 export default AppLinkingScreen;
 
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 65,
-    width: '100%',
-    zIndex: 1,
-  },
   container: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     flex: 1,
-    width: '100%',
-    backgroundColor: WHITE,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     flexDirection: 'column',
-    borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
-    marginTop: -58,
-    zIndex: 10,
-    overflow: 'hidden',
-    paddingTop: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 20,
+  },
+  blurView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  modalContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: WHITE,
+    width: '90%',
+    borderRadius: 25,
+    padding: DEVICE_LARGE ? 30 : 25,
   },
   divider: {
     width: DEVICE_LARGE ? 240 : 200,
