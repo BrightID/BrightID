@@ -201,8 +201,6 @@ const AppsScreenController = () => {
   return (
     <>
       <AppsScreen
-        sponsoringApp={linkingAppInfo?.appInfo}
-        pendingLink={pendingLink}
         isSponsored={isSponsored}
         totalApps={totalApps}
         linkedContextsCount={linkedContextsCount}
