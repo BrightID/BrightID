@@ -135,17 +135,17 @@ export enum channel_states {
   BACKGROUND = 'BACKGROUND',
 }
 
-export enum sponsoring_steps {
+export enum app_linking_steps {
   IDLE,
   // Preparation
   REFRESHING_APPS,
   WAITING_USER_CONFIRMATION,
   // Sponsoring
-  PRECHECK_APP, // Check if sponsoring was already requested
-  WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
-  WAITING_APP, // waiting for app to actually execute sponsoring
-  SUCCESS, // got sponsored
-  // LINKING
+  SPONSOR_PRECHECK_APP, // Check if sponsoring was already requested before
+  SPONSOR_WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
+  SPONSOR_WAITING_APP, // waiting for app to actually execute sponsoring
+  SPONSOR_SUCCESS, // got sponsored
+  // Linking
   LINK_WAITING_V5, // Waiting for link operation to confirm (v5 app)
   LINK_WAITING_V6, // Waiting for link function to complete (v6 app)
   LINK_SUCCESS,

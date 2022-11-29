@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 import { find, propEq } from 'ramda';
 import { RESET_STORE } from '@/actions/resetStore';
-import { sponsoring_steps } from '@/utils/constants';
+import { app_linking_steps } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 
@@ -24,8 +24,8 @@ const initialState: AppsState = {
   linkedContexts: linkedContextsAdapter.getInitialState(),
   sigs: sigsAdapter.getInitialState(),
   sigsUpdating: false,
-  sponsoringStep: sponsoring_steps.IDLE,
-  sponsoringStepText: undefined,
+  appLinkingStep: app_linking_steps.IDLE,
+  appLinkingStepText: undefined,
   linkingAppInfo: undefined,
   linkingAppStartTime: 0,
   sponsorOperationHash: undefined,
@@ -78,11 +78,11 @@ const appsSlice = createSlice({
     },
     setSponsoringStep(
       state,
-      action: PayloadAction<{ step: SponsoringStep_Type; text?: string }>,
+      action: PayloadAction<{ step: AppLinkingStep_Type; text?: string }>,
     ) {
       const { step, text } = action.payload;
-      state.sponsoringStep = step;
-      state.sponsoringStepText = text;
+      state.appLinkingStep = step;
+      state.appLinkingStepText = text;
     },
     setLinkingAppInfo(
       state,
@@ -100,8 +100,8 @@ const appsSlice = createSlice({
       state.linkingAppError = action.payload;
     },
     resetLinkingAppState(state) {
-      state.sponsoringStep = sponsoring_steps.IDLE;
-      state.sponsoringStepText = undefined;
+      state.appLinkingStep = app_linking_steps.IDLE;
+      state.appLinkingStepText = undefined;
       state.linkingAppInfo = undefined;
       state.linkingAppStartTime = 0;
       state.sponsorOperationHash = undefined;
@@ -186,11 +186,11 @@ export const selectExpireableBlindSigApps = createSelector(
     apps.filter((app) => app.verificationExpirationLength && !app.testing),
 );
 
-export const selectSponsoringStep = (state: RootState) =>
-  state.apps.sponsoringStep;
+export const selectApplinkingStep = (state: RootState) =>
+  state.apps.appLinkingStep;
 
-export const selectSponsoringStepText = (state: RootState) =>
-  state.apps.sponsoringStepText;
+export const selectApplinkingStepText = (state: RootState) =>
+  state.apps.appLinkingStepText;
 
 export const selectLinkingAppInfo = (state: RootState) =>
   state.apps.linkingAppInfo;

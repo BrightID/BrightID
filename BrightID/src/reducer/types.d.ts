@@ -14,8 +14,8 @@ type AppsState = {
   linkedContexts: EntityState<ContextInfo>;
   sigs: EntityState<SigInfo>;
   sigsUpdating: boolean;
-  sponsoringStep: SponsoringStep_Type;
-  sponsoringStepText?: string;
+  appLinkingStep: AppLinkingStep_Type;
+  appLinkingStepText?: string;
   sponsorOperationHash?: string;
   linkingAppInfo?: LinkingAppInfo;
   linkingAppStartTime: number;

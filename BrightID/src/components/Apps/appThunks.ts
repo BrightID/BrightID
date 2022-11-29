@@ -9,7 +9,7 @@ import {
   selectAppInfoByAppId,
   selectLinkingAppError,
   selectLinkingAppInfo,
-  selectSponsoringStep,
+  selectApplinkingStep,
   setApps,
   setLinkingAppError,
   setLinkingAppInfo,
@@ -24,7 +24,7 @@ import {
   operation_states,
   SPONSOR_WAIT_TIME,
   SPONSORING_POLL_INTERVAL,
-  sponsoring_steps,
+  app_linking_steps,
 } from '@/utils/constants';
 import { addOperation, Operation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
@@ -44,8 +44,8 @@ type requestLinkingParams = {
 export const requestLinking =
   (params: requestLinkingParams): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.IDLE) {
+    const sponsoringStep = selectApplinkingStep(getState());
+    if (sponsoringStep !== app_linking_steps.IDLE) {
       console.log(
         `Can't request linking when not in IDLE state. Current state: ${sponsoringStep}`,
       );
@@ -63,7 +63,7 @@ export const requestLinking =
     dispatch(setLinkingAppInfo(params));
 
     const api = getGlobalNodeApi();
-    dispatch(setSponsoringStep({ step: sponsoring_steps.REFRESHING_APPS }));
+    dispatch(setSponsoringStep({ step: app_linking_steps.REFRESHING_APPS }));
     try {
       // make sure to have latest appInfo available
       const apps = await api.getApps();
@@ -100,16 +100,16 @@ export const requestLinking =
 
     // request user confirmation
     dispatch(
-      setSponsoringStep({ step: sponsoring_steps.WAITING_USER_CONFIRMATION }),
+      setSponsoringStep({ step: app_linking_steps.WAITING_USER_CONFIRMATION }),
     );
   };
 
 export const startLinking =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.WAITING_USER_CONFIRMATION) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.WAITING_USER_CONFIRMATION) {
       console.log(
-        `Can't start linkApp when not in WAITING_USER_CONFIRMATION state. Current state: ${sponsoringStep}`,
+        `Can't start linkApp when not in WAITING_USER_CONFIRMATION state. Current state: ${applinkingStep}`,
       );
     }
     const isSponsored = selectIsSponsored(getState());
@@ -124,17 +124,17 @@ export const startLinking =
     } else {
       // trigger app linking
       console.log(`Already sponsored, proceed with linking`);
-      dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
+      dispatch(setSponsoringStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
       dispatch(linkAppOrContext());
     }
   };
 
 export const linkAppOrContext =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.SUCCESS) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
       console.log(
-        `Can't start linkApp when not in SUCCESS state. Current state: ${sponsoringStep}`,
+        `Can't start linkApp when not in SUCCESS state. Current state: ${applinkingStep}`,
       );
     }
     // TODO How to handle below condition?
@@ -164,10 +164,10 @@ export const linkAppOrContext =
 export const requestSponsoring =
   (): AppThunk<Promise<string | undefined>> =>
   async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.WAITING_USER_CONFIRMATION) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.WAITING_USER_CONFIRMATION) {
       console.log(
-        `Can't request sponsoring when not in WAITING_USER_CONFIRMATION state. Current state: ${sponsoringStep}`,
+        `Can't request sponsoring when not in WAITING_USER_CONFIRMATION state. Current state: ${applinkingStep}`,
       );
       return;
     }
@@ -176,27 +176,33 @@ export const requestSponsoring =
     const api = getGlobalNodeApi();
 
     // Check if sponsoring was already requested
-    dispatch(setSponsoringStep({ step: sponsoring_steps.PRECHECK_APP }));
+    dispatch(
+      setSponsoringStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
+    );
     const sp = await getSponsorship(appUserId, api);
     if (!sp || !sp.spendRequested) {
       console.log(`Sending spend sponsorship op...`);
       const op = await api.spendSponsorship(appId, appUserId);
       dispatch(addOperation(op));
-      dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_OP }));
+      dispatch(
+        setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
+      );
       return op.hash;
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
-      dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
+      dispatch(
+        setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+      );
       dispatch(waitForAppSponsoring());
     }
   };
 
 export const waitForAppSponsoring =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.WAITING_APP) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_APP) {
       console.log(
-        `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${sponsoringStep}`,
+        `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${applinkingStep}`,
       );
     }
 
@@ -225,7 +231,9 @@ export const waitForAppSponsoring =
         ) {
           console.log(`Sponsorship complete!`);
           clearInterval(intervalId);
-          dispatch(setSponsoringStep({ step: sponsoring_steps.SUCCESS }));
+          dispatch(
+            setSponsoringStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
+          );
           dispatch(setIsSponsoredv6(true));
           dispatch(linkAppOrContext());
         }
@@ -242,17 +250,19 @@ export const waitForAppSponsoring =
 export const handleSponsorOpUpdate =
   (state: OperationStateType): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.WAITING_OP) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_OP) {
       console.log(
-        `Can't handle Operation update when not in WAITING_OP state. Current state: ${sponsoringStep}`,
+        `Can't handle Operation update when not in WAITING_OP state. Current state: ${applinkingStep}`,
       );
       return;
     }
 
     switch (state) {
       case operation_states.APPLIED:
-        dispatch(setSponsoringStep({ step: sponsoring_steps.WAITING_APP }));
+        dispatch(
+          setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+        );
         dispatch(waitForAppSponsoring());
         break;
       case operation_states.FAILED:
@@ -272,14 +282,14 @@ export const handleSponsorOpUpdate =
 
 export const linkContextId =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.SUCCESS) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
       console.log(
-        `Can't start linkContext when not in SUCCESS state. Current state: ${sponsoringStep}`,
+        `Can't start linkContext when not in SUCCESS state. Current state: ${applinkingStep}`,
       );
       return;
     }
-    dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_WAITING_V5 }));
+    dispatch(setSponsoringStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
 
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
@@ -329,10 +339,10 @@ export const handleLinkContextOpUpdate =
 
     // Update local state only if UI is in app linking workflow and waiting for the operation.
     // The operation update might come in anytime when the app is not in the linking workflow
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep === sponsoring_steps.LINK_WAITING_V5) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
       if (state === operation_states.APPLIED) {
-        dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS }));
+        dispatch(setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS }));
       } else {
         const text = t('apps.alert.text.linkFailure', {
           context: `${op.context}`,
@@ -346,10 +356,10 @@ export const handleLinkContextOpUpdate =
 export const linkAppId =
   ({ silent }: { silent: boolean }): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.SUCCESS) {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
       console.log(
-        `Can't start linkAppId when not in SUCCESS state. Current state: ${sponsoringStep}`,
+        `Can't start linkAppId when not in SUCCESS state. Current state: ${applinkingStep}`,
       );
       return;
     }
@@ -361,7 +371,7 @@ export const linkAppId =
     const appInfo = selectAppInfoByAppId(getState(), appId);
     const isPrimary = selectIsPrimaryDevice(getState());
 
-    dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_WAITING_V6 }));
+    dispatch(setSponsoringStep({ step: app_linking_steps.LINK_WAITING_V6 }));
 
     // generate blind sig for apps with no verification expiration at linking time
     // and also ensure blind sig is not missed because of delay in generation for all apps
@@ -427,7 +437,7 @@ export const linkAppId =
           },
         );
         dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS, text }),
+          setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS, text }),
         );
         return;
       }
@@ -531,13 +541,8 @@ export const linkAppId =
 
     if (linkSuccess) {
       // at least one verification successfully linked
-      const text = t('apps.alert.text.linkSuccess', {
-        context: appInfo.name,
-      });
       // TODO If there were errors with other verifications (sigErrors array), how to show in the UI?
-      dispatch(
-        setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS, text }),
-      );
+      dispatch(setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS }));
 
       if (appInfo.callbackUrl) {
         const onSuccess = async () => {

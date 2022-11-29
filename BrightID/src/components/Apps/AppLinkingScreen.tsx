@@ -20,10 +20,10 @@ import {
   selectAppInfoByAppId,
   selectLinkingAppError,
   selectLinkingAppInfo,
-  selectSponsoringStep,
-  selectSponsoringStepText,
+  selectApplinkingStep,
+  selectApplinkingStepText,
 } from '@/reducer/appsSlice';
-import { sponsoring_steps } from '@/utils/constants';
+import { app_linking_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
 import { startLinking } from '@/components/Apps/appThunks';
 
@@ -72,7 +72,7 @@ const ConfirmationView = ({ appName }) => {
   );
 };
 
-const SponsoringView = ({ sponsoringStep, appName, text }) => {
+const AppLinkingView = ({ sponsoringStep, appName, text }) => {
   const isSponsored = useSelector(selectIsSponsored);
   const error = useSelector(selectLinkingAppError);
 
@@ -80,25 +80,25 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
   let stateDescription: string;
   const stateDetails = text;
   switch (sponsoringStep) {
-    case sponsoring_steps.REFRESHING_APPS:
+    case app_linking_steps.REFRESHING_APPS:
       stateDescription = `Verifying app details`;
       break;
-    case sponsoring_steps.PRECHECK_APP:
+    case app_linking_steps.SPONSOR_PRECHECK_APP:
       stateDescription = `Checking for prior sponsoring request`;
       break;
-    case sponsoring_steps.WAITING_OP:
+    case app_linking_steps.SPONSOR_WAITING_OP:
       stateDescription = `Requesting sponsorship from app`;
       break;
-    case sponsoring_steps.WAITING_APP:
+    case app_linking_steps.SPONSOR_WAITING_APP:
       stateDescription = `Waiting for ${appName} to sponsor you`;
       break;
-    case sponsoring_steps.LINK_WAITING_V5:
+    case app_linking_steps.LINK_WAITING_V5:
       stateDescription = `Waiting for link operation to confirm`;
       break;
-    case sponsoring_steps.LINK_WAITING_V6:
+    case app_linking_steps.LINK_WAITING_V6:
       stateDescription = `Waiting for link function to complete`;
       break;
-    case sponsoring_steps.LINK_SUCCESS:
+    case app_linking_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
       stateDescription = `Successfully linked!`;
       break;
@@ -151,8 +151,8 @@ const AppLinkingScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const sponsoringStep = useSelector(selectSponsoringStep);
-  const sponsoringStepText = useSelector(selectSponsoringStepText);
+  const appLinkingStep = useSelector(selectApplinkingStep);
+  const appLinkingStepText = useSelector(selectApplinkingStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
   const error = useSelector(selectLinkingAppError);
   const appInfo = useSelector((state: RootState) =>
@@ -161,13 +161,12 @@ const AppLinkingScreen = () => {
       : undefined,
   );
 
-  const isSuccess = sponsoringStep === sponsoring_steps.LINK_SUCCESS;
   const showConfirm =
-    sponsoringStep === sponsoring_steps.WAITING_USER_CONFIRMATION;
+    appLinkingStep === app_linking_steps.WAITING_USER_CONFIRMATION;
   const showProgress =
-    sponsoringStep > sponsoring_steps.WAITING_USER_CONFIRMATION &&
-    sponsoringStep <= sponsoring_steps.LINK_SUCCESS;
-
+    appLinkingStep > app_linking_steps.IDLE &&
+    appLinkingStep <= app_linking_steps.LINK_SUCCESS;
+  const isSuccess = appLinkingStep === app_linking_steps.LINK_SUCCESS;
   const appName = appInfo?.name || linkingAppInfo.appId;
 
   let resultContainer;
@@ -230,9 +229,9 @@ const AppLinkingScreen = () => {
             Linking with <Text style={styles.headerTextAppname}>{appName}</Text>
           </Text>
         </View>
-        <SponsoringView
-          sponsoringStep={sponsoringStep}
-          text={sponsoringStepText}
+        <AppLinkingView
+          sponsoringStep={appLinkingStep}
+          text={appLinkingStepText}
           appName={appName}
         />
       </>

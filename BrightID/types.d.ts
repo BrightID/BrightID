@@ -13,7 +13,7 @@ import {
   channel_types,
   connection_levels,
   report_reasons,
-  sponsoring_steps,
+  app_linking_steps,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -379,6 +379,6 @@ declare global {
 
   type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
 
-  type SponsoringStep_Type =
-    typeof sponsoring_steps[keyof typeof sponsoring_steps];
+  type AppLinkingStep_Type =
+    typeof app_linking_steps[keyof typeof app_linking_steps];
 }

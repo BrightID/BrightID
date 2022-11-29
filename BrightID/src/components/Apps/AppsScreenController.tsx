@@ -8,14 +8,14 @@ import {
   selectAllApps,
   selectAllLinkedContexts,
   selectAllLinkedSigs,
-  selectSponsoringStep,
+  selectApplinkingStep,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
 import { fetchApps, selectIsSponsored } from '@/actions';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { requestLinking } from '@/components/Apps/appThunks';
-import { sponsoring_steps } from '@/utils/constants';
+import { app_linking_steps } from '@/utils/constants';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 
 // get app linking details from route params
@@ -38,7 +38,7 @@ const AppsScreenController = () => {
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
-  const sponsoringStep = useSelector(selectSponsoringStep);
+  const sponsoringStep = useSelector(selectApplinkingStep);
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector((state) => state.user.verifications);
   const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
@@ -158,7 +158,7 @@ const AppsScreenController = () => {
         refreshing={refreshing}
         sigsUpdating={sigsUpdating}
       />
-      {sponsoringStep !== sponsoring_steps.IDLE && <AppLinkingScreen />}
+      {sponsoringStep !== app_linking_steps.IDLE && <AppLinkingScreen />}
     </>
   );
 };
