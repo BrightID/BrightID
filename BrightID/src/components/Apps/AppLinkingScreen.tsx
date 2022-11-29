@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import {
   resetLinkingAppState,
+  selectAppInfoByAppId,
   selectLinkingAppInfo,
   selectSponsoringStep,
   selectSponsoringStepText,
@@ -24,6 +25,57 @@ import {
 } from '@/reducer/appsSlice';
 import { sponsoring_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
+import { startLinking } from '@/components/Apps/appThunks';
+
+const ConfirmationView = ({ appName }) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const confirmHandler = () => {
+    console.log(`User confirmed linking.`);
+    dispatch(startLinking());
+  };
+
+  const rejectHandler = () => {
+    console.log(`User rejected linking!`);
+    dispatch(resetLinkingAppState());
+  };
+
+  return (
+    <View style={styles.stepContainer}>
+      <View style={styles.stepHeaderTextContainer}>
+        <Text style={styles.stepHeaderText}>
+          {t('apps.alert.title.linkApp')}
+        </Text>
+      </View>
+      <View style={styles.statusContainer}>
+        <View style={styles.infoTextContainer}>
+          <Text style={styles.infoText}>
+            {t('apps.alert.text.linkApp', {
+              context: appName,
+            })}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          testID="RejectLinking"
+          style={styles.resetButton}
+          onPress={rejectHandler}
+        >
+          <Text style={styles.resetText}>{t('common.alert.no')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="Confirminking"
+          style={styles.resetButton}
+          onPress={confirmHandler}
+        >
+          <Text style={styles.resetText}>{t('common.alert.yes')}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const SponsoringView = ({ sponsoringStep, appName, text }) => {
   const isSponsored = useSelector(selectIsSponsored);
@@ -107,6 +159,9 @@ const LinkingView = ({ sponsoringStep, text }) => {
   const stateDetails = text;
 
   switch (sponsoringStep) {
+    case sponsoring_steps.REFRESHING_APPS:
+      stateDescription = `Getting latest appInfo`;
+      break;
     case sponsoring_steps.LINK_WAITING_V5:
       stateDescription = `Waiting for link operation to confirm`;
       break;
@@ -167,6 +222,11 @@ const AppLinkingScreen = () => {
   const sponsoringStep = useSelector(selectSponsoringStep);
   const sponsoringStepText = useSelector(selectSponsoringStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
+  const appInfo = useSelector((state: RootState) =>
+    linkingAppInfo
+      ? selectAppInfoByAppId(state, linkingAppInfo.appId)
+      : undefined,
+  );
 
   const error_states = [
     sponsoring_steps.ERROR_OP,
@@ -176,7 +236,14 @@ const AppLinkingScreen = () => {
   const isError = error_states.includes(sponsoringStep);
   const isSuccess = sponsoringStep === sponsoring_steps.LINK_SUCCESS;
 
-  const showSponsoring = sponsoringStep <= sponsoring_steps.SUCCESS;
+  const showConfirm =
+    sponsoringStep === sponsoring_steps.WAITING_USER_CONFIRMATION;
+
+  const showSponsoring =
+    sponsoringStep > sponsoring_steps.WAITING_USER_CONFIRMATION &&
+    sponsoringStep <= sponsoring_steps.SUCCESS;
+
+  const appName = appInfo?.name || linkingAppInfo.appId;
 
   let resultContainer;
   if (isError || isSuccess) {
@@ -187,7 +254,7 @@ const AppLinkingScreen = () => {
             {isSuccess && (
               <Text style={styles.resultContainerSuccessText}>
                 {t('apps.alert.text.linkSuccess', {
-                  context: linkingAppInfo.appInfo.name,
+                  context: appName,
                 })}
               </Text>
             )}
@@ -234,17 +301,16 @@ const AppLinkingScreen = () => {
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerText}>
                 Linking with{' '}
-                <Text style={styles.headerTextAppname}>
-                  {linkingAppInfo.appInfo.name}
-                </Text>
+                <Text style={styles.headerTextAppname}>{appName}</Text>
               </Text>
             </View>
+            {showConfirm && <ConfirmationView appName={appName} />}
 
             {showSponsoring ? (
               <SponsoringView
                 sponsoringStep={sponsoringStep}
                 text={sponsoringStepText}
-                appName={linkingAppInfo.appInfo.name}
+                appName={appName}
               />
             ) : (
               <LinkingView

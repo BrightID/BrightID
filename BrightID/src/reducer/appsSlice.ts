@@ -5,6 +5,7 @@ import {
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
+import { find, propEq } from 'ramda';
 import { RESET_STORE } from '@/actions/resetStore';
 import { sponsoring_steps } from '@/utils/constants';
 
@@ -28,6 +29,7 @@ const initialState: AppsState = {
   linkingAppInfo: undefined,
   linkingAppStartTime: 0,
   sponsorOperationHash: undefined,
+  linkingAppError: undefined,
 };
 
 const appsSlice = createSlice({
@@ -94,12 +96,16 @@ const appsSlice = createSlice({
     setSponsorOperationHash(state, action: PayloadAction<string>) {
       state.sponsorOperationHash = action.payload;
     },
+    setLinkingAppError(state, action: PayloadAction<string>) {
+      state.linkingAppError = action.payload;
+    },
     resetLinkingAppState(state) {
       state.sponsoringStep = sponsoring_steps.IDLE;
       state.sponsoringStepText = undefined;
       state.linkingAppInfo = undefined;
       state.linkingAppStartTime = 0;
       state.sponsorOperationHash = undefined;
+      state.linkingAppError = undefined;
     },
   },
   extraReducers: {
@@ -125,6 +131,7 @@ export const {
   setLinkingAppStarttime,
   setSponsorOperationHash,
   resetLinkingAppState,
+  setLinkingAppError,
 } = appsSlice.actions;
 
 export const {
@@ -193,6 +200,16 @@ export const selectLinkingAppStartTime = (state: RootState) =>
 
 export const selectSponsorOperationHash = (state: RootState) =>
   state.apps.sponsorOperationHash;
+
+// look up app info. Legacy apps send 'context' in the deep link but soulbound
+// apps send 'id', so look in both places
+export const selectAppInfoByAppId = createSelector(
+  selectAllApps,
+  (_: RootState, appId: string) => appId,
+  (apps, appId) =>
+    (find(propEq('id', appId))(apps) as AppInfo) ||
+    (find(propEq('context', appId))(apps) as AppInfo),
+);
 
 // Export reducer
 export default appsSlice.reducer;

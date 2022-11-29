@@ -7,7 +7,6 @@ type LinkingAppInfo = {
   appUserId: string;
   baseUrl?: string;
   v: number;
-  appInfo?: AppInfo;
 };
 
 type AppsState = {
@@ -20,6 +19,7 @@ type AppsState = {
   sponsorOperationHash?: string;
   linkingAppInfo?: LinkingAppInfo;
   linkingAppStartTime: number;
+  linkingAppError?: string;
 };
 
 /**

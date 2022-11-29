@@ -137,6 +137,9 @@ export enum channel_states {
 
 export enum sponsoring_steps {
   IDLE,
+  // Preparation
+  REFRESHING_APPS,
+  WAITING_USER_CONFIRMATION,
   // Sponsoring
   PRECHECK_APP, // Check if sponsoring was already requested
   WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm

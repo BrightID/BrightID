@@ -1,13 +1,17 @@
 import { Alert } from 'react-native';
-import i18next from 'i18next';
 import { create } from 'apisauce';
+import { find, propEq } from 'ramda';
+import { t } from 'i18next';
 import { getSponsorship } from '@/components/Apps/model';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
 import {
   addLinkedContext,
+  selectAllApps,
   selectAllSigs,
+  selectAppInfoByAppId,
   selectLinkingAppInfo,
   selectSponsoringStep,
+  setApps,
   setLinkingAppInfo,
   setLinkingAppStarttime,
   setSponsoringStep,
@@ -31,15 +35,14 @@ import {
 } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
 
-type startLinkingParams = {
-  appInfo: AppInfo;
+type requestLinkingParams = {
   appId: string;
   appUserId: string;
   baseUrl?: string;
   v: number;
 };
-export const startLinking =
-  (params: startLinkingParams): AppThunk<Promise<void>> =>
+export const requestLinking =
+  (params: requestLinkingParams): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const sponsoringStep = selectSponsoringStep(getState());
     if (sponsoringStep !== sponsoring_steps.IDLE) {
@@ -48,11 +51,60 @@ export const startLinking =
       );
       return;
     }
-    const isSponsored = selectIsSponsored(getState());
 
     // store app linking details
     dispatch(setLinkingAppInfo(params));
 
+    const api = getGlobalNodeApi();
+    dispatch(setSponsoringStep({ step: sponsoring_steps.REFRESHING_APPS }));
+    try {
+      // make sure to have latest appInfo available
+      const apps = await api.getApps();
+      dispatch(setApps(apps));
+    } catch (e) {
+      dispatch(
+        setSponsoringStep({
+          step: sponsoring_steps.ERROR_OP,
+          text: 'Failed to fetch latest appInfo',
+        }),
+      );
+    }
+
+    // First check if provided data is valid
+    const appInfo = selectAppInfoByAppId(getState(), params.appId);
+    if (!appInfo) {
+      // The app that should be linked was not found!
+      dispatch(
+        setSponsoringStep({
+          step: sponsoring_steps.ERROR_OP,
+          text: t('apps.alert.text.invalidContext', {
+            context: `${params.appId}`,
+          }),
+        }),
+      );
+      return;
+    }
+
+    if (params.v === 6 && !appInfo.usingBlindSig) {
+      // v6 apps HAVE to use blind sigs!
+      setSponsoringStep({
+        step: sponsoring_steps.ERROR_OP,
+        text: t('apps.alert.text.invalidApp', {
+          app: `${params.appId}`,
+        }),
+      });
+      return;
+    }
+
+    // request user confirmation
+    dispatch(
+      setSponsoringStep({ step: sponsoring_steps.WAITING_USER_CONFIRMATION }),
+    );
+  };
+
+export const startLinking =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const isSponsored = selectIsSponsored(getState());
     if (!isSponsored) {
       // trigger sponsoring workflow
       console.log(`Not yet sponsored, proceed with sponsoring`);
@@ -267,8 +319,8 @@ export const handleLinkContextOpUpdate =
     result: string;
   }): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
+    // make sure this is only called with the correct operation
     if (op.name !== 'Link ContextId') {
-      // make sure this is called with the correct operation
       return;
     }
 
@@ -287,7 +339,7 @@ export const handleLinkContextOpUpdate =
       if (state === operation_states.APPLIED) {
         dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_SUCCESS }));
       } else {
-        const text = i18next.t('apps.alert.text.linkFailure', {
+        const text = t('apps.alert.text.linkFailure', {
           context: `${op.context}`,
           result: `${result}`,
         });
@@ -312,7 +364,8 @@ export const linkAppId =
     const {
       keypair: { secretKey },
     } = getState();
-    const { appId, appUserId, appInfo } = selectLinkingAppInfo(getState());
+    const { appId, appUserId } = selectLinkingAppInfo(getState());
+    const appInfo = selectAppInfoByAppId(getState(), appId);
     const isPrimary = selectIsPrimaryDevice(getState());
 
     dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_WAITING_V6 }));
@@ -349,7 +402,7 @@ export const linkAppId =
       }
       if (previousAppUserIds.size) {
         // don't link app when userId is different
-        const text = i18next.t(
+        const text = t(
           'apps.alert.text.blindSigAlreadyLinkedDifferent',
           'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
           {
@@ -374,7 +427,7 @@ export const linkAppId =
         },
       );
       if (allVerificationsLinked) {
-        const text = i18next.t(
+        const text = t(
           'apps.alert.text.blindSigAlreadyLinked',
           'You are already linked with {{app}} with id {{appUserId}}',
           {
@@ -419,7 +472,7 @@ export const linkAppId =
     const linkedVerifications = previousSigs.map((sig) => sig.verification);
 
     if (sigs.length === 0) {
-      const text = i18next.t(
+      const text = t(
         'apps.alert.text.missingBlindSig',
         'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
         {
@@ -436,7 +489,7 @@ export const linkAppId =
     if (!isPrimary) {
       const missingSigs = sigs.filter((sig) => sig.sig === undefined);
       if (missingSigs.length) {
-        const text = i18next.t(
+        const text = t(
           'apps.alert.text.notPrimary',
           'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
           { app: appInfo.name },
@@ -478,7 +531,7 @@ export const linkAppId =
       } catch (err) {
         console.log(err);
         const msg = err instanceof Error ? err.message : err;
-        const text = i18next.t(
+        const text = t(
           'apps.alert.text.linkSigFailed',
           'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
           { verification: sig.verification, appId: appInfo.name, msg },
@@ -489,7 +542,7 @@ export const linkAppId =
 
     if (linkSuccess) {
       // at least one verification successfully linked
-      const text = i18next.t('apps.alert.text.linkSuccess', {
+      const text = t('apps.alert.text.linkSuccess', {
         context: appInfo.name,
       });
       // TODO If there were errors with other verifications (sigErrors array), how to show in the UI?
@@ -515,11 +568,11 @@ export const linkAppId =
         } catch (e) {
           if (!silent) {
             Alert.alert(
-              i18next.t(
+              t(
                 'apps.alert.title.callbackError',
                 'Error while executing app callback',
               ),
-              i18next.t(
+              t(
                 'apps.alert.text.callbackError',
                 `App {{context}} reported an error: {{error}}`,
                 {
