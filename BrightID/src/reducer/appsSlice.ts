@@ -76,7 +76,7 @@ const appsSlice = createSlice({
     setSigsUpdating(state, action: PayloadAction<boolean>) {
       state.sigsUpdating = action.payload;
     },
-    setSponsoringStep(
+    setAppLinkingStep(
       state,
       action: PayloadAction<{ step: AppLinkingStep_Type; text?: string }>,
     ) {
@@ -126,7 +126,7 @@ export const {
   removeAllSigs,
   updateSig,
   setSigsUpdating,
-  setSponsoringStep,
+  setAppLinkingStep,
   setLinkingAppInfo,
   setLinkingAppStarttime,
   setSponsorOperationHash,

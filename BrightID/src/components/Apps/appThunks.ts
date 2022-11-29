@@ -14,7 +14,7 @@ import {
   setLinkingAppError,
   setLinkingAppInfo,
   setLinkingAppStarttime,
-  setSponsoringStep,
+  setAppLinkingStep,
   setSponsorOperationHash,
   updateLinkedContext,
   updateSig,
@@ -44,10 +44,10 @@ type requestLinkingParams = {
 export const requestLinking =
   (params: requestLinkingParams): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
-    const sponsoringStep = selectApplinkingStep(getState());
-    if (sponsoringStep !== app_linking_steps.IDLE) {
+    const appLinkingStep = selectApplinkingStep(getState());
+    if (appLinkingStep !== app_linking_steps.IDLE) {
       console.log(
-        `Can't request linking when not in IDLE state. Current state: ${sponsoringStep}`,
+        `Can't request linking when not in IDLE state. Current state: ${appLinkingStep}`,
       );
       return;
     }
@@ -63,7 +63,7 @@ export const requestLinking =
     dispatch(setLinkingAppInfo(params));
 
     const api = getGlobalNodeApi();
-    dispatch(setSponsoringStep({ step: app_linking_steps.REFRESHING_APPS }));
+    dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
     try {
       // make sure to have latest appInfo available
       const apps = await api.getApps();
@@ -100,7 +100,7 @@ export const requestLinking =
 
     // request user confirmation
     dispatch(
-      setSponsoringStep({ step: app_linking_steps.WAITING_USER_CONFIRMATION }),
+      setAppLinkingStep({ step: app_linking_steps.WAITING_USER_CONFIRMATION }),
     );
   };
 
@@ -124,7 +124,7 @@ export const startLinking =
     } else {
       // trigger app linking
       console.log(`Already sponsored, proceed with linking`);
-      dispatch(setSponsoringStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
+      dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
       dispatch(linkAppOrContext());
     }
   };
@@ -177,7 +177,7 @@ export const requestSponsoring =
 
     // Check if sponsoring was already requested
     dispatch(
-      setSponsoringStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
+      setAppLinkingStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
     );
     const sp = await getSponsorship(appUserId, api);
     if (!sp || !sp.spendRequested) {
@@ -185,13 +185,13 @@ export const requestSponsoring =
       const op = await api.spendSponsorship(appId, appUserId);
       dispatch(addOperation(op));
       dispatch(
-        setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
+        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
       );
       return op.hash;
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
       dispatch(
-        setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
       );
       dispatch(waitForAppSponsoring());
     }
@@ -232,7 +232,7 @@ export const waitForAppSponsoring =
           console.log(`Sponsorship complete!`);
           clearInterval(intervalId);
           dispatch(
-            setSponsoringStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
+            setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
           );
           dispatch(setIsSponsoredv6(true));
           dispatch(linkAppOrContext());
@@ -261,7 +261,7 @@ export const handleSponsorOpUpdate =
     switch (state) {
       case operation_states.APPLIED:
         dispatch(
-          setSponsoringStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+          setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
         );
         dispatch(waitForAppSponsoring());
         break;
@@ -289,7 +289,7 @@ export const linkContextId =
       );
       return;
     }
-    dispatch(setSponsoringStep({ step: app_linking_steps.LINK_WAITING_V5 }));
+    dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
 
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
@@ -342,7 +342,7 @@ export const handleLinkContextOpUpdate =
     const applinkingStep = selectApplinkingStep(getState());
     if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
       if (state === operation_states.APPLIED) {
-        dispatch(setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS }));
+        dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
       } else {
         const text = t('apps.alert.text.linkFailure', {
           context: `${op.context}`,
@@ -371,7 +371,7 @@ export const linkAppId =
     const appInfo = selectAppInfoByAppId(getState(), appId);
     const isPrimary = selectIsPrimaryDevice(getState());
 
-    dispatch(setSponsoringStep({ step: app_linking_steps.LINK_WAITING_V6 }));
+    dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V6 }));
 
     // generate blind sig for apps with no verification expiration at linking time
     // and also ensure blind sig is not missed because of delay in generation for all apps
@@ -437,7 +437,7 @@ export const linkAppId =
           },
         );
         dispatch(
-          setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS, text }),
+          setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS, text }),
         );
         return;
       }
@@ -542,7 +542,7 @@ export const linkAppId =
     if (linkSuccess) {
       // at least one verification successfully linked
       // TODO If there were errors with other verifications (sigErrors array), how to show in the UI?
-      dispatch(setSponsoringStep({ step: app_linking_steps.LINK_SUCCESS }));
+      dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
 
       if (appInfo.callbackUrl) {
         const onSuccess = async () => {

@@ -30,7 +30,8 @@ const appsPersistConfig = {
   migrate: appsMigrate,
   blacklist: [
     'sigsUpdating',
-    'sponsoringStep',
+    'appLinkingStep',
+    'appLinkingStepText',
     'linkingAppStartTime',
     'linkingAppInfo',
     'linkingAppError',

@@ -167,7 +167,7 @@ const AppLinkingScreen = () => {
     appLinkingStep > app_linking_steps.IDLE &&
     appLinkingStep <= app_linking_steps.LINK_SUCCESS;
   const isSuccess = appLinkingStep === app_linking_steps.LINK_SUCCESS;
-  const appName = appInfo?.name || linkingAppInfo.appId;
+  const appName = appInfo?.name || linkingAppInfo?.appId || 'undefined';
 
   let resultContainer;
   if (error || isSuccess) {
@@ -257,7 +257,7 @@ const AppLinkingScreen = () => {
          <TouchableOpacity
          disabled={sponsoringStep >= sponsoring_steps.LINK_SUCCESS}
          onPress={() =>
-         dispatch(setSponsoringStep({ step: sponsoringStep + 1 }))
+         dispatch(setAppLinkingStep({ step: sponsoringStep + 1 }))
          }
          >
          <Text>+</Text>
@@ -265,7 +265,7 @@ const AppLinkingScreen = () => {
          <TouchableOpacity
          disabled={sponsoringStep <= sponsoring_steps.IDLE}
          onPress={() =>
-         dispatch(setSponsoringStep({ step: sponsoringStep - 1 }))
+         dispatch(setAppLinkingStep({ step: sponsoringStep - 1 }))
          }
          >
          <Text>-</Text>

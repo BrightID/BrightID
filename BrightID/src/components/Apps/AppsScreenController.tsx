@@ -38,7 +38,7 @@ const AppsScreenController = () => {
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
-  const sponsoringStep = useSelector(selectApplinkingStep);
+  const appLinkingStep = useSelector(selectApplinkingStep);
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector((state) => state.user.verifications);
   const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
@@ -158,7 +158,7 @@ const AppsScreenController = () => {
         refreshing={refreshing}
         sigsUpdating={sigsUpdating}
       />
-      {sponsoringStep !== app_linking_steps.IDLE && <AppLinkingScreen />}
+      {appLinkingStep !== app_linking_steps.IDLE && <AppLinkingScreen />}
     </>
   );
 };
