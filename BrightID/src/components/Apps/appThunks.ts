@@ -1,17 +1,17 @@
 import { Alert } from 'react-native';
 import { create } from 'apisauce';
-import { find, propEq } from 'ramda';
 import { t } from 'i18next';
 import { getSponsorship } from '@/components/Apps/model';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
 import {
   addLinkedContext,
-  selectAllApps,
   selectAllSigs,
   selectAppInfoByAppId,
+  selectLinkingAppError,
   selectLinkingAppInfo,
   selectSponsoringStep,
   setApps,
+  setLinkingAppError,
   setLinkingAppInfo,
   setLinkingAppStarttime,
   setSponsoringStep,
@@ -47,7 +47,14 @@ export const requestLinking =
     const sponsoringStep = selectSponsoringStep(getState());
     if (sponsoringStep !== sponsoring_steps.IDLE) {
       console.log(
-        `Can't start linking when not in IDLE state. Current state: ${sponsoringStep}`,
+        `Can't request linking when not in IDLE state. Current state: ${sponsoringStep}`,
+      );
+      return;
+    }
+    const linkingError = selectLinkingAppError(getState());
+    if (linkingError) {
+      console.log(
+        `Can't request linking when there is still an active error. Current errir: ${linkingError}`,
       );
       return;
     }
@@ -62,12 +69,7 @@ export const requestLinking =
       const apps = await api.getApps();
       dispatch(setApps(apps));
     } catch (e) {
-      dispatch(
-        setSponsoringStep({
-          step: sponsoring_steps.ERROR_OP,
-          text: 'Failed to fetch latest appInfo',
-        }),
-      );
+      dispatch(setLinkingAppError('Failed to fetch latest appInfo'));
     }
 
     // First check if provided data is valid
@@ -75,24 +77,24 @@ export const requestLinking =
     if (!appInfo) {
       // The app that should be linked was not found!
       dispatch(
-        setSponsoringStep({
-          step: sponsoring_steps.ERROR_OP,
-          text: t('apps.alert.text.invalidContext', {
+        setLinkingAppError(
+          t('apps.alert.text.invalidContext', {
             context: `${params.appId}`,
           }),
-        }),
+        ),
       );
       return;
     }
 
     if (params.v === 6 && !appInfo.usingBlindSig) {
       // v6 apps HAVE to use blind sigs!
-      setSponsoringStep({
-        step: sponsoring_steps.ERROR_OP,
-        text: t('apps.alert.text.invalidApp', {
-          app: `${params.appId}`,
-        }),
-      });
+      dispatch(
+        setLinkingAppError(
+          t('apps.alert.text.invalidApp', {
+            app: `${params.appId}`,
+          }),
+        ),
+      );
       return;
     }
 
@@ -104,6 +106,12 @@ export const requestLinking =
 
 export const startLinking =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const sponsoringStep = selectSponsoringStep(getState());
+    if (sponsoringStep !== sponsoring_steps.WAITING_USER_CONFIRMATION) {
+      console.log(
+        `Can't start linkApp when not in WAITING_USER_CONFIRMATION state. Current state: ${sponsoringStep}`,
+      );
+    }
     const isSponsored = selectIsSponsored(getState());
     if (!isSponsored) {
       // trigger sponsoring workflow
@@ -157,9 +165,9 @@ export const requestSponsoring =
   (): AppThunk<Promise<string | undefined>> =>
   async (dispatch: AppDispatch, getState) => {
     const sponsoringStep = selectSponsoringStep(getState());
-    if (sponsoringStep !== sponsoring_steps.IDLE) {
+    if (sponsoringStep !== sponsoring_steps.WAITING_USER_CONFIRMATION) {
       console.log(
-        `Can't request sponsoring when not in IDLE state. Current state: ${sponsoringStep}`,
+        `Can't request sponsoring when not in WAITING_USER_CONFIRMATION state. Current state: ${sponsoringStep}`,
       );
       return;
     }
@@ -225,7 +233,7 @@ export const waitForAppSponsoring =
       if (timeElapsed > SPONSOR_WAIT_TIME) {
         console.log(`Timeout waiting for sponsoring!`);
         clearInterval(intervalId);
-        dispatch(setSponsoringStep({ step: sponsoring_steps.ERROR_APP }));
+        dispatch(setLinkingAppError(`Timeout waiting for sponsoring!`));
       }
     }, SPONSORING_POLL_INTERVAL);
     console.log(`Started pollSponsorship ${intervalId}`);
@@ -248,20 +256,10 @@ export const handleSponsorOpUpdate =
         dispatch(waitForAppSponsoring());
         break;
       case operation_states.FAILED:
-        dispatch(
-          setSponsoringStep({
-            step: sponsoring_steps.ERROR_OP,
-            text: 'spend sponsor operation failed',
-          }),
-        );
+        dispatch(setLinkingAppError('spend sponsor operation failed'));
         break;
       case operation_states.EXPIRED:
-        dispatch(
-          setSponsoringStep({
-            step: sponsoring_steps.ERROR_OP,
-            text: 'spend sponsor operation timed out',
-          }),
-        );
+        dispatch(setLinkingAppError('spend sponsor operation timed out'));
         break;
       case operation_states.UNKNOWN:
       case operation_states.INIT:
@@ -301,10 +299,7 @@ export const linkContextId =
         }),
       );
     } catch (e) {
-      setSponsoringStep({
-        step: sponsoring_steps.LINK_ERROR,
-        text: `${(e as Error).message}`,
-      });
+      dispatch(setLinkingAppError(`${(e as Error).message}`));
     }
   };
 
@@ -343,9 +338,7 @@ export const handleLinkContextOpUpdate =
           context: `${op.context}`,
           result: `${result}`,
         });
-        dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
-        );
+        dispatch(setLinkingAppError(text));
       }
     }
   };
@@ -411,9 +404,7 @@ export const linkAppId =
             previousAppUserIds: Array.from(previousAppUserIds).join(', '),
           },
         );
-        dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
-        );
+        dispatch(setLinkingAppError(text));
         return;
       }
 
@@ -481,7 +472,7 @@ export const linkAppId =
           linkedVerifications: linkedVerifications.join(),
         },
       );
-      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
+      dispatch(setLinkingAppError(text));
       return;
     }
 
@@ -494,9 +485,7 @@ export const linkAppId =
           'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
           { app: appInfo.name },
         );
-        dispatch(
-          setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }),
-        );
+        dispatch(setLinkingAppError(text));
         return;
       }
     }
@@ -587,6 +576,6 @@ export const linkAppId =
     } else {
       // No verification could be linked
       const text = sigErrors.join(`, `);
-      dispatch(setSponsoringStep({ step: sponsoring_steps.LINK_ERROR, text }));
+      dispatch(setLinkingAppError(text));
     }
   };

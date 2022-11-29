@@ -18,10 +18,10 @@ import { fontSize } from '@/theme/fonts';
 import {
   resetLinkingAppState,
   selectAppInfoByAppId,
+  selectLinkingAppError,
   selectLinkingAppInfo,
   selectSponsoringStep,
   selectSponsoringStepText,
-  setSponsoringStep,
 } from '@/reducer/appsSlice';
 import { sponsoring_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
@@ -43,11 +43,6 @@ const ConfirmationView = ({ appName }) => {
 
   return (
     <View style={styles.stepContainer}>
-      <View style={styles.stepHeaderTextContainer}>
-        <Text style={styles.stepHeaderText}>
-          {t('apps.alert.title.linkApp')}
-        </Text>
-      </View>
       <View style={styles.statusContainer}>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>
@@ -79,11 +74,15 @@ const ConfirmationView = ({ appName }) => {
 
 const SponsoringView = ({ sponsoringStep, appName, text }) => {
   const isSponsored = useSelector(selectIsSponsored);
+  const error = useSelector(selectLinkingAppError);
 
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
   switch (sponsoringStep) {
+    case sponsoring_steps.REFRESHING_APPS:
+      stateDescription = `Verifying app details`;
+      break;
     case sponsoring_steps.PRECHECK_APP:
       stateDescription = `Checking for prior sponsoring request`;
       break;
@@ -93,20 +92,15 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
     case sponsoring_steps.WAITING_APP:
       stateDescription = `Waiting for ${appName} to sponsor you`;
       break;
-    case sponsoring_steps.ERROR_OP:
-      iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = `Error submitting request sponsorship operation!`;
-      break;
-    case sponsoring_steps.ERROR_APP:
-      iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = `Timeout waiting for ${appName} to sponsor you!`;
-      break;
-    case sponsoring_steps.SUCCESS:
     case sponsoring_steps.LINK_WAITING_V5:
+      stateDescription = `Waiting for link operation to confirm`;
+      break;
     case sponsoring_steps.LINK_WAITING_V6:
+      stateDescription = `Waiting for link function to complete`;
+      break;
     case sponsoring_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully sponsored!`;
+      stateDescription = `Successfully linked!`;
       break;
     default:
       if (isSponsored) {
@@ -118,74 +112,12 @@ const SponsoringView = ({ sponsoringStep, appName, text }) => {
       }
   }
 
-  return (
-    <View style={styles.stepContainer}>
-      <View style={styles.stepHeaderTextContainer}>
-        <Text style={styles.stepHeaderText}>Sponsoring phase</Text>
-      </View>
-      <View style={styles.statusContainer}>
-        <View>
-          {iconData ? (
-            <IonIcons
-              style={{ alignSelf: 'center' }}
-              size={DEVICE_LARGE ? 64 : 44}
-              name={iconData.name}
-              color={iconData.color}
-            />
-          ) : (
-            <Spinner
-              isVisible={true}
-              size={DEVICE_LARGE ? 64 : 44}
-              type="Wave"
-              color={ORANGE}
-            />
-          )}
-        </View>
-        <View style={styles.infoTextContainer}>
-          <Text style={styles.infoText}>{stateDescription}</Text>
-          {stateDetails && (
-            <Text style={styles.infoSubText}>{stateDetails}</Text>
-          )}
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const LinkingView = ({ sponsoringStep, text }) => {
-  const { t } = useTranslation();
-  let iconData: { color: string; name: string };
-  let stateDescription: string;
-  const stateDetails = text;
-
-  switch (sponsoringStep) {
-    case sponsoring_steps.REFRESHING_APPS:
-      stateDescription = `Getting latest appInfo`;
-      break;
-    case sponsoring_steps.LINK_WAITING_V5:
-      stateDescription = `Waiting for link operation to confirm`;
-      break;
-    case sponsoring_steps.LINK_WAITING_V6:
-      stateDescription = `Waiting for link function to complete`;
-      break;
-    case sponsoring_steps.LINK_ERROR:
-      iconData = { color: RED, name: 'alert-circle-outline' };
-      stateDescription = t('apps.alert.title.linkingFailed');
-      break;
-    case sponsoring_steps.LINK_SUCCESS:
-      iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully linked!`;
-      break;
-    default:
-      iconData = { color: DARKER_GREY, name: 'information-circle-outline' };
-      stateDescription = `Waiting for sponsoring before linking phase can start.`;
+  if (error) {
+    iconData = { color: RED, name: 'alert-circle-outline' };
   }
 
   return (
     <View style={styles.stepContainer}>
-      <View style={styles.stepHeaderTextContainer}>
-        <Text style={styles.stepHeaderText}>Linking phase</Text>
-      </View>
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
@@ -222,31 +154,24 @@ const AppLinkingScreen = () => {
   const sponsoringStep = useSelector(selectSponsoringStep);
   const sponsoringStepText = useSelector(selectSponsoringStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
+  const error = useSelector(selectLinkingAppError);
   const appInfo = useSelector((state: RootState) =>
     linkingAppInfo
       ? selectAppInfoByAppId(state, linkingAppInfo.appId)
       : undefined,
   );
 
-  const error_states = [
-    sponsoring_steps.ERROR_OP,
-    sponsoring_steps.ERROR_APP,
-    sponsoring_steps.LINK_ERROR,
-  ];
-  const isError = error_states.includes(sponsoringStep);
   const isSuccess = sponsoringStep === sponsoring_steps.LINK_SUCCESS;
-
   const showConfirm =
     sponsoringStep === sponsoring_steps.WAITING_USER_CONFIRMATION;
-
-  const showSponsoring =
+  const showProgress =
     sponsoringStep > sponsoring_steps.WAITING_USER_CONFIRMATION &&
-    sponsoringStep <= sponsoring_steps.SUCCESS;
+    sponsoringStep <= sponsoring_steps.LINK_SUCCESS;
 
   const appName = appInfo?.name || linkingAppInfo.appId;
 
   let resultContainer;
-  if (isError || isSuccess) {
+  if (error || isSuccess) {
     resultContainer = (
       <>
         <View style={styles.resultContainer}>
@@ -258,11 +183,14 @@ const AppLinkingScreen = () => {
                 })}
               </Text>
             )}
-            {isError && (
-              <Text style={styles.resultContainerErrorText}>
-                {t('apps.alert.title.linkingFailed')}
-              </Text>
-            )}
+            {error ? (
+              <>
+                <Text style={styles.resultContainerErrorText}>
+                  {t('apps.alert.title.linkingFailed')}
+                </Text>
+                <Text style={styles.infoSubText}>{error}</Text>
+              </>
+            ) : null}
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -284,6 +212,33 @@ const AppLinkingScreen = () => {
     navigation.goBack();
   };
 
+  let content;
+  if (showConfirm) {
+    content = (
+      <>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>{t('apps.alert.title.linkApp')}</Text>
+        </View>
+        <ConfirmationView appName={appName} />
+      </>
+    );
+  } else if (showProgress) {
+    content = (
+      <>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>
+            Linking with <Text style={styles.headerTextAppname}>{appName}</Text>
+          </Text>
+        </View>
+        <SponsoringView
+          sponsoringStep={sponsoringStep}
+          text={sponsoringStepText}
+          appName={appName}
+        />
+      </>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <BlurView
@@ -296,49 +251,28 @@ const AppLinkingScreen = () => {
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
-        {sponsoringStep !== sponsoring_steps.IDLE && (
-          <>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerText}>
-                Linking with{' '}
-                <Text style={styles.headerTextAppname}>{appName}</Text>
-              </Text>
-            </View>
-            {showConfirm && <ConfirmationView appName={appName} />}
-
-            {showSponsoring ? (
-              <SponsoringView
-                sponsoringStep={sponsoringStep}
-                text={sponsoringStepText}
-                appName={appName}
-              />
-            ) : (
-              <LinkingView
-                sponsoringStep={sponsoringStep}
-                text={sponsoringStepText}
-              />
-            )}
-            {resultContainer}
-          </>
-        )}
-        <View style={{ marginBottom: 2 }}>
-          <TouchableOpacity
-            disabled={sponsoringStep >= sponsoring_steps.LINK_SUCCESS}
-            onPress={() =>
-              dispatch(setSponsoringStep({ step: sponsoringStep + 1 }))
-            }
-          >
-            <Text>+</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            disabled={sponsoringStep <= sponsoring_steps.IDLE}
-            onPress={() =>
-              dispatch(setSponsoringStep({ step: sponsoringStep - 1 }))
-            }
-          >
-            <Text>-</Text>
-          </TouchableOpacity>
-        </View>
+        {content}
+        {resultContainer}
+        {/*
+         <View style={{ marginBottom: 2 }}>
+         <TouchableOpacity
+         disabled={sponsoringStep >= sponsoring_steps.LINK_SUCCESS}
+         onPress={() =>
+         dispatch(setSponsoringStep({ step: sponsoringStep + 1 }))
+         }
+         >
+         <Text>+</Text>
+         </TouchableOpacity>
+         <TouchableOpacity
+         disabled={sponsoringStep <= sponsoring_steps.IDLE}
+         onPress={() =>
+         dispatch(setSponsoringStep({ step: sponsoringStep - 1 }))
+         }
+         >
+         <Text>-</Text>
+         </TouchableOpacity>
+         </View>
+         */}
       </View>
     </View>
   );

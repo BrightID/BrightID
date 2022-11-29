@@ -33,6 +33,7 @@ const appsPersistConfig = {
     'sponsoringStep',
     'linkingAppStartTime',
     'linkingAppInfo',
+    'linkingAppError',
   ],
 };
 
