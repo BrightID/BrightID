@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
@@ -42,6 +42,7 @@ const AppsScreenController = () => {
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector((state) => state.user.verifications);
   const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
+  const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
   const [totalApps, setTotalApps] = useState(0);
@@ -125,10 +126,16 @@ const AppsScreenController = () => {
     if (route.params.appId && api) {
       // get all app linking details from route params
       const linkingParams = parseRouteParams(route.params);
+      // reset route params
+      navigation.setParams({
+        baseUrl: undefined,
+        appId: undefined,
+        appUserId: undefined,
+      });
       // start linking process
       dispatch(requestLinking(linkingParams));
     }
-  }, [t, api, dispatch, route.params]);
+  }, [t, api, dispatch, route.params, navigation]);
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
