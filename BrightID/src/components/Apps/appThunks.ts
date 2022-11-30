@@ -69,7 +69,9 @@ export const requestLinking =
       const apps = await api.getApps();
       dispatch(setApps(apps));
     } catch (e) {
-      dispatch(setLinkingAppError('Failed to fetch latest appInfo'));
+      const msg = e instanceof Error ? e.message : `${e}`;
+      dispatch(setLinkingAppError(`Failed to fetch latest appInfo: ${msg}`));
+      return;
     }
 
     // First check if provided data is valid
