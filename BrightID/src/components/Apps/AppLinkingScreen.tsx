@@ -54,18 +54,18 @@ const ConfirmationView = ({ appName }) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          testID="RejectLinking"
-          style={styles.resetButton}
-          onPress={rejectHandler}
-        >
-          <Text style={styles.resetText}>{t('common.alert.no')}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
           testID="Confirminking"
-          style={styles.resetButton}
+          style={[styles.modalButton, styles.submitButton]}
           onPress={confirmHandler}
         >
-          <Text style={styles.resetText}>{t('common.alert.yes')}</Text>
+          <Text style={styles.submitButtonText}>{t('common.alert.yes')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="RejectLinking"
+          style={[styles.modalButton, styles.cancelButton]}
+          onPress={rejectHandler}
+        >
+          <Text style={styles.cancelButtonText}>{t('common.alert.no')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     width: '90%',
     borderRadius: 25,
-    padding: DEVICE_LARGE ? 30 : 25,
+    padding: DEVICE_LARGE ? 20 : 15,
   },
   divider: {
     width: DEVICE_LARGE ? 240 : 200,
@@ -369,7 +369,6 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   resultContainer: {
-    width: '75%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
@@ -388,7 +387,40 @@ const styles = StyleSheet.create({
     color: RED,
   },
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 15,
+  },
+  modalButton: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    backgroundColor: WHITE,
+    borderRadius: 50,
+    borderColor: DARKER_GREY,
+    borderWidth: 1,
+  },
+  cancelButtonText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[15],
+    color: DARKER_GREY,
+  },
+  submitButton: {
+    backgroundColor: GREEN,
+    borderRadius: 50,
+    borderColor: GREEN,
+    borderWidth: 1,
+  },
+  submitButtonText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   resetButton: {
     flexDirection: 'row',
