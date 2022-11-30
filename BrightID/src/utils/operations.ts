@@ -27,7 +27,6 @@ const handleOpUpdate = (
   switch (op.name) {
     case 'Link ContextId':
       store.dispatch(handleLinkContextOpUpdate({ op, state, result }));
-      showDefaultError = true;
       break;
 
     case 'Connect':
