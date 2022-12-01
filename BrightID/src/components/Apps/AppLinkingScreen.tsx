@@ -252,26 +252,6 @@ const AppLinkingScreen = () => {
       <View style={styles.modalContainer}>
         {content}
         {resultContainer}
-        {/*
-         <View style={{ marginBottom: 2 }}>
-         <TouchableOpacity
-         disabled={sponsoringStep >= sponsoring_steps.LINK_SUCCESS}
-         onPress={() =>
-         dispatch(setAppLinkingStep({ step: sponsoringStep + 1 }))
-         }
-         >
-         <Text>+</Text>
-         </TouchableOpacity>
-         <TouchableOpacity
-         disabled={sponsoringStep <= sponsoring_steps.IDLE}
-         onPress={() =>
-         dispatch(setAppLinkingStep({ step: sponsoringStep - 1 }))
-         }
-         >
-         <Text>-</Text>
-         </TouchableOpacity>
-         </View>
-         */}
       </View>
     </View>
   );
