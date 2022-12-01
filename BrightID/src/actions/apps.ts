@@ -23,7 +23,7 @@ import { BrightIdNetwork } from '@/utils/constants';
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
 export const updateBlindSig =
-  (app): AppThunk =>
+  (app): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const {
       user: { verifications, id },
