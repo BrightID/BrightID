@@ -361,7 +361,7 @@ export const linkAppId =
     const applinkingStep = selectApplinkingStep(getState());
     if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
       console.log(
-        `Can't start linkAppId when not in SUCCESS state. Current state: ${applinkingStep}`,
+        `Can't start linkAppId when not in SPONSOR_SUCCESS state. Current state: ${applinkingStep}`,
       );
       return;
     }
@@ -548,15 +548,13 @@ export const linkAppId =
 
       if (appInfo.callbackUrl) {
         const onSuccess = async () => {
-          if (appInfo.callbackUrl) {
-            const api = create({
-              baseURL: appInfo.callbackUrl,
-            });
-            await api.post('/', {
-              network,
-              appUserId,
-            });
-          }
+          const api = create({
+            baseURL: appInfo.callbackUrl,
+          });
+          await api.post('/', {
+            network,
+            appUserId,
+          });
         };
 
         try {
