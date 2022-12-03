@@ -7,6 +7,9 @@ const ProdCandidates = [
   'http://brightid2.idealmoney.io',
   'https://brightid.59836e71dd6e5898.dyndns.dappnode.io',
   'http://bright.daosquare.io',
+  'https://brightid.clr.fund',
+  'https://aura-node.brightid.org',
+  'https://aura-test.brightid.org',
   // Following nodes exist, but currently fail the NodeChooser tests
   //  'http://brightid.onehive.org',
   //  'http://node.topupgifter.com',
