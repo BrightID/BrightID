@@ -151,7 +151,7 @@ export const updateBlindSig =
   };
 
 export const updateBlindSigs =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
         const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
@@ -159,7 +159,7 @@ export const updateBlindSigs =
         console.log('getting blind sigs started');
         for (const app of expireableBlindSigApps) {
           try {
-            dispatch(updateBlindSig(app));
+            await dispatch(updateBlindSig(app));
           } catch {
             console.log(`error in getting blind sig for ${app}`);
           }
