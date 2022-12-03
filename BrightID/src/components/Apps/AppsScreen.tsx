@@ -29,7 +29,6 @@ type Props = {
   setSearch: (term: string) => void;
   filteredApps: AppInfo[];
   refreshing: boolean;
-  sigsUpdating: boolean;
   refreshApps: () => void;
 };
 

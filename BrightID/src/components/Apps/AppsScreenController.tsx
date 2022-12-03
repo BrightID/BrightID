@@ -9,6 +9,7 @@ import {
   selectAllLinkedContexts,
   selectAllLinkedSigs,
   selectApplinkingStep,
+  selectSigsUpdating,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
 import { fetchApps, selectIsSponsored } from '@/actions';
@@ -41,7 +42,6 @@ const AppsScreenController = () => {
   const appLinkingStep = useSelector(selectApplinkingStep);
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector((state) => state.user.verifications);
-  const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
   const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
@@ -163,7 +163,6 @@ const AppsScreenController = () => {
         filteredApps={filteredApps}
         refreshApps={refreshApps}
         refreshing={refreshing}
-        sigsUpdating={sigsUpdating}
       />
       {appLinkingStep !== app_linking_steps.IDLE && <AppLinkingScreen />}
     </>
