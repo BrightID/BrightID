@@ -18,6 +18,8 @@ import {
   setSponsorOperationHash,
   updateLinkedContext,
   updateSig,
+  selectSigsUpdating,
+  setSigsUpdating,
 } from '@/reducer/appsSlice';
 import {
   BrightIdNetwork,
@@ -25,6 +27,7 @@ import {
   SPONSOR_WAIT_TIME,
   SPONSORING_POLL_INTERVAL,
   app_linking_steps,
+  UPDATE_BLIND_SIG_WAIT_TIME,
 } from '@/utils/constants';
 import { addOperation, Operation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
@@ -139,13 +142,6 @@ export const linkAppOrContext =
         `Can't start linkApp when not in SUCCESS state. Current state: ${applinkingStep}`,
       );
     }
-    // TODO How to handle below condition?
-    /*
-     if (sigsUpdating) {
-     console.log(`Waiting for updating sigs before linking...`);
-     return;
-     }
-     */
     // sponsoring ok, now start linking.
     const { v } = selectLinkingAppInfo(getState());
     switch (v) {
@@ -372,12 +368,58 @@ export const linkAppId =
     const { appId, appUserId } = selectLinkingAppInfo(getState());
     const appInfo = selectAppInfoByAppId(getState(), appId);
     const isPrimary = selectIsPrimaryDevice(getState());
+    const sigsUpdating = selectSigsUpdating(getState());
 
     dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V6 }));
 
-    // generate blind sig for apps with no verification expiration at linking time
-    // and also ensure blind sig is not missed because of delay in generation for all apps
-    await dispatch(updateBlindSig(appInfo));
+    if (sigsUpdating) {
+      console.log(`Waiting for updating sigs before linking...`);
+      // Create promise that polls on sigsUpdating state and resolves once it is false.
+      const sigsUpdatingPromise = new Promise<void>((resolve, reject) => {
+        const waitingStartTime = Date.now();
+        const intervalId = setInterval(() => {
+          const timeElapsed = Date.now() - waitingStartTime;
+          const stillUpdating = selectSigsUpdating(getState());
+          if (!stillUpdating) {
+            console.log(`blindSigs update finished! Continue with linking...`);
+            clearInterval(intervalId);
+            resolve();
+          }
+          if (timeElapsed > UPDATE_BLIND_SIG_WAIT_TIME) {
+            clearInterval(intervalId);
+            reject(new Error(`Timeout waiting for sigsUpdating to finish!`));
+          } else {
+            console.log(
+              `Still waiting for sigsUpdating to finish. Time elapsed: ${timeElapsed}ms`,
+            );
+          }
+        }, 500);
+      });
+
+      try {
+        await sigsUpdatingPromise;
+      } catch (e) {
+        dispatch(
+          setLinkingAppError(`Timeout waiting for update of blind sigs!`),
+        );
+        return;
+      }
+
+      // double-check app is still in linking workflow
+      const currentStep = selectApplinkingStep(getState());
+      if (currentStep !== app_linking_steps.SPONSOR_SUCCESS) {
+        console.log(
+          `Can't continue linkAppId when not in SPONSOR_SUCCESS state. Current state: ${applinkingStep}`,
+        );
+        return;
+      }
+    } else {
+      dispatch(setSigsUpdating(true));
+      // generate blind sig for apps with no verification expiration at linking time
+      // and also ensure blind sig is not missed because of delay in generation for all apps
+      await dispatch(updateBlindSig(appInfo));
+      dispatch(setSigsUpdating(false));
+    }
 
     const vel = appInfo.verificationExpirationLength;
     const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;

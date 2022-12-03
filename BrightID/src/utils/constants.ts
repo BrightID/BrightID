@@ -17,6 +17,8 @@ const day = 24 * hour;
 export const OPERATION_TRACE_TIME = 2 * minute;
 // Max. time to wait for app to respond to sponsoring request
 export const SPONSOR_WAIT_TIME = 4 * minute;
+// Max. time to wait for app to finish updating blind signatures
+export const UPDATE_BLIND_SIG_WAIT_TIME = 2 * minute;
 // How long to keep "done" operations (success, failed or expired) in local redux store
 export const LOCAL_OPERATION_KEEP_THRESHOLD = 7 * day;
 export const operation_states = {
