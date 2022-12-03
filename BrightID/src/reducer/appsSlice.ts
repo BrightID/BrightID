@@ -204,6 +204,8 @@ export const selectSponsorOperationHash = (state: RootState) =>
 export const selectLinkingAppError = (state: RootState) =>
   state.apps.linkingAppError;
 
+export const selectSigsUpdating = (state: RootState) => state.apps.sigsUpdating;
+
 // look up app info. Legacy apps send 'context' in the deep link but soulbound
 // apps send 'id', so look in both places
 export const selectAppInfoByAppId = createSelector(

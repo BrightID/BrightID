@@ -12,6 +12,7 @@ import {
   setSigsUpdating,
   selectAllSigs,
   selectExpireableBlindSigApps,
+  selectSigsUpdating,
 } from '@/reducer/appsSlice';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
@@ -154,18 +155,23 @@ export const updateBlindSigs =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     return new Promise(() => {
       InteractionManager.runAfterInteractions(async () => {
-        const expireableBlindSigApps = selectExpireableBlindSigApps(getState());
-        dispatch(setSigsUpdating(true));
-        console.log('getting blind sigs started');
-        for (const app of expireableBlindSigApps) {
-          try {
-            await dispatch(updateBlindSig(app));
-          } catch {
-            console.log(`error in getting blind sig for ${app}`);
+        const sigsUpdating = selectSigsUpdating(getState());
+        if (!sigsUpdating) {
+          dispatch(setSigsUpdating(true));
+          const expireableBlindSigApps = selectExpireableBlindSigApps(
+            getState(),
+          );
+          console.log('getting blind sigs started');
+          for (const app of expireableBlindSigApps) {
+            try {
+              await dispatch(updateBlindSig(app));
+            } catch {
+              console.log(`error in getting blind sig for ${app}`);
+            }
           }
+          dispatch(setSigsUpdating(false));
+          console.log('getting blind sigs finished');
         }
-        dispatch(setSigsUpdating(false));
-        console.log('getting blind sigs finished');
       });
     });
   };
