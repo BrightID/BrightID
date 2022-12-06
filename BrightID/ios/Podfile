@@ -4,6 +4,17 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
+# def fix_hermes(app_name)
+#   path = "Pods/Target Support Files/Pods-" + app_name + "/Pods-" + app_name + "-frameworks.sh"
+#   lines = File.readlines(path)
+#   lines.insert(181, '  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/hermes.framework"'+"\n")
+#   lines.insert(183, 'if [[ "$CONFIGURATION" == "Release" ]]; then'+"\n")
+#   lines.insert(184, '  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/hermes.framework"'+"\n")
+#   lines.insert(185, "fi\n")
+#   File.write(path, lines.join, mode: "w")
+#   puts "Hermes fixed"
+# end
+
 target 'BrightID' do
   config = use_native_modules!
 
@@ -15,7 +26,7 @@ target 'BrightID' do
     # Hermes is now enabled by default. Disable by setting this flag to false.
     # Upcoming versions of React Native may rely on get_default_flags(), but
     # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => true,
+    :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
     #
@@ -39,5 +50,6 @@ target 'BrightID' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    # fix_hermes("BrightID")
   end
 end
