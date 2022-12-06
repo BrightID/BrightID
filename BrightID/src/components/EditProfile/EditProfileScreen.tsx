@@ -777,6 +777,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: DARK_ORANGE,
+    marginRight: 'auto',
   },
   editNameInput: {
     fontFamily: 'Poppins-Medium',
@@ -792,13 +793,12 @@ const styles = StyleSheet.create({
   },
   shareSocialMediaToggleContainer: {
     alignItems: 'center',
-    paddingBottom: DEVICE_LARGE ? 4 : 2,
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 6,
   },
-  syncSocialMediaSwitch: {
-    flex: 1,
-  },
+  syncSocialMediaSwitch: {},
   bottomDivider: {
     width: '100%',
     borderBottomColor: LIGHT_GREY,
