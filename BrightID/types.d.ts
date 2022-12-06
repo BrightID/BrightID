@@ -238,7 +238,6 @@ declare global {
   };
 
   type BrightIdSocialAppData = {
-    linked: boolean;
     appUserId: string;
     token: string;
     synced: boolean;
@@ -247,6 +246,7 @@ declare global {
   type SocialMedia = SocialMediaShared & {
     shareWithConnections?: boolean;
     brightIdSocialAppData?: BrightIdSocialAppData;
+    discoverable?: boolean;
   };
 
   type PhoneNumberObject = {

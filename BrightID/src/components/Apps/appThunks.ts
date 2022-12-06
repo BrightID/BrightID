@@ -39,13 +39,14 @@ import {
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
 
 type requestLinkingParams = {
-  appId: string;
-  appUserId: string;
-  baseUrl?: string;
-  v: number;
+  linkingAppInfo: LinkingAppInfo;
+  skipUserConfirmation?: boolean;
 };
 export const requestLinking =
-  (params: requestLinkingParams): AppThunk<Promise<void>> =>
+  ({
+    linkingAppInfo,
+    skipUserConfirmation,
+  }: requestLinkingParams): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const appLinkingStep = selectApplinkingStep(getState());
     if (appLinkingStep !== app_linking_steps.IDLE) {
@@ -57,13 +58,14 @@ export const requestLinking =
     const linkingError = selectLinkingAppError(getState());
     if (linkingError) {
       console.log(
-        `Can't request linking when there is still an active error. Current errir: ${linkingError}`,
+        `Can't request linking when there is still an active error. Current error: ${linkingError}`,
       );
       return;
     }
 
     // store app linking details
-    dispatch(setLinkingAppInfo(params));
+    dispatch(setLinkingAppInfo(linkingAppInfo));
+    const { appId, v } = linkingAppInfo;
 
     const api = getGlobalNodeApi();
     dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
@@ -78,59 +80,71 @@ export const requestLinking =
     }
 
     // First check if provided data is valid
-    const appInfo = selectAppInfoByAppId(getState(), params.appId);
+    const appInfo = selectAppInfoByAppId(getState(), appId);
     if (!appInfo) {
       // The app that should be linked was not found!
       dispatch(
         setLinkingAppError(
           t('apps.alert.text.invalidContext', {
-            context: `${params.appId}`,
+            context: `${appId}`,
           }),
         ),
       );
       return;
     }
 
-    if (params.v === 6 && !appInfo.usingBlindSig) {
+    if (v === 6 && !appInfo.usingBlindSig) {
       // v6 apps HAVE to use blind sigs!
       dispatch(
         setLinkingAppError(
           t('apps.alert.text.invalidApp', {
-            app: `${params.appId}`,
+            app: `${appId}`,
           }),
         ),
       );
       return;
     }
 
-    // request user confirmation
-    dispatch(
-      setAppLinkingStep({ step: app_linking_steps.WAITING_USER_CONFIRMATION }),
-    );
+    if (skipUserConfirmation) {
+      dispatch(
+        setAppLinkingStep({
+          step: app_linking_steps.USER_CONFIRMED,
+        }),
+      );
+      await dispatch(startLinking());
+    } else {
+      dispatch(
+        setAppLinkingStep({
+          step: app_linking_steps.WAITING_USER_CONFIRMATION,
+        }),
+      );
+    }
   };
 
 export const startLinking =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.WAITING_USER_CONFIRMATION) {
+    if (applinkingStep !== app_linking_steps.USER_CONFIRMED) {
       console.log(
-        `Can't start linkApp when not in WAITING_USER_CONFIRMATION state. Current state: ${applinkingStep}`,
+        `Can't start linkApp when not in USER_CONFIRMED state. Current state: ${applinkingStep}`,
       );
     }
     const isSponsored = selectIsSponsored(getState());
-    if (!isSponsored) {
+    const { skipSponsoring } = selectLinkingAppInfo(getState());
+
+    if (isSponsored || skipSponsoring) {
+      // trigger app linking
+      console.log(`Sponsoring not required, proceed with linking`);
+      dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
+      await dispatch(linkAppOrContext());
+    } else {
       // trigger sponsoring workflow
-      console.log(`Not yet sponsored, proceed with sponsoring`);
+      console.log(`Sponsoring required`);
       const opHash = await dispatch(requestSponsoring());
       if (opHash) {
         console.log(`Sponsor op hash: ${opHash}`);
         dispatch(setSponsorOperationHash(opHash));
       }
-    } else {
-      // trigger app linking
-      console.log(`Already sponsored, proceed with linking`);
-      dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
-      dispatch(linkAppOrContext());
     }
   };
 
@@ -147,11 +161,11 @@ export const linkAppOrContext =
     switch (v) {
       case 5:
         // v5 app
-        dispatch(linkContextId());
+        await dispatch(linkContextId());
         break;
       case 6:
         // v6 app
-        dispatch(linkAppId({ silent: false }));
+        await dispatch(linkAppId());
         break;
       default:
         console.log(`Unhandled app version v: ${v}`);
@@ -352,8 +366,7 @@ export const handleLinkContextOpUpdate =
   };
 
 export const linkAppId =
-  ({ silent }: { silent: boolean }): AppThunk<Promise<void>> =>
-  async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
     if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
       console.log(
@@ -523,7 +536,7 @@ export const linkAppId =
         {
           appId: appInfo.name,
           missingVerifications: missingVerifications.join(),
-          linkedVerifications: linkedVerifications.join(),
+          linkedVerifications: linkedVerifications.join() || 'None',
         },
       );
       dispatch(setLinkingAppError(text));
@@ -602,22 +615,20 @@ export const linkAppId =
         try {
           await onSuccess();
         } catch (e) {
-          if (!silent) {
-            Alert.alert(
-              t(
-                'apps.alert.title.callbackError',
-                'Error while executing app callback',
-              ),
-              t(
-                'apps.alert.text.callbackError',
-                `App {{context}} reported an error: {{error}}`,
-                {
-                  context: appInfo.name,
-                  error: (e as Error).message,
-                },
-              ),
-            );
-          }
+          Alert.alert(
+            t(
+              'apps.alert.title.callbackError',
+              'Error while executing app callback',
+            ),
+            t(
+              'apps.alert.text.callbackError',
+              `App {{context}} reported an error: {{error}}`,
+              {
+                context: appInfo.name,
+                error: (e as Error).message,
+              },
+            ),
+          );
         }
       }
     } else {

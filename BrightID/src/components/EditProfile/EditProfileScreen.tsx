@@ -42,27 +42,36 @@ import { fontSize } from '@/theme/fonts';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
 import {
-  selectSyncSocialMediaEnabled,
+  selectAppInfoByAppId,
+  selectApplinkingStep,
+  selectLinkingAppInfo,
+  selectUserVerifications,
   setName,
   setPhoto,
-  setSyncSocialMediaEnabled,
 } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
   saveSocialMedia,
   selectExistingSocialMedia,
+  setDiscoverable,
   setProfileDisplayWidth,
-} from '../../reducer/socialMediaSlice';
+} from '@/reducer/socialMediaSlice';
 import {
   selectAllSocialMediaVariationsByType,
   selectSocialMediaVariationById,
+  selectSocialMediaVariationsWithBrightIDApp,
 } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
 import {
+  allowDiscovery,
+  linkSocialMediaApp,
+  removeSocialFromServer,
   removeSocialMediaThunk,
-  setSyncSocialMediaEnabledThunk,
+  syncSocialMediaChanges,
 } from '@/components/EditProfile/socialMediaThunks';
 import { getShareWithConnectionsValue } from '@/utils/socialUtils';
+import { app_linking_steps } from '@/utils/constants';
+import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -178,14 +187,24 @@ const SocialMediaLink = (props: {
   socialMedia: SocialMedia;
   type: SocialMediaType;
 }) => {
+  const { socialMedia } = props;
+  const { id, profile, profileDisplayWidth, order } = socialMedia;
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order } = props.socialMedia;
-  const { t } = useTranslation();
-
   const socialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, id),
   );
+  const appInfo = useSelector((state: RootState) => {
+    if (socialMediaVariation.brightIdAppId) {
+      return selectAppInfoByAppId(state, socialMediaVariation.brightIdAppId);
+    } else return undefined;
+  });
+  const userVerifications = useSelector(selectUserVerifications);
+
+  const showDiscovery = appInfo
+    ? allowDiscovery({ appInfo, userVerifications })
+    : false;
+
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
@@ -235,6 +254,70 @@ const SocialMediaLink = (props: {
       }),
     );
   };
+
+  const toggleDiscoverable = async () => {
+    if (!socialMedia.discoverable) {
+      /* Need to perform 2 steps:
+        1. save socialmedia data in socialMediaService. This will generate the AppUserId
+        2. link with the socialMediaApp, using the AppUserId generated in step 1
+       */
+      Alert.alert(
+        `You need to link your BrightID`,
+        `In order to allow your friends to see that you ` +
+          `are a BrightID user you need to link with the ${appInfo.name} app.`,
+        [
+          {
+            text: `Don't link now`,
+            style: 'cancel',
+            onPress: () => null,
+          },
+          {
+            text: `Link with app now`,
+            style: 'default',
+            onPress: async () => {
+              console.log(`Start sync + link!`);
+              try {
+                // Step 1 - sync with socialMediaService
+                const syncedSocialMedia = await dispatch(
+                  syncSocialMediaChanges(socialMedia),
+                );
+                // step 2 - link with app
+                await dispatch(
+                  linkSocialMediaApp({
+                    appId: appInfo.id,
+                    appUserId:
+                      syncedSocialMedia.brightIdSocialAppData.appUserId,
+                  }),
+                );
+                // okay, update discoverable state
+                dispatch(
+                  setDiscoverable({ id: socialMedia.id, discoverable: true }),
+                );
+              } catch (e) {
+                console.log(`Failed to enable discovery: ${e}`);
+              }
+            },
+          },
+        ],
+      );
+    } else {
+      try {
+        await removeSocialFromServer(socialMedia);
+        const newSocialMedia: SocialMedia = {
+          ...socialMedia,
+          brightIdSocialAppData: {
+            ...socialMedia.brightIdSocialAppData,
+            synced: false,
+          },
+        };
+        dispatch(saveSocialMedia(newSocialMedia));
+        dispatch(setDiscoverable({ id: socialMedia.id, discoverable: false }));
+      } catch (e) {
+        console.log(`Failed to disable discovery: ${e}`);
+      }
+    }
+  };
+
   return (
     <>
       <View style={styles.socialMediaLinkContainer}>
@@ -297,6 +380,19 @@ const SocialMediaLink = (props: {
           value={getShareWithConnectionsValue(props.socialMedia)}
         />
       </View>
+      {showDiscovery && (
+        <View style={styles.shareSocialMediaToggleContainer}>
+          <Text style={styles.label} onPress={toggleDiscoverable}>
+            Allow friends to see I'm a BrightID user{' '}
+          </Text>
+          <CheckBox
+            style={styles.syncSocialMediaSwitch}
+            tintColors={{ false: GREY, true: ORANGE }}
+            onValueChange={toggleDiscoverable}
+            value={socialMedia.discoverable}
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -314,7 +410,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
-  // console.log('socialMedia', socialMediaItems);
+  console.log('socialMedia', socialMediaItems);
 
   const SocialMediaVariations = socialMediaItems
     .filter((item) => socialMediaVariationIds.includes(item.id))
@@ -431,7 +527,7 @@ const ShowEditPassword = () => {
     </View>
   );
 };
-
+/*
 function SyncSocialMedia() {
   const dispatch = useDispatch();
   const syncSocialMediaEnabled = useSelector(selectSyncSocialMediaEnabled);
@@ -465,6 +561,8 @@ function SyncSocialMedia() {
   );
 }
 
+ */
+
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -479,6 +577,12 @@ export const EditProfileScreen = ({ navigation }) => {
   const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
   const prevName = useSelector((state) => state.user.name);
   const prevPhoto = useRef(null);
+  const appLinkingStep = useSelector(selectApplinkingStep);
+  const variationsWithApp = useSelector(
+    selectSocialMediaVariationsWithBrightIDApp,
+  );
+  const linkingAppInfo = useSelector(selectLinkingAppInfo);
+
   // state passed down to children
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
   const [nextName, setNextName] = useState(prevName);
@@ -557,6 +661,15 @@ export const EditProfileScreen = ({ navigation }) => {
     [navigation, saveDisabled, t],
   );
 
+  // show the app linking screen if we are in the linking workflow for one of the socialMediaVariation apps
+  // like emailRegistry, phoneRegistry etc.
+  const socialMediaVariationAppIds = variationsWithApp.map(
+    (variation) => variation.brightIdAppId,
+  );
+  const showAppLinkingScreen =
+    appLinkingStep !== app_linking_steps.IDLE &&
+    socialMediaVariationAppIds.includes(linkingAppInfo.appId);
+
   return (
     <View
       style={[
@@ -574,7 +687,7 @@ export const EditProfileScreen = ({ navigation }) => {
         <EditName nextName={nextName} setNextName={setNextName} />
 
         <View style={styles.socialMediaTopDivider} />
-        <SyncSocialMedia />
+        {/* <SyncSocialMedia /> */}
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <View style={styles.bottomDivider} />
@@ -609,6 +722,7 @@ export const EditProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {showAppLinkingScreen && <AppLinkingScreen />}
     </View>
   );
 };

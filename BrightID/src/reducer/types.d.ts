@@ -7,6 +7,7 @@ type LinkingAppInfo = {
   appUserId: string;
   baseUrl?: string;
   v: number;
+  skipSponsoring?: boolean;
 };
 
 type AppsState = {

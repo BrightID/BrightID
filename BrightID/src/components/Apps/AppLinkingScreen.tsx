@@ -22,6 +22,7 @@ import {
   selectLinkingAppInfo,
   selectApplinkingStep,
   selectApplinkingStepText,
+  setAppLinkingStep,
 } from '@/reducer/appsSlice';
 import { app_linking_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
@@ -33,6 +34,7 @@ const ConfirmationView = ({ appName }) => {
 
   const confirmHandler = () => {
     console.log(`User confirmed linking.`);
+    dispatch(setAppLinkingStep({ step: app_linking_steps.USER_CONFIRMED }));
     dispatch(startLinking());
   };
 

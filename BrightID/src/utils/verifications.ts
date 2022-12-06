@@ -1,5 +1,6 @@
 import { Parser, Value } from 'expr-eval';
 import { Dictionary } from 'ramda';
+import _ from 'lodash';
 import { UserTasks } from '@/components/Tasks/UserTasks';
 
 export const isVerified = (
@@ -18,6 +19,23 @@ export const isVerified = (
     console.log(`verification ${verification} can not be evaluated.`, err);
     return false;
   }
+};
+
+export const isVerifiedForApp = (
+  userVerifications: Verification[],
+  appVerifications: string[],
+) => {
+  let count = 0;
+  for (const verification of appVerifications) {
+    const verified = isVerified(
+      _.keyBy(userVerifications, (v) => v.name),
+      verification,
+    );
+    if (verified) {
+      count++;
+    }
+  }
+  return count === appVerifications.length;
 };
 
 export const getVerificationPatches = (verifications: Verification[]) => {

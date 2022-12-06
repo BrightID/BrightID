@@ -9,10 +9,13 @@ import {
   selectAllLinkedContexts,
   selectAllLinkedSigs,
   selectApplinkingStep,
-  selectSigsUpdating,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
-import { fetchApps, selectIsSponsored } from '@/actions';
+import {
+  fetchApps,
+  selectIsSponsored,
+  selectUserVerifications,
+} from '@/actions';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { requestLinking } from '@/components/Apps/appThunks';
@@ -41,9 +44,8 @@ const AppsScreenController = () => {
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
   const appLinkingStep = useSelector(selectApplinkingStep);
   const isSponsored = useSelector(selectIsSponsored);
-  const userVerifications = useSelector((state) => state.user.verifications);
+  const userVerifications = useSelector(selectUserVerifications);
   const navigation = useNavigation();
-
   const [refreshing, setRefreshing] = useState(false);
   const [totalApps, setTotalApps] = useState(0);
   const [totalVerifiedApps, setTotalVerifiedApps] = useState(0);
@@ -125,7 +127,7 @@ const AppsScreenController = () => {
     // can only start linking if api is available
     if (route.params.appId && api) {
       // get all app linking details from route params
-      const linkingParams = parseRouteParams(route.params);
+      const linkingAppInfo = parseRouteParams(route.params);
       // reset route params
       navigation.setParams({
         baseUrl: undefined,
@@ -133,7 +135,7 @@ const AppsScreenController = () => {
         appUserId: undefined,
       });
       // start linking process
-      dispatch(requestLinking(linkingParams));
+      dispatch(requestLinking({ linkingAppInfo }));
     }
   }, [t, api, dispatch, route.params, navigation]);
 

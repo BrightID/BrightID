@@ -142,6 +142,7 @@ export enum app_linking_steps {
   // Preparation
   REFRESHING_APPS,
   WAITING_USER_CONFIRMATION,
+  USER_CONFIRMED,
   // Sponsoring
   SPONSOR_PRECHECK_APP, // Check if sponsoring was already requested before
   SPONSOR_WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
