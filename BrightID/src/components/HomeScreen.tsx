@@ -115,9 +115,8 @@ export const HomeScreen = (props) => {
         console.log(`updating blind sigs...`);
         dispatch(updateBlindSigs());
       }
-      console.log(`linking social media...`);
+      console.log(`updating socialMediaVariations...`);
       dispatch(updateSocialMediaVariations());
-      dispatch(syncAndLinkSocialMedias());
     }
   }, [api, dispatch, isPrimaryDevice]);
 
