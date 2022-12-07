@@ -13,7 +13,6 @@ import {
   setApps,
   setLinkingAppError,
   setLinkingAppInfo,
-  setLinkingAppStarttime,
   setAppLinkingStep,
   setSponsorOperationHash,
   updateLinkedContext,
@@ -218,14 +217,13 @@ export const waitForAppSponsoring =
       );
     }
 
-    const linkingAppStarttime = Date.now();
-    dispatch(setLinkingAppStarttime(linkingAppStarttime));
+    const startTime = Date.now();
     const { appUserId } = selectLinkingAppInfo(getState());
     const api = getGlobalNodeApi();
 
     // Op to request sponsoring is submitted. Now wait for app to actually perform it.
     const intervalId = setInterval(async () => {
-      const timeElapsed = Date.now() - linkingAppStarttime;
+      const timeElapsed = Date.now() - startTime;
       let sponsorshipInfo: SponsorshipInfo | undefined;
       try {
         sponsorshipInfo = await getSponsorship(appUserId, api);

@@ -27,7 +27,6 @@ const initialState: AppsState = {
   appLinkingStep: app_linking_steps.IDLE,
   appLinkingStepText: undefined,
   linkingAppInfo: undefined,
-  linkingAppStartTime: 0,
   sponsorOperationHash: undefined,
   linkingAppError: undefined,
 };
@@ -90,9 +89,6 @@ const appsSlice = createSlice({
     ) {
       state.linkingAppInfo = action.payload;
     },
-    setLinkingAppStarttime(state, action: PayloadAction<number>) {
-      state.linkingAppStartTime = action.payload;
-    },
     setSponsorOperationHash(state, action: PayloadAction<string>) {
       state.sponsorOperationHash = action.payload;
     },
@@ -103,7 +99,6 @@ const appsSlice = createSlice({
       state.appLinkingStep = app_linking_steps.IDLE;
       state.appLinkingStepText = undefined;
       state.linkingAppInfo = undefined;
-      state.linkingAppStartTime = 0;
       state.sponsorOperationHash = undefined;
       state.linkingAppError = undefined;
     },
@@ -128,7 +123,6 @@ export const {
   setSigsUpdating,
   setAppLinkingStep,
   setLinkingAppInfo,
-  setLinkingAppStarttime,
   setSponsorOperationHash,
   resetLinkingAppState,
   setLinkingAppError,
@@ -194,9 +188,6 @@ export const selectApplinkingStepText = (state: RootState) =>
 
 export const selectLinkingAppInfo = (state: RootState) =>
   state.apps.linkingAppInfo;
-
-export const selectLinkingAppStartTime = (state: RootState) =>
-  state.apps.linkingAppStartTime;
 
 export const selectSponsorOperationHash = (state: RootState) =>
   state.apps.sponsorOperationHash;

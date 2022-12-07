@@ -19,7 +19,6 @@ type AppsState = {
   appLinkingStepText?: string;
   sponsorOperationHash?: string;
   linkingAppInfo?: LinkingAppInfo;
-  linkingAppStartTime: number;
   linkingAppError?: string;
 };
 

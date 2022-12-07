@@ -32,7 +32,6 @@ const appsPersistConfig = {
     'sigsUpdating',
     'appLinkingStep',
     'appLinkingStepText',
-    'linkingAppStartTime',
     'linkingAppInfo',
     'linkingAppError',
   ],
