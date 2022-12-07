@@ -1,6 +1,10 @@
 import { SOCIAL_API_AUTHENTICATION_ERROR } from '@/api/socialMediaService';
 import { getSignedTimestamp } from '@/components/Apps/model';
-import { selectAllLinkedSigs, selectAppInfoByAppId } from '@/reducer/appsSlice';
+import {
+  selectAllLinkedSigs,
+  selectAppInfoByAppId,
+  selectLinkingAppError,
+} from '@/reducer/appsSlice';
 import {
   saveSocialMedia,
   selectAllSocialMedia,
@@ -12,7 +16,6 @@ import {
 } from '@/reducer/socialMediaVariationSlice';
 import { generateSocialProfileHashes } from '@/utils/socialUtils';
 import { BrightIdNetwork, SOCIAL_MEDIA_SIG_WAIT_TIME } from '@/utils/constants';
-import { setSyncSocialMediaEnabled } from '@/reducer/settingsSlice';
 import socialMediaService from '@/utils/socialMediaServiceProvider';
 import { requestLinking } from '@/components/Apps/appThunks';
 import { isVerifiedForApp } from '@/utils/verifications';
@@ -121,6 +124,8 @@ export const linkSocialMediaApp =
           skipUserConfirmation: true,
         }),
       );
+      const error = selectLinkingAppError(getState());
+      if (error) throw Error(error);
     } else {
       throw Error(
         `User can not activate discovery. Either verifications missing or sig timestamp invalid`,
@@ -166,31 +171,16 @@ export const syncSocialMediaChanges =
     return socialMedia;
   };
 
-export const saveAndLinkSocialMedia =
+export const saveAndSyncSocialMedia =
   (incomingSocialMedia: SocialMedia) =>
-  async (dispatch: AppDispatch, getState) => {
+  async (dispatch: AppDispatch, _getState) => {
     // First, update locally, so the user doesn't need to wait for
     // the server to complete the request to see his new profile in the UI.
     dispatch(saveSocialMedia(incomingSocialMedia));
 
     if (incomingSocialMedia.discoverable) {
-      const socialMediaVariation = selectSocialMediaVariationById(
-        getState(),
-        incomingSocialMedia.id,
-      );
-
       // this social media should be synced with socialMediaService
-      const syncedSocialMedia = await dispatch(
-        syncSocialMediaChanges(incomingSocialMedia),
-      );
-
-      // link with social media app. Will do nothing if already linked.
-      await dispatch(
-        linkSocialMediaApp({
-          appId: socialMediaVariation.brightIdAppId,
-          appUserId: syncedSocialMedia.brightIdSocialAppData.appUserId,
-        }),
-      );
+      await dispatch(syncSocialMediaChanges(incomingSocialMedia));
     }
   };
 
@@ -231,27 +221,16 @@ export const updateSocialMediaVariations =
     dispatch(upsertSocialMediaVariations(socialMediaVariations));
   };
 
-export const syncAndLinkSocialMedias =
+export const saveAndSyncSocialMedias =
   (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const socialMedias = selectAllSocialMedia(getState());
-
-    /* TODO: add "syncSocialMediaEnabled === undefined &&" to the if statement
-        after all clients got the new version. for now some clients have the
-        other version in which syncSocialMediaEnabled has default value of false
-     */
-    // If the user does not have any social media, set sync to
-    // true by default
-    if (!socialMedias.filter((s) => !!s.profile).length) {
-      dispatch(setSyncSocialMediaEnabled(true));
-    }
-
     socialMedias.forEach((socialMedia) => {
       if (socialMedia.profile) {
-        dispatch(saveAndLinkSocialMedia(socialMedia));
+        dispatch(saveAndSyncSocialMedia(socialMedia));
       }
     });
   };
-/*
+
 export const removeAllSocialMediasFromServer =
   (): AppThunk => async (dispatch: AppDispatch, getState) => {
     const socialMedias = selectAllSocialMedia(getState());
@@ -270,23 +249,3 @@ export const removeAllSocialMediasFromServer =
       }
     }
   };
- */
-/*
-export const setSyncSocialMediaEnabledThunk =
-  (value: boolean): AppThunk =>
-  async (dispatch: AppDispatch, getState) => {
-    const prevState = selectSyncSocialMediaEnabled(getState());
-
-    dispatch(setSyncSocialMediaEnabled(value));
-    try {
-      if (value) {
-        await dispatch(syncAndLinkSocialMedias());
-      } else {
-        await dispatch(removeAllSocialMediasFromServer());
-      }
-    } catch (e) {
-      // rollback
-      dispatch(setSyncSocialMediaEnabled(prevState));
-    }
-  };
-*/

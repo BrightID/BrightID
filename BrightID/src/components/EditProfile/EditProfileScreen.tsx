@@ -42,8 +42,10 @@ import { fontSize } from '@/theme/fonts';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
 import {
+  selectAllLinkedSigs,
   selectAppInfoByAppId,
   selectApplinkingStep,
+  selectLinkingAppError,
   selectLinkingAppInfo,
   selectUserVerifications,
   setName,
@@ -199,6 +201,16 @@ const SocialMediaLink = (props: {
       return selectAppInfoByAppId(state, socialMediaVariation.brightIdAppId);
     } else return undefined;
   });
+
+  const isLinked = useSelector((state: RootState) => {
+    if (appInfo) {
+      const appSigs = selectAllLinkedSigs(state).filter(
+        (sig) => sig.app === appInfo.id,
+      );
+      return appSigs.length > 0;
+    } else return false;
+  });
+
   const userVerifications = useSelector(selectUserVerifications);
 
   const showDiscovery = appInfo
@@ -257,49 +269,58 @@ const SocialMediaLink = (props: {
 
   const toggleDiscoverable = async () => {
     if (!socialMedia.discoverable) {
-      /* Need to perform 2 steps:
-        1. save socialmedia data in socialMediaService. This will generate the AppUserId
-        2. link with the socialMediaApp, using the AppUserId generated in step 1
-       */
-      Alert.alert(
-        `You need to link your BrightID`,
-        `In order to allow your friends to see that you ` +
-          `are a BrightID user you need to link with the ${appInfo.name} app.`,
-        [
-          {
-            text: `Don't link now`,
-            style: 'cancel',
-            onPress: () => null,
-          },
-          {
-            text: `Link with app now`,
-            style: 'default',
-            onPress: async () => {
-              console.log(`Start sync + link!`);
-              try {
-                // Step 1 - sync with socialMediaService
-                const syncedSocialMedia = await dispatch(
-                  syncSocialMediaChanges(socialMedia),
-                );
-                // step 2 - link with app
-                await dispatch(
-                  linkSocialMediaApp({
-                    appId: appInfo.id,
-                    appUserId:
-                      syncedSocialMedia.brightIdSocialAppData.appUserId,
-                  }),
-                );
-                // okay, update discoverable state
-                dispatch(
-                  setDiscoverable({ id: socialMedia.id, discoverable: true }),
-                );
-              } catch (e) {
-                console.log(`Failed to enable discovery: ${e}`);
-              }
+      if (!isLinked) {
+        Alert.alert(
+          `You need to link your BrightID`,
+          `In order to allow your friends to see that you ` +
+            `are a BrightID user you need to link with the ${appInfo.name} app.`,
+          [
+            {
+              text: `Cancel`,
+              style: 'cancel',
+              onPress: () => null,
             },
-          },
-        ],
-      );
+            {
+              text: `Okay`,
+              style: 'default',
+              onPress: async () => {
+                try {
+                  console.log(`Start sync + link!`);
+                  // Step 1 - sync with socialMediaService
+                  const syncedSocialMedia = await dispatch(
+                    syncSocialMediaChanges(socialMedia),
+                  );
+                  // step 2 - link with app
+                  await dispatch(
+                    linkSocialMediaApp({
+                      appId: appInfo.id,
+                      appUserId:
+                        syncedSocialMedia.brightIdSocialAppData.appUserId,
+                    }),
+                  );
+                  console.log(`End sync + link!`);
+                  // okay, update discoverable state
+                  dispatch(
+                    setDiscoverable({ id: socialMedia.id, discoverable: true }),
+                  );
+                } catch (e) {
+                  console.log(`Failed to enable discovery: ${e}`);
+                }
+              },
+            },
+          ],
+        );
+      } else {
+        // already linked with app, just need to sync changes
+        try {
+          console.log(`Start sync`);
+          await dispatch(syncSocialMediaChanges(socialMedia));
+          console.log(`End sync`);
+          dispatch(setDiscoverable({ id: socialMedia.id, discoverable: true }));
+        } catch (e) {
+          console.log(`Failed to enable discovery: ${e}`);
+        }
+      }
     } else {
       try {
         await removeSocialFromServer(socialMedia);
