@@ -818,6 +818,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingLeft: 6,
+    paddingRight: 0,
   },
   syncSocialMediaSwitch: {},
   bottomDivider: {
@@ -838,7 +839,7 @@ const styles = StyleSheet.create({
   },
   socialMediaLinkContainer: {
     width: WIDTH - (DEVICE_LARGE ? 80 : 60),
-    maxWidth: WIDTH - (DEVICE_LARGE ? 80 : 60),
+    maxWidth: WIDTH - (DEVICE_LARGE ? 88 : 68),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -847,6 +848,7 @@ const styles = StyleSheet.create({
   socialMediaLinkLabel: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 8,
   },
   socialMediaSelect: {
     flexDirection: 'row',
