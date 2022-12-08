@@ -608,6 +608,8 @@ export const EditProfileScreen = ({ navigation }) => {
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
   const [nextName, setNextName] = useState(prevName);
 
+  const [showAppLinkingScreen, setShowAppLinkingScreen] = useState(false);
+
   // allow user to save changes if profilePhoto or name has changed
   const saveDisabled =
     (prevPhoto.current === profilePhoto && prevName === nextName) ||
@@ -682,14 +684,43 @@ export const EditProfileScreen = ({ navigation }) => {
     [navigation, saveDisabled, t],
   );
 
-  // show the app linking screen if we are in the linking workflow for one of the socialMediaVariation apps
-  // like emailRegistry, phoneRegistry etc.
-  const socialMediaVariationAppIds = variationsWithApp.map(
-    (variation) => variation.brightIdAppId,
-  );
-  const showAppLinkingScreen =
-    appLinkingStep !== app_linking_steps.IDLE &&
-    socialMediaVariationAppIds.includes(linkingAppInfo.appId);
+  useEffect(() => {
+    const socialMediaVariationAppIds = variationsWithApp.map(
+      (variation) => variation.brightIdAppId,
+    );
+
+    // show the app linking screen if we are in the linking workflow for one of the socialMediaVariation apps
+    // like emailRegistry, phoneRegistry etc.
+    const linkingSocialMediaApp =
+      linkingAppInfo &&
+      appLinkingStep !== app_linking_steps.IDLE &&
+      socialMediaVariationAppIds.includes(linkingAppInfo.appId);
+
+    if (linkingSocialMediaApp) {
+      // show modal
+      setShowAppLinkingScreen(true);
+
+      // hide header of parent navigator (home screen) as it can't be blurred
+      // Yes, this is a horrible workaround :-/
+      navigation.getParent()?.setOptions({
+        headerShown: false,
+      });
+    } else {
+      // hide modal
+      setShowAppLinkingScreen(false);
+      // restore header
+      navigation.getParent()?.setOptions({
+        headerShown: true,
+      });
+    }
+
+    return () => {
+      // restore header
+      navigation.getParent()?.setOptions({
+        headerShown: true,
+      });
+    };
+  }, [appLinkingStep, linkingAppInfo, navigation, variationsWithApp]);
 
   return (
     <View

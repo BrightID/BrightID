@@ -11,6 +11,7 @@ import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -153,6 +154,7 @@ const AppLinkingScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const headerHeight = useHeaderHeight();
   const appLinkingStep = useSelector(selectApplinkingStep);
   const appLinkingStepText = useSelector(selectApplinkingStepText);
   const linkingAppInfo = useSelector(selectLinkingAppInfo);
@@ -241,7 +243,7 @@ const AppLinkingScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: -headerHeight }]}>
       <BlurView
         style={styles.blurView}
         blurType="dark"
