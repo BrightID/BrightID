@@ -165,6 +165,10 @@ describe('With account', () => {
     )
       .toBeVisible()
       .withTimeout(SPONSOR_WAIT_TIME + 1000);
+
+    // dismiss dialog
+    await element(by.id('ResetAppLinkingState')).tap();
+    await expectAppsScreen();
   });
 
   describe('Apps screen', () => {
