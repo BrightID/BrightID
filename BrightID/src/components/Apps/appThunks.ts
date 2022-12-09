@@ -215,13 +215,14 @@ export const waitForAppSponsoring =
       console.log(
         `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${applinkingStep}`,
       );
+      return;
     }
 
     const startTime = Date.now();
     const { appUserId } = selectLinkingAppInfo(getState());
     const api = getGlobalNodeApi();
 
-    // Op to request sponsoring is submitted. Now wait for app to actually perform it.
+    // Op to request sponsoring is confirmed. Now wait for app to actually sponsor me.
     const intervalId = setInterval(async () => {
       const timeElapsed = Date.now() - startTime;
       let sponsorshipInfo: SponsorshipInfo | undefined;
