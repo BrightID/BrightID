@@ -85,6 +85,7 @@
         "linkSuccess": "Dein {{context}}-Konto erfolgreich mit deiner BrightID verknüpft"
       },
       "title": {
+        "invalidApp": "Fehlgeschlagen",
         "invalidContext": "Fehlgeschlagen",
         "linkApp": "Anwendung verknüpfen?",
         "linkFailure": "Fehlgeschlagen",
