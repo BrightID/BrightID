@@ -13,6 +13,7 @@ import {
   channel_types,
   connection_levels,
   report_reasons,
+  app_linking_steps,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -100,7 +101,6 @@ declare global {
     ttl: number;
     initiatorProfileId: string;
   };
-
   /* Profile information shared P2P via channel when making connections */
   type SharedProfile = {
     requestProof?: string;
@@ -238,7 +238,6 @@ declare global {
   };
 
   type BrightIdSocialAppData = {
-    linked: boolean;
     appUserId: string;
     token: string;
     synced: boolean;
@@ -247,6 +246,7 @@ declare global {
   type SocialMedia = SocialMediaShared & {
     shareWithConnections?: boolean;
     brightIdSocialAppData?: BrightIdSocialAppData;
+    discoverable?: boolean;
   };
 
   type PhoneNumberObject = {
@@ -378,4 +378,7 @@ declare global {
   };
 
   type RecoverStep_Type = typeof recover_steps[keyof typeof recover_steps];
+
+  type AppLinkingStep_Type =
+    typeof app_linking_steps[keyof typeof app_linking_steps];
 }

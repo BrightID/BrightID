@@ -5,7 +5,9 @@ import {
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
+import { find, propEq } from 'ramda';
 import { RESET_STORE } from '@/actions/resetStore';
+import { app_linking_steps } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 
@@ -22,6 +24,11 @@ const initialState: AppsState = {
   linkedContexts: linkedContextsAdapter.getInitialState(),
   sigs: sigsAdapter.getInitialState(),
   sigsUpdating: false,
+  appLinkingStep: app_linking_steps.IDLE,
+  appLinkingStepText: undefined,
+  linkingAppInfo: undefined,
+  sponsorOperationHash: undefined,
+  linkingAppError: undefined,
 };
 
 const appsSlice = createSlice({
@@ -68,6 +75,33 @@ const appsSlice = createSlice({
     setSigsUpdating(state, action: PayloadAction<boolean>) {
       state.sigsUpdating = action.payload;
     },
+    setAppLinkingStep(
+      state,
+      action: PayloadAction<{ step: AppLinkingStep_Type; text?: string }>,
+    ) {
+      const { step, text } = action.payload;
+      state.appLinkingStep = step;
+      state.appLinkingStepText = text;
+    },
+    setLinkingAppInfo(
+      state,
+      action: PayloadAction<LinkingAppInfo | undefined>,
+    ) {
+      state.linkingAppInfo = action.payload;
+    },
+    setSponsorOperationHash(state, action: PayloadAction<string>) {
+      state.sponsorOperationHash = action.payload;
+    },
+    setLinkingAppError(state, action: PayloadAction<string>) {
+      state.linkingAppError = action.payload;
+    },
+    resetLinkingAppState(state) {
+      state.appLinkingStep = app_linking_steps.IDLE;
+      state.appLinkingStepText = undefined;
+      state.linkingAppInfo = undefined;
+      state.sponsorOperationHash = undefined;
+      state.linkingAppError = undefined;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -87,6 +121,11 @@ export const {
   removeAllSigs,
   updateSig,
   setSigsUpdating,
+  setAppLinkingStep,
+  setLinkingAppInfo,
+  setSponsorOperationHash,
+  resetLinkingAppState,
+  setLinkingAppError,
 } = appsSlice.actions;
 
 export const {
@@ -139,6 +178,33 @@ export const selectExpireableBlindSigApps = createSelector(
   selectBlindSigApps,
   (apps) =>
     apps.filter((app) => app.verificationExpirationLength && !app.testing),
+);
+
+export const selectApplinkingStep = (state: RootState) =>
+  state.apps.appLinkingStep;
+
+export const selectApplinkingStepText = (state: RootState) =>
+  state.apps.appLinkingStepText;
+
+export const selectLinkingAppInfo = (state: RootState) =>
+  state.apps.linkingAppInfo;
+
+export const selectSponsorOperationHash = (state: RootState) =>
+  state.apps.sponsorOperationHash;
+
+export const selectLinkingAppError = (state: RootState) =>
+  state.apps.linkingAppError;
+
+export const selectSigsUpdating = (state: RootState) => state.apps.sigsUpdating;
+
+// look up app info. Legacy apps send 'context' in the deep link but soulbound
+// apps send 'id', so look in both places
+export const selectAppInfoByAppId = createSelector(
+  selectAllApps,
+  (_: RootState, appId: string) => appId,
+  (apps, appId) =>
+    (find(propEq('id', appId))(apps) as AppInfo) ||
+    (find(propEq('context', appId))(apps) as AppInfo),
 );
 
 // Export reducer

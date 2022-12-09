@@ -34,7 +34,7 @@ import {
   SocialMediaVariationIds,
 } from './socialMediaVariations';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
-import { saveAndLinkSocialMedia } from '@/components/EditProfile/socialMediaThunks';
+import { saveAndSyncSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 import { DEFAULT_SHARE_WITH_CONNECTIONS_VALUE } from '@/utils/constants';
 
 /** Helper functions */
@@ -164,7 +164,7 @@ const SelectMediaModal = ({ route }: props) => {
           ? prevProfile.shareWithConnections
           : DEFAULT_SHARE_WITH_CONNECTIONS_VALUE,
     };
-    dispatch(saveAndLinkSocialMedia(socialMedia));
+    dispatch(saveAndSyncSocialMedia(socialMedia));
     navigation.navigate('Edit Profile');
   };
 

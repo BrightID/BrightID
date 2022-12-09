@@ -7,6 +7,7 @@ import {
   navigateHome,
   operationTimeout,
 } from './testUtils';
+import { app_linking_steps, SPONSOR_WAIT_TIME } from '@/utils/constants';
 
 function getRandomAddres() {
   const letters = '0123456789ABCDEF';
@@ -107,9 +108,9 @@ describe('With account', () => {
       }/${getRandomAddres()}`,
     });
     // Alert should be open
-    await expect(element(by.text('Link App?'))).toBeVisible();
+    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
     // cancel linking
-    await element(by.text(no)).tap();
+    await element(by.id('RejectLinking')).tap();
     await expectAppsScreen();
   });
 
@@ -121,10 +122,49 @@ describe('With account', () => {
       }/${getRandomAddres()}`,
     });
     // Alert should be open
-    await expect(element(by.text('Link App?'))).toBeVisible();
+    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
     // cancel linking
-    await element(by.text(no)).tap();
+    await element(by.id('RejectLinking')).tap();
     await expectAppsScreen();
+  });
+
+  it('should fail sponsoring when user is not sponsored', async () => {
+    const context = 'idchain';
+    await device.launchApp({
+      newInstance: true,
+      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${context}/${getRandomAddres()}`,
+    });
+    // Alert should be open
+    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
+    // confirm linking
+    await element(by.id('ConfirmLinking')).tap();
+
+    // next step: SPONSORE_PRECHECK_APP
+    // skip this step as it is very short and missed by test
+
+    // next step: SPONSOR_WAITING_OP
+    await expect(
+      element(by.id(`AppLinkingStep-${app_linking_steps.SPONSOR_WAITING_OP}`)),
+    ).toBeVisible();
+
+    // next step: SPONSOR_WAITING_APP
+    // This will happen once the sponsor op confirms, so we need an according timeout
+    await waitFor(
+      element(by.id(`AppLinkingStep-${app_linking_steps.SPONSOR_WAITING_APP}`)),
+    )
+      .toBeVisible()
+      .withTimeout(operationTimeout);
+
+    // App will not sponsor, so we should end up with error state
+    // This will happen once the app gives up waiting for sponsoring, so we need
+    // an according timeout
+    await waitFor(
+      element(
+        by.id(`AppLinkingError-${app_linking_steps.SPONSOR_WAITING_APP}`),
+      ),
+    )
+      .toBeVisible()
+      .withTimeout(SPONSOR_WAIT_TIME + 1000);
   });
 
   describe('Apps screen', () => {
@@ -146,7 +186,7 @@ describe('With account', () => {
         });
 
         it('should not be linked', async () => {
-          await expect(element(by.id(`Linked_${app.id}`))).toNotExist();
+          await expect(element(by.id(`Linked_${app.id}`))).not.toExist();
         });
       });
     }

@@ -164,8 +164,10 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         });
       }
       setGateState(ApiGateState.NODE_AVAILABLE);
+      globalNodeApi = apiInstance;
       setApi(apiInstance);
     } else {
+      globalNodeApi = null;
       setApi(null);
     }
   }, [url, id, secretKey]);
@@ -186,11 +188,6 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         clearInterval(timerId);
       };
     }
-  }, [api]);
-
-  // keep global NodeAPI object in sync
-  useEffect(() => {
-    globalNodeApi = api;
   }, [api]);
 
   /* Manually set node url */

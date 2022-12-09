@@ -17,6 +17,8 @@ const day = 24 * hour;
 export const OPERATION_TRACE_TIME = 2 * minute;
 // Max. time to wait for app to respond to sponsoring request
 export const SPONSOR_WAIT_TIME = 4 * minute;
+// Max. time to wait for app to finish updating blind signatures
+export const UPDATE_BLIND_SIG_WAIT_TIME = 2 * minute;
 // How long to keep "done" operations (success, failed or expired) in local redux store
 export const LOCAL_OPERATION_KEEP_THRESHOLD = 7 * day;
 export const operation_states = {
@@ -45,6 +47,9 @@ export const CONNECTION_STALE_AGE = 15 * minute;
 
 export const RECOVERY_COOLDOWN_DURATION = 7 * day;
 export const RECOVERY_COOLDOWN_EXEMPTION = 24 * hour;
+
+// App linking and sponsoring
+export const SPONSORING_POLL_INTERVAL = 5 * second;
 
 // Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
@@ -130,4 +135,26 @@ export enum channel_states {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
   BACKGROUND = 'BACKGROUND',
+}
+
+export enum app_linking_steps {
+  IDLE,
+  // Preparation
+  REFRESHING_APPS,
+  WAITING_USER_CONFIRMATION,
+  USER_CONFIRMED,
+  // Sponsoring
+  SPONSOR_PRECHECK_APP, // Check if sponsoring was already requested before
+  SPONSOR_WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
+  SPONSOR_WAITING_APP, // waiting for app to actually execute sponsoring
+  SPONSOR_SUCCESS, // got sponsored
+  // Linking
+  LINK_WAITING_V5, // Waiting for link operation to confirm (v5 app)
+  LINK_WAITING_V6, // Waiting for link function to complete (v6 app)
+  LINK_SUCCESS,
+}
+
+export enum BrightIdNetwork {
+  TEST = 'test',
+  NODE = 'node',
 }
