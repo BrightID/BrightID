@@ -7,6 +7,7 @@ import {
   Linking,
   FlatList,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { store } from '@/store';
@@ -87,6 +88,16 @@ export const BituVerificationScreen = function ({ route }) {
     );
   };
 
+  const openExternalUrl = () => {
+    Linking.openURL(url).catch((err) => {
+      const errorString = err instanceof Error ? err.message : err;
+      Alert.alert(
+        `Could not open url`,
+        `Could not open ${url}. Error: ${errorString}`,
+      );
+    });
+  };
+
   return (
     <ScrollView
       style={[styles.container, { marginTop: headerHeight }]}
@@ -122,8 +133,8 @@ export const BituVerificationScreen = function ({ route }) {
         "already known" connections to friends or family who are connected to
         BrightID graph and have "Bitu" verification. Never make "already known"
         connections to users you do not know, because you lose 5 scores if they
-        report you and 1 score every time they are reported.
-        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(url)}>
+        report you and 1 score every time they are reported.{' '}
+        <Text style={{ color: 'blue' }} onPress={openExternalUrl}>
           more ...
         </Text>
       </Text>
