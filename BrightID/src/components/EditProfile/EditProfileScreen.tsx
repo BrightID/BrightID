@@ -548,41 +548,6 @@ const ShowEditPassword = () => {
     </View>
   );
 };
-/*
-function SyncSocialMedia() {
-  const dispatch = useDispatch();
-  const syncSocialMediaEnabled = useSelector(selectSyncSocialMediaEnabled);
-  return (
-    <>
-      <View style={styles.syncSocialMediaSwitchContainer}>
-        <Text
-          style={styles.label}
-          onPress={() => {
-            dispatch(setSyncSocialMediaEnabledThunk(!syncSocialMediaEnabled));
-          }}
-        >
-          Allow friends to see I'm a BrightID user{' '}
-        </Text>
-        <CheckBox
-          style={styles.syncSocialMediaSwitch}
-          tintColors={{ false: GREY, true: ORANGE }}
-          onValueChange={(value) => {
-            dispatch(setSyncSocialMediaEnabledThunk(value));
-          }}
-          value={syncSocialMediaEnabled}
-        />
-      </View>
-      <Text style={styles.infoText}>
-        Items you add to your profile are encrypted and used anonymously to help
-        your contacts see that you're a BrightID user. If you check the box next
-        to an item, it will also be shared directly with people you connect to.
-        Profile info is not shared with BrightID or apps.
-      </Text>
-    </>
-  );
-}
-
- */
 
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -739,7 +704,21 @@ export const EditProfileScreen = ({ navigation }) => {
         <EditName nextName={nextName} setNextName={setNextName} />
 
         <View style={styles.socialMediaTopDivider} />
-        {/* <SyncSocialMedia /> */}
+        <View style={styles.shareProfileInfoHeader}>
+          <Text>Profile sharing options</Text>
+        </View>
+        <Text style={styles.infoText}>
+          <Text style={styles.emphasized}>"Share with connections":</Text> Info
+          will be shared directly with people you connect to. Info is never
+          shared with BrightID or any app using BrightID.
+        </Text>
+        <Text style={styles.infoText}>
+          <Text style={styles.emphasized}>
+            "Allow friends to see I'm a BrightID user":
+          </Text>{' '}
+          Info will be encrypted and used anonymously to help your contacts see
+          that you are a BrightID user.
+        </Text>
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <View style={styles.bottomDivider} />
@@ -824,6 +803,10 @@ const styles = StyleSheet.create({
   editNameContainer: {
     width: '100%',
     marginTop: DEVICE_LARGE ? 36 : 30,
+  },
+  emphasized: {
+    fontWeight: 'bold',
+    fontStyle: 'italic',
   },
   label: {
     fontFamily: 'Poppins-Medium',
@@ -981,6 +964,9 @@ const styles = StyleSheet.create({
   closeButton: {
     paddingHorizontal: DEVICE_LARGE ? 10 : 8,
     marginRight: DEVICE_LARGE ? -10 : -8,
+  },
+  shareProfileInfoHeader: {
+    marginBottom: 5,
   },
 });
 
