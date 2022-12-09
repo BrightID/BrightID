@@ -3,7 +3,6 @@ import {
   createEntityAdapter,
   createSelector,
 } from '@reduxjs/toolkit';
-
 import {
   SocialMediaType,
   socialMediaVariations,
@@ -41,5 +40,10 @@ export const selectAllSocialMediaVariationsByType = () =>
     (socialMediaVariations, type) =>
       socialMediaVariations.filter((item) => item.type === type),
   );
+
+export const selectSocialMediaVariationsWithBrightIDApp = createSelector(
+  selectAllSocialMediaVariations,
+  (variations) => variations.filter((variation) => variation.brightIdAppId),
+);
 
 export default socialMediaVariationSlice.reducer;

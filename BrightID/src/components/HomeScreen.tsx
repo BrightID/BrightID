@@ -49,10 +49,7 @@ import {
 
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
-import {
-  syncAndLinkSocialMedias,
-  updateSocialMediaVariations,
-} from '@/components/EditProfile/socialMediaThunks';
+import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
 
 /**
  * Home screen of BrightID
@@ -115,9 +112,8 @@ export const HomeScreen = (props) => {
         console.log(`updating blind sigs...`);
         dispatch(updateBlindSigs());
       }
-      console.log(`linking social media...`);
+      console.log(`updating socialMediaVariations...`);
       dispatch(updateSocialMediaVariations());
-      dispatch(syncAndLinkSocialMedias());
     }
   }, [api, dispatch, isPrimaryDevice]);
 
@@ -344,9 +340,9 @@ export const HomeScreen = (props) => {
           onPress={() => {
             dispatch(setActiveNotification(null));
             navigation.navigate('Apps', {
-              baseUrl: '',
-              context: '',
-              contextId: '',
+              baseUrl: undefined,
+              appId: undefined,
+              appUserId: undefined,
             });
           }}
         >

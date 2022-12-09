@@ -1,45 +1,52 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { any, find, propEq } from 'ramda';
-import { Alert } from 'react-native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { AppsRoute } from '@/components/Apps/types';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   linkedContextTotal,
   selectAllApps,
   selectAllLinkedContexts,
   selectAllLinkedSigs,
-  selectPendingLinkedContext,
+  selectApplinkingStep,
 } from '@/reducer/appsSlice';
 import AppsScreen from '@/components/Apps/AppsScreen';
-import { fetchApps } from '@/actions';
-import { handleV5App, handleV6App } from '@/components/Apps/model';
+import {
+  fetchApps,
+  selectIsSponsored,
+  selectUserVerifications,
+} from '@/actions';
 import { isVerified } from '@/utils/verifications';
 import { useDispatch, useSelector } from '@/store/hooks';
+import { requestLinking } from '@/components/Apps/appThunks';
+import { app_linking_steps } from '@/utils/constants';
+import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
+
+// get app linking details from route params
+const parseRouteParams = (params: Params) => {
+  const { appId, appUserId, baseUrl } = params;
+  return {
+    baseUrl,
+    appId,
+    appUserId,
+    v: baseUrl ? 5 : 6, // apps providing baseUrl use v5 api
+  };
+};
 
 const AppsScreenController = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
   const apps = useSelector(selectAllApps);
-  const isSponsored = useSelector(
-    (state) => state.user.isSponsored || state.user.isSponsoredv6,
-  );
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);
   const selectLinkedSigs = useSelector(selectAllLinkedSigs);
-  const pendingLink = useSelector(selectPendingLinkedContext);
-  const userVerifications = useSelector((state) => state.user.verifications);
-  const sigsUpdating = useSelector((state) => state.apps.sigsUpdating);
-
+  const appLinkingStep = useSelector(selectApplinkingStep);
+  const isSponsored = useSelector(selectIsSponsored);
+  const userVerifications = useSelector(selectUserVerifications);
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
-  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
-    undefined,
-  );
   const [totalApps, setTotalApps] = useState(0);
   const [totalVerifiedApps, setTotalVerifiedApps] = useState(0);
 
@@ -115,52 +122,22 @@ const AppsScreenController = () => {
     userVerifications,
   ]);
 
-  const handleV5DeepLink = useCallback(() => {
-    const context = route.params?.context;
-    const isValidApp = any(propEq('id', context))(apps);
-    const isValidContext = any(propEq('context', context))(apps);
-    // legacy apps send context in the deep link but soulbound apps send app
-    if (isValidApp || isValidContext) {
-      handleV5App(route.params, setSponsoringApp, api);
-    } else {
-      Alert.alert(
-        t('apps.alert.title.invalidContext'),
-        t('apps.alert.text.invalidContext', { context: `${context}` }),
-      );
-    }
-    // reset params
-    navigation.setParams({
-      baseUrl: '',
-      context: '',
-      contextId: '',
-    });
-  }, [navigation, route.params, apps, api, t]);
-
-  const handleV6DeepLink = useCallback(() => {
-    const appId = route.params?.context;
-    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-    if (api && appInfo && appInfo.usingBlindSig) {
-      handleV6App(route.params, setSponsoringApp, api);
-    } else {
-      Alert.alert(
-        t('apps.alert.title.invalidApp'),
-        t('apps.alert.text.invalidApp', { app: `${appId}` }),
-      );
-    }
-    // reset params
-    navigation.setParams({
-      context: '',
-      contextId: '',
-    });
-  }, [route.params, apps, navigation, api, t]);
-
+  // start process to link app/context if according route parameters were set
   useEffect(() => {
-    if (apps.length > 0 && route.params?.baseUrl) {
-      handleV5DeepLink();
-    } else if (apps.length > 0 && route.params?.context) {
-      handleV6DeepLink();
+    // can only start linking if api is available
+    if (route.params.appId && api) {
+      // get all app linking details from route params
+      const linkingAppInfo = parseRouteParams(route.params);
+      // reset route params
+      navigation.setParams({
+        baseUrl: undefined,
+        appId: undefined,
+        appUserId: undefined,
+      });
+      // start linking process
+      dispatch(requestLinking({ linkingAppInfo }));
     }
-  }, [apps, handleV5DeepLink, handleV6DeepLink, route.params]);
+  }, [t, api, dispatch, route.params, navigation]);
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -175,22 +152,22 @@ const AppsScreenController = () => {
   }, [api, dispatch]);
 
   return (
-    <AppsScreen
-      sponsoringApp={sponsoringApp}
-      pendingLink={pendingLink}
-      isSponsored={isSponsored}
-      totalApps={totalApps}
-      linkedContextsCount={linkedContextsCount}
-      totalVerifiedApps={totalVerifiedApps}
-      activeFilter={activeFilter}
-      searchTerm={searchTerm}
-      setFilter={setFilter}
-      setSearch={setSearchTerm}
-      filteredApps={filteredApps}
-      refreshApps={refreshApps}
-      refreshing={refreshing}
-      sigsUpdating={sigsUpdating}
-    />
+    <>
+      <AppsScreen
+        isSponsored={isSponsored}
+        totalApps={totalApps}
+        linkedContextsCount={linkedContextsCount}
+        totalVerifiedApps={totalVerifiedApps}
+        activeFilter={activeFilter}
+        searchTerm={searchTerm}
+        setFilter={setFilter}
+        setSearch={setSearchTerm}
+        filteredApps={filteredApps}
+        refreshApps={refreshApps}
+        refreshing={refreshing}
+      />
+      {appLinkingStep !== app_linking_steps.IDLE && <AppLinkingScreen />}
+    </>
   );
 };
 

@@ -2,11 +2,24 @@
  * Apps
  */
 
+type LinkingAppInfo = {
+  appId: string;
+  appUserId: string;
+  baseUrl?: string;
+  v: number;
+  skipSponsoring?: boolean;
+};
+
 type AppsState = {
   apps: AppInfo[];
   linkedContexts: EntityState<ContextInfo>;
   sigs: EntityState<SigInfo>;
   sigsUpdating: boolean;
+  appLinkingStep: AppLinkingStep_Type;
+  appLinkingStepText?: string;
+  sponsorOperationHash?: string;
+  linkingAppInfo?: LinkingAppInfo;
+  linkingAppError?: string;
 };
 
 /**

@@ -27,6 +27,7 @@ const socialMediaSlice = createSlice({
         profile: incomingProfile,
         brightIdSocialAppData: incomingBrightIdSocialAppData,
         shareWithConnections: incomingShareWithConnections,
+        discoverable: incomingDiscoverable,
       } = action.payload;
 
       // access previous values from the reducer
@@ -42,7 +43,6 @@ const socialMediaSlice = createSlice({
           const entityToRemove = Object.values(entities).find(
             (entity) => entity.order === incomingOrder,
           );
-
           socialMediaAdapter.removeOne(state, entityToRemove.id);
         }
       }
@@ -55,6 +55,7 @@ const socialMediaSlice = createSlice({
             profile: incomingProfile,
             brightIdSocialAppData: incomingBrightIdSocialAppData,
             shareWithConnections: incomingShareWithConnections,
+            discoverable: incomingDiscoverable,
           },
         });
       }
@@ -69,13 +70,19 @@ const socialMediaSlice = createSlice({
         const shouldDecrement = !shouldIncrement;
 
         const updateList = Object.values(entities).map((entity) => {
-          let { order, profile, brightIdSocialAppData, shareWithConnections } =
-            entity;
+          let {
+            order,
+            profile,
+            brightIdSocialAppData,
+            shareWithConnections,
+            discoverable,
+          } = entity;
           if (entity.id === incomingId) {
             order = incomingOrder;
             profile = incomingProfile;
             brightIdSocialAppData = incomingBrightIdSocialAppData;
             shareWithConnections = incomingShareWithConnections;
+            discoverable = incomingDiscoverable;
           } else if (
             shouldIncrement &&
             order >= incomingOrder &&
@@ -97,6 +104,7 @@ const socialMediaSlice = createSlice({
               profile,
               brightIdSocialAppData,
               shareWithConnections,
+              discoverable,
             },
           };
         });
@@ -115,10 +123,22 @@ const socialMediaSlice = createSlice({
         },
       });
     },
+    setDiscoverable: (
+      state,
+      action: PayloadAction<{ id: string; discoverable: boolean }>,
+    ) => {
+      const { id, discoverable } = action.payload;
+      socialMediaAdapter.updateOne(state, {
+        id,
+        changes: {
+          discoverable,
+        },
+      });
+    },
   },
 });
 
-export const { saveSocialMedia, setProfileDisplayWidth } =
+export const { saveSocialMedia, setProfileDisplayWidth, setDiscoverable } =
   socialMediaSlice.actions;
 
 export const {

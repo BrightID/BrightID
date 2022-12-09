@@ -23,6 +23,7 @@ type SeedConnectedVerification = HashVerification & {
   name: 'SeedConnected';
   rank: number;
   connected: Array<string>; // hashes of seedgroups that connected with user
+  communities: Array<string>;
   reported: Array<string>; // hashes of seedgroups that reported this user
 };
 

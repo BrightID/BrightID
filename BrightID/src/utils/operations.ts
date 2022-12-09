@@ -2,43 +2,28 @@ import { Alert } from 'react-native';
 import i18next from 'i18next';
 import store from '@/store';
 import {
-  updateLinkedContext,
   addConnection,
+  Operation,
+  selectPendingOperations,
   updateMemberships,
   updateOperation,
-  selectPendingOperations,
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
 import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
 import { NodeApi } from '@/api/brightId';
+import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 
-const handleOpUpdate = (store, op, state, result, api) => {
+const handleOpUpdate = (
+  store,
+  op: Operation,
+  state: OperationStateType,
+  result,
+  api: NodeApi,
+) => {
   let showDefaultError = false;
   switch (op.name) {
     case 'Link ContextId':
-      store.dispatch(
-        updateLinkedContext({
-          context: op.context,
-          contextId: op.contextId,
-          state,
-        }),
-      );
-      if (state === operation_states.APPLIED) {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkSuccess'),
-          i18next.t('apps.alert.text.linkSuccess', {
-            context: `${op.context}`,
-          }),
-        );
-      } else {
-        Alert.alert(
-          i18next.t('apps.alert.title.linkFailure'),
-          i18next.t('apps.alert.text.linkFailure', {
-            context: `${op.context}`,
-            result: `${result.message}`,
-          }),
-        );
-      }
+      store.dispatch(handleLinkContextOpUpdate({ op, state, result }));
       break;
 
     case 'Connect':
@@ -52,8 +37,10 @@ const handleOpUpdate = (store, op, state, result, api) => {
         api.getProfile(op.id2).then((profile) => {
           const conn = {
             id: profile.id,
+            // @ts-ignore
             level: profile.level,
             timestamp: profile.connectedAt,
+            // @ts-ignore
             reportReason: profile.reports.find((r) => r.id === op.id1)?.reason,
           };
           store.dispatch(addConnection(conn));
@@ -77,6 +64,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
         }
       }
       break;
+
     default:
       if (state === operation_states.FAILED) {
         showDefaultError = true;
@@ -94,7 +82,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
   }
 };
 
-export const pollOperations = async (api) => {
+export const pollOperations = async (api: NodeApi) => {
   const operations = selectPendingOperations(store.getState());
   let shouldUpdateTasks = false;
   try {

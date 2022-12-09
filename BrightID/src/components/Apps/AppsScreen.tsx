@@ -10,19 +10,15 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/stack';
-import Spinner from 'react-native-spinkit';
 import { useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, BLUE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
 import AnimatedLinearGradient from './AnimatedLinearGradient';
 import AppsScreenFilter from '@/components/Apps/AppsScreenFilter';
 
 type Props = {
-  sponsoringApp: AppInfo | undefined;
-  pendingLink: ContextInfo | undefined;
   isSponsored: boolean;
   totalApps: number;
   linkedContextsCount: number;
@@ -33,13 +29,10 @@ type Props = {
   setSearch: (term: string) => void;
   filteredApps: AppInfo[];
   refreshing: boolean;
-  sigsUpdating: boolean;
   refreshApps: () => void;
 };
 
 export const AppsScreen = ({
-  sponsoringApp,
-  pendingLink,
   isSponsored,
   totalApps,
   linkedContextsCount,
@@ -50,13 +43,11 @@ export const AppsScreen = ({
   setSearch,
   filteredApps,
   refreshing,
-  sigsUpdating,
   refreshApps,
 }: Props) => {
   const headerHeight = useHeaderHeight();
   const { t } = useTranslation();
   useFocusEffect(refreshApps);
-
   const scrollViewRef = useRef(null);
 
   // Animation
@@ -108,25 +99,12 @@ export const AppsScreen = ({
   });
 
   const OverallDescription = () => {
-    let msg: string, waiting: boolean;
+    let msg: string;
 
     showView.start();
-
-    if (sponsoringApp) {
-      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
-      waiting = true;
-    } else if (pendingLink) {
-      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
-      waiting = true;
-    } else if (sigsUpdating) {
-      msg = t('apps.text.sigsUpdating');
-      waiting = true;
-    } else if (!isSponsored) {
+    if (!isSponsored) {
       msg = t('apps.text.notSponsored');
-      waiting = false;
     } else {
-      msg = '';
-      waiting = false;
       closeView.start();
     }
 
@@ -148,12 +126,6 @@ export const AppsScreen = ({
           <Animated.View
             style={[styles.statusContainer, { maxHeight: notifHeight }]}
           >
-            <Spinner
-              isVisible={waiting}
-              size={DEVICE_LARGE ? 48 : 42}
-              type="ThreeBounce"
-              color={WHITE}
-            />
             <Text style={styles.statusMessage}>{msg}</Text>
           </Animated.View>
         ) : (

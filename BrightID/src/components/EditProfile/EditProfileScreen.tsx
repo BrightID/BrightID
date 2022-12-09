@@ -42,27 +42,38 @@ import { fontSize } from '@/theme/fonts';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
 import {
-  selectSyncSocialMediaEnabled,
+  selectAllLinkedSigs,
+  selectAppInfoByAppId,
+  selectApplinkingStep,
+  selectLinkingAppError,
+  selectLinkingAppInfo,
+  selectUserVerifications,
   setName,
   setPhoto,
-  setSyncSocialMediaEnabled,
 } from '@/actions';
 import Chevron from '@/components/Icons/Chevron';
 import {
   saveSocialMedia,
   selectExistingSocialMedia,
+  setDiscoverable,
   setProfileDisplayWidth,
-} from '../../reducer/socialMediaSlice';
+} from '@/reducer/socialMediaSlice';
 import {
   selectAllSocialMediaVariationsByType,
   selectSocialMediaVariationById,
+  selectSocialMediaVariationsWithBrightIDApp,
 } from '@/reducer/socialMediaVariationSlice';
 import { SocialMediaType } from './socialMediaVariations';
 import {
+  allowDiscovery,
+  linkSocialMediaApp,
+  removeSocialFromServer,
   removeSocialMediaThunk,
-  setSyncSocialMediaEnabledThunk,
+  syncSocialMediaChanges,
 } from '@/components/EditProfile/socialMediaThunks';
 import { getShareWithConnectionsValue } from '@/utils/socialUtils';
+import { app_linking_steps } from '@/utils/constants';
+import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -178,14 +189,34 @@ const SocialMediaLink = (props: {
   socialMedia: SocialMedia;
   type: SocialMediaType;
 }) => {
+  const { socialMedia } = props;
+  const { id, profile, profileDisplayWidth, order } = socialMedia;
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id, profile, profileDisplayWidth, order } = props.socialMedia;
-  const { t } = useTranslation();
-
   const socialMediaVariation = useSelector((state) =>
     selectSocialMediaVariationById(state, id),
   );
+  const appInfo = useSelector((state: RootState) => {
+    if (socialMediaVariation.brightIdAppId) {
+      return selectAppInfoByAppId(state, socialMediaVariation.brightIdAppId);
+    } else return undefined;
+  });
+
+  const isLinked = useSelector((state: RootState) => {
+    if (appInfo) {
+      const appSigs = selectAllLinkedSigs(state).filter(
+        (sig) => sig.app === appInfo.id,
+      );
+      return appSigs.length > 0;
+    } else return false;
+  });
+
+  const userVerifications = useSelector(selectUserVerifications);
+
+  const showDiscovery = appInfo
+    ? allowDiscovery({ appInfo, userVerifications })
+    : false;
+
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
@@ -235,6 +266,79 @@ const SocialMediaLink = (props: {
       }),
     );
   };
+
+  const toggleDiscoverable = async () => {
+    if (!socialMedia.discoverable) {
+      if (!isLinked) {
+        Alert.alert(
+          `You need to link your BrightID`,
+          `In order to allow your friends to see that you ` +
+            `are a BrightID user you need to link with the ${appInfo.name} app.`,
+          [
+            {
+              text: `Cancel`,
+              style: 'cancel',
+              onPress: () => null,
+            },
+            {
+              text: `Okay`,
+              style: 'default',
+              onPress: async () => {
+                try {
+                  console.log(`Start sync + link!`);
+                  // Step 1 - sync with socialMediaService
+                  const syncedSocialMedia = await dispatch(
+                    syncSocialMediaChanges(socialMedia),
+                  );
+                  // step 2 - link with app
+                  await dispatch(
+                    linkSocialMediaApp({
+                      appId: appInfo.id,
+                      appUserId:
+                        syncedSocialMedia.brightIdSocialAppData.appUserId,
+                    }),
+                  );
+                  console.log(`End sync + link!`);
+                  // okay, update discoverable state
+                  dispatch(
+                    setDiscoverable({ id: socialMedia.id, discoverable: true }),
+                  );
+                } catch (e) {
+                  console.log(`Failed to enable discovery: ${e}`);
+                }
+              },
+            },
+          ],
+        );
+      } else {
+        // already linked with app, just need to sync changes
+        try {
+          console.log(`Start sync`);
+          await dispatch(syncSocialMediaChanges(socialMedia));
+          console.log(`End sync`);
+          dispatch(setDiscoverable({ id: socialMedia.id, discoverable: true }));
+        } catch (e) {
+          console.log(`Failed to enable discovery: ${e}`);
+        }
+      }
+    } else {
+      try {
+        await removeSocialFromServer(socialMedia);
+        const newSocialMedia: SocialMedia = {
+          ...socialMedia,
+          brightIdSocialAppData: {
+            ...socialMedia.brightIdSocialAppData,
+            synced: false,
+          },
+        };
+        dispatch(saveSocialMedia(newSocialMedia));
+        dispatch(setDiscoverable({ id: socialMedia.id, discoverable: false }));
+      } catch (e) {
+        console.log(`Failed to disable discovery: ${e}`);
+      }
+    }
+  };
+
   return (
     <>
       <View style={styles.socialMediaLinkContainer}>
@@ -297,6 +401,19 @@ const SocialMediaLink = (props: {
           value={getShareWithConnectionsValue(props.socialMedia)}
         />
       </View>
+      {showDiscovery && (
+        <View style={styles.shareSocialMediaToggleContainer}>
+          <Text style={styles.label} onPress={toggleDiscoverable}>
+            Allow friends to see I'm a BrightID user{' '}
+          </Text>
+          <CheckBox
+            style={styles.syncSocialMediaSwitch}
+            tintColors={{ false: GREY, true: ORANGE }}
+            onValueChange={toggleDiscoverable}
+            value={socialMedia.discoverable}
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -314,7 +431,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
   const socialMediaVariationIds = socialMediaVariations.map((item) => item.id);
   const { t } = useTranslation();
 
-  // console.log('socialMedia', socialMediaItems);
+  console.log('socialMedia', socialMediaItems);
 
   const SocialMediaVariations = socialMediaItems
     .filter((item) => socialMediaVariationIds.includes(item.id))
@@ -432,39 +549,6 @@ const ShowEditPassword = () => {
   );
 };
 
-function SyncSocialMedia() {
-  const dispatch = useDispatch();
-  const syncSocialMediaEnabled = useSelector(selectSyncSocialMediaEnabled);
-  return (
-    <>
-      <View style={styles.syncSocialMediaSwitchContainer}>
-        <Text
-          style={styles.label}
-          onPress={() => {
-            dispatch(setSyncSocialMediaEnabledThunk(!syncSocialMediaEnabled));
-          }}
-        >
-          Allow friends to see I'm a BrightID user{' '}
-        </Text>
-        <CheckBox
-          style={styles.syncSocialMediaSwitch}
-          tintColors={{ false: GREY, true: ORANGE }}
-          onValueChange={(value) => {
-            dispatch(setSyncSocialMediaEnabledThunk(value));
-          }}
-          value={syncSocialMediaEnabled}
-        />
-      </View>
-      <Text style={styles.infoText}>
-        Items you add to your profile are encrypted and used anonymously to help
-        your contacts see that you're a BrightID user. If you check the box next
-        to an item, it will also be shared directly with people you connect to.
-        Profile info is not shared with BrightID or apps.
-      </Text>
-    </>
-  );
-}
-
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -479,9 +563,17 @@ export const EditProfileScreen = ({ navigation }) => {
   const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
   const prevName = useSelector((state) => state.user.name);
   const prevPhoto = useRef(null);
+  const appLinkingStep = useSelector(selectApplinkingStep);
+  const variationsWithApp = useSelector(
+    selectSocialMediaVariationsWithBrightIDApp,
+  );
+  const linkingAppInfo = useSelector(selectLinkingAppInfo);
+
   // state passed down to children
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
   const [nextName, setNextName] = useState(prevName);
+
+  const [showAppLinkingScreen, setShowAppLinkingScreen] = useState(false);
 
   // allow user to save changes if profilePhoto or name has changed
   const saveDisabled =
@@ -557,6 +649,44 @@ export const EditProfileScreen = ({ navigation }) => {
     [navigation, saveDisabled, t],
   );
 
+  useEffect(() => {
+    const socialMediaVariationAppIds = variationsWithApp.map(
+      (variation) => variation.brightIdAppId,
+    );
+
+    // show the app linking screen if we are in the linking workflow for one of the socialMediaVariation apps
+    // like emailRegistry, phoneRegistry etc.
+    const linkingSocialMediaApp =
+      linkingAppInfo &&
+      appLinkingStep !== app_linking_steps.IDLE &&
+      socialMediaVariationAppIds.includes(linkingAppInfo.appId);
+
+    if (linkingSocialMediaApp) {
+      // show modal
+      setShowAppLinkingScreen(true);
+
+      // hide header of parent navigator (home screen) as it can't be blurred
+      // Yes, this is a horrible workaround :-/
+      navigation.getParent()?.setOptions({
+        headerShown: false,
+      });
+    } else {
+      // hide modal
+      setShowAppLinkingScreen(false);
+      // restore header
+      navigation.getParent()?.setOptions({
+        headerShown: true,
+      });
+    }
+
+    return () => {
+      // restore header
+      navigation.getParent()?.setOptions({
+        headerShown: true,
+      });
+    };
+  }, [appLinkingStep, linkingAppInfo, navigation, variationsWithApp]);
+
   return (
     <View
       style={[
@@ -574,7 +704,21 @@ export const EditProfileScreen = ({ navigation }) => {
         <EditName nextName={nextName} setNextName={setNextName} />
 
         <View style={styles.socialMediaTopDivider} />
-        <SyncSocialMedia />
+        <View style={styles.shareProfileInfoHeader}>
+          <Text>Profile sharing options</Text>
+        </View>
+        <Text style={styles.infoText}>
+          <Text style={styles.emphasized}>"Share with connections":</Text> Info
+          will be shared directly with people you connect to. Info is never
+          shared with BrightID or any app using BrightID.
+        </Text>
+        <Text style={styles.infoText}>
+          <Text style={styles.emphasized}>
+            "Allow friends to see I'm a BrightID user":
+          </Text>{' '}
+          Info will be encrypted and used anonymously to help your contacts see
+          that you are a BrightID user.
+        </Text>
         <SocialMediaLinks type={SocialMediaType.CONTACT_INFO} />
         <SocialMediaLinks type={SocialMediaType.SOCIAL_PROFILE} />
         <View style={styles.bottomDivider} />
@@ -609,6 +753,7 @@ export const EditProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {showAppLinkingScreen && <AppLinkingScreen />}
     </View>
   );
 };
@@ -659,10 +804,15 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: DEVICE_LARGE ? 36 : 30,
   },
+  emphasized: {
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  },
   label: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: DARK_ORANGE,
+    marginRight: 'auto',
   },
   editNameInput: {
     fontFamily: 'Poppins-Medium',
@@ -678,13 +828,13 @@ const styles = StyleSheet.create({
   },
   shareSocialMediaToggleContainer: {
     alignItems: 'center',
-    paddingBottom: DEVICE_LARGE ? 4 : 2,
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 6,
+    paddingRight: 0,
   },
-  syncSocialMediaSwitch: {
-    flex: 1,
-  },
+  syncSocialMediaSwitch: {},
   bottomDivider: {
     width: '100%',
     borderBottomColor: LIGHT_GREY,
@@ -703,7 +853,7 @@ const styles = StyleSheet.create({
   },
   socialMediaLinkContainer: {
     width: WIDTH - (DEVICE_LARGE ? 80 : 60),
-    maxWidth: WIDTH - (DEVICE_LARGE ? 80 : 60),
+    maxWidth: WIDTH - (DEVICE_LARGE ? 88 : 68),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -712,6 +862,7 @@ const styles = StyleSheet.create({
   socialMediaLinkLabel: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 8,
   },
   socialMediaSelect: {
     flexDirection: 'row',
@@ -813,6 +964,9 @@ const styles = StyleSheet.create({
   closeButton: {
     paddingHorizontal: DEVICE_LARGE ? 10 : 8,
     marginRight: DEVICE_LARGE ? -10 : -8,
+  },
+  shareProfileInfoHeader: {
+    marginBottom: 5,
   },
 });
 
