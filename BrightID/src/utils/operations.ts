@@ -11,10 +11,7 @@ import {
 import { checkTasks } from '@/components/Tasks/TasksSlice';
 import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
 import { NodeApi } from '@/api/brightId';
-import {
-  handleLinkContextOpUpdate,
-  handleSponsorOpUpdate,
-} from '@/components/Apps/appThunks';
+import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 
 const handleOpUpdate = (
   store,
@@ -66,10 +63,6 @@ const handleOpUpdate = (
           });
         }
       }
-      break;
-
-    case 'Spend Sponsorship':
-      store.dispatch(handleSponsorOpUpdate(state));
       break;
 
     default:

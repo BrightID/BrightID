@@ -19,6 +19,7 @@ import {
   updateSig,
   selectSigsUpdating,
   setSigsUpdating,
+  selectSponsorOperationHash,
 } from '@/reducer/appsSlice';
 import {
   BrightIdNetwork,
@@ -27,8 +28,13 @@ import {
   SPONSORING_POLL_INTERVAL,
   app_linking_steps,
   UPDATE_BLIND_SIG_WAIT_TIME,
+  OPERATION_TRACE_TIME,
 } from '@/utils/constants';
-import { addOperation, Operation } from '@/reducer/operationsSlice';
+import {
+  addOperation,
+  Operation,
+  selectOperationByHash,
+} from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
 import {
   selectIsSponsored,
@@ -139,11 +145,7 @@ export const startLinking =
     } else {
       // trigger sponsoring workflow
       console.log(`Sponsoring required`);
-      const opHash = await dispatch(requestSponsoring());
-      if (opHash) {
-        console.log(`Sponsor op hash: ${opHash}`);
-        dispatch(setSponsorOperationHash(opHash));
-      }
+      await dispatch(requestSponsoring());
     }
   };
 
@@ -173,12 +175,11 @@ export const linkAppOrContext =
   };
 
 export const requestSponsoring =
-  (): AppThunk<Promise<string | undefined>> =>
-  async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.WAITING_USER_CONFIRMATION) {
+    if (applinkingStep !== app_linking_steps.USER_CONFIRMED) {
       console.log(
-        `Can't request sponsoring when not in WAITING_USER_CONFIRMATION state. Current state: ${applinkingStep}`,
+        `Can't request sponsoring when not in USER_CONFIRMED state. Current state: ${applinkingStep}`,
       );
       return;
     }
@@ -194,11 +195,13 @@ export const requestSponsoring =
     if (!sp || !sp.spendRequested) {
       console.log(`Sending spend sponsorship op...`);
       const op = await api.spendSponsorship(appId, appUserId);
+      console.log(`Sponsor op hash: ${op.hash}`);
+      dispatch(setSponsorOperationHash(op.hash));
       dispatch(addOperation(op));
       dispatch(
         setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
       );
-      return op.hash;
+      dispatch(waitForSponsorOp());
     } else {
       // sponsoring was already requested, go to next step (waiting for sponsoring by app)
       dispatch(
@@ -206,6 +209,58 @@ export const requestSponsoring =
       );
       dispatch(waitForAppSponsoring());
     }
+  };
+
+export const waitForSponsorOp =
+  (): AppThunk => (dispatch: AppDispatch, getState) => {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_OP) {
+      console.log(
+        `Can't wait for sponsoring op when not in WAITING_OP state. Current state: ${applinkingStep}`,
+      );
+      return;
+    }
+    const sponsorOpHash = selectSponsorOperationHash(getState());
+    if (!sponsorOpHash) {
+      console.log(`Can't wait for sponsoring op - Op hash is not set`);
+      return;
+    }
+
+    const startTime = Date.now();
+    // Op to request sponsoring is submitted. Now wait for it to confirm.
+    const intervalId = setInterval(async () => {
+      const timeElapsed = Date.now() - startTime;
+      const op = selectOperationByHash(getState(), sponsorOpHash);
+      switch (op.state) {
+        case operation_states.APPLIED:
+          clearInterval(intervalId);
+          dispatch(
+            setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+          );
+          dispatch(waitForAppSponsoring());
+          break;
+        case operation_states.FAILED:
+          clearInterval(intervalId);
+          dispatch(setLinkingAppError('spend sponsor operation failed'));
+          break;
+        case operation_states.EXPIRED:
+          clearInterval(intervalId);
+          dispatch(setLinkingAppError('spend sponsor operation timed out'));
+          break;
+        case operation_states.UNKNOWN:
+        case operation_states.INIT:
+        case operation_states.SENT:
+        default:
+          // keep waiting until timeout
+          if (timeElapsed > OPERATION_TRACE_TIME) {
+            console.log(`Timeout waiting for sponsoring!`);
+            clearInterval(intervalId);
+            dispatch(setLinkingAppError('spend sponsor operation timed out'));
+          }
+          break;
+      }
+    }, SPONSORING_POLL_INTERVAL);
+    console.log(`Started pollSponsorOp ${intervalId}`);
   };
 
 export const waitForAppSponsoring =
@@ -256,39 +311,6 @@ export const waitForAppSponsoring =
       }
     }, SPONSORING_POLL_INTERVAL);
     console.log(`Started pollSponsorship ${intervalId}`);
-  };
-
-export const handleSponsorOpUpdate =
-  (state: OperationStateType): AppThunk<Promise<void>> =>
-  async (dispatch: AppDispatch, getState) => {
-    const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_OP) {
-      console.log(
-        `Can't handle Operation update when not in WAITING_OP state. Current state: ${applinkingStep}`,
-      );
-      return;
-    }
-
-    switch (state) {
-      case operation_states.APPLIED:
-        dispatch(
-          setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
-        );
-        dispatch(waitForAppSponsoring());
-        break;
-      case operation_states.FAILED:
-        dispatch(setLinkingAppError('spend sponsor operation failed'));
-        break;
-      case operation_states.EXPIRED:
-        dispatch(setLinkingAppError('spend sponsor operation timed out'));
-        break;
-      case operation_states.UNKNOWN:
-      case operation_states.INIT:
-      case operation_states.SENT:
-      default:
-        // keep waiting
-        break;
-    }
   };
 
 export const linkContextId =
