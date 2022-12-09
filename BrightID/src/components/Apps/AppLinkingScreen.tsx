@@ -45,7 +45,7 @@ const ConfirmationView = ({ appName }) => {
   };
 
   return (
-    <View style={styles.stepContainer}>
+    <View style={styles.stepContainer} testID="AppLinkingConfirmationView">
       <View style={styles.statusContainer}>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>
@@ -57,7 +57,7 @@ const ConfirmationView = ({ appName }) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          testID="Confirminking"
+          testID="ConfirmLinking"
           style={[styles.modalButton, styles.submitButton]}
           onPress={confirmHandler}
         >
@@ -120,7 +120,10 @@ const AppLinkingView = ({ sponsoringStep, appName, text }) => {
   }
 
   return (
-    <View style={styles.stepContainer}>
+    <View
+      style={styles.stepContainer}
+      testID={`AppLinkingStep-${sponsoringStep}`}
+    >
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
@@ -188,7 +191,10 @@ const AppLinkingScreen = () => {
             )}
             {error ? (
               <>
-                <Text style={styles.resultContainerErrorText}>
+                <Text
+                  style={styles.resultContainerErrorText}
+                  testID={`AppLinkingError-${appLinkingStep}`}
+                >
                   {t('apps.alert.title.linkingFailed')}
                 </Text>
                 <Text style={styles.infoSubText}>{error}</Text>
