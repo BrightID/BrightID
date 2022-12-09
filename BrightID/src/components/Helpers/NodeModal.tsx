@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Alert,
   Linking,
@@ -30,6 +30,7 @@ import { leaveAllChannels } from '@/components/PendingConnections/actions/channe
 import GraphQl from '@/components/Icons/GraphQl';
 import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
 import { startHttpServer, stopHttpServer } from '@/utils/httpServer';
+import { setLocalServerUrl } from '@/reducer/userSlice';
 
 const NodeModal = () => {
   const route = useRoute() as {
@@ -77,26 +78,26 @@ const NodeModal = () => {
     );
   }
 
-  const [httpServerUrl, setHttpServerUrl] = useState('');
+  const localServerUrl = useSelector((state) => state.user.localServerUrl);
 
   const startHttpServerCallback = useCallback(async () => {
     await startHttpServer();
     const ip = await NetworkInfo.getIPV4Address();
     const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
-    setHttpServerUrl(serverUrl);
+    dispatch(setLocalServerUrl(serverUrl));
     return serverUrl;
-  }, []);
+  }, [dispatch]);
 
   const toggleHttpServer = useCallback(async () => {
-    if (!httpServerUrl) {
+    if (!localServerUrl) {
       const serverUrl = await startHttpServerCallback();
       Clipboard.setString(serverUrl);
       Alert.alert(t('home.alert.text.copied'));
     } else {
       stopHttpServer();
-      setHttpServerUrl('');
+      dispatch(setLocalServerUrl(''));
     }
-  }, [httpServerUrl, startHttpServerCallback, t]);
+  }, [dispatch, localServerUrl, startHttpServerCallback, t]);
 
   useEffect(() => {
     const openNext = async () => {
@@ -106,7 +107,7 @@ const NodeModal = () => {
       }
     };
     if (route.params?.run) {
-      if (!httpServerUrl) {
+      if (!localServerUrl) {
         startHttpServerCallback().then(openNext);
       } else {
         openNext();
@@ -149,7 +150,7 @@ const NodeModal = () => {
             styles.switchNodeButton,
             styles.httpServerButton,
             {
-              backgroundColor: httpServerUrl ? GREEN : ORANGE,
+              backgroundColor: localServerUrl ? GREEN : ORANGE,
             },
           ]}
           onPress={toggleHttpServer}
@@ -160,7 +161,7 @@ const NodeModal = () => {
             width={DEVICE_LARGE ? 25 : 20}
             height={DEVICE_LARGE ? 25 : 20}
           />
-          {httpServerUrl ? (
+          {localServerUrl ? (
             <View style={styles.httpServerInfo}>
               <Text
                 style={[
@@ -170,7 +171,7 @@ const NodeModal = () => {
                   },
                 ]}
               >
-                {httpServerUrl}
+                {localServerUrl}
               </Text>
               <Text style={styles.wifiSharingText}>WiFi Sharing Url</Text>
             </View>

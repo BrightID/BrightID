@@ -21,6 +21,7 @@ const initialState: UserState = {
     name: 0,
     password: 0,
   },
+  localServerUrl: '',
 };
 
 const userSlice = createSlice({
@@ -84,6 +85,9 @@ const userSlice = createSlice({
       state.id = id;
       state.password = password;
     },
+    setLocalServerUrl(state, action) {
+      state.localServerUrl = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -105,6 +109,7 @@ export const {
   setVerifications,
   setEula,
   hydrateUser,
+  setLocalServerUrl,
 } = userSlice.actions;
 
 export const userSelector = (state: RootState): User => ({

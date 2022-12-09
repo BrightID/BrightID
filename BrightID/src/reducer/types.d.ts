@@ -103,6 +103,7 @@ type UserState = User & {
     backupCompleted: number;
     password: number;
   };
+  localServerUrl: string;
 };
 
 /**
