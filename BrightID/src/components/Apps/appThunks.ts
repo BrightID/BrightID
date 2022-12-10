@@ -354,7 +354,7 @@ export const handleLinkContextOpUpdate =
   }: {
     op: Operation;
     state: OperationStateType;
-    result: string;
+    result: any;
   }): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     // make sure this is only called with the correct operation
@@ -379,7 +379,7 @@ export const handleLinkContextOpUpdate =
       } else {
         const text = t('apps.alert.text.linkFailure', {
           context: `${op.context}`,
-          result: `${result}`,
+          result: `${result.message}`,
         });
         dispatch(setLinkingAppError(text));
       }
