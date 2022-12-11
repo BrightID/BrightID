@@ -17,6 +17,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import nacl from 'tweetnacl';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
@@ -48,7 +49,11 @@ import {
 } from '@/components/Tasks/TasksSlice';
 
 import { version as app_version } from '../../package.json';
-import { uInt8ArrayToB64 } from '@/utils/encoding';
+import {
+  b64ToUint8Array,
+  UInt8ArrayEqual,
+  uInt8ArrayToB64,
+} from '@/utils/encoding';
 import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
 
 /**
@@ -143,6 +148,37 @@ export const HomeScreen = (props) => {
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
   }, [dispatch, headerHeight]);
+
+  useEffect(() => {
+    console.log(`checking secret key`);
+    console.log(secretKey);
+    if (secretKey.length !== nacl.sign.secretKeyLength) {
+      Alert.alert(
+        `Invalid secret key size`,
+        `Expected: ${nacl.sign.secretKeyLength} Byte - Actual: ${secretKey.length}`,
+      );
+    }
+    console.log(`checking public key`);
+    console.log(publicKey);
+    const pubKeyUInt8 = b64ToUint8Array(publicKey);
+    console.log(pubKeyUInt8);
+    if (pubKeyUInt8.length !== nacl.sign.publicKeyLength) {
+      Alert.alert(
+        `Invalid public key size.`,
+        `Expected: ${nacl.sign.publicKeyLength} Byte - Actual: ${pubKeyUInt8.length}`,
+      );
+    }
+    // check if public key matches secret key
+    const { publicKey: newPub, secretKey: newSecret } =
+      nacl.sign.keyPair.fromSecretKey(secretKey);
+    console.log(newPub);
+    if (!UInt8ArrayEqual(newPub, pubKeyUInt8)) {
+      Alert.alert(
+        `Public/secret key mismatch.`,
+        `Expected: ${pubKeyUInt8}\nActual: ${newPub}`,
+      );
+    }
+  }, [secretKey, publicKey]);
 
   const { showActionSheetWithOptions } = useActionSheet();
 
