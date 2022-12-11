@@ -189,9 +189,7 @@ const RecoveryCodeScreen = ({ route }) => {
         t('recovery.error.title', 'Account recovery failed'),
         message,
       );
-      if (action === 'recovery') {
-        // dispatch(clearRecoveryChannel());
-      } else if (action === 'import') {
+      if (action === 'import') {
         clearImportChannel();
       }
       dispatch(resetRecoveryData());
