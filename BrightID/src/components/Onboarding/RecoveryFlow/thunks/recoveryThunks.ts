@@ -29,7 +29,7 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 // THUNKS
 
 export const setupRecovery =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     console.log(`Setting up recovery...`);
     const { recoveryData } = getState();
     await createImageDirectory();
@@ -39,6 +39,15 @@ export const setupRecovery =
       const aesKey = await urlSafeRandomKey(16);
       // setup recovery data slice with new keypair
       dispatch(init({ publicKey, secretKey, aesKey }));
+    } else {
+      // we should have valid recovery data. double-check required data is available.
+      const { publicKey, secretKey } = recoveryData;
+      if (!publicKey?.length || !secretKey?.length) {
+        const { publicKey, secretKey } = await nacl.sign.keyPair();
+        const aesKey = await urlSafeRandomKey(16);
+        // setup recovery data slice with new keypair
+        dispatch(init({ publicKey, secretKey, aesKey }));
+      }
     }
   };
 
