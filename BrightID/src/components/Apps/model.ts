@@ -21,7 +21,10 @@ export const getSignedTimestamp = (app: AppInfo) => {
   return null;
 };
 
-export const getSponsorship = async (appUserId: string, api: NodeApi) => {
+export const getSponsorship = async (
+  appUserId: string,
+  api: NodeApi,
+): Promise<SponsorshipInfo | undefined> => {
   try {
     return await api.getSponsorship(appUserId);
   } catch (e) {

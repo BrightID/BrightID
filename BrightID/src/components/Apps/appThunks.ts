@@ -281,11 +281,13 @@ export const waitForAppSponsoring =
     const intervalId = setInterval(async () => {
       const timeElapsed = Date.now() - startTime;
       let sponsorshipInfo: SponsorshipInfo | undefined;
+      let errorResponse;
       try {
         sponsorshipInfo = await getSponsorship(appUserId, api);
       } catch (error) {
         console.log(`Error getting sponsorship info:`);
         console.log(`${error}`);
+        errorResponse = error;
       }
       if (sponsorshipInfo) {
         console.log(
@@ -307,7 +309,18 @@ export const waitForAppSponsoring =
       if (timeElapsed > SPONSOR_WAIT_TIME) {
         console.log(`Timeout waiting for sponsoring!`);
         clearInterval(intervalId);
-        dispatch(setLinkingAppError(`Timeout waiting for sponsoring!`));
+        let lastResult;
+        if (sponsorshipInfo) {
+          lastResult = `Last poll result: "appHasAuthorized": "${sponsorshipInfo.appHasAuthorized}", "spendRequested": "${sponsorshipInfo.spendRequested}"`;
+        } else if (errorResponse) {
+          lastResult = `Error: "${errorResponse?.message || errorResponse}"`;
+        } else {
+          // no sponsorshipInfo but also no error
+          lastResult = `Error: Node has not registered the sponsor request`;
+        }
+        dispatch(
+          setLinkingAppError(`Timeout waiting for sponsoring!. ${lastResult}`),
+        );
       }
     }, SPONSORING_POLL_INTERVAL);
     console.log(`Started pollSponsorship ${intervalId}`);
@@ -354,7 +367,7 @@ export const handleLinkContextOpUpdate =
   }: {
     op: Operation;
     state: OperationStateType;
-    result: string;
+    result: any;
   }): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     // make sure this is only called with the correct operation
@@ -379,7 +392,7 @@ export const handleLinkContextOpUpdate =
       } else {
         const text = t('apps.alert.text.linkFailure', {
           context: `${op.context}`,
-          result: `${result}`,
+          result: `${result.message}`,
         });
         dispatch(setLinkingAppError(text));
       }
