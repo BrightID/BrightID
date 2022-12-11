@@ -109,10 +109,21 @@ const RestoreScreen = () => {
       }
     };
     const finishRecovery = async () => {
-      dispatch(setRecoveryKeys());
-      setAccountStep(AccountSteps.COMPLETE);
-      // restore backup can now start
-      setDataStep(BackupSteps.WAITING_PASSWORD);
+      try {
+        dispatch(setRecoveryKeys());
+        setAccountStep(AccountSteps.COMPLETE);
+        // restore backup can now start
+        setDataStep(BackupSteps.WAITING_PASSWORD);
+      } catch (err) {
+        let errorString = '';
+        if (err instanceof Error) {
+          errorString = `${err.message}`;
+        } else {
+          errorString = `${err}`;
+        }
+        setAccountStep(AccountSteps.ERROR);
+        setAccountError(errorString);
+      }
     };
     switch (accountStep) {
       case AccountSteps.DOWNLOAD_COMPLETE:

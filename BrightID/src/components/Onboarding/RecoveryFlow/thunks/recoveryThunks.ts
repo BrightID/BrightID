@@ -120,7 +120,21 @@ export const restoreUserData = async (id: string, pass: string) => {
 export const setRecoveryKeys =
   (): AppThunk => (dispatch: AppDispatch, getState) => {
     const { publicKey, secretKey } = getState().recoveryData;
-    dispatch(setKeypair({ publicKey, secretKey }));
+    let publicError = '';
+    let secretError = '';
+    if (!publicKey || publicKey.length === 0) {
+      publicError = `Publickey invalid`;
+    }
+    if (!secretKey || secretKey.length === 0) {
+      secretError = `Secretkey invalid`;
+    }
+    if (publicError || secretError) {
+      throw Error(
+        `Can not save keypair! ${publicError} - ${secretError}`,
+      );
+    } else {
+      dispatch(setKeypair({ publicKey, secretKey }));
+    }
   };
 
 export const recoverData =
