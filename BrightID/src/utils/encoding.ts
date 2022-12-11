@@ -4,6 +4,12 @@ import { Buffer } from 'buffer';
 import CryptoJS from 'crypto-js';
 import { compose } from 'ramda';
 
+export const UInt8ArrayEqual = (first: Uint8Array, second: Uint8Array) => {
+  if (first.byteLength !== second.byteLength) return false;
+  // bytelength matches, now check in detail
+  return first.every((value, index) => value === second[index]);
+};
+
 /**
  *
  * @param {Uint8Array} array
@@ -99,7 +105,7 @@ export const randomKey = (size: number) =>
     });
   });
 
-export const urlSafeRandomKey = async (size: number = 9) => {
+export const urlSafeRandomKey = async (size = 9) => {
   const key = await randomKey(size);
   return b64ToUrlSafeB64(key);
 };
