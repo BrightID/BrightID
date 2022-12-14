@@ -5,8 +5,9 @@ import CryptoJS from 'crypto-js';
 import { compose } from 'ramda';
 
 export const UInt8ArrayEqual = (first: Uint8Array, second: Uint8Array) => {
+  // first compare bytelength
   if (first.byteLength !== second.byteLength) return false;
-  // bytelength matches, now check in detail
+  // bytelength matches, now compare each array element
   return first.every((value, index) => value === second[index]);
 };
 
