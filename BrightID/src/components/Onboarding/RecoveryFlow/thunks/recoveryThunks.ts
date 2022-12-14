@@ -19,6 +19,7 @@ import {
   resetRecoverySigs,
   updateNamePhoto,
 } from '../recoveryDataSlice';
+import { verifyKeypair } from '@/utils/cryptoHelper';
 
 // HELPERS
 
@@ -40,9 +41,12 @@ export const setupRecovery =
       // setup recovery data slice with new keypair
       dispatch(init({ publicKey, secretKey, aesKey }));
     } else {
-      // we should have valid recovery data. double-check required data is available.
+      // we should already have valid recovery data. double-check required data is available.
       const { publicKey, secretKey } = recoveryData;
-      if (!publicKey?.length || !secretKey?.length) {
+      try {
+        verifyKeypair({ publicKey, secretKey });
+      } catch (e) {
+        // Existing keys don't work, set up new keys.
         const { publicKey, secretKey } = await nacl.sign.keyPair();
         const aesKey = await urlSafeRandomKey(16);
         // setup recovery data slice with new keypair
@@ -120,21 +124,8 @@ export const restoreUserData = async (id: string, pass: string) => {
 export const setRecoveryKeys =
   (): AppThunk => (dispatch: AppDispatch, getState) => {
     const { publicKey, secretKey } = getState().recoveryData;
-    let publicError = '';
-    let secretError = '';
-    if (!publicKey || publicKey.length === 0) {
-      publicError = `Publickey invalid`;
-    }
-    if (!secretKey || secretKey.length === 0) {
-      secretError = `Secretkey invalid`;
-    }
-    if (publicError || secretError) {
-      throw Error(
-        `Can not save keypair! ${publicError} - ${secretError}`,
-      );
-    } else {
-      dispatch(setKeypair({ publicKey, secretKey }));
-    }
+    verifyKeypair({ publicKey, secretKey });
+    dispatch(setKeypair({ publicKey, secretKey }));
   };
 
 export const recoverData =

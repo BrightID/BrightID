@@ -32,12 +32,7 @@ const ImportScreen = ({ route }) => {
         dispatch(resetRecoveryData());
         dispatch(setUserId(recoveryData.id));
       } catch (err) {
-        let errorString = '';
-        if (err instanceof Error) {
-          errorString = `${err.message}`;
-        } else {
-          errorString = `${err}`;
-        }
+        const errorString = err instanceof Error ? err.message : `${err}`;
         dispatch(
           setRecoveryError({
             errorType: RecoveryErrorType.GENERIC,

@@ -97,12 +97,7 @@ const RestoreScreen = () => {
           setRecoveryOpHash(op.hash);
         }
       } catch (err) {
-        let errorString = '';
-        if (err instanceof Error) {
-          errorString = `${err.message}`;
-        } else {
-          errorString = `${err}`;
-        }
+        const errorString = err instanceof Error ? err.message : `${err}`;
         console.log(`Error during account recovery: ${errorString}`);
         setAccountStep(AccountSteps.ERROR);
         setAccountError(errorString);
@@ -115,12 +110,7 @@ const RestoreScreen = () => {
         // restore backup can now start
         setDataStep(BackupSteps.WAITING_PASSWORD);
       } catch (err) {
-        let errorString = '';
-        if (err instanceof Error) {
-          errorString = `${err.message}`;
-        } else {
-          errorString = `${err}`;
-        }
+        const errorString = err instanceof Error ? err.message : `${err}`;
         setAccountStep(AccountSteps.ERROR);
         setAccountError(errorString);
       }
