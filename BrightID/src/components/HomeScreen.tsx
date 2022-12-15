@@ -50,7 +50,6 @@ import {
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
-import { verifyKeypair } from '@/utils/cryptoHelper';
 
 /**
  * Home screen of BrightID
@@ -144,15 +143,6 @@ export const HomeScreen = (props) => {
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
   }, [dispatch, headerHeight]);
-
-  useEffect(() => {
-    console.log(`checking secret key`);
-    try {
-      verifyKeypair({ publicKey, secretKey });
-    } catch (e) {
-      Alert.alert('Invalid keypair', `${e instanceof Error ? e.message : e}`);
-    }
-  }, [secretKey, publicKey]);
 
   const { showActionSheetWithOptions } = useActionSheet();
 
