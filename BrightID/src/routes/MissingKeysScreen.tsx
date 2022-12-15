@@ -14,8 +14,10 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
           {t('missingKeysScreen.header', 'Corrupt keypair')}
         </Text>
         <Text style={styles.subHeaderText}>
-          The signing keys on this device got lost or corrupted. You can not use
-          the BrightID app unless this is fixed.
+          {t(
+            'missingKeysScreen.subHeader',
+            'The signing keys on this device got lost or corrupted. You can not use the BrightID app unless this is fixed.',
+          )}
         </Text>
       </View>
       <View style={styles.keyErrorContainer}>
@@ -25,79 +27,123 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
       </View>
       <ScrollView style={styles.resetInfoContainer} persistentScrollbar={true}>
         <View>
-          <Text style={styles.optionHeaderText}>Recovery options:</Text>
+          <Text style={styles.optionHeaderText}>
+            {t('missingKeysScreen.recoveryOptions', 'Recovery options')}
+          </Text>
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionHeaderText}>Perform Social recovery</Text>
+          <Text style={styles.sectionHeaderText}>
+            {t(
+              'missingKeysScreen.options.socialRecovery',
+              'Perform Social recovery',
+            )}
+          </Text>
           <Text style={styles.preconditionText}>
-            Precondition: You have social recovery set up
+            {t(
+              'missingKeysScreen.options.socialRecovery.notes',
+              'Precondition: You have social recovery set up',
+            )}
           </Text>
 
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Uninstall and reinstall BrightID app
+              {t(
+                'missingKeysScreen.options.reinstall',
+                'Uninstall and reinstall BrightID app',
+              )}
             </Text>
           </View>
 
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Select "Recover" option at startup
+              {t(
+                'missingKeysScreen.options.socialRecovery.selectRecovery',
+                'Select "Recover" option at startup',
+              )}
             </Text>
           </View>
 
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Follow the Recovery workflow
+              {t(
+                'missingKeysScreen.options.socialRecovery.followWorkflow',
+                'Follow the Recovery workflow',
+              )}
             </Text>
           </View>
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionHeaderText}>
-            Import from another device
+            {t(
+              'missingKeysScreen.options.import',
+              'Import from another device',
+            )}
           </Text>
           <Text style={styles.preconditionText}>
-            Precondition: You have your brightId installed on another device
+            {t(
+              'missingKeysScreen.options.import.notes',
+              'Precondition: You have your brightId installed on another device',
+            )}
           </Text>
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Uninstall and reinstall BrightID app
+              {t(
+                'missingKeysScreen.options.reinstall',
+                'Uninstall and reinstall BrightID app',
+              )}
             </Text>
           </View>
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Select "Import" option at startup
+              {t(
+                'missingKeysScreen.options.import.selectImport',
+                'Select "Import" option at startup',
+              )}
             </Text>
           </View>
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Follow the Import workflow
+              {t(
+                'missingKeysScreen.options.import.followWorkflow',
+                'Follow the Import workflow',
+              )}
             </Text>
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionHeaderText}>Start from scratch</Text>
+          <Text style={styles.sectionHeaderText}>
+            {t('missingKeysScreen.options.restart', 'Start from scratch')}
+          </Text>
           <Text style={styles.preconditionText}>
-            This is the last-resort option. You will create a new BrightID and
-            lose all existing connections and verifications.
+            {t(
+              'missingKeysScreen.options.restart.notes',
+              'This is the last-resort option. You will create a new BrightID and lose all existing connections and verifications.',
+            )}
           </Text>
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Uninstall and reinstall BrightID app
+              {t(
+                'missingKeysScreen.options.reinstall',
+                'Uninstall and reinstall BrightID app',
+              )}
             </Text>
           </View>
           <View style={styles.sectionItem}>
             <Text>{'\u2022'}</Text>
             <Text style={styles.sectionItemText}>
-              Select "Create my BrightID" option at startup
+              {t(
+                'missingKeysScreen.options.restart.selectCreate',
+                'Select "Create my BrightID" option at startup',
+              )}
             </Text>
           </View>
         </View>
