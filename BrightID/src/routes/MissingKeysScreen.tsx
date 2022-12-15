@@ -156,9 +156,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     margin: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   header: {
     marginTop: 5,
@@ -174,13 +176,10 @@ const styles = StyleSheet.create({
   subHeaderText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[14],
-    textAlign: 'center',
     color: DARK_RED,
   },
   keyErrorContainer: {
     paddingTop: 4,
-    paddingLeft: 10,
-    paddingRight: 10,
   },
   keyErrorText: {
     fontWeight: 'bold',
@@ -204,7 +203,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 20,
   },
-  sectionItemText: { flex: 1, paddingLeft: 5 },
+  sectionItemText: {
+    flex: 1,
+    paddingLeft: 5,
+  },
   preconditionText: {
     fontFamily: 'Poppins-Bold',
     fontStyle: 'italic',
@@ -228,8 +230,6 @@ const styles = StyleSheet.create({
   resetInfoContainer: {
     marginBottom: 3,
     marginTop: 25,
-    paddingLeft: 10,
-    paddingRight: 10,
   },
   resetInfoText: {
     fontFamily: 'Poppins-Medium',
