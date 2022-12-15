@@ -24,9 +24,6 @@ export const verifyKeypair = ({
   publicKey: string;
   secretKey: Uint8Array;
 }) => {
-  const publicError = '';
-  const secretError = '';
-
   // check public key
   if (!publicKey) {
     throw Error('Invalid keypair: publicKey undefined');
@@ -54,12 +51,6 @@ export const verifyKeypair = ({
   if (secretKey.length !== nacl.sign.secretKeyLength) {
     throw Error(
       `secretKey size wrong, expected: ${nacl.sign.secretKeyLength} - actual: ${secretKey.length}`,
-    );
-  }
-
-  if (publicError || secretError) {
-    throw Error(
-      `Invalid keypair: ${publicError && `${publicError} -`} ${secretError}`,
     );
   }
 
