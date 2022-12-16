@@ -1,8 +1,18 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LIGHT_BLACK, ORANGE, WHITE, DARK_RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import ChatBox from '@/components/Icons/ChatBox';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { discordUrl } from '@/utils/constants';
 
 const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
   const { t } = useTranslation();
@@ -148,6 +158,32 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
           </View>
         </View>
       </ScrollView>
+
+      <View style={styles.supportSection}>
+        <View style={styles.supportHeader}>
+          <Text style={styles.supportHeaderText}>Need help?</Text>
+        </View>
+        <TouchableOpacity
+          testID="JoinCommunityBtn"
+          style={styles.communityContainer}
+          onPress={() => Linking.openURL(discordUrl)}
+        >
+          <ChatBox
+            width={DEVICE_LARGE ? 22 : 20}
+            height={DEVICE_LARGE ? 22 : 20}
+            color={ORANGE}
+          />
+          <View
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: WHITE,
+              marginLeft: 5,
+            }}
+          >
+            <Text style={styles.communityLink}>{t('home.link.community')}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -245,10 +281,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
   },
+  supportSection: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: DEVICE_LARGE ? 17 : 15,
+  },
+  supportHeader: {
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  supportHeaderText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    textAlign: 'center',
+    color: LIGHT_BLACK,
+  },
+  communityContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   resetButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
     color: WHITE,
+  },
+  communityLink: {
+    color: ORANGE,
+    fontSize: fontSize[14],
+    fontFamily: 'Poppins-Bold',
   },
 });
 
