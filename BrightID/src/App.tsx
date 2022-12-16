@@ -37,6 +37,10 @@ export const App = () => {
                 },
               },
             },
+            NodeModal: {
+              path: 'local-server',
+              exact: true,
+            },
             ScanCode: {
               path: 'connection-code/:qrcode',
               exact: true,

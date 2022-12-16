@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
+  Alert,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -7,11 +9,13 @@ import {
   View,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
+import { NetworkInfo } from 'react-native-network-info';
+import Clipboard from '@react-native-community/clipboard';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { LIGHT_BLACK, ORANGE, WHITE, BLACK } from '@/theme/colors';
+import { BLACK, GREEN, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
@@ -23,8 +27,16 @@ import {
   selectDefaultNodeUrls,
 } from '@/reducer/settingsSlice';
 import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
+import GraphQl from '@/components/Icons/GraphQl';
+import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
+import { startHttpServer, stopHttpServer } from '@/utils/httpServer';
+import { setLocalServerUrl } from '@/reducer/userSlice';
 
 const NodeModal = () => {
+  const route = useRoute() as {
+    params?: { next: string; run: boolean };
+  };
+
   const navigation = useNavigation();
   const { t } = useTranslation();
   const currentBaseUrl = useSelector(selectBaseUrl);
@@ -66,6 +78,44 @@ const NodeModal = () => {
     );
   }
 
+  const localServerUrl = useSelector((state) => state.user.localServerUrl);
+
+  const startHttpServerCallback = useCallback(async () => {
+    await startHttpServer();
+    const ip = await NetworkInfo.getIPV4Address();
+    const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
+    dispatch(setLocalServerUrl(serverUrl));
+    return serverUrl;
+  }, [dispatch]);
+
+  const toggleHttpServer = useCallback(async () => {
+    if (!localServerUrl) {
+      const serverUrl = await startHttpServerCallback();
+      Clipboard.setString(serverUrl);
+      Alert.alert(t('home.alert.text.copied'));
+    } else {
+      stopHttpServer();
+      dispatch(setLocalServerUrl(''));
+    }
+  }, [dispatch, localServerUrl, startHttpServerCallback, t]);
+
+  useEffect(() => {
+    const openNext = async () => {
+      const next = route.params?.next;
+      if (next) {
+        await Linking.openURL(next);
+      }
+    };
+    if (route.params?.run) {
+      if (!localServerUrl) {
+        startHttpServerCallback().then(openNext);
+      } else {
+        openNext();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
       <BlurView
@@ -94,6 +144,43 @@ const NodeModal = () => {
           </Text>
         </TouchableOpacity>
         {resetContainer}
+        <TouchableOpacity
+          testID="httpServerBtn"
+          style={[
+            styles.switchNodeButton,
+            styles.httpServerButton,
+            {
+              backgroundColor: localServerUrl ? GREEN : ORANGE,
+            },
+          ]}
+          onPress={toggleHttpServer}
+          accessible={true}
+          accessibilityLabel={t('home.button.httpServer')}
+        >
+          <GraphQl
+            width={DEVICE_LARGE ? 25 : 20}
+            height={DEVICE_LARGE ? 25 : 20}
+          />
+          {localServerUrl ? (
+            <View style={styles.httpServerInfo}>
+              <Text
+                style={[
+                  styles.switchNodeButtonText,
+                  {
+                    color: BLACK,
+                  },
+                ]}
+              >
+                {localServerUrl}
+              </Text>
+              <Text style={styles.wifiSharingText}>WiFi Sharing Url</Text>
+            </View>
+          ) : (
+            <Text style={styles.switchNodeButtonText}>
+              {t('home.button.httpServer')}
+            </Text>
+          )}
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -147,6 +234,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   switchNodeButtonText: {
+    paddingLeft: 4,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
     color: WHITE,
@@ -173,6 +261,23 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
     color: WHITE,
+  },
+  httpServerButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: DEVICE_LARGE ? 8 : 6,
+  },
+  httpServerInfo: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  wifiSharingText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[10],
+    color: BLACK,
+    lineHeight: DEVICE_LARGE ? 12 : 10,
   },
 });
 

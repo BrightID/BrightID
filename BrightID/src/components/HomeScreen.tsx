@@ -1,14 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-  Alert,
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
@@ -20,14 +20,14 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
+  selectActiveDevices,
   setActiveNotification,
   updateBlindSigs,
-  selectActiveDevices,
 } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
-import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
+import { BLACK, BLUE, DARKER_GREY, ORANGE, WHITE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
@@ -36,15 +36,15 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import {
+  removeCurrentNodeUrl,
   selectBaseUrl,
   selectIsPrimaryDevice,
-  removeCurrentNodeUrl,
 } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
-  selectTaskIds,
   selectCompletedTaskIds,
+  selectTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
 import { version as app_version } from '../../package.json';

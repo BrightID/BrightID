@@ -431,6 +431,7 @@
       "apps": "Apps",
       "connections": "Connections",
       "myCode": "My Code",
+      "httpServer": "WiFi BrightID Sharing",
       "scanCode": "Scan a Code"
     },
     "chatActionSheet": {
@@ -442,6 +443,11 @@
     },
     "link": {
       "community": "Join the Community"
+    },
+    "alert": {
+      "text": {
+        "copied": "Server url copied to clipboard!"
+      }
     }
   },
   "import": {
