@@ -26,8 +26,8 @@ import { SocialMediaVariationIds } from '@/components/EditProfile/socialMediaVar
 import { extractDigits } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { BrightIdNetwork } from '@/components/Apps/types.d';
 import socialMediaService from '@/utils/socialMediaServiceProvider';
+import { BrightIdNetwork } from '@/utils/constants';
 
 const FlatListItemSeparator = () => {
   return (

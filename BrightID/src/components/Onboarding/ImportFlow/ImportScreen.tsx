@@ -10,9 +10,11 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setRecoveryKeys } from '../RecoveryFlow/thunks/recoveryThunks';
 import {
   resetRecoveryData,
+  setRecoveryError,
   uploadCompletedByOtherSide,
 } from '../RecoveryFlow/recoveryDataSlice';
 import { clearImportChannel } from './thunks/channelThunks';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 /* Component to track import restore */
 const ImportScreen = ({ route }) => {
@@ -24,10 +26,20 @@ const ImportScreen = ({ route }) => {
   useEffect(() => {
     if (importCompleted) {
       clearImportChannel();
-      dispatch(setPrimaryDevice(!!route.params.changePrimaryDevice));
-      dispatch(setRecoveryKeys());
-      dispatch(resetRecoveryData());
-      dispatch(setUserId(recoveryData.id));
+      try {
+        dispatch(setRecoveryKeys());
+        dispatch(setPrimaryDevice(!!route.params.changePrimaryDevice));
+        dispatch(resetRecoveryData());
+        dispatch(setUserId(recoveryData.id));
+      } catch (err) {
+        const errorString = err instanceof Error ? err.message : `${err}`;
+        dispatch(
+          setRecoveryError({
+            errorType: RecoveryErrorType.GENERIC,
+            errorMessage: errorString,
+          }),
+        );
+      }
     }
   }, [recoveryData, dispatch, importCompleted]);
 

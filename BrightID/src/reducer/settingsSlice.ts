@@ -7,6 +7,9 @@ const ProdCandidates = [
   'http://brightid2.idealmoney.io',
   'https://brightid.59836e71dd6e5898.dyndns.dappnode.io',
   'http://bright.daosquare.io',
+  'https://brightid.clr.fund',
+  'https://aura-node.brightid.org',
+  'https://aura-test.brightid.org',
   // Following nodes exist, but currently fail the NodeChooser tests
   //  'http://brightid.onehive.org',
   //  'http://node.topupgifter.com',
@@ -15,7 +18,6 @@ const ProdCandidates = [
 const TestCandidates = ['http://test.brightid.org'];
 
 interface SettingsSlice {
-  syncSocialMediaEnabled: boolean;
   baseUrl: string | null;
   nodeUrls: Array<string>;
   isPrimaryDevice: boolean;
@@ -24,7 +26,6 @@ interface SettingsSlice {
 }
 
 const initialState: SettingsSlice = {
-  syncSocialMediaEnabled: undefined,
   baseUrl: null,
   nodeUrls: __DEV__ ? TestCandidates : ProdCandidates,
   isPrimaryDevice: true,
@@ -36,9 +37,6 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setSyncSocialMediaEnabled: (state, action: PayloadAction<boolean>) => {
-      state.syncSocialMediaEnabled = action.payload;
-    },
     setBaseUrl: (state, action: PayloadAction<string>) => {
       state.baseUrl = action.payload;
     },
@@ -102,7 +100,6 @@ export const settingsSlice = createSlice({
 });
 
 export const {
-  setSyncSocialMediaEnabled,
   setBaseUrl,
   clearBaseUrl,
   resetSettings,
@@ -116,8 +113,6 @@ export const {
   resetLanguageTag,
 } = settingsSlice.actions;
 
-export const selectSyncSocialMediaEnabled = (state: RootState): boolean =>
-  !!state.settings.syncSocialMediaEnabled;
 export const selectBaseUrl = (state: RootState) => state.settings.baseUrl;
 export const selectAllNodeUrls = (state: RootState) => state.settings.nodeUrls;
 export const selectDefaultNodeUrls = (_: RootState) => initialState.nodeUrls;

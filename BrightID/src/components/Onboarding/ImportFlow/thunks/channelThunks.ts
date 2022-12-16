@@ -138,8 +138,6 @@ export const checkImportChannel =
     await dispatch(downloadConnections({ channelApi, dataIds }));
     await dispatch(downloadGroups({ channelApi, dataIds }));
     await dispatch(downloadContextInfo({ channelApi, dataIds }));
-    if (!isPrimaryDevice) {
-      await dispatch(downloadBlindSigs({ channelApi, dataIds }));
-    }
+    await dispatch(downloadBlindSigs({ channelApi, dataIds }));
     await dispatch(checkCompletedFlags({ channelApi, dataIds }));
   };

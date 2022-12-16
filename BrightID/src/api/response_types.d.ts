@@ -1,8 +1,11 @@
 /**
  * Response Types
  */
+type OperationStateType =
+  typeof operation_states[keyof typeof operation_states];
+
 type OperationState = {
-  state: typeof operation_states[keyof typeof operation_states];
+  state: OperationStateType;
 };
 
 type NodeApiRes =
