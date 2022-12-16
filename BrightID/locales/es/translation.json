@@ -48,7 +48,8 @@
       "title": "Establecer la contraseña de la copia de seguridad"
     },
     "setupRecoveryConnections": {
-      "description": "Configurar las conexiones de recuperación para permitir la recuperación de las cuentas sociales"
+      "description": "Configurar las conexiones de recuperación para permitir la recuperación de las cuentas sociales",
+      "title": "Configurar la recuperación social"
     },
     "setupTrustedConnections": {
       "description": "Configure sus conexiones de recuperación para habilitar la recuperación social de cuentas",

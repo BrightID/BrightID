@@ -13,6 +13,21 @@ import {
 } from '@/utils/channels';
 import { IMPORT_PREFIX, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
 
+export const getUserInfo = async () => {
+  const { user } = store.getState();
+  const photo = await retrieveImage(user.photo.filename);
+  return {
+    id: user.id,
+    name: user.name,
+    photo,
+    isSponsored: user.isSponsored,
+    isSponsoredv6: user.isSponsoredv6,
+    backupCompleted: user.backupCompleted,
+    password: user.password,
+    updateTimestamps: user.updateTimestamps,
+  };
+};
+
 export const uploadAllInfoAfter = async (after) => {
   const {
     user,
@@ -28,19 +43,8 @@ export const uploadAllInfoAfter = async (after) => {
   const channelApi = new ChannelAPI(url.href);
 
   console.log('uploading user info');
-  const photo = await retrieveImage(user.photo.filename);
-  const data = {
-    id: user.id,
-    name: user.name,
-    photo,
-    isSponsored: user.isSponsored,
-    isSponsoredv6: user.isSponsoredv6,
-    backupCompleted: user.backupCompleted,
-    password: user.password,
-    updateTimestamps: user.updateTimestamps,
-  };
 
-  const encrypted = encryptData(data, aesKey);
+  const encrypted = encryptData(await getUserInfo(), aesKey);
   const userDataId = `${IMPORT_PREFIX}userinfo_${user.id}:${b64ToUrlSafeB64(
     signingKey,
   )}`;

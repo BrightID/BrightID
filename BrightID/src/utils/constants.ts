@@ -1,5 +1,7 @@
 /** ** INVITE CONSTANTS  *** */
 
+export const LOCAL_HTTP_SERVER_PORT = 9025;
+
 export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
@@ -158,3 +160,5 @@ export enum BrightIdNetwork {
   TEST = 'test',
   NODE = 'node',
 }
+
+export const discordUrl = 'https://discord.gg/nTtuB2M';

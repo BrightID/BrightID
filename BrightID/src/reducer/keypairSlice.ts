@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
 const initialState: Keypair = {
@@ -10,7 +10,7 @@ const keypairSlice = createSlice({
   name: 'keypair',
   initialState,
   reducers: {
-    setKeypair(state, action) {
+    setKeypair(state, action: PayloadAction<Keypair>) {
       const { publicKey, secretKey } = action.payload;
       state.publicKey = publicKey;
       state.secretKey = secretKey;

@@ -97,22 +97,23 @@ const RestoreScreen = () => {
           setRecoveryOpHash(op.hash);
         }
       } catch (err) {
-        let errorString = '';
-        if (err instanceof Error) {
-          errorString = `${err.message}`;
-        } else {
-          errorString = `${err}`;
-        }
+        const errorString = err instanceof Error ? err.message : `${err}`;
         console.log(`Error during account recovery: ${errorString}`);
         setAccountStep(AccountSteps.ERROR);
         setAccountError(errorString);
       }
     };
     const finishRecovery = async () => {
-      dispatch(setRecoveryKeys());
-      setAccountStep(AccountSteps.COMPLETE);
-      // restore backup can now start
-      setDataStep(BackupSteps.WAITING_PASSWORD);
+      try {
+        dispatch(setRecoveryKeys());
+        setAccountStep(AccountSteps.COMPLETE);
+        // restore backup can now start
+        setDataStep(BackupSteps.WAITING_PASSWORD);
+      } catch (err) {
+        const errorString = err instanceof Error ? err.message : `${err}`;
+        setAccountStep(AccountSteps.ERROR);
+        setAccountError(errorString);
+      }
     };
     switch (accountStep) {
       case AccountSteps.DOWNLOAD_COMPLETE:

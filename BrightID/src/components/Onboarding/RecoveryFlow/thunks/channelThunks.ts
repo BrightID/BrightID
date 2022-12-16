@@ -9,10 +9,12 @@ import {
 } from './channelDownloadThunks';
 import {
   selectRecoveryChannel,
+  selectRecoveryStep,
   setChannelIntervalId,
   setRecoveryChannel,
 } from '../recoveryDataSlice';
 import { uploadRecoveryData } from '@/utils/recovery';
+import { recover_steps } from '@/utils/constants';
 
 // CONSTANTS
 
@@ -50,22 +52,28 @@ export const pollRecoveryChannel =
     clearInterval(pollTimerId);
 
     pollTimerId = setInterval(() => {
-      if (!checkInProgress) {
-        checkInProgress = true;
-        dispatch(checkRecoveryChannel())
-          .then(() => {
-            checkInProgress = false;
-          })
-          .catch((err) => {
-            checkInProgress = false;
-            console.error(`Error polling recovery channel: ${err.message}`);
-          });
+      const step = selectRecoveryStep(getState());
+      if (step !== recover_steps.POLLING_SIGS) {
+        // stop polling, something happened while waiting for interval so we are not in polling state anymore
+        dispatch(clearRecoveryChannel());
+      } else {
+        if (!checkInProgress) {
+          checkInProgress = true;
+          dispatch(checkRecoveryChannel())
+            .then(() => {
+              checkInProgress = false;
+            })
+            .catch((err) => {
+              checkInProgress = false;
+              console.error(`Error polling recovery channel: ${err.message}`);
+            });
+        }
       }
     }, CHANNEL_POLL_INTERVAL);
 
     dispatch(setChannelIntervalId(pollTimerId));
 
-    console.log(`start polling recovery channel (${pollTimerId}`);
+    console.log(`started polling recovery channel (${pollTimerId})`);
   };
 
 export const clearRecoveryChannel =
