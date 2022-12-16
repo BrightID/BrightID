@@ -53,7 +53,7 @@ const notificationsPersistConfig = {
 const userPersistConfig = {
   ...fsPersistConfig,
   key: 'user',
-  blacklist: ['searchParam', 'migrated'],
+  blacklist: ['searchParam', 'migrated', 'localServerUrl'],
 };
 
 const tasksPersistConfig = {
