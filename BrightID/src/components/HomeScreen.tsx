@@ -50,12 +50,12 @@ import {
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
+import { discordUrl } from '@/utils/constants';
 
 /**
  * Home screen of BrightID
  * ==========================
  */
-const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 

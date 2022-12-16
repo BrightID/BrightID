@@ -158,3 +158,5 @@ export enum BrightIdNetwork {
   TEST = 'test',
   NODE = 'node',
 }
+
+export const discordUrl = 'https://discord.gg/nTtuB2M';
