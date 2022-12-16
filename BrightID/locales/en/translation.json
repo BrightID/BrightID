@@ -308,7 +308,7 @@
       "deviceName": "Device Name"
     },
     "text": {
-      "listDescription": "Your BrightID is available on following devices:",
+      "listDescription": "Your BrightID is available on following devices and networks:",
       "notice": "Notice:",
       "primaryDeviceNotice": "Only one of your active devices should be set as a primary device, or you will encounter problems while syncing devices. Before setting your current device as primary, make sure you are synced with your old primary device and delete that device.",
       "switchPrimaryLabel": "Use current device as primary device",
@@ -331,7 +331,7 @@
       "checkForUpdates": "Check for Updates",
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
-      "devices": "Devices",
+      "devices": "Devices and Networks",
       "editProfile": "Edit Profile",
       "findFriends": "Find Friends",
       "groups": "Groups",
