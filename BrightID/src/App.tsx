@@ -12,13 +12,14 @@ import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
 import MainApp from '@/routes';
 import ErrorFallback from '@/components/ErrorFallback';
+import { bootstrap } from '@/bootstrap';
+import { notificationSubscription } from '@/NotificationService';
 
 /**
  * Central part of the application
  * react-navigation is used for routing
  * read docs here: https://reactnavigation.org/
  */
-// NOTE: BOOTSTRAP happens inside of LoadingScreen
 export const App = () => {
   // setup deep linking
   const linking = {
@@ -67,13 +68,21 @@ export const App = () => {
     },
   };
 
-  console.log('RENDERING ENTIRE APP');
+  // bootstrap app when Redux-Persist is done rehydrating
+  const onBeforeLift = async () => {
+    console.log('BOOSTRAPING APP');
+    await bootstrap();
+    console.log('SUBSCRIBING TO NOTIFICATIONS');
+    notificationSubscription();
+    console.log('DONE BOOTSTRAP');
+  };
 
   return (
     <Provider store={store}>
       <PersistGate
-        loading={<InitialLoading app={true} />}
+        loading={<InitialLoading />}
         persistor={persistor}
+        onBeforeLift={onBeforeLift}
       >
         <ActionSheetProvider>
           <SafeAreaProvider>
@@ -82,7 +91,7 @@ export const App = () => {
               <NavigationContainer
                 linking={linking}
                 ref={navigationRef}
-                fallback={<InitialLoading app={false} />}
+                fallback={<InitialLoading />}
               >
                 <MainApp />
               </NavigationContainer>

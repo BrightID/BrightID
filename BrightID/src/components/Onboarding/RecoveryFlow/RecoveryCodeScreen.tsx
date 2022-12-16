@@ -80,7 +80,6 @@ const RecoveryCodeScreen = ({ route }) => {
       recoveryData.recoverStep === recover_steps.POLLING_SIGS &&
       !recoveryData.channel.pollTimerId
     ) {
-      console.log(`Start polling recovery channel...`);
       dispatch(pollRecoveryChannel());
     }
   }, [
@@ -97,6 +96,7 @@ const RecoveryCodeScreen = ({ route }) => {
       await dispatch(setupRecovery());
       // create channel and upload new publicKey to get signed by the scanner
       await dispatch(createRecoveryChannel());
+      dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
     };
     const runImportEffect = async () => {
       // create publicKey, secretKey, aesKey for user
@@ -121,7 +121,6 @@ const RecoveryCodeScreen = ({ route }) => {
       if (action === 'recovery') {
         if (!id) {
           console.log(`initializing recovery process`);
-          dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
           runRecoveryEffect();
         } else {
           console.log(`Not starting recovery process, user has id!`);
@@ -190,9 +189,7 @@ const RecoveryCodeScreen = ({ route }) => {
         t('recovery.error.title', 'Account recovery failed'),
         message,
       );
-      if (action === 'recovery') {
-        // dispatch(clearRecoveryChannel());
-      } else if (action === 'import') {
+      if (action === 'import') {
         clearImportChannel();
       }
       dispatch(resetRecoveryData());

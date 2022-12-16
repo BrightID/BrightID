@@ -19,6 +19,7 @@ import {
   resetRecoverySigs,
   updateNamePhoto,
 } from '../recoveryDataSlice';
+import { verifyKeypair } from '@/utils/cryptoHelper';
 
 // HELPERS
 
@@ -29,7 +30,7 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 // THUNKS
 
 export const setupRecovery =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     console.log(`Setting up recovery...`);
     const { recoveryData } = getState();
     await createImageDirectory();
@@ -39,6 +40,18 @@ export const setupRecovery =
       const aesKey = await urlSafeRandomKey(16);
       // setup recovery data slice with new keypair
       dispatch(init({ publicKey, secretKey, aesKey }));
+    } else {
+      // we should already have valid recovery data. double-check required data is available.
+      const { publicKey, secretKey } = recoveryData;
+      try {
+        verifyKeypair({ publicKey, secretKey });
+      } catch (e) {
+        // Existing keys don't work, set up new keys.
+        const { publicKey, secretKey } = await nacl.sign.keyPair();
+        const aesKey = await urlSafeRandomKey(16);
+        // setup recovery data slice with new keypair
+        dispatch(init({ publicKey, secretKey, aesKey }));
+      }
     }
   };
 
@@ -111,6 +124,7 @@ export const restoreUserData = async (id: string, pass: string) => {
 export const setRecoveryKeys =
   (): AppThunk => (dispatch: AppDispatch, getState) => {
     const { publicKey, secretKey } = getState().recoveryData;
+    verifyKeypair({ publicKey, secretKey });
     dispatch(setKeypair({ publicKey, secretKey }));
   };
 
