@@ -264,9 +264,9 @@ export const HomeScreen = (props) => {
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
             {verificationPatches.length > 0 ? (
-              verificationPatches.map((patch, i) => (
+              verificationPatches.map((patch) => (
                 <TouchableOpacity
-                  key={`verificationPatch-${i}`}
+                  key={`verificationPatch-${id}`}
                   style={styles.verificationBox}
                   onPress={() => {
                     if (patch?.task?.navigationTarget) {
@@ -277,7 +277,7 @@ export const HomeScreen = (props) => {
                   }}
                 >
                   <Text
-                    key={`verificationText-${i}`}
+                    key={`verificationText-${id}`}
                     style={styles.verificationText}
                   >
                     {patch.text}
