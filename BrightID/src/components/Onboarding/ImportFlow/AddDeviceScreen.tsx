@@ -114,7 +114,13 @@ const AddDeviceScreen = ({ route }) => {
     ) {
       runEffect();
     }
-  }, [addSigningKeyStep, changePrimaryDevice, dispatch, uploadDataStep]);
+  }, [
+    addSigningKeyStep,
+    changePrimaryDevice,
+    dispatch,
+    isPrimary,
+    uploadDataStep,
+  ]);
 
   // track overall progress
   useEffect(() => {
