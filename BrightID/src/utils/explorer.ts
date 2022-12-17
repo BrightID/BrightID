@@ -1,10 +1,6 @@
 import CryptoJS from 'crypto-js';
-import store from '@/store';
 
-export const getExplorerCode = () => {
-  const {
-    user: { password, id },
-  } = store.getState();
+export const getExplorerCode = (id: string, password: string) => {
   if (!password) {
     return null;
   }
