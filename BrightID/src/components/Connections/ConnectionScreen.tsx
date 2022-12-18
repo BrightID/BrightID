@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { SvgXml } from 'react-native-svg';
 import Clipboard from '@react-native-community/clipboard';
-import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -240,7 +239,17 @@ function ConnectionScreen(props: Props) {
           </View>
         ))
       ) : (
-        <UnverifiedSticker width={100} height={19} />
+        <View style={styles.verificationBox}>
+          <Text
+            style={{
+              ...styles.verificationText,
+              color: DARKER_GREY,
+              borderColor: DARKER_GREY,
+            }}
+          >
+            Verifications: None
+          </Text>
+        </View>
       );
     }
   };

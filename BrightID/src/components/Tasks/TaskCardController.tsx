@@ -15,7 +15,7 @@ type TaskCardControllerProps = {
 function TaskCardController({ taskId }: TaskCardControllerProps) {
   const dispatch = useDispatch();
   const storeTask = useSelector((state) => state.tasks[taskId]);
-  const extendedTask = {
+  const combinedTask: CombinedTask = {
     ...storeTask,
     ...UserTasks[taskId],
   };
@@ -26,12 +26,12 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
 
   return (
     <TaskCard
-      description={extendedTask.description}
-      fulfilled={extendedTask.completed}
-      id={extendedTask.id}
-      title={extendedTask.title}
-      url={extendedTask.url}
-      navigationTarget={extendedTask.navigationTarget}
+      description={combinedTask.description}
+      fulfilled={combinedTask.completed}
+      id={combinedTask.id}
+      title={combinedTask.title}
+      url={combinedTask.url}
+      navigationTarget={combinedTask.navigationTarget}
       onClick={__DEV__ ? reset : null}
     />
   );
