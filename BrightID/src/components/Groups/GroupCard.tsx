@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -11,8 +10,9 @@ import {
   BLACK,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { getGroupName, ids2connections } from '@/utils/groups';
 import { GroupPhoto } from '@/components/Groups/GroupPhoto';
+import { useSelector } from '@/store/hooks';
+import { selectConnectionsByIDs, selectGroupName } from '@/reducer/groupsSlice';
 
 /**
  * Group Card in the Groups Screen
@@ -24,15 +24,14 @@ type GroupCardProps = {
 
 export const GroupCard = ({ group, index }: GroupCardProps) => {
   const { t } = useTranslation();
-  const [unknownsCount, setUnknownsCount] = useState(0);
+  const connections = useSelector((state) =>
+    selectConnectionsByIDs(state, group.members),
+  );
+  const groupName = useSelector((state) => selectGroupName(state, group));
 
-  useEffect(() => {
-    setUnknownsCount(
-      ids2connections(group.members).filter(
-        (member) => member.name === 'Stranger',
-      ).length,
-    );
-  }, [group.members]);
+  const unknownsCount = connections.filter(
+    (member) => member.name === 'Stranger',
+  ).length;
 
   const groupInfo = __DEV__ ? (
     <View>
@@ -57,7 +56,7 @@ export const GroupCard = ({ group, index }: GroupCardProps) => {
           <View />
         )}
         <Text testID="groupName" style={styles.name}>
-          {getGroupName(group)}
+          {groupName}
         </Text>
         <View>
           <View style={styles.membersContainer}>

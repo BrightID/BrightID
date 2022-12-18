@@ -9,8 +9,7 @@ import {
   connection_levels,
 } from '@/utils/constants';
 import { getInvites } from '@/utils/invites';
-import { getGroupName } from '@/utils/groups';
-import { setInvites, userSelector } from './index';
+import { selectGroupName, setInvites } from './index';
 import {
   recoveryConnectionsSelector,
   verifiedConnectionsSelector,
@@ -128,7 +127,8 @@ export const updateNotifications =
           const activeInvites = invites.filter(
             (invite) => invite.state === INVITE_ACTIVE,
           );
-          const groupName = getGroupName(
+          const groupName = selectGroupName(
+            getState(),
             activeInvites[activeInvites.length - 1].group,
           );
           const message = `You've been invited to join ${groupName}`;

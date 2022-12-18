@@ -2,8 +2,11 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 import { toSearchString } from '@/utils/strings';
-import { getGroupName, ids2connections } from '@/utils/groups';
 import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
+import {
+  selectAllConnections,
+  selectConnectionById,
+} from '@/reducer/connectionsSlice';
 
 /* ******** INITIAL STATE ************** */
 
@@ -183,14 +186,17 @@ export const filteredGroupsSelector = createSelector(
     if (searchParam !== '') {
       const searchString = toSearchString(searchParam);
       filteredGroups = allGroups.filter((group) => {
-        if (toSearchString(getGroupName(state, group)).includes(searchString)) {
+        if (
+          toSearchString(selectGroupName(state, group)).includes(searchString)
+        ) {
           // direct group name match
           return true;
         } else {
           // check group members
-          const allMemberNames = ids2connections(state, group.members).map(
-            (member) => toSearchString(member.name),
-          );
+          const allMemberNames = selectConnectionsByIDs(
+            state,
+            group.members,
+          ).map((member) => toSearchString(member.name));
           for (const name of allMemberNames) {
             if (name.includes(searchString)) {
               // stop looking if a match is found
@@ -206,6 +212,60 @@ export const filteredGroupsSelector = createSelector(
     return filteredGroups.sort(compareCreatedDesc);
   },
 );
+
+export const selectConnectionsByIDs = (
+  state: RootState,
+  ids: Array<string>,
+): Array<Connection> => {
+  const {
+    user: { name, id, photo },
+  } = state;
+
+  return ids.map((_id) => {
+    if (_id === id) {
+      return { id, name, photo };
+    }
+    const conn = selectConnectionById(state, _id);
+    if (conn) {
+      return conn;
+    } else {
+      return { id: _id, name: 'Stranger' };
+    }
+  });
+};
+
+export const selectGroupName = (state: RootState, group: Group) => {
+  return (
+    group?.name ||
+    selectThreeKnownMembers(state, group)
+      .map((member) => member.name.substr(0, 13))
+      .join(', ')
+  );
+};
+
+const selectThreeKnownMembers = (
+  state: RootState,
+  group: Group,
+): Array<Connection> => {
+  const {
+    user: { id, photo, name },
+  } = state;
+  const connections = selectAllConnections(state);
+  const { members } = group;
+  const connsWithMe = [
+    ...connections,
+    {
+      photo,
+      name,
+      id,
+    },
+  ];
+  return members
+    .map((u) => connsWithMe.find((conn) => conn.id === u))
+    .filter((u) => u)
+    .sort((u1) => (group.admins.includes(u1.id) ? -1 : 1))
+    .slice(0, 3);
+};
 
 export const {
   createGroup,

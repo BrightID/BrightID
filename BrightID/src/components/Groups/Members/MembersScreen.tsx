@@ -28,6 +28,7 @@ import {
   addAdmin,
   selectAllConnections,
   userSelector,
+  selectGroupName,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
@@ -54,6 +55,7 @@ export const MembersScreen = () => {
   const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
+  const groupName = useSelector((state) => selectGroupName(state, group));
 
   const ACTION_INVITE = t('groups.groupActionSheet.inviteUser');
   const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
@@ -63,6 +65,12 @@ export const MembersScreen = () => {
     'groups.groupActionSheet.copyGroupId',
     'Copy group ID to clipboard',
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: groupName,
+    });
+  }, [groupName, navigation]);
 
   useLayoutEffect(() => {
     if (contextActions.length > 0) {
