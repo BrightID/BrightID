@@ -36,15 +36,13 @@ const newGroupOptions: StackNavigationOptions = {
   ),
 };
 
-const membersScreenOptions: ({ route }) => StackNavigationOptions = () => {
-  return {
-    ...headerOptions,
-    headerTitleStyle: {
-      fontSize: fontSize[20],
-      paddingLeft: 20,
-      paddingRight: 30,
-    },
-  };
+const membersScreenOptions: StackNavigationOptions = {
+  ...headerOptions,
+  headerTitleStyle: {
+    fontSize: fontSize[20],
+    paddingLeft: 20,
+    paddingRight: 30,
+  },
 };
 
 const Groups = () => {
