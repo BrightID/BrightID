@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 import { toSearchString } from '@/utils/strings';
-import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
+import { getGroupName, ids2connections } from '@/utils/groups';
 import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
 
 /* ******** INITIAL STATE ************** */
@@ -175,19 +175,20 @@ export const searchParamSelector = (state: RootState) =>
   state.groups.searchParam;
 
 export const filteredGroupsSelector = createSelector(
+  (state) => state,
   activeGroupsSelector,
   searchParamSelector,
-  (allGroups, searchParam) => {
+  (state, allGroups, searchParam) => {
     let filteredGroups: Array<Group>;
     if (searchParam !== '') {
       const searchString = toSearchString(searchParam);
       filteredGroups = allGroups.filter((group) => {
-        if (toSearchString(getGroupName(group)).includes(searchString)) {
+        if (toSearchString(getGroupName(state, group)).includes(searchString)) {
           // direct group name match
           return true;
         } else {
           // check group members
-          const allMemberNames = ids2connections(knownMemberIDs(group)).map(
+          const allMemberNames = ids2connections(state, group.members).map(
             (member) => toSearchString(member.name),
           );
           for (const name of allMemberNames) {
