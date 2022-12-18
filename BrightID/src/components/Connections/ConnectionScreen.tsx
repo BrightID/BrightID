@@ -554,7 +554,7 @@ function ConnectionScreen(props: Props) {
           renderSectionHeader={renderSectionHeader}
           ListHeaderComponent={connectionHeader}
           ListFooterComponent={connectionFooter}
-          // @ts-ignore: mistyped
+          // @ts-ignore: ListFooterComponentStyle is existing, but not included in typescript definition
           ListFooterComponentStyle={styles.connectionFooter}
           ItemSeparatorComponent={ItemSeparator}
         />

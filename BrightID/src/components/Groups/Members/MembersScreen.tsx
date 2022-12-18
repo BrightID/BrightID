@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Platform,
   ToastAndroid,
+  AlertButton,
 } from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
@@ -76,7 +77,7 @@ export const MembersScreen = () => {
     if (contextActions.length > 0) {
       // action sheet actions
       const handleLeaveGroup = () => {
-        const buttons = [
+        const buttons: AlertButton[] = [
           {
             text: t('common.alert.cancel'),
             style: 'cancel',
@@ -101,7 +102,6 @@ export const MembersScreen = () => {
         Alert.alert(
           t('groups.alert.title.leaveGroup'),
           t('groups.alert.text.leaveGroup'),
-          // @ts-ignore
           buttons,
           {
             cancelable: true,
@@ -239,7 +239,7 @@ export const MembersScreen = () => {
   }, [user, connections, members]);
 
   const handleDismiss = (user) => {
-    const buttons = [
+    const buttons: AlertButton[] = [
       {
         text: t('common.alert.cancel'),
         style: 'cancel',
@@ -263,7 +263,6 @@ export const MembersScreen = () => {
     Alert.alert(
       t('groups.alert.title.dismissMember'),
       t('groups.alert.text.dismissMember', { name: user.name }),
-      // @ts-ignore
       buttons,
       {
         cancelable: true,
@@ -272,7 +271,7 @@ export const MembersScreen = () => {
   };
 
   const handleAddAdmin = (user) => {
-    const buttons = [
+    const buttons: AlertButton[] = [
       {
         text: t('common.alert.cancel'),
         style: 'cancel',
@@ -296,7 +295,6 @@ export const MembersScreen = () => {
     Alert.alert(
       t('groups.alert.title.addAdmin'),
       t('groups.alert.text.addAdmin', { name: user.name }),
-      // @ts-ignore
       buttons,
       {
         cancelable: true,
