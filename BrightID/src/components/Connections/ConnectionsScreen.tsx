@@ -3,7 +3,6 @@ import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import _ from 'lodash';
-import { store } from '@/store';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -11,7 +10,7 @@ import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { updateConnections } from '@/actions';
+import { updateConnections, userSelector } from '@/actions';
 import ConnectionCard from './ConnectionCard';
 import { MAX_DISPLAY_CONNECTIONS } from '@/utils/constants';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -48,6 +47,7 @@ export const ConnectionsScreen = () => {
     connectionsSelector(state, excludeGroup?.members),
   ).slice(0, MAX_DISPLAY_CONNECTIONS);
   const { t } = useTranslation();
+  const { id } = useSelector(userSelector);
 
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
@@ -56,9 +56,6 @@ export const ConnectionsScreen = () => {
   const ConnectionList = useMemo(() => {
     const onRefresh = async () => {
       console.log('Reloading Connections');
-      const {
-        user: { id },
-      } = store.getState();
       try {
         const conns = await api.getConnections(id, 'outbound');
         const incomingConns = await api.getConnections(id, 'inbound');
@@ -97,7 +94,7 @@ export const ConnectionsScreen = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connections]);
+  }, [id, connections]);
 
   return (
     <>
