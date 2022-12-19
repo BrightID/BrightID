@@ -112,7 +112,7 @@ const recoveryDataPersistConfig = {
   transforms: [RecoveryDataTransform],
 };
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   ...reducers,
   apps: persistReducer(
     appsPersistConfig,
