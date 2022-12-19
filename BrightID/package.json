@@ -115,6 +115,8 @@
     "@babel/runtime": "^7.17.8",
     "@react-native-community/eslint-config": "^2.0.0",
     "@react-native-community/eslint-plugin": "^1.0.0",
+    "@testing-library/jest-native": "^5.3.3",
+    "@testing-library/react-native": "^11.5.0",
     "@types/jest": "^27.4.1",
     "@types/ramda": "^0.27.38",
     "@types/react": "^17.0.34",
