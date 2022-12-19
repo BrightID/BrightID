@@ -79,9 +79,9 @@ export const App = () => {
   // bootstrap app when Redux-Persist is done rehydrating
   const onBeforeLift = async () => {
     console.log('BOOSTRAPING APP');
-    await bootstrap();
+    await bootstrap(store.dispatch);
     console.log('SUBSCRIBING TO NOTIFICATIONS');
-    notificationSubscription();
+    notificationSubscription(store.dispatch, store.getState);
     console.log('DONE BOOTSTRAP');
   };
 
