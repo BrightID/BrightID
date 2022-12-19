@@ -96,7 +96,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await uploadAllInfoAfter(0);
+        await dispatch(uploadAllInfoAfter(0));
         setUploadDataStep(UploadDataSteps.COMPLETE);
         if (isPrimary) {
           dispatch(setPrimaryDevice(!changePrimaryDevice));

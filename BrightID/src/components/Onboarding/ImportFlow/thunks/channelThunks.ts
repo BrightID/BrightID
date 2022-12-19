@@ -42,7 +42,7 @@ export const createSyncChannel =
     const { settings } = getState();
     let lastSyncTime = 0;
     if (!settings.isPrimaryDevice) {
-      await uploadDeviceInfo();
+      await dispatch(uploadDeviceInfo());
       console.log(
         `Finished uploading last sync time to the channel ${channelId}`,
       );
@@ -57,9 +57,8 @@ export const createSyncChannel =
     const after = settings.isPrimaryDevice
       ? lastSyncTime
       : settings.lastSyncTime;
-    uploadAllInfoAfter(after).then(() => {
-      console.log(`Finished uploading sync data to the channel ${channelId}`);
-    });
+    await dispatch(uploadAllInfoAfter(after));
+    console.log(`Finished uploading sync data to the channel ${channelId}`);
   };
 
 export const getOtherSideDeviceInfo = async (

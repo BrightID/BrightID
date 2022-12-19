@@ -103,10 +103,10 @@ export const DevicesScreen = ({ route }) => {
         );
       }
       if (!isPrimary) {
-        await uploadDeviceInfo();
+        await dispatch(uploadDeviceInfo());
       }
       const after = isPrimary ? lastSyncTime : settings.lastSyncTime;
-      await uploadAllInfoAfter(after);
+      await dispatch(uploadAllInfoAfter(after));
       dispatch(pollImportChannel());
     };
     const showConfirmDialog = () => {
