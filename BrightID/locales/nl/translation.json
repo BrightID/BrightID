@@ -274,7 +274,7 @@
         "nameTooShort": "De groepsnaam dient uit minimaal 2 tekens te bestaan"
       },
       "title": {
-        "createFailed": "De groep kan niet worden aangemaakt",
+        "createFailed": "De groep is aangemaakt",
         "formIncomplete": "Niet alles is ingevuld"
       }
     },
@@ -310,11 +310,11 @@
       "deviceName": "Apparaatnaam"
     },
     "text": {
-      "listDescription": "Je BrightID is beschikbaar op de volgende apparaten:",
+      "listDescription": "Je BrightID is beschikbaar op de volgende apparaten en netwerken:",
       "notice": "Let op:",
       "primaryDeviceNotice": "Slechts een van je actieve apparaten kan als primair apparaat worden gebruikt, anders kunnen er synchronisatieproblemen optreden. Zorg er dus voor dat dit apparaat gesynchroniseerd is met het oude en verwijder dat apparaat nadien.",
       "switchPrimaryLabel": "Huidig apparaat gebruiken als primair apparaat",
-      "syncCompleted": "Je apparaat is gesynchroniseerd.",
+      "syncCompleted": "Het apparaat is gesynchroniseerd",
       "waitSyncing": "Bezig met synchroniseren…",
       "whatsDeviceName": "Geef het nieuwe apparaat een naam"
     }
@@ -333,7 +333,7 @@
       "checkForUpdates": "Controleren op updates",
       "contactUs": "Contact opnemen",
       "copyExplorerCode": "Verkennercode kopiëren",
-      "devices": "Apparaten",
+      "devices": "Apparaten en netwerken",
       "editProfile": "Profiel bewerken",
       "findFriends": "Vrienden zoeken",
       "groups": "Groepen",
@@ -428,10 +428,16 @@
     "accessibilityLabel": {
       "connect": "Koppelen"
     },
+    "alert": {
+      "text": {
+        "copied": "De serverurl is gekopieerd!"
+      }
+    },
     "button": {
       "achievements": "Prestaties",
       "apps": "Apps",
       "connections": "Koppelingen",
+      "httpServer": "BrightID delen via wifi",
       "myCode": "Mijn code",
       "scanCode": "Scan een code"
     },

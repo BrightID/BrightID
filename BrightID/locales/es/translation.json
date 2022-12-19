@@ -29,11 +29,11 @@
       "title": "Primera conexión"
     },
     "makeThreeConnection": {
-      "description": "Conectate con 3 usuarios de BrightID",
+      "description": "Conectar con 3 usuarios de BrightID",
       "title": "Tres conexiones"
     },
     "makeTwoConnection": {
-      "description": "Conectate con 2 usuarios de BrightID",
+      "description": "Conectar con 2 usuarios de BrightID",
       "title": "Dos conexiones"
     },
     "notification": {
@@ -74,12 +74,12 @@
         "visitWebsite": "Si"
       },
       "text": {
-        "blindSigAlreadyLinked": "Ya estás vinculado con {{app}} con el id {{appUserId}}",
+        "blindSigAlreadyLinked": "Ya estás vinculado a {{app}} con el ID {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Estás intentando enlazar con {{app}} utilizando {{appUserId}}. Ya estás enlazado con {{app}} con un id diferente {{previousAppUserIds}}. Esto puede causar problemas al utilizar la aplicación.",
         "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!",
         "invalidApp": "¡{{app}} no es una aplicación válida!",
         "invalidContext": "{{context}} no es un contexto válido!",
-        "linkApp": "¿Quiere vincular tu cuenta en {{context}} a su BrightID?",
+        "linkApp": "¿Vincular su cuenta en {{context}} a su BrightID?",
         "linkFailure": "No se pudo vincular su cuenta en {{context}} a su BrightID\n{{result}}",
         "linkSigFailed": "Error al realizar la verificación {{verification}} a la aplicación {{appId}}. Mensaje de error: {{msg}}",
         "linkSuccess": "Vinculó correctamente su cuenta en {{context}} a su BrightID",
@@ -325,7 +325,7 @@
         "nameTooShort": "El nombre del grupo debe tener al menos 2 caracteres"
       },
       "title": {
-        "createFailed": "No se pudo crear el grupo",
+        "createFailed": "Grupo creado",
         "formIncomplete": "Formulario de grupo incompleto"
       }
     },
@@ -353,7 +353,7 @@
       "confirmAdd": "¿Está seguro de que desea exportar su BrightID a otro dispositivo?",
       "confirmAddPrimary": "¿Está seguro de que desea exportar su BrightID a otro dispositivo y configurarlo como su dispositivo principal?",
       "confirmRemove": "¿Está seguro de que desea eliminar su BrightID de \"{{name}}\"?",
-      "confirmSync": "¿Está seguro de que desea compartir y sincronizar sus datos de BrightID con este dispositivo?",
+      "confirmSync": "¿Compartir y sincronizar sus datos de BrightID con este dispositivo?",
       "noPrimary": "Tus dispositivos sólo pueden ser sincronizados por el dispositivo principal."
     },
     "button": {
@@ -363,11 +363,11 @@
       "deviceName": "Nombre del dispositivo"
     },
     "text": {
-      "listDescription": "Su BrightID está disponible en los siguientes dispositivos:",
+      "listDescription": "Su BrightID está disponible en los siguientes dispositivos y redes:",
       "notice": "Aviso:",
       "primaryDeviceNotice": "Sólo uno de tus dispositivos activos debe establecerse como dispositivo principal, o tendrás problemas al sincronizar los dispositivos. Antes de establecer tu dispositivo actual como principal, asegúrate de que estás sincronizado con tu antiguo dispositivo principal y elimínalo.",
       "switchPrimaryLabel": "Utilizar el dispositivo actual como dispositivo principal",
-      "syncCompleted": "Tu dispositivo se ha sincronizado correctamente.",
+      "syncCompleted": "Dispositivo sincronizado",
       "waitSyncing": "Sincronizando dispositivos, por favor espere ...",
       "whatsDeviceName": "Elija un nombre para el nuevo dispositivo"
     }
@@ -386,7 +386,7 @@
       "checkForUpdates": "Buscar Actualizaciones",
       "contactUs": "Contactanos",
       "copyExplorerCode": "Copiar Código de Explorer",
-      "devices": "Dispositivos",
+      "devices": "Dispositivos y redes",
       "editProfile": "Editar Perfil",
       "findFriends": "invitación",
       "groups": "Grupos",
@@ -428,18 +428,18 @@
     },
     "alert": {
       "text": {
-        "addAdmin": "¿Estás seguro de que quieres hacer de {{name}} un administrador para este grupo?",
-        "dismissMember": "¿Está seguro de que desea descartar a {{name}} de este grupo?",
+        "addAdmin": "¿Hacer que {{name}} sea administrador de este grupo?",
+        "dismissMember": "¿Descartar a {{name}} de este grupo?",
         "groupIdCopied": "ID de grupo copiada en el portapapeles",
-        "inviteSuccess": "Has invitado a {{name}} correctamente al grupo",
-        "leaveGroup": "¿Estás seguro de que quieres dejar este grupo?"
+        "inviteSuccess": "Invitaste a {{name}} al grupo",
+        "leaveGroup": "¿Dejar este grupo?"
       },
       "title": {
         "addAdmin": "Agregar administrador",
         "dismissMember": "Descartar Miembro",
         "errorDismissMember": "Error al descartar al miembro del grupo",
         "errorLeaveGroup": "Error al salir del grupo",
-        "inviteSuccess": "Invitación Exitosa",
+        "inviteSuccess": "Invitación enviada",
         "leaveGroup": "Salir del Grupo"
       }
     },
@@ -486,11 +486,17 @@
     "accessibilityLabel": {
       "connect": "conectar"
     },
+    "alert": {
+      "text": {
+        "copied": "¡La URL del servidor se copió al portapapeles!"
+      }
+    },
     "button": {
       "achievements": "Logros",
       "apps": "Aplicaciones",
       "connections": "Conexiones",
       "groups": "Grupos",
+      "httpServer": "Compartir la WiFi BrightID",
       "myCode": "Mi Código",
       "scanCode": "Escanear un Código"
     },
@@ -550,14 +556,14 @@
     "title": {
       "backupPassword": "Establecer contraseña de la copia de seguridad",
       "pendingConnection": "Confirmar Conexiones",
-      "socialRecovery": "Configurar la Recuperación Social"
+      "socialRecovery": "Configurar la recuperación social"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "No se pudo unir al grupo",
-        "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?",
+        "rejectGroupInvite": "¿Rechazar unirse a este grupo?",
         "successGroupInvite": "Te uniste a {{groupName}}"
       },
       "title": {
@@ -587,9 +593,9 @@
       "miscellaneous": "variados"
     },
     "text": {
-      "noGroupInvites": "No tienes invitaciones grupales...",
+      "noGroupInvites": "No tienes invitaciones a grupos…",
       "noMiscellaneous": "Nada que ver aqui…",
-      "noPendingConnections": "No tienes conexiones pendientes..."
+      "noPendingConnections": "No tienes conexiones pendientes…"
     }
   },
   "onboarding": {
@@ -657,7 +663,7 @@
         "dontLeave": "No te vayas"
       },
       "text": {
-        "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
+        "discardChanges": "Tienes cambios sin guardar. ¿Descartarlos y salir de la pantalla?",
         "invalidPhoneNumber": "Introduce un número de teléfono válido",
         "passwordMatch": "La contraseña actual no coincide."
       },
@@ -778,7 +784,7 @@
       "addMoreRecovery": "Agregar más conexiones de recuperación +",
       "addRecoveryConnections": "Agregar conexiones de recuperación",
       "chooseThreeConnections": "Elija tres o más conexiones ya conocidas para respaldar su BrightID",
-      "completed": "Se agregaron correctamente las conexiones de recuperación",
+      "completed": "Conexiones de recuperación añadidas",
       "connectionsAlreadyKnown": "Las conexiones deben ser \"ya conocidas\" antes de que se puedan configurar como recuperación.",
       "currentRecoveryConnections": "Tus conexiones de recuperación actuales",
       "emptyList": "Por favor, agregue conexiones de recuperación para habilitar la recuperación social",
@@ -799,9 +805,9 @@
     "alert": {
       "text": {
         "notTrusted": "Uno de tus amigos no está en tu lista de conexiones de recuperación",
-        "requestRecovering": "¡Su solicitud para ayudar a recuperar esta cuenta se envió correctamente!",
+        "requestRecovering": "Solicitud para ayudar a recuperar esta cuenta enviada",
         "restoreConfirm": "¿Es {{name}} la cuenta que está ayudando a recuperar?",
-        "restoreSuccess": "¡Su cuenta se recuperó con éxito!"
+        "restoreSuccess": "Cuenta recuperada"
       },
       "title": {
         "notTrusted": "Uh Oh"
@@ -903,7 +909,7 @@
     "info": "Cargar los datos del usuario (conexiones, aplicaciones vinculadas, ...) en el nuevo dispositivo",
     "steps": {
       "complete": "Carga completada.",
-      "downloading": "Cargando los datos del usuario...",
+      "downloading": "Subiendo los datos del usuario…",
       "error": "Error al cargar los datos",
       "waiting": "A la espera de las claves de firma..."
     }
