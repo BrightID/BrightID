@@ -51,6 +51,7 @@
     "crypto-js": "3.3.0",
     "detox": "^19.12.6",
     "ed2curve": "0.3.0",
+    "emittery": "0.6.0",
     "events": "3.2.0",
     "expr-eval": "^2.0.2",
     "fast-json-stable-stringify": "2.1.0",
