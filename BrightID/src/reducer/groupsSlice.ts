@@ -1,6 +1,10 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
+import {
+  group_states,
+  INVITE_ACCEPTED,
+  INVITE_REJECTED,
+} from '@/utils/constants';
 import { toSearchString } from '@/utils/strings';
 import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
 import {
@@ -21,7 +25,7 @@ const groupsSlice = createSlice({
   name: 'groups',
   initialState,
   reducers: {
-    createGroup(state, action: PayloadAction<Group>) {
+    createGroup(state, action: PayloadAction<JoinedGroup>) {
       state.groups.push(action.payload);
     },
     updateGroup(state, action: PayloadAction<GroupInfo>) {
@@ -38,7 +42,7 @@ const groupsSlice = createSlice({
       } else {
         state.groups.push({
           ...groupInfo,
-          state: 'verified',
+          state: group_states.VERIFIED,
           joined: Date.now(),
         });
       }
@@ -48,7 +52,7 @@ const groupsSlice = createSlice({
         (group) => group.id !== action.payload.id,
       );
     },
-    setGroups(state, action: PayloadAction<Group[]>) {
+    setGroups(state, action: PayloadAction<JoinedGroup[]>) {
       state.groups = action.payload;
     },
     updateMemberships(state, action: PayloadAction<MembershipInfo[]>) {
@@ -56,19 +60,19 @@ const groupsSlice = createSlice({
         const membership = action.payload.find(
           (membership) => membership.id === group.id,
         );
-        if (!membership && group.state === 'verified') {
-          group.state = 'dismissed';
+        if (!membership && group.state === group_states.VERIFIED) {
+          group.state = group_states.DISMISSED;
         }
       });
       action.payload.forEach((membership) => {
         const group = state.groups.find((group) => group.id === membership.id);
         if (group) {
-          group.state = 'verified';
+          group.state = group_states.VERIFIED;
           group.joined = membership.timestamp;
         } else {
           state.groups.push({
             id: membership.id,
-            state: 'verified',
+            state: group_states.VERIFIED,
             joined: membership.timestamp,
             members: [],
             admins: [],
@@ -80,7 +84,7 @@ const groupsSlice = createSlice({
         }
       });
     },
-    joinGroup(state, action: PayloadAction<Group>) {
+    joinGroup(state, action: PayloadAction<JoinedGroup>) {
       const newGroup = action.payload;
       const existingGroup = state.groups.find(
         (group) => group.id === newGroup.id,
@@ -98,7 +102,7 @@ const groupsSlice = createSlice({
         (group) => group.id === action.payload.id,
       );
       for (const group of groupsToLeave) {
-        group.state = 'dismissed';
+        group.state = group_states.DISMISSED;
       }
       if (groupsToLeave.length > 1) {
         // There was a bug that could result in users having the same group multiple times in state.
@@ -171,7 +175,9 @@ export const allGroupsSelector = (state: RootState) => state.groups.groups;
 
 export const activeGroupsSelector = (state: RootState) =>
   state.groups.groups.filter(
-    (group) => group.state === 'initiated' || group.state === 'verified',
+    (group) =>
+      group.state === group_states.INITIATED ||
+      group.state === group_states.VERIFIED,
   );
 
 export const searchParamSelector = (state: RootState) =>

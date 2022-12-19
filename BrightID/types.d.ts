@@ -13,6 +13,7 @@ import {
   connection_levels,
   report_reasons,
   app_linking_steps,
+  group_states,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -382,4 +383,6 @@ declare global {
 
   type AppLinkingStep_Type =
     typeof app_linking_steps[keyof typeof app_linking_steps];
+
+  type GroupState_Type = typeof group_states[keyof typeof group_states];
 }

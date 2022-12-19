@@ -129,7 +129,7 @@ export const updateNotifications =
           );
           const groupName = selectGroupName(
             getState(),
-            activeInvites[activeInvites.length - 1].group,
+            activeInvites[activeInvites.length - 1].groupObj,
           );
           const message = `You've been invited to join ${groupName}`;
           dispatch(

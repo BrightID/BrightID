@@ -6,6 +6,12 @@ export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
 
+export const group_states = {
+  INITIATED: 'initiated',
+  VERIFIED: 'verified',
+  DISMISSED: 'dismissed',
+};
+
 export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // helpers for time constants (milliseconds)

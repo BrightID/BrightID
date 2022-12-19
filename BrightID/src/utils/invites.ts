@@ -10,7 +10,10 @@ import { NodeApi } from '@/api/brightId';
 import { userSelector } from '@/reducer/userSlice';
 
 export const getInviteGroup =
-  (api: NodeApi, inviteInfo: InviteInfo): AppThunk<Promise<any | undefined>> =>
+  (
+    api: NodeApi,
+    inviteInfo: InviteInfo,
+  ): AppThunk<Promise<Group | undefined>> =>
   async (dispatch: AppDispatch, getState) => {
     try {
       console.log('getting invite group info', inviteInfo);
@@ -55,8 +58,8 @@ export const getInviteGroup =
       }
 
       // const uuidKey = invite.url.split('/').pop();
-      const group = await api.getGroup(inviteInfo.group);
-      const res = await fetch(group.url);
+      const groupInfo = await api.getGroup(inviteInfo.group);
+      const res = await fetch(groupInfo.url);
       const data = await res.text();
       if (!data) {
         return undefined;
@@ -65,17 +68,28 @@ export const getInviteGroup =
       const infoString = CryptoJS.AES.decrypt(data, groupAesKey).toString(
         CryptoJS.enc.Utf8,
       );
-      const info = JSON.parse(infoString);
-      const groupObj = { ...info, ...group };
+      const info: {
+        name: string;
+        photo?: string; // base64 encoded: `data:${mime};base64,${data}`
+      } = JSON.parse(infoString);
+
+      // save group photo
       let filename = '';
-      if (groupObj.photo) {
+      if (info.photo) {
         filename = await saveImage({
-          imageName: groupObj.id,
-          base64Image: groupObj.photo,
+          imageName: groupInfo.id,
+          base64Image: info.photo,
         });
       }
-      groupObj.photo = { filename };
-      groupObj.aesKey = groupAesKey;
+      const groupObj: Group = {
+        ...groupInfo,
+        name: info.name,
+        photo: {
+          filename,
+        },
+        aesKey: groupAesKey,
+      };
+
       return groupObj;
     } catch (err) {
       console.log(`error in getting invite info ${err.message}`);
@@ -92,16 +106,16 @@ export const getInvites =
       const invites: Array<Invite> = await Promise.all(
         inviteInfos.map(async (inviteInfo) => {
           const oldInvite = oldInvites.find(eqProps('id', inviteInfo));
-          if (oldInvite && (oldInvite.group.name || !oldInvite.data)) {
+          if (oldInvite && (oldInvite.groupObj.name || !oldInvite.data)) {
             return {
               ...inviteInfo,
-              group: oldInvite.group,
+              groupObj: oldInvite.groupObj,
               state: oldInvite.state,
             };
           } else {
             return {
               ...inviteInfo,
-              group: await dispatch(getInviteGroup(api, inviteInfo)),
+              groupObj: await dispatch(getInviteGroup(api, inviteInfo)),
               state: INVITE_ACTIVE,
             };
           }

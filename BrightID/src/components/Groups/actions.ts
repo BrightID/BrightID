@@ -13,6 +13,7 @@ import {
   backupUser,
 } from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 import { NodeApi } from '@/api/brightId';
+import { group_states } from '@/utils/constants';
 
 export const createNewGroup =
   (
@@ -58,7 +59,7 @@ export const createNewGroup =
         });
       }
 
-      const newGroup: Group = {
+      const newGroup: JoinedGroup = {
         invites: [],
         joined: 0,
         timestamp: 0,
@@ -70,7 +71,7 @@ export const createNewGroup =
         url,
         aesKey,
         type,
-        state: 'initiated',
+        state: group_states.INITIATED,
       };
 
       const createOp = await api.createGroup(groupId, url, type);
