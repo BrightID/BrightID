@@ -48,6 +48,7 @@ import {
 } from './thunks/channelUploadThunks';
 import {
   resetRecoveryData,
+  selectRecoveryChannel,
   uploadCompletedByOtherSide,
 } from '../RecoveryFlow/recoveryDataSlice';
 
@@ -74,6 +75,7 @@ export const DevicesScreen = ({ route }) => {
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
   const isPrimary = useSelector(selectIsPrimaryDevice);
+  const { url, channelId } = useSelector(selectRecoveryChannel);
 
   const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const isCurrentDevice = (d) => d.signingKey === signingKey;
@@ -84,7 +86,7 @@ export const DevicesScreen = ({ route }) => {
   useEffect(() => {
     const runEffect = async () => {
       const { isPrimaryDevice: otherPrimary, lastSyncTime } =
-        await getOtherSideDeviceInfo();
+        await getOtherSideDeviceInfo(url, channelId);
       if (otherPrimary && isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
@@ -137,6 +139,8 @@ export const DevicesScreen = ({ route }) => {
     isPrimary,
     settings.lastSyncTime,
     t,
+    url,
+    channelId,
   ]);
 
   useEffect(() => {
