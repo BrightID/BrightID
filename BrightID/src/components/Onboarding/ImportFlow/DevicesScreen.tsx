@@ -32,6 +32,7 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   removeDevice,
   selectIsPrimaryDevice,
+  selectKeypair,
   setLastSyncTime,
   setPrimaryDevice,
 } from '@/actions';
@@ -66,7 +67,7 @@ export const DevicesScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const signingKey = useSelector((state) => state.keypair.publicKey);
+  const { publicKey: signingKey } = useSelector(selectKeypair);
   const devices = useSelector(selectActiveDevices).sort((a, _b) =>
     a.signingKey === signingKey ? -1 : 1,
   );
