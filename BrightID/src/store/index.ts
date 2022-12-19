@@ -1,8 +1,9 @@
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import {
   combineReducers,
   configureStore,
   getDefaultMiddleware,
+  PreloadedState,
 } from '@reduxjs/toolkit';
 import reducers from '@/reducer';
 import FsStorage from './storage/fsStorageAdapter';
@@ -140,16 +141,15 @@ const rootReducer = combineReducers({
   ) as typeof reducers.recoveryData,
 });
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: getDefaultMiddleware({
-    // We have a bunch of non-serializable data like secret key etc.
-    // TODO For now disabled completely. Revisit later for fine-grained configuration.
-    serializableCheck: false,
-    immutableCheck: false,
-  }),
-});
-
-export const persistor = persistStore(store);
-
-export default store;
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware({
+      // We have a bunch of non-serializable data like secret key etc.
+      // TODO For now disabled completely. Revisit later for fine-grained configuration.
+      serializableCheck: false,
+      immutableCheck: false,
+    }),
+    preloadedState,
+  });
+};
