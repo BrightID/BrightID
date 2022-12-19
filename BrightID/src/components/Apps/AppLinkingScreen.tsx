@@ -50,7 +50,7 @@ const ConfirmationView = ({ appName }) => {
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>
             {t('apps.alert.text.linkApp', {
-              context: appName,
+              context: `${appName}`,
             })}
           </Text>
         </View>
@@ -185,7 +185,7 @@ const AppLinkingScreen = () => {
             {isSuccess && (
               <Text style={styles.resultContainerSuccessText}>
                 {t('apps.alert.text.linkSuccess', {
-                  context: appName,
+                  context: `${appName}`,
                 })}
               </Text>
             )}

@@ -44,7 +44,7 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
         <View style={styles.section}>
           <Text style={styles.sectionHeaderText}>
             {t(
-              'missingKeysScreen.options.socialRecovery',
+              'missingKeysScreen.options.socialRecovery.header',
               'Perform Social recovery',
             )}
           </Text>
@@ -89,7 +89,7 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
         <View style={styles.section}>
           <Text style={styles.sectionHeaderText}>
             {t(
-              'missingKeysScreen.options.import',
+              'missingKeysScreen.options.import.header',
               'Import from another device',
             )}
           </Text>
@@ -130,7 +130,10 @@ const MissingKeysScreen = ({ keyError }: { keyError: string }) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionHeaderText}>
-            {t('missingKeysScreen.options.restart', 'Start from scratch')}
+            {t(
+              'missingKeysScreen.options.restart.header',
+              'Start from scratch',
+            )}
           </Text>
           <Text style={styles.preconditionText}>
             {t(
