@@ -1,6 +1,6 @@
 import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 import { scrubOps } from '@/reducer/operationsSlice';
-import { rejoinChannels } from '@/components/PendingConnections/channelSlice';
+import { rejoinChannels } from '@/components/PendingConnections/actions/channelThunks';
 
 export const bootstrap = async (dispatch: AppDispatch) => {
   // update available usertasks
