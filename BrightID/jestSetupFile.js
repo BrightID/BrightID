@@ -58,3 +58,8 @@ jest.mock('react-native-keychain', () => {
 
 /* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
 jest.mock('react-native-modpow', () => {});
+
+const mockedNavigate = jest.fn();
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({ navigate: mockedNavigate }),
+}));
