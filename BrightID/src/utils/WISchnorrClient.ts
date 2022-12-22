@@ -18,7 +18,7 @@ if (!__DEV__) {
     return new BigInteger(result, 16);
   };
 } else {
-  console.log(`Using js implementation of BigNumber.modPow`);
+  // console.log(`Using js implementation of BigNumber.modPow`);
 }
 
 function sha256(s) {
