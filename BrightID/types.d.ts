@@ -276,6 +276,20 @@ declare global {
     timestamp: number;
   };
 
+  type UserTasks = { [taskId: string]: UserTasksEntry };
+
+  type UserTasksEntry = {
+    id: string;
+    sortValue: number;
+    title: string;
+    description: string;
+    url: string;
+    checkFn: (state: RootState) => boolean;
+    navigationTarget?: string;
+  };
+
+  type CombinedTask = TasksStateEntry & UserTasksEntry;
+
   type User = {
     id: string;
     name: string;

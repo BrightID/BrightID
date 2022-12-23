@@ -6,7 +6,7 @@ import {
 import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
 import { linkedContextTotal, selectAllLinkedSigs } from '@/reducer/appsSlice';
 
-export const UserTasks = {
+export const UserTasks: UserTasks = {
   make_first_connection: {
     id: 'make_first_connection',
     sortValue: 10,

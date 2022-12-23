@@ -3,16 +3,25 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack';
+import i18next from 'i18next';
 import AddDeviceScreen from '@/components/Onboarding/ImportFlow/AddDeviceScreen';
 import DevicesScreen from '@/components/Onboarding/ImportFlow/DevicesScreen';
 import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCodeScreen';
-import { headerOptions, NavHome } from './helpers';
+import { AnimatedHeaderTitle, headerOptions, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
 const topOptions: StackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
+};
+
+const devicesOptions: StackNavigationOptions = {
+  ...headerOptions,
+  headerLeft: () => <NavHome />,
+  headerTitle: () => (
+    <AnimatedHeaderTitle text={i18next.t('drawer.label.devices')} />
+  ),
 };
 
 const Devices = () => {
@@ -26,7 +35,7 @@ const Devices = () => {
       <Stack.Screen
         name="Devices"
         component={DevicesScreen}
-        options={topOptions}
+        options={devicesOptions}
       />
       <Stack.Screen
         name="SyncCode"

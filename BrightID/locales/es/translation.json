@@ -29,11 +29,11 @@
       "title": "Primera conexión"
     },
     "makeThreeConnection": {
-      "description": "Conectate con 3 usuarios de BrightID",
+      "description": "Conectar con 3 usuarios de BrightID",
       "title": "Tres conexiones"
     },
     "makeTwoConnection": {
-      "description": "Conectate con 2 usuarios de BrightID",
+      "description": "Conectar con 2 usuarios de BrightID",
       "title": "Dos conexiones"
     },
     "notification": {
@@ -56,24 +56,44 @@
       "title": "Configurar la recuperación social"
     }
   },
+  "addSigningKey": {
+    "header": {
+      "text": "Añadir información del dispositivo"
+    },
+    "info": "Permitir que el nuevo dispositivo use tú BrightID",
+    "steps": {
+      "adding": "Añadir la llave de firmada...",
+      "complete": "Llave de firmada añadida",
+      "downloading": "Descargando nuevos datos del dispositivo...",
+      "error": "No se pudo agregar la llave de firmada"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
         "visitWebsite": "Si"
       },
       "text": {
+        "blindSigAlreadyLinked": "Ya estás vinculado a {{app}} con el ID {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Estás intentando enlazar con {{app}} utilizando {{appUserId}}. Ya estás enlazado con {{app}} con un id diferente {{previousAppUserIds}}. Esto puede causar problemas al utilizar la aplicación.",
         "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!",
+        "invalidApp": "¡{{app}} no es una aplicación válida!",
         "invalidContext": "{{context}} no es un contexto válido!",
-        "linkApp": "¿Quiere vincular tu cuenta en {{context}} a su BrightID?",
+        "linkApp": "¿Vincular su cuenta en {{context}} a su BrightID?",
         "linkFailure": "No se pudo vincular su cuenta en {{context}} a su BrightID\n{{result}}",
-        "linkSuccess": "Vinculó correctamente su cuenta en {{context}} a su BrightID"
+        "linkSigFailed": "Error al realizar la verificación {{verification}} a la aplicación {{appId}}. Mensaje de error: {{msg}}",
+        "linkSuccess": "Vinculó correctamente su cuenta en {{context}} a su BrightID",
+        "missingBlindSig": "No se encontró ninguna firma ciega para la aplicación {{appId}}. Faltan verificaciones: {{missingVerifications}}. Verificaciones ya vinculadas: {{linkedVerifications}}",
+        "notPrimary": "Actualmente está utilizando un dispositivo secundario. Vincular la aplicación \"{{app}}\" requiere interacción con su dispositivo principal. Sincronice con su dispositivo principal o realice la vinculación con su dispositivo principal."
       },
       "title": {
+        "invalidApp": "Fallido",
         "invalidContext": "Falló",
         "linkApp": "¿Vincular aplicación?",
         "linkFailure": "Falló",
         "linkSuccess": "Éxito",
-        "linkingFailed": "Error al vincular la aplicación"
+        "linkingFailed": "Error al vincular la aplicación",
+        "notPrimary": "Enlace imposible"
       }
     },
     "tag": {
@@ -85,7 +105,9 @@
     "text": {
       "noApps": "Sin Aplicaciones",
       "notSponsored": "No está patrocinado.\nEncuentre una aplicación a continuación para ser patrocinado.",
-      "pendingLink": "Vinculando su cuenta en {{context}} a su BrightID…"
+      "pendingLink": "Vinculando su cuenta en {{context}} a su BrightID…",
+      "sigsUpdating": "Actualización de firmas ciegas para aplicaciones…",
+      "sponsoring": "{{app}} te patrocina…"
     }
   },
   "backup": {
@@ -147,12 +169,15 @@
         "commonError": "Lo sentimos, no pudimos completar su solicitud. Vuelva a intentarlo en un momento.",
         "failedOp": "¡{{name}} falló!\n{{message}}",
         "incorrectPassword": "¡Contraseña incorrecta!",
+        "invalidSigningKey": "Su clave de firma no es válida. Esto puede deberse a que\n- Ha recuperado su BrightID en otro dispositivo.\n- Ha eliminado este dispositivo de la lista de dispositivos activos.\n- Ha fallado la recuperación.\n- El nodo al que está conectado tiene un problema.",
         "lostKeys": "Cree un nuevo BrightID o intente recuperar su BrightID anterior",
         "passwordMatch": "La contraseña y la contraseña de confirmación no coinciden.",
         "passwordShort": "Su contraseña debe tener al menos 8 caracteres.",
+        "recoverySigned": "Una de tus conexiones de recuperación firmó tu solicitud",
         "trustedSigned": "Una de tus conexiones de recuperación firmó tu solicitud"
       },
       "title": {
+        "invalidSigningKey": "Llave firmada no válida",
         "lostKeys": "Perdimos el par de claves BrightID del dispositivo",
         "pleaseConfirm": "Por favor, confirme"
       },
@@ -161,6 +186,7 @@
     "button": {
       "cancel": "Cancelar",
       "copy": "Copiar",
+      "retry": "Reintentar",
       "save": "Guardar"
     },
     "camera": {
@@ -188,6 +214,7 @@
       "reportedByUser": "reportado por ti"
     },
     "text": {
+      "noConnection": "No se ha podido conectar con el servidor",
       "progress": "{{completed}}/{{total}} completado",
       "uploadingData": "Subiendo datos encriptados al servidor de respaldo…"
     }
@@ -209,6 +236,7 @@
       "mutualConnections": "Conexiones Mutuas",
       "mutualGroups": "Grupos Mutuos",
       "possibleDuplicates": "Posibles Duplicados",
+      "recoveryConnections": "Conexiones para la recuperación",
       "socialMedia": "Redes sociales"
     },
     "tags": {
@@ -222,12 +250,18 @@
       "levelJustMet": "Esta persona es un extraño que acabo de conocer",
       "levelRecovery": "Confío en esta persona como para recuperar mi BrightID",
       "levelSuspicious": "No conozco a esta persona en absoluto",
+      "removeConnection": "Desconectarse de {{name}}",
       "reportConnection": "Denunciar {{name}}",
       "reportDuplicate": "Este usuario está creando maliciosamente varias cuentas",
       "reportOther": "Otra razon",
+      "reportReplaced": "El usuario ha perdido el acceso a esta antigua cuenta y ha creado una nueva",
       "reportSpammer": "Esta persona me envió spam con una solicitud de conexión no deseada",
+      "reportSuspicious": "Esta cuenta pertenecía a una persona diferente antes",
       "unReportConnection": "Restaurar la conexión",
-      "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?"
+      "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?",
+      "unkownRecoveryConnection": "Desconocido",
+      "whyRemove": "Díganos por qué quiere eliminar esta conexión",
+      "whyReport": "Por favor, díganos por qué sospecha de esta conexión"
     }
   },
   "connections": {
@@ -291,7 +325,7 @@
         "nameTooShort": "El nombre del grupo debe tener al menos 2 caracteres"
       },
       "title": {
-        "createFailed": "No se pudo crear el grupo",
+        "createFailed": "Grupo creado",
         "formIncomplete": "Formulario de grupo incompleto"
       }
     },
@@ -313,6 +347,31 @@
       "noConnections": "Sin conexiones"
     }
   },
+  "devices": {
+    "alert": {
+      "bothPrimary": "Ambos dispositivos están configurados como dispositivos principales. Solo puede tener un dispositivo principal. Configura uno de los dispositivos como secundario para poder sincronizarlos.",
+      "confirmAdd": "¿Está seguro de que desea exportar su BrightID a otro dispositivo?",
+      "confirmAddPrimary": "¿Está seguro de que desea exportar su BrightID a otro dispositivo y configurarlo como su dispositivo principal?",
+      "confirmRemove": "¿Está seguro de que desea eliminar su BrightID de \"{{name}}\"?",
+      "confirmSync": "¿Compartir y sincronizar sus datos de BrightID con este dispositivo?",
+      "noPrimary": "Tus dispositivos sólo pueden ser sincronizados por el dispositivo principal."
+    },
+    "button": {
+      "submit": "Enviar"
+    },
+    "placeholder": {
+      "deviceName": "Nombre del dispositivo"
+    },
+    "text": {
+      "listDescription": "Su BrightID está disponible en los siguientes dispositivos y redes:",
+      "notice": "Aviso:",
+      "primaryDeviceNotice": "Sólo uno de tus dispositivos activos debe establecerse como dispositivo principal, o tendrás problemas al sincronizar los dispositivos. Antes de establecer tu dispositivo actual como principal, asegúrate de que estás sincronizado con tu antiguo dispositivo principal y elimínalo.",
+      "switchPrimaryLabel": "Utilizar el dispositivo actual como dispositivo principal",
+      "syncCompleted": "Dispositivo sincronizado",
+      "waitSyncing": "Sincronizando dispositivos, por favor espere ...",
+      "whatsDeviceName": "Elija un nombre para el nuevo dispositivo"
+    }
+  },
   "drawer": {
     "alert": {
       "text": {
@@ -327,9 +386,12 @@
       "checkForUpdates": "Buscar Actualizaciones",
       "contactUs": "Contactanos",
       "copyExplorerCode": "Copiar Código de Explorer",
+      "devices": "Dispositivos y redes",
       "editProfile": "Editar Perfil",
       "findFriends": "invitación",
-      "home": "Inicio"
+      "groups": "Grupos",
+      "home": "Inicio",
+      "settings": "Ajustes"
     }
   },
   "eula": {
@@ -342,7 +404,8 @@
       "invite": "invitación"
     },
     "text": {
-      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación."
+      "invitationNotAvailable": "Lo sentimos, el envío de invitaciones no está disponible actualmente para esta aplicación.",
+      "noFriends": "Sin amigos"
     }
   },
   "graphExplorer": {
@@ -365,17 +428,18 @@
     },
     "alert": {
       "text": {
-        "addAdmin": "¿Estás seguro de que quieres hacer de {{name}} un administrador para este grupo?",
-        "dismissMember": "¿Está seguro de que desea descartar a {{name}} de este grupo?",
-        "inviteSuccess": "Has invitado a {{name}} correctamente al grupo",
-        "leaveGroup": "¿Estás seguro de que quieres dejar este grupo?"
+        "addAdmin": "¿Hacer que {{name}} sea administrador de este grupo?",
+        "dismissMember": "¿Descartar a {{name}} de este grupo?",
+        "groupIdCopied": "ID de grupo copiada en el portapapeles",
+        "inviteSuccess": "Invitaste a {{name}} al grupo",
+        "leaveGroup": "¿Dejar este grupo?"
       },
       "title": {
         "addAdmin": "Agregar administrador",
         "dismissMember": "Descartar Miembro",
         "errorDismissMember": "Error al descartar al miembro del grupo",
         "errorLeaveGroup": "Error al salir del grupo",
-        "inviteSuccess": "Invitación Exitosa",
+        "inviteSuccess": "Invitación enviada",
         "leaveGroup": "Salir del Grupo"
       }
     },
@@ -385,6 +449,7 @@
     },
     "groupActionSheet": {
       "cancel": "Cancelar",
+      "copyGroupId": "Copiar la ID del grupo al portapapeles",
       "inviteUser": "Invitar usuario",
       "leaveGroup": "Salir del grupo"
     },
@@ -421,10 +486,17 @@
     "accessibilityLabel": {
       "connect": "conectar"
     },
+    "alert": {
+      "text": {
+        "copied": "¡La URL del servidor se copió al portapapeles!"
+      }
+    },
     "button": {
+      "achievements": "Logros",
       "apps": "Aplicaciones",
       "connections": "Conexiones",
       "groups": "Grupos",
+      "httpServer": "Compartir la WiFi BrightID",
       "myCode": "Mi Código",
       "scanCode": "Escanear un Código"
     },
@@ -439,6 +511,41 @@
       "community": "Unete a la Communidad"
     }
   },
+  "import": {
+    "alert": {
+      "text": "Abra este enlace con la aplicación BrightID que debe importarse.",
+      "title": "Importar el enlace BrightID"
+    },
+    "clipboardmessage": "Exporte su BrightID a otro dispositivo: {{link}}. Este enlace es válido hasta {{expirationTimestamp}}.",
+    "header": {
+      "title": "Importar cuenta"
+    },
+    "text": {
+      "additionalInfo": "Debe escanear este código QR con su otro dispositivo para importar su BrightID a éste",
+      "askScanning": "Escanee este código QR con otro dispositivo",
+      "waitImporting": "Importando conexiones, por favor espere ..."
+    }
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Restaurar la lista de nodos predeterminada",
+      "text": "No está utilizando la lista de nodos por defecto"
+    },
+    "state": {
+      "connecting": "Conectando al nodo de BrightID...",
+      "noConnection": "No se ha podido conectar a un nodo de BrightID. Compruebe la conectividad de la red.",
+      "noNode": "La lista de nodos está vacía."
+    },
+    "timer": {
+      "text": "Tiempo restante: {{secondsLeft}} segundos"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Nodo actual:"
+    },
+    "switchNodeButtonLabel": "Cambiar de nodo"
+  },
   "notificationBar": {
     "text": {
       "backupPassword": "Establezca una contraseña para activar la copia de respaldo cifrada de sus datos",
@@ -449,14 +556,14 @@
     "title": {
       "backupPassword": "Establecer contraseña de la copia de seguridad",
       "pendingConnection": "Confirmar Conexiones",
-      "socialRecovery": "Configurar la Recuperación Social"
+      "socialRecovery": "Configurar la recuperación social"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "No se pudo unir al grupo",
-        "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?",
+        "rejectGroupInvite": "¿Rechazar unirse a este grupo?",
         "successGroupInvite": "Te uniste a {{groupName}}"
       },
       "title": {
@@ -486,15 +593,16 @@
       "miscellaneous": "variados"
     },
     "text": {
-      "noGroupInvites": "No tienes invitaciones grupales...",
+      "noGroupInvites": "No tienes invitaciones a grupos…",
       "noMiscellaneous": "Nada que ver aqui…",
-      "noPendingConnections": "No tienes conexiones pendientes..."
+      "noPendingConnections": "No tienes conexiones pendientes…"
     }
   },
   "onboarding": {
     "button": {
       "create": "Crear Mi BrightID",
       "getStarted": "Empezar",
+      "import": "Importar",
       "recover": "Recuperar"
     },
     "label": {
@@ -555,7 +663,7 @@
         "dontLeave": "No te vayas"
       },
       "text": {
-        "discardChanges": "Usted tiene cambios sin guardar. ¿Estás seguro de que quieres descartarlos y salir de esta sección?",
+        "discardChanges": "Tienes cambios sin guardar. ¿Descartarlos y salir de la pantalla?",
         "invalidPhoneNumber": "Introduce un número de teléfono válido",
         "passwordMatch": "La contraseña actual no coincide."
       },
@@ -569,6 +677,7 @@
       "socialPrevious": "Anterior"
     },
     "label": {
+      "contactInfo": "Información de contacto",
       "currentPassword": "Contraseña actual",
       "name": "Nombre",
       "newPassword": "Nueva contraseña",
@@ -600,13 +709,15 @@
       "text": {
         "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente.",
         "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire.",
+        "codeStar": "Este código QR está diseñado para conectar a muchas personas con una sola.",
         "shareLinkGroup": "Comparte este enlace",
         "shareLinkSingle": "Comparte este enlace con un amigo",
         "universalLink": "Enlace universal"
       },
       "title": {
         "codeGroup": "Código grupal",
-        "codeSingle": "Código de un solo uso"
+        "codeSingle": "Código de un solo uso",
+        "codeStar": "Código de estrellas"
       },
       "universalLink": "Link Universal"
     },
@@ -626,6 +737,7 @@
       "canAlso": "O también puedes…",
       "codeGroup": "Código grupal",
       "codeSingle": "Código de un solo uso",
+      "codeStar": "Código de estrellas",
       "confirmConnections": "Confirmar conexiones",
       "downloadingConnectionData": "Descargando datos de conexión",
       "expiresIn": "Expira en:",
@@ -640,6 +752,7 @@
       "text": "Comparta este enlace con sus contactos de recuperación.",
       "title": "Enlace de recuperación"
     },
+    "clipboardmessage": "Ayúdenme a recuperar mi BrightID: {{link}}. Este enlace es válido hasta {{expirationTimestamp}}.",
     "error": {
       "mismatchId": "Tus conexiones de recuperación seleccionaron cuentas diferentes",
       "title": "Falló la recuperación de la cuenta",
@@ -659,6 +772,7 @@
     },
     "text": {
       "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
+      "askScanning": "Por favor, muestre este código QR a sus conexiones de recuperación",
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
       "signatures": "{{count}} / firma",
       "signatures_plural": "{{count}} / firmas"
@@ -670,7 +784,7 @@
       "addMoreRecovery": "Agregar más conexiones de recuperación +",
       "addRecoveryConnections": "Agregar conexiones de recuperación",
       "chooseThreeConnections": "Elija tres o más conexiones ya conocidas para respaldar su BrightID",
-      "completed": "Se agregaron correctamente las conexiones de recuperación",
+      "completed": "Conexiones de recuperación añadidas",
       "connectionsAlreadyKnown": "Las conexiones deben ser \"ya conocidas\" antes de que se puedan configurar como recuperación.",
       "currentRecoveryConnections": "Tus conexiones de recuperación actuales",
       "emptyList": "Por favor, agregue conexiones de recuperación para habilitar la recuperación social",
@@ -691,9 +805,9 @@
     "alert": {
       "text": {
         "notTrusted": "Uno de tus amigos no está en tu lista de conexiones de recuperación",
-        "requestRecovering": "¡Su solicitud para ayudar a recuperar esta cuenta se envió correctamente!",
+        "requestRecovering": "Solicitud para ayudar a recuperar esta cuenta enviada",
         "restoreConfirm": "¿Es {{name}} la cuenta que está ayudando a recuperar?",
-        "restoreSuccess": "¡Su cuenta se recuperó con éxito!"
+        "restoreSuccess": "Cuenta recuperada"
       },
       "title": {
         "notTrusted": "Uh Oh"
@@ -722,6 +836,7 @@
       "complete": "Restauración completa",
       "error": "La restauración ha fallado. ¿Contraseña incorrecta?",
       "restoring": "Restaurando datos…",
+      "restoringProgress": "Restaurar elemento {{currentItem}} de {{totalItems}}",
       "skipped": "Restauración omitida",
       "waitingAccount": "Esperando la recuperación de la cuenta",
       "waitingPassword": "Ingrese contraseña u omita"
@@ -737,6 +852,11 @@
     },
     "title": {
       "chooseConnection": "Elije la conexión"
+    }
+  },
+  "settings": {
+    "language": {
+      "label": "Idioma"
     }
   },
   "signup": {
@@ -769,6 +889,29 @@
       "photoNotShared": "Tu foto nunca será compartida con aplicaciones o\nalmacenada en nuestra blockchain.",
       "pleaseAddPhoto": "Por favor, agregue una foto",
       "whatsYouName": "¿Cómo te conocen tus amigos?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Abra este enlace con la aplicación BrightID que debe sincronizarse.",
+      "title": "Sincronizar los datos del usuario"
+    },
+    "clipboardmessage": "Sincronice los datos de BrightID con otro dispositivo: {{link}}. Este enlace es válido hasta {{expirationTimestamp}}.",
+    "text": {
+      "additionalInfo": "Este código QR debe escanearse con tu otro dispositivo para sincronizar los datos entre ellos",
+      "askScanning": "Escanee este código QR con otro dispositivo"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Cargar los datos del usuario"
+    },
+    "info": "Cargar los datos del usuario (conexiones, aplicaciones vinculadas, ...) en el nuevo dispositivo",
+    "steps": {
+      "complete": "Carga completada.",
+      "downloading": "Subiendo los datos del usuario…",
+      "error": "Error al cargar los datos",
+      "waiting": "A la espera de las claves de firma..."
     }
   },
   "walkthroughs": {

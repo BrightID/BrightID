@@ -30,7 +30,6 @@ import { retrieveImage } from '@/utils/filesystem';
 import { BLACK, BLUE, DARKER_GREY, ORANGE, WHITE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
-import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -264,9 +263,9 @@ export const HomeScreen = (props) => {
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
             {verificationPatches.length > 0 ? (
-              verificationPatches.map((patch, i) => (
+              verificationPatches.map((patch) => (
                 <TouchableOpacity
-                  key={`verificationPatch-${i}`}
+                  key={`verificationPatch-${id}`}
                   style={styles.verificationBox}
                   onPress={() => {
                     if (patch?.task?.navigationTarget) {
@@ -277,7 +276,7 @@ export const HomeScreen = (props) => {
                   }}
                 >
                   <Text
-                    key={`verificationText-${i}`}
+                    key={`verificationText-${id}`}
                     style={styles.verificationText}
                   >
                     {patch.text}
@@ -290,7 +289,15 @@ export const HomeScreen = (props) => {
               </View>
             ) : (
               <View style={styles.verificationBox}>
-                <UnverifiedSticker width={100} height={19} />
+                <Text
+                  style={{
+                    ...styles.verificationText,
+                    color: DARKER_GREY,
+                    borderColor: DARKER_GREY,
+                  }}
+                >
+                  Verifications: None
+                </Text>
               </View>
             )}
           </View>

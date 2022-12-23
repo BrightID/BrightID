@@ -39,7 +39,7 @@ export const isVerifiedForApp = (
 };
 
 export const getVerificationPatches = (verifications: Verification[]) => {
-  const patches = [];
+  const patches: Array<{ text: string; task?: UserTasksEntry }> = [];
   let v = verifications.find((v) => v.name === 'SeedConnected');
   if (v && (v as SeedConnectedVerification).rank > 0) {
     patches.push({ text: 'Meets' });

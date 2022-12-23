@@ -1,0 +1,318 @@
+{
+  "achievements": {
+    "bituVerification": {
+      "description": "Flere detaljer"
+    },
+    "getSponsored": {
+      "title": "Bli sponset"
+    },
+    "joinMeet": {
+      "description": "Ta del i et BrightID-treff",
+      "title": "BrightID-treff"
+    },
+    "makeFirstConnection": {
+      "description": "Koble til en annen BrightID-bruker",
+      "title": "Første tilkobling"
+    },
+    "makeThreeConnection": {
+      "title": "Tre tilkoblinger"
+    },
+    "makeTwoConnection": {
+      "title": "To tilkoblinger"
+    },
+    "notification": {
+      "message": "Du har fullført oppgaven «{{title}}»."
+    },
+    "progress": {
+      "title": "Fullførelse:"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Ja"
+      },
+      "text": {
+        "invalidApp": "{{app}} er ikke et gyldig program.",
+        "linkApp": "Lenk kontoen din i {{context}} til din BrightID?"
+      }
+    },
+    "text": {
+      "sponsoring": "{{app}} sponser deg …"
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "profilePhoto": "profilbilde",
+      "userPhoto": "brukerbilde"
+    },
+    "actionSheet": {
+      "cancel": "avbryt",
+      "title": "Hva vil du gjøre?"
+    },
+    "alert": {
+      "cancel": "Avbryt",
+      "dismiss": "Forkast",
+      "error": "Feil",
+      "info": "Info",
+      "no": "Nei",
+      "ok": "OK",
+      "success": "Vellykket",
+      "sure": "Ja"
+    },
+    "photoActionSheet": {
+      "title": "Velg bilde"
+    },
+    "tag": {
+      "connectionDate": "Tilkoblet {{date}}",
+      "reported": "(rapportert)",
+      "reportedByUser": "rapportert av deg"
+    },
+    "text": {
+      "noConnection": "Kunne ikke koble til en tjener"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Lagre",
+      "ok": "OK",
+      "report": "Fjern denne tilkoblingen",
+      "reportCancel": "Avbryt",
+      "reportSubmit": "Send inn",
+      "undoReport": "Angre rapport"
+    },
+    "header": {
+      "connectionDetails": "Tilkoblingsdetaljer"
+    },
+    "label": {
+      "connectionLevel": "Tilkoblingsnivå",
+      "socialMedia": "Sosiale media"
+    },
+    "tags": {
+      "connectedAt": "Tilkoblet {{date}}",
+      "loading": "Laster inn …"
+    },
+    "text": {
+      "copied": "Kopiert til utklippstavlen.",
+      "level": "Hvor godt kjenner du {{name}}?",
+      "levelAlreadyKnown": "Jeg kjenner denne personen",
+      "reportConnection": "Rapporter {{name}}",
+      "reportOther": "Annen grunn",
+      "unReportConnection": "Gjenopprett tilkobling",
+      "unkownRecoveryConnection": "Ukjent"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Tilkoblingsbilde",
+      "viewConnectionDetails": "Vis tilkoblingsdetaljer"
+    },
+    "button": {
+      "reconnect": "Koble til igjen",
+      "reportConnection": "Rapporter tilkobling",
+      "updateConnection": "Oppdater tilkobling"
+    },
+    "header": {
+      "connections": "Tilkoblinger"
+    },
+    "label": {
+      "currentConnectionLevel": "Tilkoblingsnivå",
+      "newProfile": "Ny profil",
+      "oldProfile": "Gammel profil"
+    },
+    "removeActionSheet": {
+      "remove": "Fjern",
+      "title": "Fjern tilkobling"
+    },
+    "tag": {
+      "deleted": "Slettet",
+      "reported": "Rapportert",
+      "reportedAs": "Rapportert som {{flag}}"
+    },
+    "text": {
+      "noConnections": "Ingen tilkoblinger"
+    }
+  },
+  "createGroup": {
+    "text": {
+      "noConnections": "Ingen tilkoblinger"
+    }
+  },
+  "drawer": {
+    "label": {
+      "contactUs": "Kontakt oss",
+      "devices": "Enheter",
+      "editProfile": "Rediger profil",
+      "findFriends": "Finn venner",
+      "groups": "Grupper",
+      "home": "Hjem",
+      "settings": "Innstillinger"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Lisensvilkår"
+    }
+  },
+  "findFriends": {
+    "text": {
+      "noFriends": "Ingen venner"
+    }
+  },
+  "graphExplorer": {
+    "button": {
+      "copyCode": "Kopier kode"
+    }
+  },
+  "groups": {
+    "alert": {
+      "title": {
+        "addAdmin": "Legg til administrator"
+      }
+    },
+    "button": {
+      "createGroup": "Opprett gruppe",
+      "learnMore": "Lær mer"
+    },
+    "groupActionSheet": {
+      "cancel": "Avbryt",
+      "inviteUser": "Inviter bruker"
+    },
+    "header": {
+      "groups": "Grupper",
+      "newGroup": "Ny gruppe"
+    },
+    "label": {
+      "knownMembers": "Kjente medlemmer:",
+      "unknownMembers": "Ukjente:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Legg til administrator",
+      "cancel": "Avbryt"
+    }
+  },
+  "import": {
+    "alert": {
+      "title": "Importer BrightID-lenke"
+    },
+    "header": {
+      "title": "Importer konto"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "successGroupInvite": "Du tok del i {{groupName}}"
+      },
+      "title": {
+        "rejectGroupInvite": "Avslå"
+      }
+    },
+    "tab": {
+      "miscellaneous": "ymse"
+    },
+    "text": {
+      "noGroupInvites": "Du har ingen gruppeinvitasjoner …"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "Opprett min BrightID",
+      "import": "Importer",
+      "recover": "Gjenopprett"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "suspicious": "Mistenkelig"
+    }
+  },
+  "profile": {
+    "alert": {
+      "title": {
+        "passwordMatch": "Prøv igjen"
+      }
+    },
+    "button": {
+      "socialNext": "Neste",
+      "socialPrevious": "Forrige"
+    },
+    "label": {
+      "contactInfo": "Kontaktinfo",
+      "currentPassword": "Nåværende passord",
+      "name": "Navn",
+      "newPassword": "Nytt passord",
+      "newPasswordAgain": "Gjenta passordet",
+      "password": "Passord"
+    },
+    "placeholder": {
+      "name": "Skriv inn navn",
+      "newPassword": "Nytt passord",
+      "newPasswordAgain": "Gjenta passord",
+      "password": "Passord"
+    },
+    "text": {
+      "backupPasswordTitle": "Sikkerhetskopier passord",
+      "changePassword": "Endre passord",
+      "changeProfilePicture": "Endre profilbilde",
+      "setPassword": "Sett passord",
+      "viewPassword": "Vis passord"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "text": {
+        "shareLinkGroup": "Del denne lenken",
+        "shareLinkSingle": "Del denne lenken med én venn",
+        "universalLink": "Universell lenke"
+      },
+      "title": {
+        "codeGroup": "Gruppekode"
+      }
+    },
+    "button": {
+      "copyLink": "Kopier lenke",
+      "scanCode": "Skann en kode",
+      "showCode": "Vis din QR-kode"
+    },
+    "label": {
+      "connectionType": "Tilkoblingstype:"
+    },
+    "text": {
+      "codeGroup": "Gruppekode",
+      "confirmConnections": "Bekreft tilkoblinger",
+      "expiresIn": "Utløper om:"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "title": "Gjenopprettingslenke"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Skjønner"
+  },
+  "settings": {
+    "language": {
+      "label": "Språk"
+    }
+  },
+  "signup": {
+    "button": {
+      "submit": "Send inn"
+    },
+    "placeholder": {
+      "name": "Ditt navn",
+      "password": "passord"
+    },
+    "text": {
+      "createPassword": "Opprett ditt BrightID-passord"
+    }
+  },
+  "uploadData": {
+    "steps": {
+      "complete": "Opplasting fullført.",
+      "downloading": "Laster opp brukerdata …"
+    }
+  }
+}

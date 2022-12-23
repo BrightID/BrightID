@@ -79,7 +79,7 @@
         "checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
         "invalidApp": "{{app}} n'est pas une application valide !",
         "invalidContext": "{{context}} n'est pas un contexte valide !",
-        "linkApp": "Voulez-vous lier votre compte BrightID à {{context}} ?",
+        "linkApp": "Associer votre compte dans {{context}} à votre BrightID ?",
         "linkFailure": "Impossible de lier votre compte BrightID avec {{context}}\n{{result}}",
         "linkSigFailed": "Erreur de liaison entre la vérification {{verification}} et l'application {{appId}}. Message d'erreur : {{msg}}",
         "linkSuccess": "Votre compte BrightID est désormais lié à {{context}}",
@@ -327,7 +327,7 @@
         "nameTooShort": "Le nom du groupe doit contenir au moins 2 caractères"
       },
       "title": {
-        "createFailed": "Échec de la création du groupe",
+        "createFailed": "Groupe créé",
         "formIncomplete": "Formulaire incomplet"
       }
     },
@@ -355,7 +355,7 @@
       "confirmAdd": "Êtes-vous sûr(e) de vouloir exporter votre BrightID vers un autre appareil ?",
       "confirmAddPrimary": "Êtes-vous sûr·e de vouloir exporter votre BrightID vers un autre appareil et de le définir comme votre appareil principal ?",
       "confirmRemove": "Êtes-vous sûr(e) de vouloir supprimer votre BrightID de « {{name}} » ?",
-      "confirmSync": "Êtes-vous sûr(e) de vouloir partager et synchroniser vos données BrightID avec cet appareil ?",
+      "confirmSync": "Partager et synchroniser vos données BrightID avec cet appareil ?",
       "noPrimary": "Vos appareils ne peuvent être synchronisés que par l'appareil principal."
     },
     "button": {
@@ -365,11 +365,11 @@
       "deviceName": "Nom de l'appareil"
     },
     "text": {
-      "listDescription": "Votre BrightID est disponible sur les appareils suivants :",
+      "listDescription": "Votre BrightID est disponible sur les appareils et réseaux suivants :",
       "notice": "Avis :",
       "primaryDeviceNotice": "Un seul de vos appareils actifs doit être défini comme appareil principal, sinon vous rencontrerez des problèmes lors de la synchronisation des appareils. Avant de définir votre appareil actuel comme appareil principal, assurez-vous que vous êtes synchronisé avec votre ancien appareil principal et supprimez cet appareil.",
       "switchPrimaryLabel": "Utiliser l'appareil actuel comme appareil principal",
-      "syncCompleted": "Votre appareil s'est synchronisé avec succès.",
+      "syncCompleted": "Appareil synchronisé",
       "waitSyncing": "Synchronisation des appareils, veuillez patienter…",
       "whatsDeviceName": "Veuillez choisir un nom pour le nouvel appareil"
     }
@@ -388,7 +388,7 @@
       "checkForUpdates": "Rechercher des mises à jour",
       "contactUs": "Nous contacter",
       "copyExplorerCode": "Copier le Code Explorer",
-      "devices": "Appareils",
+      "devices": "Appareils et réseaux",
       "editProfile": "Modifier le profil",
       "findFriends": "inviter",
       "groups": "Groupes",
@@ -430,11 +430,11 @@
     },
     "alert": {
       "text": {
-        "addAdmin": "Êtes-vous sûr·e de vouloir définir {{name}} comme administrateur de ce groupe ?",
-        "dismissMember": "Êtes-vous sûr·e de vouloir retirer {{name}} de ce groupe ?",
+        "addAdmin": "Faire de {{name}} un administrateur pour ce groupe ?",
+        "dismissMember": "Supprimer {{name}} de ce groupe ?",
         "groupIdCopied": "Identifiant du groupe copié dans le presse-papiers",
-        "inviteSuccess": "Vous avez invité {{name}} avec succès",
-        "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
+        "inviteSuccess": "Vous avez invité {{name}} au groupe",
+        "leaveGroup": "Quitter ce groupe ?"
       },
       "title": {
         "addAdmin": "Définir comme administrateur",
@@ -488,11 +488,17 @@
     "accessibilityLabel": {
       "connect": "se connecter"
     },
+    "alert": {
+      "text": {
+        "copied": "URL du serveur copiée dans le presse-papiers !"
+      }
+    },
     "button": {
       "achievements": "Réalisations",
       "apps": "Applis",
       "connections": "Connexions",
       "groups": "Groupes",
+      "httpServer": "Partage Wi-Fi BrightID",
       "myCode": "Mon Code",
       "scanCode": "Scanner un Code"
     },
@@ -552,14 +558,14 @@
     "title": {
       "backupPassword": "Définir le mot de passe de sauvegarde",
       "pendingConnection": "Confirmez les connexions",
-      "socialRecovery": "Configurer la récupérarion sociale"
+      "socialRecovery": "Configurer la récupération sociale"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
-        "rejectGroupInvite": "Êtes-vous sûr·e de vouloir refuser de rejoindre ce groupe ?",
+        "rejectGroupInvite": "Refuser de rejoindre ce groupe ?",
         "successGroupInvite": "Vous avez rejoint {{groupName}}"
       },
       "title": {
@@ -589,9 +595,9 @@
       "miscellaneous": "divers"
     },
     "text": {
-      "noGroupInvites": "Vous n'avez pas d'invitation à des groupes..",
+      "noGroupInvites": "Vous n'avez aucune invitation de groupe…",
       "noMiscellaneous": "Rien à voir ici…",
-      "noPendingConnections": "Vous n'avez pas de connexion en attente.."
+      "noPendingConnections": "Vous n'avez pas de connexion en attente…"
     }
   },
   "onboarding": {
@@ -659,7 +665,7 @@
         "dontLeave": "Rester"
       },
       "text": {
-        "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr·e de vouloir les annuler en quittant l'écran ?",
+        "discardChanges": "Vous avez des modifications non enregistrées. Jetez-les et quittez l'écran ?",
         "invalidPhoneNumber": "Entrez un numéro de téléphone valide",
         "passwordMatch": "Le mot de passe actuel est incorrect."
       },
@@ -780,7 +786,7 @@
       "addMoreRecovery": "Ajouter plus de connexions de récupération +",
       "addRecoveryConnections": "Ajouter des connexions de récupération",
       "chooseThreeConnections": "Choisissez trois connexions déjà connues ou plus pour sauvegarder votre BrightID",
-      "completed": "Les connexions de récupération ont été ajoutées avec succès",
+      "completed": "Connexions de récupération ajoutées",
       "connectionsAlreadyKnown": "Les connexions doivent être « déjà connues » avant de pouvoir être configurées en tant que récupération.",
       "currentRecoveryConnections": "Vos connexions de récupération actuelles",
       "emptyList": "Veuillez ajouter des connexions de récupération pour permettre la récupération sociale",
@@ -801,9 +807,9 @@
     "alert": {
       "text": {
         "notTrusted": "L'un de vos amis ne figure pas dans votre liste de connexions de récupération",
-        "requestRecovering": "Votre requête pour aider à la restauration de ce compte a été soumise avec succès !",
+        "requestRecovering": "Demande d'aide au recouvrement de ce compte soumise",
         "restoreConfirm": "Le compte que vous aidez à restaurer est-il bien {{name}} ?",
-        "restoreSuccess": "Votre compte a été récupéré avec succès !"
+        "restoreSuccess": "Compte récupéré"
       },
       "title": {
         "notTrusted": "Oh oh"

@@ -21,11 +21,11 @@
       "title": "First connection"
     },
     "makeThreeConnection": {
-      "description": "Connect with 3 BrightID user",
+      "description": "Connect with 3 BrightID users",
       "title": "Three connections"
     },
     "makeTwoConnection": {
-      "description": "Connect with 2 BrightID user",
+      "description": "Connect with 2 BrightID users",
       "title": "Two connections"
     },
     "notification": {
@@ -62,12 +62,13 @@
         "visitWebsite": "Sure"
       },
       "text": {
-        "blindSigAlreadyLinked": "You are already linked with {{app}} with id {{appUserId}}",
+        "blindSigAlreadyLinked": "You are already linked with {{app}} with the ID {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.",
+        "callbackError": "App {{context}} reported an error: {{error}}",
         "checkWebsite": "To find out more about {{name}}, check out their website!",
         "invalidApp": "{{app}} is not a valid app!",
         "invalidContext": "{{context}} is not a valid context!",
-        "linkApp": "Do you want to link your account in {{context}} to your BrightID?",
+        "linkApp": "Link your account in {{context}} to your BrightID?",
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
         "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
         "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
@@ -75,21 +76,14 @@
         "notPrimary": "You are currently using a secondary device. Linking app \"{{app}}\" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device."
       },
       "title": {
-        "invalidApp": "Failed",
-        "invalidContext": "Failed",
+        "callbackError": "Error while executing app callback",
         "linkApp": "Link App?",
-        "linkFailure": "Failed",
-        "linkingFailed": "App linking failed",
-        "linkSuccess": "Success",
-        "notPrimary": "Linking not possible"
+        "linkingFailed": "App linking failed"
       }
     },
     "text": {
       "noApps": "No Apps",
-      "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
-      "pendingLink": "Linking your account in {{context}} to your BrightID…",
-      "sponsoring": "{{app}} is sponsoring you…",
-      "sigsUpdating": "Updating blind signatures for apps…"
+      "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you."
     }
   },
   "channel": {
@@ -124,14 +118,12 @@
         "commonError": "Sorry, We Couldn't Complete Your Request. Please Try Again in a Moment.",
         "failedOp": "{{name}} failed!\n{{message}}",
         "invalidSigningKey": "Your signing key is not valid. This might be because:\n- You recovered your BrightID on another device.\n- You removed this device from your active devices list.\n- You had a failed recovery.\n- The node that you are connected to has a problem.",
-        "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
         "recoverySigned": "One of your recovery connections signed your request"
       },
       "title": {
         "invalidSigningKey": "Invalid Signing Key",
-        "lostKeys": "We've lost the BrightID keypair from the device",
         "pleaseConfirm": "Please Confirm"
       },
       "yes": "Yes"
@@ -251,7 +243,7 @@
   },
   "contact": {
     "label": {
-      "email": "Email",
+      "email": "E-mail",
       "meet": "Make Connections",
       "socialMedia": "Social Media",
       "website": "Website"
@@ -272,7 +264,7 @@
         "nameTooShort": "The group name must be at least 2 characters"
       },
       "title": {
-        "createFailed": "Group creation unsuccessful",
+        "createFailed": "Group created",
         "formIncomplete": "Group Form Incomplete"
       }
     },
@@ -298,7 +290,7 @@
       "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
       "confirmAddPrimary": "Are you sure that you want to export your BrightID into another device and set that as your primary device?",
       "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
-      "confirmSync": "Are you sure that you want to share and sync your BrightID data with this device?",
+      "confirmSync": "Share and sync your BrightID data with this device?",
       "noPrimary": "Your devices can only be synced by the primary device."
     },
     "button": {
@@ -308,13 +300,13 @@
       "deviceName": "Device Name"
     },
     "text": {
-      "listDescription": "Your BrightID is available on following devices:",
-      "syncCompleted": "Your device synced successfully.",
-      "waitSyncing": "Syncing devices, please wait ...",
-      "whatsDeviceName": "Please choose a name for the new device",
-      "switchPrimaryLabel": "Use current device as primary device",
+      "listDescription": "Your BrightID is available on following devices and networks:",
       "notice": "Notice:",
-      "primaryDeviceNotice": "Only one of your active devices should be set as a primary device, or you will encounter problems while syncing devices. Before setting your current device as primary, make sure you are synced with your old primary device and delete that device."
+      "primaryDeviceNotice": "Only one of your active devices should be set as a primary device, or you will encounter problems while syncing devices. Before setting your current device as primary, make sure you are synced with your old primary device and delete that device.",
+      "switchPrimaryLabel": "Use current device as primary device",
+      "syncCompleted": "Device synced",
+      "waitSyncing": "Syncing devices, please wait ...",
+      "whatsDeviceName": "Please choose a name for the new device"
     }
   },
   "drawer": {
@@ -331,7 +323,7 @@
       "checkForUpdates": "Check for Updates",
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
-      "devices": "Devices",
+      "devices": "Devices and Networks",
       "editProfile": "Edit Profile",
       "findFriends": "Find Friends",
       "groups": "Groups",
@@ -370,18 +362,18 @@
     },
     "alert": {
       "text": {
-        "addAdmin": "Are you sure you want to make {{name}} an admin for this group?",
-        "dismissMember": "Are you sure you want to dismiss {{name}} from this group?",
+        "addAdmin": "Make {{name}} an admin for this group?",
+        "dismissMember": "Dismiss {{name}} from this group?",
         "groupIdCopied": "Group ID copied to clipboard",
-        "inviteSuccess": "You invited {{name}} successfully to the group",
-        "leaveGroup": "Are you sure you want to leave this group?"
+        "inviteSuccess": "You invited {{name}} to the group",
+        "leaveGroup": "Leave this group?"
       },
       "title": {
         "addAdmin": "Add admin",
         "dismissMember": "Dismiss Member",
         "errorDismissMember": "Error dismissing member from the group",
         "errorLeaveGroup": "Error leaving group",
-        "inviteSuccess": "Successful Invitation",
+        "inviteSuccess": "Invitation sent",
         "leaveGroup": "Leave Group"
       }
     },
@@ -426,12 +418,17 @@
     "accessibilityLabel": {
       "connect": "connect"
     },
+    "alert": {
+      "text": {
+        "copied": "Server url copied to clipboard!"
+      }
+    },
     "button": {
       "achievements": "Achievements",
       "apps": "Apps",
       "connections": "Connections",
-      "myCode": "My Code",
       "httpServer": "WiFi BrightID Sharing",
+      "myCode": "My Code",
       "scanCode": "Scan a Code"
     },
     "chatActionSheet": {
@@ -443,11 +440,6 @@
     },
     "link": {
       "community": "Join the Community"
-    },
-    "alert": {
-      "text": {
-        "copied": "Server url copied to clipboard!"
-      }
     }
   },
   "import": {
@@ -464,6 +456,31 @@
       "askScanning": "Please scan this QR code using your other device",
       "waitImporting": "Importing connections, please wait ..."
     }
+  },
+  "missingKeysScreen": {
+    "header": "Corrupt keypair",
+    "options": {
+      "import": {
+        "followWorkflow": "Follow the Import workflow",
+        "header": "Import from another device",
+        "notes": "Precondition: You have your brightId installed on another device",
+        "selectImport": "Select \"Import\" option at startup"
+      },
+      "reinstall": "Uninstall and reinstall BrightID app",
+      "restart": {
+        "header": "Start from scratch",
+        "notes": "This is the last-resort option. You will create a new BrightID and lose all existing connections and verifications.",
+        "selectCreate": "Select \"Create my BrightID\" option at startup"
+      },
+      "socialRecovery": {
+        "followWorkflow": "Follow the Recovery workflow",
+        "header": "Perform Social recovery",
+        "notes": "Precondition: You have social recovery set up",
+        "selectRecovery": "Select \"Recover\" option at startup"
+      }
+    },
+    "recoveryOptions": "Recovery options",
+    "subHeader": "The signing keys on this device got lost or corrupted. You can not use the BrightID app unless this is fixed."
   },
   "nodeApiGate": {
     "reset": {
@@ -495,14 +512,14 @@
     "title": {
       "backupPassword": "Set Backup Password",
       "pendingConnection": "Confirm Connections",
-      "socialRecovery": "Setup Social Recovery"
+      "socialRecovery": "Set up social Recovery"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Failed to join the group",
-        "rejectGroupInvite": "Are you sure you want to reject joining this group?",
+        "rejectGroupInvite": "Reject joining this group?",
         "successGroupInvite": "You joined {{groupName}}"
       },
       "title": {
@@ -531,9 +548,9 @@
       "miscellaneous": "miscellaneous"
     },
     "text": {
-      "noGroupInvites": "You have no group invites..",
+      "noGroupInvites": "You have no group invites…",
       "noMiscellaneous": "Nothing to see here…",
-      "noPendingConnections": "You have no pending connections.."
+      "noPendingConnections": "You have no pending connections…"
     }
   },
   "onboarding": {
@@ -594,7 +611,7 @@
         "dontLeave": "Don't leave"
       },
       "text": {
-        "discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
+        "discardChanges": "You have unsaved changes. Discard them and leave the screen?",
         "invalidPhoneNumber": "Enter a valid phone number",
         "passwordMatch": "Current password does not match."
       },
@@ -708,7 +725,7 @@
       "addMoreRecovery": "Add more recovery connections +",
       "addRecoveryConnections": "Add Recovery Connections",
       "chooseThreeConnections": "Choose three or more already known connection to backup your BrightID",
-      "completed": "Recovery connections have been successfully added",
+      "completed": "Recovery connections added",
       "connectionsAlreadyKnown": "Connections must be \"already known\" before they can be setup as recovery.",
       "currentRecoveryConnections": "Your Current Recovery Connections",
       "emptyList": "Please add recovery connections to enable social recovery",
@@ -726,9 +743,9 @@
   "restore": {
     "alert": {
       "text": {
-        "requestRecovering": "Your request to help recovering this account submitted successfully!",
+        "requestRecovering": "Request to help recover this account submitted",
         "restoreConfirm": "Is {{name}} the account you are helping to recover?",
-        "restoreSuccess": "Your account recovered successfully!"
+        "restoreSuccess": "Account recovered"
       }
     },
     "emptyList": {
@@ -804,7 +821,7 @@
     "info": "Uploading user data (connections, linked apps, ...) to the new device",
     "steps": {
       "complete": "Upload complete.",
-      "downloading": "Uploading user data...",
+      "downloading": "Uploading user data…",
       "error": "Upload data failed",
       "waiting": "Waiting for Signing keys..."
     }
