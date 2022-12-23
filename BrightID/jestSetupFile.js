@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import MockAsyncStorage from 'mock-async-storage';
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
 
@@ -17,15 +19,15 @@ jest.mock('react-native', () => {
     },
   };
 
-  /*
-
   // mock modules/components created by assigning to NativeModules
   RN.NativeModules.ReanimatedModule = {
     configureProps: jest.fn(),
     createNode: jest.fn(),
     connectNodes: jest.fn(),
-    connectNodeToView: jest.fn()
+    connectNodeToView: jest.fn(),
   };
+
+  /*
 
   // mock modules created through UIManager
   RN.UIManager.getViewManagerConfig = name => {
@@ -59,7 +61,5 @@ jest.mock('react-native-keychain', () => {
 /* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
 jest.mock('react-native-modpow', () => {});
 
-const mockedNavigate = jest.fn();
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: mockedNavigate }),
-}));
+// Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');

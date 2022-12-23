@@ -104,7 +104,7 @@ module.exports = {
       'error',
       {
         // tests are allowed to import from devDependencies
-        devDependencies: ['**/*.test.tsx'],
+        devDependencies: ['**/*.test.tsx', '**/test-utils.tsx'],
       },
     ],
 
