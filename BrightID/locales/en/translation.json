@@ -41,7 +41,7 @@
     },
     "setupRecoveryConnections": {
       "description": "Setup your recovery connections to enable social account recovery",
-      "title": "Setup social recovery"
+      "title": "Set up social recovery"
     }
   },
   "addSigningKey": {
@@ -137,7 +137,7 @@
     "camera": {
       "cancel": "Cancel",
       "message": "We need your permission to use your camera",
-      "ok": "Ok",
+      "ok": "OK",
       "title": "Permission to use camera"
     },
     "photoActionSheet": {
