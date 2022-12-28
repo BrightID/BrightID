@@ -64,6 +64,7 @@
       "text": {
         "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Je probeert {{app}} te koppelen via {{appUserId}}, maar {{app}} is al gekoppeld aan een andere id: {{previousAppUserIds}}. Dit kan problemen veroorzaken tijdens het gebruik van de app.",
+        "callbackError": "De app {{context}} gaf een foutmelding: {{error}}",
         "checkWebsite": "Meer informatie over {{name}} is te vinden op hun website!",
         "invalidApp": "{{app}} is geen geldige app!",
         "invalidContext": "{{context}} is geen geldige context!",
@@ -75,6 +76,7 @@
         "notPrimary": "Je maakt momenteel gebruik van een tweede apparaat. Je kunt ‘{{app}}’ alléén koppelen via je gebruikelijke apparaat."
       },
       "title": {
+        "callbackError": "Fout tijdens uitvoeren van terugkoppeling",
         "invalidApp": "Mislukt",
         "invalidContext": "Mislukt",
         "linkApp": "Wil je de app koppelen?",
@@ -466,6 +468,31 @@
       "askScanning": "Scan deze QR-code met je andere apparaat",
       "waitImporting": "Bezig met importeren van koppelingen…"
     }
+  },
+  "missingKeysScreen": {
+    "header": "Beschadigde sleutel",
+    "options": {
+      "import": {
+        "followWorkflow": "Import-werkmethode volgen",
+        "header": "Importeren van ander apparaat",
+        "notes": "Let op: BrightID dient reeds geïnstalleerd te zijn op het andere apparaat",
+        "selectImport": "Kies ‘Importeren’ na het opstarten"
+      },
+      "reinstall": "BrightID herinstalleren",
+      "restart": {
+        "header": "Overnieuw beginnen",
+        "notes": "Dit is alléén bedoeld voor noodgevallen. Hiermee maak je een nieuwe BrightID aan, waardoor al je bestaande connecties en verificaties gewist worden.",
+        "selectCreate": "Kies ‘BrightID aanmaken’ na het opstarten"
+      },
+      "socialRecovery": {
+        "followWorkflow": "Doorloop de herstelprocedure",
+        "header": "Sociaal herstel uitvoeren",
+        "notes": "Let op: sociaal herstel dient reeds te zijn ingesteld",
+        "selectRecovery": "Kies ‘Herstellen’ na het opstarten"
+      }
+    },
+    "recoveryOptions": "Herstelopties",
+    "subHeader": "De sleutels op dit apparaat zijn onvindbaar of beschadigd. Je kunt de app niet gebruiken totdat het probleem is opgelost."
   },
   "nodeApiGate": {
     "reset": {
