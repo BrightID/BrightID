@@ -2,8 +2,9 @@ import React, { PropsWithChildren } from 'react';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { render, RenderOptions } from '@testing-library/react-native';
+import { I18nextProvider } from 'react-i18next';
 import { setupStore } from '@/store';
-import '../i18nForTests';
+import i18n from '../i18nForTests';
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -22,7 +23,11 @@ export function renderWithProviders(
   }: ExtendedRenderOptions = {},
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+      </Provider>
+    );
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
