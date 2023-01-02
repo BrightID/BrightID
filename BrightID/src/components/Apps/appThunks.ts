@@ -186,6 +186,14 @@ export const requestSponsoring =
 
     const { appUserId, appId } = selectLinkingAppInfo(getState());
     const api = getGlobalNodeApi();
+    if (!api) {
+      dispatch(
+        setLinkingAppError(
+          'No BrightID node API available. Please try again later.',
+        ),
+      );
+      return;
+    }
 
     // Check if sponsoring was already requested
     dispatch(
