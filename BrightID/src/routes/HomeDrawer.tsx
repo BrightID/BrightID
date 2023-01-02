@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   Alert,
   Image,
-  View,
-  Text,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {
   createDrawerNavigator,
@@ -20,11 +20,10 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
-import HomeScreen from '@/components/HomeScreen';
-import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
+import { BLACK, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { retrieveImage, photoDirectory } from '@/utils/filesystem';
+import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { photoDirectory, retrieveImage } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
 import RecoveryAccount from '@/components/Icons/RecoveryAccount';
@@ -44,6 +43,9 @@ import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
 import AppSettings from '@/components/Icons/AppSettings';
+import HomeScreen from '@/components/HomeScreen';
+import Aura from '@/components/Aura';
+import AuraScreen from '@/components/Aura';
 
 const CustomItem = ({
   onPress,
@@ -146,6 +148,29 @@ const CustomDrawerContent = (props) => {
         )}
         onPress={() => {
           navigation.navigate('HomeScreen');
+        }}
+      />
+      <CustomItem
+        testId="drawerAuraBtn"
+        focused={state.routeNames[state.index] === 'Aura'}
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label="Aura"
+        icon={({ focused }) => (
+          <Pencil
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Aura' }],
+          });
         }}
       />
       <CustomItem
@@ -416,6 +441,7 @@ export const HomeDrawer = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+      <Drawer.Screen name="Aura" component={AuraScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
       <Drawer.Screen name="FindFriendsScreen" component={FindFriendsScreen} />
       <Drawer.Screen

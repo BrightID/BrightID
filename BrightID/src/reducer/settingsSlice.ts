@@ -15,7 +15,7 @@ const ProdCandidates = [
   //  'http://node.topupgifter.com',
   //  'http://node.lumos.services',
 ];
-const TestCandidates = ['http://test.brightid.org'];
+const TestCandidates = ['http://node.brightid.org'];
 
 interface SettingsSlice {
   baseUrl: string | null;
