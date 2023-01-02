@@ -14,7 +14,7 @@ import { RESET_STORE } from '@/actions/resetStore';
 
 const connectionsAdapter = createEntityAdapter<Connection>();
 
-const initialState: ConnectionsState = {
+export const initialConnectionsState: ConnectionsState = {
   connections: connectionsAdapter.getInitialState(),
   connectionsSort: '',
   searchParam: '',
@@ -30,7 +30,7 @@ const initialState: ConnectionsState = {
 
 const connectionsSlice = createSlice({
   name: 'connections',
-  initialState,
+  initialState: initialConnectionsState,
   reducers: {
     setConnections(state, action: PayloadAction<Connection[]>) {
       state.connections = connectionsAdapter.setAll(state.connections, action);
@@ -165,7 +165,7 @@ const connectionsSlice = createSlice({
   },
   extraReducers: {
     [RESET_STORE]: () => {
-      return initialState;
+      return initialConnectionsState;
     },
   },
 });
