@@ -1,10 +1,12 @@
 import * as React from 'react';
 import i18next from 'i18next';
 import { fireEvent, screen } from '@testing-library/react-native';
+import { PreloadedState } from '@reduxjs/toolkit';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import { renderWithProviders } from '@/utils/test-utils';
 import { connection_levels } from '@/utils/constants';
 import clearAllMocks = jest.clearAllMocks;
+import { initialConnectionsState } from '@/reducer/connectionsSlice';
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -57,36 +59,43 @@ describe('TrustlevelModal', () => {
   });
 
   it('shows name and trustlevel', () => {
+    const testConnection = {
+      id: 'aaa',
+      name: 'Johnny Test',
+      incomingLevel: connection_levels.ALREADY_KNOWN,
+      level: connection_levels.ALREADY_KNOWN,
+    };
+    const preloadedState: PreloadedState<RootState> = {
+      connections: {
+        ...initialConnectionsState,
+        _persist: {
+          rehydrated: true,
+          version: 1,
+        },
+        connections: {
+          ids: [testConnection.id],
+          entities: {
+            aaa: testConnection,
+          },
+        },
+      },
+    };
     props = createTestProps({
       route: {
         params: {
-          connectionId: 'aaa',
+          connectionId: testConnection.id,
         },
       },
     });
     renderWithProviders(<TrustlevelModal {...props} />, {
-      preloadedState: {
-        connections: {
-          connections: {
-            ids: ['aaa'],
-            entities: {
-              aaa: {
-                id: 'aaa',
-                name: 'name',
-                incomingLevel: connection_levels.ALREADY_KNOWN,
-                level: connection_levels.ALREADY_KNOWN,
-              },
-            },
-          },
-        },
-      },
+      preloadedState,
     });
     // should show connection name
-    screen.getByText('name', {
+    screen.getByText(testConnection.name, {
       exact: false,
     });
     // should show current trustlevel. Can't do real text match here because the translated description
-    // is not available in test environment (see utils/connectionLevelStrings.ts)
+    // is not available in test environment (probably to be fixed in utils/connectionLevelStrings.ts)
     screen.getByText('😎', {
       exact: false,
     });
