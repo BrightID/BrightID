@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
+import { useTranslation } from 'react-i18next';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, BLACK } from '@/theme/colors';
@@ -13,20 +13,20 @@ import {
 
 const levelsWithoutRecovery = {
   [connection_levels.SUSPICIOUS]: {
-    description: i18next.t('connectionDetails.text.levelSuspicious'),
+    key: 'connectionDetails.text.levelSuspicious',
   },
   [connection_levels.JUST_MET]: {
-    description: i18next.t('connectionDetails.text.levelJustMet'),
+    key: 'connectionDetails.text.levelJustMet',
   },
   [connection_levels.ALREADY_KNOWN]: {
-    description: i18next.t('connectionDetails.text.levelAlreadyKnown'),
+    key: 'connectionDetails.text.levelAlreadyKnown',
   },
 };
 
 const levelsWithRecovery = {
   ...levelsWithoutRecovery,
   [connection_levels.RECOVERY]: {
-    description: i18next.t('connectionDetails.text.levelRecovery'),
+    key: 'connectionDetails.text.levelRecovery',
   },
 };
 
@@ -43,6 +43,7 @@ const TrustlevelSlider = ({
   changeLevelHandler,
   verbose,
 }: TrustlevelSliderProps) => {
+  const { t } = useTranslation();
   const includeRecovery = Array<ConnectionLevel>(
     connection_levels.ALREADY_KNOWN,
     connection_levels.RECOVERY,
@@ -87,7 +88,7 @@ const TrustlevelSlider = ({
       {verbose && (
         <View style={styles.description}>
           <Text style={styles.descriptionText}>
-            "{trustLevelDetails[currentLevel]?.description}"
+            "{t(trustLevelDetails[currentLevel]?.key)}"
           </Text>
         </View>
       )}
