@@ -10,18 +10,27 @@ import { initialConnectionsState } from '@/reducer/connectionsSlice';
 
 const mockNavigation = {
   navigate: jest.fn(),
+  dispatch: jest.fn(),
   goBack: jest.fn(),
 };
+
+jest.mock('@react-navigation/native', () => {
+  const actualNav = jest.requireActual('@react-navigation/native');
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: mockNavigation.navigate,
+      dispatch: mockNavigation.dispatch,
+      goBack: mockNavigation.goBack,
+    }),
+  };
+});
+
 // mock navigation prop
 const createTestProps = (props: Record<string, unknown>) => ({
   navigation: mockNavigation,
   ...props,
 });
-// mock useNavigation hook for components that rely on useNavigation() instead of the `navigation` prop provided
-// by react navigation
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => mockNavigation,
-}));
 
 describe('TrustlevelModal', () => {
   let props: any; // use type "any" to opt-out of type-checking

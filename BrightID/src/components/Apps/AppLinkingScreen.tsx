@@ -75,14 +75,20 @@ const ConfirmationView = ({ appName }) => {
   );
 };
 
-const AppLinkingView = ({ sponsoringStep, appName, text }) => {
+type AppLinkingViewProps = {
+  step: AppLinkingStep_Type;
+  appName: string;
+  text: string;
+};
+
+const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
   const isSponsored = useSelector(selectIsSponsored);
   const error = useSelector(selectLinkingAppError);
 
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
-  switch (sponsoringStep) {
+  switch (step) {
     case app_linking_steps.REFRESHING_APPS:
       stateDescription = `Verifying app details`;
       break;
@@ -120,10 +126,7 @@ const AppLinkingView = ({ sponsoringStep, appName, text }) => {
   }
 
   return (
-    <View
-      style={styles.stepContainer}
-      testID={`AppLinkingStep-${sponsoringStep}`}
-    >
+    <View style={styles.stepContainer} testID={`AppLinkingStep-${step}`}>
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
@@ -240,7 +243,7 @@ const AppLinkingScreen = () => {
           </Text>
         </View>
         <AppLinkingView
-          sponsoringStep={appLinkingStep}
+          step={appLinkingStep}
           text={appLinkingStepText}
           appName={appName}
         />

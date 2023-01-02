@@ -3,8 +3,9 @@ import MockAsyncStorage from 'mock-async-storage';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
-const mockImpl = new MockAsyncStorage();
-jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
+jest.mock('@react-native-async-storage/async-storage', () => {
+  return new MockAsyncStorage();
+});
 
 jest.mock('react-native', () => {
   // use original implementation, which comes with mocks out of the box
@@ -63,3 +64,8 @@ jest.mock('react-native-modpow', () => {});
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+// useHeaderHeight hook
+jest.mock('@react-navigation/stack', () => ({
+  useHeaderHeight: jest.fn().mockImplementation(() => 200),
+}));
