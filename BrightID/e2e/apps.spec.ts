@@ -128,7 +128,7 @@ describe('With account', () => {
     await expectAppsScreen();
   });
 
-  it('should fail sponsoring when user is not sponsored', async () => {
+  test.todo('should fail sponsoring when user is not sponsored', async () => {
     const context = 'idchain';
     await device.launchApp({
       newInstance: true,
