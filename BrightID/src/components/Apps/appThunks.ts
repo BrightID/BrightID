@@ -341,7 +341,6 @@ export const linkContextId =
       );
       return;
     }
-    dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
 
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
@@ -360,6 +359,7 @@ export const linkContextId =
           state: 'pending',
         }),
       );
+      dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     } catch (e) {
       dispatch(setLinkingAppError(`${(e as Error).message}`));
     }
