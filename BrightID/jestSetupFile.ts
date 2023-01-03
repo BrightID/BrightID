@@ -62,6 +62,7 @@ jest.mock('react-native-keychain', () => {
 });
 
 /* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 jest.mock('react-native-modpow', () => {});
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
@@ -74,6 +75,9 @@ jest.mock('@react-navigation/stack', () => ({
 
 // nodeAPI checkhash static method
 jest.spyOn(NodeApi, 'checkHash').mockImplementation((response, message) => {
+  // original 'checkHash' implementation compares the local calculated hash
+  //  with the server provided hash. Skip this check for testing
+  //  and just use the local hash
   return hash(message);
 });
 
@@ -89,5 +93,15 @@ jest.mock('@/components/NodeApiGate', () => {
   return {
     ...originalModule,
     getGlobalNodeApi: () => mockApi,
+  };
+});
+
+// decrease timeouts and intervals used for
+//  checking operation state etc, so tests run faster
+jest.mock('@/utils/constants', () => {
+  const originalModule = jest.requireActual('@/utils/constants');
+  return {
+    ...originalModule,
+    SPONSORING_POLL_INTERVAL: 50,
   };
 });
