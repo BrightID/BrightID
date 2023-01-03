@@ -58,7 +58,6 @@ export const handlers = [
           timestamp: 0,
         },
       }),
-      ctx.delay(50),
     );
   }),
   rest.post(`${basePath}/v6/operations`, async (req, res, ctx) => {
@@ -69,7 +68,6 @@ export const handlers = [
           hash: 'abc123',
         },
       }),
-      ctx.delay(150),
     );
   }),
   rest.post(`${basePath}/v5/operations`, async (req, res, ctx) => {
@@ -80,7 +78,6 @@ export const handlers = [
           hash: 'abc123',
         },
       }),
-      ctx.delay(150),
     );
   }),
 ];
@@ -210,7 +207,6 @@ describe('AppLinkingScreen', () => {
               timestamp: Date.now(),
             },
           }),
-          ctx.delay(50),
         );
       }),
     );
