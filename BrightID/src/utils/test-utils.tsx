@@ -5,12 +5,15 @@ import { render, RenderOptions } from '@testing-library/react-native';
 import { I18nextProvider } from 'react-i18next';
 import { setupStore } from '@/store';
 import i18n from '../i18nForTests';
+import { getGlobalNodeApi, NodeApiContext } from '@/components/NodeApiGate';
+import { NodeApi } from '@/api/brightId';
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
+  api?: NodeApi;
 }
 
 export function renderWithProviders(
@@ -19,13 +22,18 @@ export function renderWithProviders(
     preloadedState = undefined,
     // Automatically create a store instance if no store was passed in
     store = setupStore(preloadedState),
+    api = getGlobalNodeApi(),
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return (
       <Provider store={store}>
-        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+        <I18nextProvider i18n={i18n}>
+          <NodeApiContext.Provider value={api}>
+            {children}
+          </NodeApiContext.Provider>
+        </I18nextProvider>
       </Provider>
     );
   }
