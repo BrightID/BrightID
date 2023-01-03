@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import nacl from 'tweetnacl';
 import { renderWithProviders } from '@/utils/test-utils';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 import clearAllMocks = jest.clearAllMocks;
@@ -7,12 +10,20 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import {
   initialAppsState,
   selectApplinkingStep,
+  selectSponsorOperationHash,
   setApps,
   setLinkingAppInfo,
 } from '@/reducer/appsSlice';
-import { app_linking_steps } from '@/utils/constants';
+import { app_linking_steps, operation_states } from '@/utils/constants';
 import { setupStore } from '@/store';
-import i18next from 'i18next';
+import {
+  selectPendingOperations,
+  updateOperation,
+} from '@/reducer/operationsSlice';
+import { setUserId } from '@/reducer/userSlice';
+import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
+import { setKeypair } from '@/reducer/keypairSlice';
+import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -20,6 +31,7 @@ const mockNavigation = {
   goBack: jest.fn(),
 };
 
+// Need to mock here so we can access the mocked functions in the tests
 jest.mock('@react-navigation/native', () => {
   const actualNav = jest.requireActual('@react-navigation/native');
   return {
@@ -31,6 +43,50 @@ jest.mock('@react-navigation/native', () => {
     }),
   };
 });
+
+// Use msw to intercept network requests
+const basePath = 'https://not.valid/brightId';
+export const handlers = [
+  rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
+    console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
+    return res(
+      ctx.json({
+        data: {
+          app: 'testApp',
+          appHasAuthorized: false,
+          spendRequested: false,
+          timestamp: 0,
+        },
+      }),
+      ctx.delay(50),
+    );
+  }),
+  rest.post(`${basePath}/v6/operations`, async (req, res, ctx) => {
+    console.log(`Mocking post operation response`);
+    return res(
+      ctx.json({
+        data: {
+          hash: 'abc123',
+        },
+      }),
+      ctx.delay(150),
+    );
+  }),
+  rest.post(`${basePath}/v5/operations`, async (req, res, ctx) => {
+    console.log(`Mocking v5 post operation response`);
+    return res(
+      ctx.json({
+        data: {
+          hash: 'abc123',
+        },
+      }),
+      ctx.delay(150),
+    );
+  }),
+];
+const server = setupServer(...handlers);
+
+jest.setTimeout(30000);
 
 describe('AppLinkingScreen', () => {
   const preloadedState: PreloadedState<RootState> = {
@@ -63,31 +119,51 @@ describe('AppLinkingScreen', () => {
     appId: app.id,
     appUserId: '123',
     v: 5,
-    baseUrl: '',
+    baseUrl: 'https://not.valid',
   };
-  let store;
+  let store: AppStore;
+  const keypair: Keypair = {
+    publicKey: undefined,
+    secretKey: undefined,
+  };
+
+  beforeAll(async () => {
+    const keys = await nacl.sign.keyPair();
+    keypair.publicKey = uInt8ArrayToB64(keys.publicKey);
+    keypair.secretKey = keys.secretKey;
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+
+  afterAll(() => {
+    server.close();
+  });
 
   beforeEach(() => {
     store = setupStore(preloadedState);
-    store.dispatch(setApps([app]));
-    store.dispatch(setLinkingAppInfo(linkingAppInfo));
+    act(() => {
+      store.dispatch(setKeypair(keypair));
+      const id = b64ToUrlSafeB64(keypair.publicKey);
+      store.dispatch(setUserId(id));
+      store.dispatch(setApps([app]));
+      store.dispatch(setLinkingAppInfo(linkingAppInfo));
+    });
   });
 
   afterEach(() => {
     clearAllMocks();
+    server.resetHandlers();
   });
 
   it('user can cancel app linking', () => {
     renderWithProviders(<AppLinkingScreen />, {
       store,
     });
-    screen.debug();
     fireEvent.press(screen.getByTestId('RejectLinking'));
     const step = selectApplinkingStep(store.getState());
     expect(step).toBe(app_linking_steps.IDLE);
   });
 
-  it('linking fails without API', async () => {
+  it('linking unsponsored user', async () => {
     renderWithProviders(<AppLinkingScreen />, {
       store,
     });
@@ -98,10 +174,74 @@ describe('AppLinkingScreen', () => {
     // confirm linking
     fireEvent.press(screen.getByTestId('ConfirmLinking'));
 
-    // should end up in error case as no API is available
+    // should wait for sponsoring op to confirm
     await waitFor(() => {
-      screen.getByText(i18next.t('apps.alert.title.linkingFailed'));
+      screen.getByText('Requesting sponsorship from app');
     });
-    screen.getByText('No BrightID node API available. Please try again later.');
+
+    // manually set operation to applied
+    const sponsorOpHash = selectSponsorOperationHash(store.getState());
+    act(() => {
+      store.dispatch(
+        updateOperation({
+          id: sponsorOpHash,
+          changes: { state: operation_states.APPLIED },
+        }),
+      );
+    });
+
+    // should wait for app to sponsor me
+    await screen.findByText(
+      `Waiting for ${app.name} to sponsor you`,
+      {},
+      { timeout: 30000 },
+    );
+
+    // change server response to have sponsorship accepted
+    server.use(
+      rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
+        console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
+        return res(
+          ctx.json({
+            data: {
+              app: 'testApp',
+              appHasAuthorized: true,
+              spendRequested: true,
+              timestamp: Date.now(),
+            },
+          }),
+          ctx.delay(50),
+        );
+      }),
+    );
+
+    // should wait for link operation to apply
+    await screen.findByText(
+      `Waiting for link operation to confirm`,
+      {},
+      { timeout: 30000 },
+    );
+
+    // manually mark link Context operation as applied
+    // Flaky: There should only be one pending operation existing, so it
+    // must be the linkContext Op...
+    const linkContextOp = selectPendingOperations(store.getState())[0];
+    await act(async () => {
+      store.dispatch(
+        updateOperation({
+          id: linkContextOp.hash,
+          changes: { state: operation_states.APPLIED },
+        }),
+      );
+      await store.dispatch(
+        handleLinkContextOpUpdate({
+          op: linkContextOp,
+          state: operation_states.APPLIED,
+          result: undefined,
+        }),
+      );
+    });
+
+    await screen.findByText(`Successfully linked!`, {}, { timeout: 30000 });
   });
 });
