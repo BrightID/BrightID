@@ -1,5 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import MockAsyncStorage from 'mock-async-storage';
+import { NodeApi } from './src/api/brightId';
+import { hash } from './src/utils/encoding';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
@@ -69,3 +71,23 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('@react-navigation/stack', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
+
+// nodeAPI checkhash static method
+jest.spyOn(NodeApi, 'checkHash').mockImplementation((response, message) => {
+  return hash(message);
+});
+
+// nodeAPI instance
+const mockApi = new NodeApi({
+  // we will intercept any request using msw so the url does not matter
+  url: 'https://not.valid',
+  id: undefined,
+  secretKey: undefined,
+});
+jest.mock('@/components/NodeApiGate', () => {
+  const originalModule = jest.requireActual('@/components/NodeApiGate');
+  return {
+    ...originalModule,
+    getGlobalNodeApi: () => mockApi,
+  };
+});
