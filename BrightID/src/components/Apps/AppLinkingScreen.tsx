@@ -34,13 +34,11 @@ const ConfirmationView = ({ appName }) => {
   const dispatch = useDispatch();
 
   const confirmHandler = () => {
-    console.log(`User confirmed linking.`);
     dispatch(setAppLinkingStep({ step: app_linking_steps.USER_CONFIRMED }));
     dispatch(startLinking());
   };
 
   const rejectHandler = () => {
-    console.log(`User rejected linking!`);
     dispatch(resetLinkingAppState());
   };
 

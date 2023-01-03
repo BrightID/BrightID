@@ -139,12 +139,10 @@ export const startLinking =
 
     if (isSponsored || skipSponsoring) {
       // trigger app linking
-      console.log(`Sponsoring not required, proceed with linking`);
       dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
       await dispatch(linkAppOrContext());
     } else {
       // trigger sponsoring workflow
-      console.log(`Sponsoring required`);
       await dispatch(requestSponsoring());
     }
   };
@@ -201,9 +199,9 @@ export const requestSponsoring =
     );
     const sp = await getSponsorship(appUserId, api);
     if (!sp || !sp.spendRequested) {
-      console.log(`Sending spend sponsorship op...`);
+      // console.log(`Sending spend sponsorship op...`);
       const op = await api.spendSponsorship(appId, appUserId);
-      console.log(`Sponsor op hash: ${op.hash}`);
+      // console.log(`Sponsor op hash: ${op.hash}`);
       dispatch(setSponsorOperationHash(op.hash));
       dispatch(addOperation(op));
       dispatch(
