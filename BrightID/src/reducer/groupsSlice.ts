@@ -249,7 +249,7 @@ export const selectGroupName = (state: RootState, group: Group) => {
   );
 };
 
-const selectThreeKnownMembers = (
+export const selectThreeKnownMembers = (
   state: RootState,
   group: Group,
 ): Array<Connection> => {
@@ -272,6 +272,19 @@ const selectThreeKnownMembers = (
     .sort((u1) => (group.admins.includes(u1.id) ? -1 : 1))
     .slice(0, 3);
 };
+
+export const selectGroupById = createSelector(
+  allGroupsSelector,
+  (_, groupId: string) => groupId,
+  (groups: Group[], groupId: string) => {
+    const group = groups.find((group) => group.id === groupId);
+    return {
+      group,
+      admins: group ? group.admins : [],
+      members: group ? group.members : [],
+    };
+  },
+);
 
 export const {
   createGroup,

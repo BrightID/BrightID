@@ -30,12 +30,12 @@ import {
   selectAllConnections,
   userSelector,
   selectGroupName,
+  selectGroupById,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { groupByIdSelector } from '@/utils/groups';
 import { addOperation } from '@/reducer/operationsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { MemberCard } from '@/components/Groups/Members/MemberCard';
@@ -51,7 +51,7 @@ export const MembersScreen = () => {
   const connections = useSelector(selectAllConnections);
   const user = useSelector(userSelector);
   const { group, admins, members } = useSelector((state) =>
-    groupByIdSelector(state, groupID),
+    selectGroupById(state, groupID),
   );
   const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
