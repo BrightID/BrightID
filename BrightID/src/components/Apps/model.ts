@@ -1,10 +1,7 @@
-import store from '@/store';
-import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
 
-export const getSignedTimestamp = (app: AppInfo) => {
-  const sigs = selectAllSigs(store.getState());
+export const getSignedTimestamp = (app: AppInfo, sigs: SigInfo[]) => {
   const vel = app.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
   for (const verification of app.verifications) {

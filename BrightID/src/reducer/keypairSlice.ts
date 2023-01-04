@@ -26,5 +26,11 @@ const keypairSlice = createSlice({
 // Export channel actions
 export const { setKeypair } = keypairSlice.actions;
 
+// Export selectors
+export const selectKeypair = (state: RootState) => ({
+  publicKey: state.keypair.publicKey,
+  secretKey: state.keypair.secretKey,
+});
+
 // Export reducer
 export default keypairSlice.reducer;

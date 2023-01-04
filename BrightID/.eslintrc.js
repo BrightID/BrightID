@@ -56,7 +56,6 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        // 'import/extensions': 'off',
       },
     },
   ],
@@ -101,6 +100,14 @@ module.exports = {
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        // tests are allowed to import from devDependencies
+        devDependencies: ['**/*.test.tsx', '**/test-utils.tsx'],
+      },
+    ],
+
     // 'sort-keys': [
     //   'error',
     //   'asc',

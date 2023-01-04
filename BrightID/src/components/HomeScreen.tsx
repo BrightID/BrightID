@@ -148,7 +148,7 @@ export const HomeScreen = (props) => {
   const handleChat = () => {
     if (__DEV__) {
       const { delStorage } = require('@/utils/dev');
-      delStorage();
+      delStorage(dispatch);
     } else {
       showActionSheetWithOptions(
         {

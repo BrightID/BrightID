@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import store from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -70,7 +69,7 @@ const AddDeviceScreen = ({ route }) => {
   const [uploadDataStep, setUploadDataStep] = useState(UploadDataSteps.WAITING);
   const [uploadDataError, setUploadDataError] = useState('');
 
-  const isPrimary = selectIsPrimaryDevice(store.getState());
+  const isPrimary = useSelector(selectIsPrimaryDevice);
   const changePrimaryDevice = isPrimary && route.params.changePrimaryDevice;
 
   const handleSubmit = async () => {
@@ -81,7 +80,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`adding new signing key`);
       setSigningKey(signingKey);
       const op = await api.addSigningKey(signingKey);
-      store.dispatch(addOperation(op));
+      dispatch(addOperation(op));
       setSigningKeyOpHash(op.hash);
       setAddSigningKeyStep(AddSigningKeySteps.WAITING_OPERATION);
     } catch (err) {
@@ -97,7 +96,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await uploadAllInfoAfter(0);
+        await dispatch(uploadAllInfoAfter(0));
         setUploadDataStep(UploadDataSteps.COMPLETE);
         if (isPrimary) {
           dispatch(setPrimaryDevice(!changePrimaryDevice));
@@ -115,7 +114,13 @@ const AddDeviceScreen = ({ route }) => {
     ) {
       runEffect();
     }
-  }, [addSigningKeyStep, changePrimaryDevice, dispatch, uploadDataStep]);
+  }, [
+    addSigningKeyStep,
+    changePrimaryDevice,
+    dispatch,
+    isPrimary,
+    uploadDataStep,
+  ]);
 
   // track overall progress
   useEffect(() => {

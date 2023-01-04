@@ -1,15 +1,14 @@
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import * as PushNotification from 'react-native-push-notification';
 import { setDeviceToken, setNotificationToken } from '@/actions';
-import { store } from '@/store';
 import notificationService from '@/api/notificationService';
 
-export function notificationSubscription() {
+export function notificationSubscription(dispatch: AppDispatch, getState) {
   // Must be outside of any component LifeCycle (such as `componentDidMount`).
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
     onRegister({ token }) {
-      const { notifications } = store.getState();
+      const { notifications } = getState();
 
       if (token) {
         console.log('RECIEVED_NOTIFICATION_TOKEN', token);
@@ -33,12 +32,12 @@ export function notificationSubscription() {
               notificationToken &&
               notificationToken !== notifications.notificationToken
             )
-              store.dispatch(setNotificationToken(notificationToken));
+              dispatch(setNotificationToken(notificationToken));
           })
           .catch((err) => {
             console.log(err.message);
           });
-        store.dispatch(setDeviceToken(token));
+        dispatch(setDeviceToken(token));
       }
     },
 

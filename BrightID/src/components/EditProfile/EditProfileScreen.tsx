@@ -43,9 +43,9 @@ import { chooseImage, takePhoto } from '@/utils/images';
 import { photoDirectory, retrieveImage, saveImage } from '@/utils/filesystem';
 import {
   selectAllLinkedSigs,
+  selectAllSigs,
   selectAppInfoByAppId,
   selectApplinkingStep,
-  selectLinkingAppError,
   selectLinkingAppInfo,
   selectUserVerifications,
   setName,
@@ -201,6 +201,7 @@ const SocialMediaLink = (props: {
       return selectAppInfoByAppId(state, socialMediaVariation.brightIdAppId);
     } else return undefined;
   });
+  const sigs = useSelector(selectAllSigs);
 
   const isLinked = useSelector((state: RootState) => {
     if (appInfo) {
@@ -214,7 +215,7 @@ const SocialMediaLink = (props: {
   const userVerifications = useSelector(selectUserVerifications);
 
   const showDiscovery = appInfo
-    ? allowDiscovery({ appInfo, userVerifications })
+    ? allowDiscovery({ appInfo, userVerifications, sigs })
     : false;
 
   // perfectly center profile text with max length

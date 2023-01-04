@@ -7,13 +7,13 @@ import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
 import ChannelAPI from '@/api/channelService';
-import { store } from '@/store';
 import {
   channel_states,
   channel_types,
   connection_levels,
   report_reasons,
   app_linking_steps,
+  group_states,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
@@ -24,10 +24,12 @@ import {
   SocialMediaVariationIds,
 } from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { rootReducer, setupStore } from '@/store';
 
 declare global {
-  type RootState = ReturnType<typeof store.getState>;
-  type AppDispatch = typeof store.dispatch;
+  type RootState = ReturnType<typeof rootReducer>;
+  type AppStore = ReturnType<typeof setupStore>;
+  type AppDispatch = AppStore['dispatch'];
   type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
   type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
@@ -395,4 +397,6 @@ declare global {
 
   type AppLinkingStep_Type =
     typeof app_linking_steps[keyof typeof app_linking_steps];
+
+  type GroupState_Type = typeof group_states[keyof typeof group_states];
 }

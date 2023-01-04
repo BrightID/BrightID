@@ -178,7 +178,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
       // subscribe to operations
       const timerId = setInterval(() => {
         InteractionManager.runAfterInteractions(() => {
-          pollOperations(api);
+          dispatch(pollOperations(api));
         });
       }, 5000);
       console.log(`Started pollOperationsTimer ${timerId}`);
@@ -188,7 +188,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         clearInterval(timerId);
       };
     }
-  }, [api]);
+  }, [api, dispatch]);
 
   /* Manually set node url */
   const setNode = async (nodeUrl: string) => {

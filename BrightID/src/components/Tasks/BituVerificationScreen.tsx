@@ -10,7 +10,6 @@ import {
   Alert,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { store } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import { getBituReportedByText } from '@/utils/verifications';
@@ -18,6 +17,7 @@ import { GREY, BLUE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { useSelector } from '@/store/hooks';
+import { selectUserVerifications } from '@/reducer/userSlice';
 
 export const BituVerificationScreen = function ({ route }) {
   const { url } = route.params;
@@ -25,9 +25,7 @@ export const BituVerificationScreen = function ({ route }) {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const {
-    user: { verifications },
-  } = store.getState();
+  const verifications = useSelector(selectUserVerifications);
   const connections = useSelector(selectAllConnections);
   const bituVerification = verifications.find(
     (v) => v.name === 'Bitu',

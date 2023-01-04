@@ -4,12 +4,18 @@ import { photoDirectory } from '@/utils/filesystem';
 import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
+import { useSelector } from '@/store/hooks';
+import { selectThreeKnownMembers } from '@/reducer/groupsSlice';
 
 type GroupPhotoProps = {
   group: Group;
 };
 
 export const GroupPhoto = ({ group }: GroupPhotoProps) => {
+  const threeKnownMembers = useSelector((state) =>
+    selectThreeKnownMembers(state, group),
+  );
+
   if (group?.photo?.filename) {
     return (
       <View style={styles.container}>
@@ -22,7 +28,7 @@ export const GroupPhoto = ({ group }: GroupPhotoProps) => {
       </View>
     );
   } else {
-    const circlePhotos = groupCirclePhotos(group).map(
+    const circlePhotos = groupCirclePhotos(threeKnownMembers).map(
       (item: { photo: Photo; source: any }) => {
         if (item?.photo?.filename) {
           item.source = {

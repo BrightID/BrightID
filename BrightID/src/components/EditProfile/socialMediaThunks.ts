@@ -2,6 +2,7 @@ import { SOCIAL_API_AUTHENTICATION_ERROR } from '@/api/socialMediaService';
 import { getSignedTimestamp } from '@/components/Apps/model';
 import {
   selectAllLinkedSigs,
+  selectAllSigs,
   selectAppInfoByAppId,
   selectLinkingAppError,
 } from '@/reducer/appsSlice';
@@ -24,15 +25,17 @@ import { selectUserVerifications } from '@/reducer/userSlice';
 export const allowDiscovery = ({
   appInfo,
   userVerifications,
+  sigs,
 }: {
   appInfo: AppInfo;
   userVerifications: Verification[];
+  sigs: Array<SigInfo>;
 }) => {
   // has the user the required verifications to link?
   if (!isVerifiedForApp(userVerifications, appInfo.verifications)) return false;
 
   // is the elapsed time since creating signatures okay?
-  const signedTimestamp = getSignedTimestamp(appInfo);
+  const signedTimestamp = getSignedTimestamp(appInfo, sigs);
   if (signedTimestamp) {
     const elapsed = Date.now() - signedTimestamp;
     if (elapsed < SOCIAL_MEDIA_SIG_WAIT_TIME) {
@@ -109,8 +112,9 @@ export const linkSocialMediaApp =
       throw Error(`App ${appInfo.name} is not using blind signatures!`);
 
     const userVerifications = selectUserVerifications(getState());
+    const sigs = selectAllSigs(getState());
     // start linking if user meets all conditions
-    if (allowDiscovery({ appInfo, userVerifications })) {
+    if (allowDiscovery({ appInfo, userVerifications, sigs })) {
       const linkingAppInfo = {
         baseUrl: undefined,
         appId,

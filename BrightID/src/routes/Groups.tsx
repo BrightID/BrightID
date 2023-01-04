@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
-import { getGroupName } from '@/utils/groups';
 import { fontSize } from '@/theme/fonts';
 import { GroupsScreen } from '@/components/Groups/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
@@ -37,19 +36,13 @@ const newGroupOptions: StackNavigationOptions = {
   ),
 };
 
-const membersScreenOptions: ({ route }) => StackNavigationOptions = ({
-  route,
-}) => {
-  const group = route.params?.group;
-  return {
-    ...headerOptions,
-    title: getGroupName(group),
-    headerTitleStyle: {
-      fontSize: fontSize[20],
-      paddingLeft: 20,
-      paddingRight: 30,
-    },
-  };
+const membersScreenOptions: StackNavigationOptions = {
+  ...headerOptions,
+  headerTitleStyle: {
+    fontSize: fontSize[20],
+    paddingLeft: 20,
+    paddingRight: 30,
+  },
 };
 
 const Groups = () => {

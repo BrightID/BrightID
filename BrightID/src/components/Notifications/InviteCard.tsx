@@ -14,13 +14,13 @@ import {
   WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { getGroupName } from '@/utils/groups';
 import {
   acceptInvite,
   rejectInvite,
   joinGroup,
   selectConnectionById,
   addOperation,
+  selectGroupName,
 } from '@/actions';
 import { GroupPhoto } from '@/components/Groups/GroupPhoto';
 import {
@@ -42,6 +42,9 @@ const InviteCard = (props) => {
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state) => state.user);
   const api = useContext(NodeApiContext);
+  const groupName = useSelector((state) =>
+    selectGroupName(state, invite.group.id),
+  );
 
   const handleRejectInvite = () => {
     Alert.alert(
@@ -81,7 +84,7 @@ const InviteCard = (props) => {
         t('common.alert.success'),
         t('notifications.alert.text.successGroupInvite', {
           defaultValue: 'You joined {{groupName}}',
-          groupName: getGroupName(invite.group),
+          groupName,
         }),
       );
       if (backupCompleted) {
@@ -112,7 +115,7 @@ const InviteCard = (props) => {
         <GroupPhoto group={invite.group} />
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>{getGroupName(invite.group)}</Text>
+        <Text style={styles.name}>{groupName}</Text>
         <Text style={styles.invitationMsg}>
           {t('notifications.item.text.pendingGroupInvite', {
             name: inviter?.name,

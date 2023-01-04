@@ -29,9 +29,12 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 
 import TrustlevelSlider from './TrustlevelSlider';
 
-type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
+type TrustlevelModalProps = StackScreenProps<
+  ModalStackParamList,
+  'SetTrustlevel'
+>;
 
-const TrustlevelModal = ({ route }: props) => {
+const TrustlevelModal = ({ route }: TrustlevelModalProps) => {
   const navigation = useNavigation();
   const { connectionId } = route.params;
   const { id: myId } = useSelector((state) => state.user);
@@ -48,7 +51,6 @@ const TrustlevelModal = ({ route }: props) => {
 
   const goBack = () => {
     navigation.goBack();
-    // navigation.navigate('Connection', { connectionId });
   };
 
   const saveLevelHandler = async () => {
@@ -102,7 +104,6 @@ const TrustlevelModal = ({ route }: props) => {
 
   // go back silently if connection does not exist. Should never happen.
   if (!connection) {
-    console.log(`ConnectionID ${connectionId} not found!`);
     goBack();
     return null;
   }

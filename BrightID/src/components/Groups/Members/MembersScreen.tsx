@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Platform,
   ToastAndroid,
+  AlertButton,
 } from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
@@ -28,12 +29,13 @@ import {
   addAdmin,
   selectAllConnections,
   userSelector,
+  selectGroupName,
+  selectGroupById,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { groupByIdSelector } from '@/utils/groups';
 import { addOperation } from '@/reducer/operationsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { MemberCard } from '@/components/Groups/Members/MemberCard';
@@ -49,11 +51,12 @@ export const MembersScreen = () => {
   const connections = useSelector(selectAllConnections);
   const user = useSelector(userSelector);
   const { group, admins, members } = useSelector((state) =>
-    groupByIdSelector(state, groupID),
+    selectGroupById(state, groupID),
   );
   const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
+  const groupName = useSelector((state) => selectGroupName(state, group));
 
   const ACTION_INVITE = t('groups.groupActionSheet.inviteUser');
   const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
@@ -64,11 +67,17 @@ export const MembersScreen = () => {
     'Copy group ID to clipboard',
   );
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: groupName,
+    });
+  }, [groupName, navigation]);
+
   useLayoutEffect(() => {
     if (contextActions.length > 0) {
       // action sheet actions
       const handleLeaveGroup = () => {
-        const buttons = [
+        const buttons: AlertButton[] = [
           {
             text: t('common.alert.cancel'),
             style: 'cancel',
@@ -93,7 +102,6 @@ export const MembersScreen = () => {
         Alert.alert(
           t('groups.alert.title.leaveGroup'),
           t('groups.alert.text.leaveGroup'),
-          // @ts-ignore
           buttons,
           {
             cancelable: true,
@@ -231,7 +239,7 @@ export const MembersScreen = () => {
   }, [user, connections, members]);
 
   const handleDismiss = (user) => {
-    const buttons = [
+    const buttons: AlertButton[] = [
       {
         text: t('common.alert.cancel'),
         style: 'cancel',
@@ -255,7 +263,6 @@ export const MembersScreen = () => {
     Alert.alert(
       t('groups.alert.title.dismissMember'),
       t('groups.alert.text.dismissMember', { name: user.name }),
-      // @ts-ignore
       buttons,
       {
         cancelable: true,
@@ -264,7 +271,7 @@ export const MembersScreen = () => {
   };
 
   const handleAddAdmin = (user) => {
-    const buttons = [
+    const buttons: AlertButton[] = [
       {
         text: t('common.alert.cancel'),
         style: 'cancel',
@@ -288,7 +295,6 @@ export const MembersScreen = () => {
     Alert.alert(
       t('groups.alert.title.addAdmin'),
       t('groups.alert.text.addAdmin', { name: user.name }),
-      // @ts-ignore
       buttons,
       {
         cancelable: true,

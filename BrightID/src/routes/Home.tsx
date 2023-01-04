@@ -33,7 +33,6 @@ const unconfirmedSelector = createSelector(
   selectAllPendingConnections,
   (pendingConnections) =>
     pendingConnections.filter(
-      // @ts-ignore
       (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
     ),
 );
