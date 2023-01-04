@@ -11,25 +11,6 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 
-const levelsWithoutRecovery = {
-  [connection_levels.SUSPICIOUS]: {
-    key: 'connectionDetails.text.levelSuspicious',
-  },
-  [connection_levels.JUST_MET]: {
-    key: 'connectionDetails.text.levelJustMet',
-  },
-  [connection_levels.ALREADY_KNOWN]: {
-    key: 'connectionDetails.text.levelAlreadyKnown',
-  },
-};
-
-const levelsWithRecovery = {
-  ...levelsWithoutRecovery,
-  [connection_levels.RECOVERY]: {
-    key: 'connectionDetails.text.levelRecovery',
-  },
-};
-
 type TrustlevelSliderProps = {
   currentLevel: ConnectionLevel;
   incomingLevel: ConnectionLevel;
@@ -48,6 +29,26 @@ const TrustlevelSlider = ({
     connection_levels.ALREADY_KNOWN,
     connection_levels.RECOVERY,
   ).includes(incomingLevel);
+
+  const levelsWithoutRecovery = {
+    [connection_levels.SUSPICIOUS]: {
+      description: t('connectionDetails.text.levelSuspicious'),
+    },
+    [connection_levels.JUST_MET]: {
+      description: t('connectionDetails.text.levelJustMet'),
+    },
+    [connection_levels.ALREADY_KNOWN]: {
+      description: t('connectionDetails.text.levelAlreadyKnown'),
+    },
+  };
+
+  const levelsWithRecovery = {
+    ...levelsWithoutRecovery,
+    [connection_levels.RECOVERY]: {
+      description: t('connectionDetails.text.levelRecovery'),
+    },
+  };
+
   const trustLevelDetails = includeRecovery
     ? levelsWithRecovery
     : levelsWithoutRecovery;
@@ -88,7 +89,7 @@ const TrustlevelSlider = ({
       {verbose && (
         <View style={styles.description}>
           <Text style={styles.descriptionText}>
-            "{t(trustLevelDetails[currentLevel]?.key)}"
+            "{trustLevelDetails[currentLevel]?.description}"
           </Text>
         </View>
       )}
