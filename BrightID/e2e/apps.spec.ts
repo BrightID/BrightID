@@ -128,49 +128,6 @@ describe('With account', () => {
     await expectAppsScreen();
   });
 
-  test.todo('should fail sponsoring when user is not sponsored', async () => {
-    const context = 'idchain';
-    await device.launchApp({
-      newInstance: true,
-      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${context}/${getRandomAddres()}`,
-    });
-    // Alert should be open
-    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
-    // confirm linking
-    await element(by.id('ConfirmLinking')).tap();
-
-    // next step: SPONSORE_PRECHECK_APP
-    // skip this step as it is very short and missed by test
-
-    // next step: SPONSOR_WAITING_OP
-    await expect(
-      element(by.id(`AppLinkingStep-${app_linking_steps.SPONSOR_WAITING_OP}`)),
-    ).toBeVisible();
-
-    // next step: SPONSOR_WAITING_APP
-    // This will happen once the sponsor op confirms, so we need an according timeout
-    await waitFor(
-      element(by.id(`AppLinkingStep-${app_linking_steps.SPONSOR_WAITING_APP}`)),
-    )
-      .toBeVisible()
-      .withTimeout(operationTimeout);
-
-    // App will not sponsor, so we should end up with error state
-    // This will happen once the app gives up waiting for sponsoring, so we need
-    // an according timeout
-    await waitFor(
-      element(
-        by.id(`AppLinkingError-${app_linking_steps.SPONSOR_WAITING_APP}`),
-      ),
-    )
-      .toBeVisible()
-      .withTimeout(SPONSOR_WAIT_TIME + 1000);
-
-    // dismiss dialog
-    await element(by.id('ResetAppLinkingState')).tap();
-    await expectAppsScreen();
-  });
-
   describe('Apps screen', () => {
     beforeAll(async () => {
       await navigateHome();
@@ -195,45 +152,4 @@ describe('With account', () => {
       });
     }
   });
-
-  /*
-  describe('Link', () => {
-    beforeAll(async () => {
-      await navigateHome();
-      await expectHomescreen();
-      await element(by.id('appsBtn')).tap();
-      await expectAppsScreen();
-      await element(by.id('appsList')).scrollTo('top');
-    });
-
-    for (const app of apps) {
-      describe(`App ${app.name}`, () => {
-        it(`should successfully link ${app.name}`, async () => {
-          await device.sendToHome();
-          await device.launchApp({
-            newInstance: false,
-            url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
-              app.context
-            }/${getRandomAddres()}`,
-          });
-          // Alert should be open
-          await expect(element(by.text('Link App?'))).toBeVisible();
-          await element(by.text(yes)).tap();
-          await expectAppsScreen();
-          // Success alert should pop up when operation confirms.
-          await waitFor(element(by.text('Success')))
-            .toBeVisible()
-            .withTimeout(operationTimeout);
-          // dismiss success alert
-          await element(by.text('OK')).tap();
-          // app context should now be linked
-          await waitFor(element(by.id(`Linked_${app.id}`)))
-            .toBeVisible()
-            .whileElement(by.id('appsList'))
-            .scroll(50, 'down');
-          // await expect(element(by.id(`Linked_${app.id}`))).toBeVisible();
-        });
-      });
-    }
-  }); */
 });
