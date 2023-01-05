@@ -45,10 +45,17 @@ type BituVerification = HashVerification & {
   reportedConnections: Record<string, Array<string>>;
 };
 
+type AuraVerification = BaseVerification & {
+  name: 'Aura';
+  score: number;
+  level: string;
+};
+
 type Verification =
   | ExpressionVerification
   | HashVerification
   | SeedConnectedVerification
   | SeedConnectedWithFriendVerification
   | YektaVerification
-  | BituVerification;
+  | BituVerification
+  | AuraVerification;
