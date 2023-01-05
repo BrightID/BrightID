@@ -27,6 +27,11 @@
       "title": "Fullførelse:"
     }
   },
+  "addSigningKey": {
+    "header": {
+      "text": "Legg til enhetsinfo"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
@@ -43,6 +48,8 @@
   },
   "common": {
     "accessibilityLabel": {
+      "addPhoto": "legg til bilde",
+      "editPhoto": "rediger bilde",
       "profilePhoto": "profilbilde",
       "userPhoto": "brukerbilde"
     },
@@ -58,7 +65,17 @@
       "no": "Nei",
       "ok": "OK",
       "success": "Vellykket",
-      "sure": "Ja"
+      "sure": "Ja",
+      "yes": "Ja"
+    },
+    "button": {
+      "cancel": "Avbryt",
+      "copy": "Kopier",
+      "retry": "Prøv igjen",
+      "save": "Lagre"
+    },
+    "camera": {
+      "cancel": "Avbryt"
     },
     "photoActionSheet": {
       "title": "Velg bilde"
