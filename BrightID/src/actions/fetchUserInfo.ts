@@ -25,9 +25,9 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
       }
 
       console.log('refreshing user info', id);
+      let verifications: Verification[];
       try {
-        const verifications = await api.getVerifications(id);
-        dispatch(setVerifications(verifications));
+        verifications = await api.getVerifications(id);
         const memberships = await api.getMemberships(id);
         dispatch(updateMemberships(memberships));
         const connections = await api.getConnections(id, 'outbound');
@@ -45,6 +45,36 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
       } catch (err) {
         console.log(err.message);
       }
+
+      // fetch additional aura verifications from aura node (https://github.com/BrightID/BrightID/issues/1081)
+      // Remove this once aura verifications are available on all nodes!
+      const hasAuraVerification =
+        verifications.findIndex((v) => v.name.toLowerCase() === 'aura') >= 0;
+      if (!hasAuraVerification) {
+        try {
+          const auraApi = new NodeApi({
+            url: 'https://aura-node.brightid.org',
+            secretKey: undefined,
+            id: undefined,
+          });
+          const auraNodeVerifications = await auraApi.getVerifications(id);
+          const auraVerifcation: Verification | undefined =
+            auraNodeVerifications.find(
+              (verification) => verification.name === 'Aura',
+            );
+          if (auraVerifcation) {
+            verifications.push(auraVerifcation);
+          }
+        } catch (e) {
+          console.log(
+            `Error fetching verifications from Aura node: ${
+              e instanceof Error ? e.message : e
+            }`,
+          );
+        }
+      }
+      dispatch(setVerifications(verifications));
+
       // this section is added to recover sponsorships missed because of a bug
       // and should be removed in future releases
       if (!isSponsored && !isSponsoredv6) {
