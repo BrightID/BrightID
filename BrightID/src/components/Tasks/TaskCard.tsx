@@ -23,7 +23,7 @@ type TaskCardProps = {
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick, navigationTarget } =
+  const { id, title, description, fulfilled, url, onClick, navigationTarget } =
     props;
   const navigation = useNavigation();
 
@@ -45,7 +45,7 @@ function TaskCard(props: TaskCardProps) {
     );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={`task-${id}-${fulfilled}`}>
       <View style={styles.taskInfo}>
         <Text style={styles.title}>{title}</Text>
         {desc}
