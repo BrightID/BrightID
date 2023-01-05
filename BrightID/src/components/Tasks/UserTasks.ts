@@ -112,10 +112,13 @@ export const UserTasks: UserTasks = {
   aura_verification: {
     id: 'aura_verification',
     sortValue: 115,
-    title: i18next.t(`achievements.auraVerification.title`, 'aura title'),
+    title: i18next.t(
+      `achievements.auraVerification.title`,
+      'Aura verification',
+    ),
     description: i18next.t(
       `achievements.auraVerification.description`,
-      'aura description',
+      'Get verified for Aura at aura.brightid.org',
     ),
     url: 'https://aura.brightid.org/',
     checkFn(state: RootState) {
