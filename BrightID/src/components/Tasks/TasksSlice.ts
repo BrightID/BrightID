@@ -141,7 +141,7 @@ export const selectTaskIds = createSelector(
   (tasks) => {
     return Object.keys(tasks)
       .filter((id) => id !== '_persist')
-      .sort((a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue);
+      .sort((a, b) => UserTasks[a]?.sortValue - UserTasks[b]?.sortValue);
   },
 );
 
