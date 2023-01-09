@@ -135,14 +135,14 @@ export const AppsScreen = ({
         <View style={styles.rowContainer}>
           <View style={styles.appDetailContainer}>
             <Text style={styles.detailLabel}>Total</Text>
-            <Text style={styles.detail}>
+            <Text style={styles.detail} testID="totalAppsCount">
               {totalApps} <Text style={styles.detailLabel}>apps</Text>
             </Text>
           </View>
           <View style={{ width: 10 }} />
           <View style={styles.appDetailContainer}>
             <Text style={styles.detailLabel}>You're linked to</Text>
-            <Text style={styles.detail}>
+            <Text style={styles.detail} testID="linkedAppsCount">
               {linkedContextsCount}
               <Text style={styles.detailLabel}> apps</Text>
             </Text>
@@ -160,7 +160,6 @@ export const AppsScreen = ({
     );
   };
 
-  console.log(`Rendering appsscreen`);
   return (
     <>
       <View style={styles.container} testID="appsScreen">

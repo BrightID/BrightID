@@ -65,6 +65,7 @@ const AppsScreenFilter = ({
         <View style={styles.filterContainer}>
           {filters.map((item, index) => (
             <TouchableOpacity
+              testID={`btn-${item.name}`}
               key={item.id}
               style={[
                 styles.filterItemContainer,
