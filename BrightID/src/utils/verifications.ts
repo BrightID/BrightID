@@ -40,9 +40,12 @@ export const isVerifiedForApp = (
 
 export const getVerificationPatches = (verifications: Verification[]) => {
   const patches: Array<{ text: string; task?: UserTasksEntry }> = [];
-  let v = verifications.find((v) => v.name === 'SeedConnected');
-  if (v && (v as SeedConnectedVerification).rank > 0) {
-    patches.push({ text: 'Meets' });
+  let v = verifications.find((v) => v.name === 'Aura');
+  if (v && (v as AuraVerification).score > 0) {
+    patches.push({
+      text: `Aura ${(v as AuraVerification).level}`,
+      task: UserTasks.aura_verification,
+    });
   }
   v = verifications.find((v) => v.name === 'Bitu');
   if (v && (v as BituVerification).score > 0) {
@@ -50,6 +53,10 @@ export const getVerificationPatches = (verifications: Verification[]) => {
       text: `Bitu ${(v as BituVerification).score}`,
       task: UserTasks.bitu_verification,
     });
+  }
+  v = verifications.find((v) => v.name === 'SeedConnected');
+  if (v && (v as SeedConnectedVerification).rank > 0) {
+    patches.push({ text: 'Meets' });
   }
   v = verifications.find((v) => v.name === 'Seed');
   if (v) {

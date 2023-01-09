@@ -98,6 +98,11 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
+// useIsDrawerOpen hook
+jest.mock('@react-navigation/drawer', () => ({
+  useIsDrawerOpen: jest.fn().mockImplementation(() => false),
+}));
+
 // nodeAPI checkhash static method
 jest.spyOn(NodeApi, 'checkHash').mockImplementation((response, message) => {
   // original 'checkHash' implementation compares the local calculated hash

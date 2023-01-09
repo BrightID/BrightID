@@ -265,7 +265,7 @@ export const HomeScreen = (props) => {
             {verificationPatches.length > 0 ? (
               verificationPatches.map((patch) => (
                 <TouchableOpacity
-                  key={`verificationPatch-${id}`}
+                  key={`verificationPatch-${patch.text}`}
                   style={styles.verificationBox}
                   onPress={() => {
                     if (patch?.task?.navigationTarget) {
@@ -275,12 +275,7 @@ export const HomeScreen = (props) => {
                     }
                   }}
                 >
-                  <Text
-                    key={`verificationText-${id}`}
-                    style={styles.verificationText}
-                  >
-                    {patch.text}
-                  </Text>
+                  <Text style={styles.verificationText}>{patch.text}</Text>
                 </TouchableOpacity>
               ))
             ) : loading ? (
