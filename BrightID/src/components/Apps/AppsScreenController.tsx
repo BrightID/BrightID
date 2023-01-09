@@ -87,9 +87,11 @@ const AppsScreenController = () => {
           count++;
         }
       }
-
       return count === app.verifications.length;
     });
+
+    // filter sponsoring apps
+    const sponsoringApps = allApps.filter((app) => app.sponsoring);
 
     setTotalApps(allApps.length);
     setTotalVerifiedApps(verifiedApps.length);
@@ -101,6 +103,8 @@ const AppsScreenController = () => {
       filteredApp = linkedApps;
     } else if (activeFilter === 2) {
       filteredApp = verifiedApps;
+    } else if (activeFilter === 3) {
+      filteredApp = sponsoringApps;
     }
 
     // filter using search bar

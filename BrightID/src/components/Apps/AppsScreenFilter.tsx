@@ -34,6 +34,7 @@ const AppsScreenFilter = ({
     { name: 'All Apps', id: 1 },
     { name: 'Linked', id: 2 },
     { name: 'Verified', id: 3 },
+    { name: 'Sponsoring', id: 4 },
   ];
 
   return (
