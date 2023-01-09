@@ -132,6 +132,7 @@ type AppInfo = {
   usingBlindSig: boolean;
   verificationExpirationLength?: number;
   sponsorPublicKey?: string;
+  sponsoring: boolean;
   nodeUrl?: string;
   callbackUrl?: string;
   soulbound: boolean;

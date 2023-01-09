@@ -73,6 +73,31 @@ jest.mock('@react-navigation/stack', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
 
+const mockNavigation = {
+  navigate: jest.fn(),
+  dispatch: jest.fn(),
+  goBack: jest.fn(),
+  isFocused: jest.fn().mockImplementation(() => true),
+};
+
+jest.mock('@react-navigation/native', () => {
+  const actualNav = jest.requireActual('@react-navigation/native');
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: mockNavigation.navigate,
+      dispatch: mockNavigation.dispatch,
+      goBack: mockNavigation.goBack,
+      isFocused: mockNavigation.isFocused,
+    }),
+    useRoute: () => ({
+      name: 'testRoute',
+      params: {},
+    }),
+    useFocusEffect: jest.fn(), // .mockImplementation((func) => func()),
+  };
+});
+
 // useIsDrawerOpen hook
 jest.mock('@react-navigation/drawer', () => ({
   useIsDrawerOpen: jest.fn().mockImplementation(() => false),

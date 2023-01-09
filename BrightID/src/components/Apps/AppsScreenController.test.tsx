@@ -1,70 +1,13 @@
 import * as React from 'react';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-import nacl from 'tweetnacl';
-import i18next from 'i18next';
 import { renderWithProviders } from '@/utils/test-utils';
-import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
-import {
-  selectApplinkingStep,
-  selectSponsorOperationHash,
-  setAppLinkingStep,
-  setApps,
-  setLinkingAppInfo,
-} from '@/reducer/appsSlice';
-import { app_linking_steps, operation_states } from '@/utils/constants';
+import AppsScreenController from '@/components/Apps/AppsScreenController';
+import { addLinkedContext, setApps } from '@/reducer/appsSlice';
 import { setupStore } from '@/store';
-import {
-  selectPendingOperations,
-  updateOperation,
-} from '@/reducer/operationsSlice';
-import { setUserId } from '@/reducer/userSlice';
-import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
-import { setKeypair } from '@/reducer/keypairSlice';
-import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
-import clearAllMocks = jest.clearAllMocks;
 
-// Use msw to intercept network requests
-const basePath = 'https://not.valid/brightId';
-export const handlers = [
-  rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
-    // console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
-    return res(
-      ctx.json({
-        data: {
-          app: 'testApp',
-          appHasAuthorized: false,
-          spendRequested: false,
-          timestamp: 0,
-        },
-      }),
-    );
-  }),
-  rest.post(`${basePath}/v6/operations`, async (req, res, ctx) => {
-    // console.log(`Mocking post operation response`);
-    return res(
-      ctx.json({
-        data: {
-          hash: 'abc123',
-        },
-      }),
-    );
-  }),
-  rest.post(`${basePath}/v5/operations`, async (req, res, ctx) => {
-    // console.log(`Mocking v5 post operation response`);
-    return res(
-      ctx.json({
-        data: {
-          hash: 'abc123',
-        },
-      }),
-    );
-  }),
-];
-const server = setupServer(...handlers);
+describe('AppsScreen', () => {
+  let store: AppStore;
 
-describe('AppLinkingScreen', () => {
   const sponsoringApp = {
     id: 'sponsoringApp',
     name: 'sponsoringApp',
@@ -89,163 +32,139 @@ describe('AppLinkingScreen', () => {
     ...sponsoringApp,
     id: 'notSponsoringApp',
     name: 'notSponsoringApp',
+    context: 'notSponsoringContext',
     sponsoring: false,
   };
-  const linkingAppInfo: LinkingAppInfo = {
-    appId: sponsoringApp.id,
-    appUserId: '123',
-    v: 5,
-    baseUrl: 'https://not.valid',
-  };
-  let store: AppStore;
-  const keypair: Keypair = {
-    publicKey: undefined,
-    secretKey: undefined,
-  };
-
-  beforeAll(async () => {
-    const keys = await nacl.sign.keyPair();
-    keypair.publicKey = uInt8ArrayToB64(keys.publicKey);
-    keypair.secretKey = keys.secretKey;
-    server.listen({ onUnhandledRequest: 'error' });
-  });
-
-  afterAll(() => {
-    server.close();
-  });
+  const allApps = [sponsoringApp, notSponsoringApp];
 
   beforeEach(() => {
     store = setupStore();
-    // prepare store
     act(() => {
-      store.dispatch(setKeypair(keypair));
-      const id = b64ToUrlSafeB64(keypair.publicKey);
-      store.dispatch(setUserId(id));
-      store.dispatch(setApps([sponsoringApp, notSponsoringApp]));
-      store.dispatch(setLinkingAppInfo(linkingAppInfo));
-      store.dispatch(
-        setAppLinkingStep({
-          step: app_linking_steps.WAITING_USER_CONFIRMATION,
-        }),
-      );
+      store.dispatch(setApps(allApps));
     });
   });
 
-  afterEach(() => {
-    clearAllMocks();
-    server.resetHandlers();
+  it('shows total number of apps', () => {
+    renderWithProviders(<AppsScreenController />, { store });
+    expect(screen.getByTestId('totalAppsCount')).toHaveTextContent(
+      `${allApps.length} apps`,
+    );
   });
 
-  it('user can cancel app linking', () => {
-    renderWithProviders(<AppLinkingScreen />, {
-      store,
-    });
-    fireEvent.press(screen.getByTestId('RejectLinking'));
-    const step = selectApplinkingStep(store.getState());
-    expect(step).toBe(app_linking_steps.IDLE);
-  });
+  it('shows number of linked apps', () => {
+    renderWithProviders(<AppsScreenController />, { store });
+    expect(screen.getByTestId('linkedAppsCount')).toHaveTextContent('0 apps');
 
-  it('will not allow unsponsored user to link with not-sponsoring app', async () => {
+    // mark v5 app as linked
     act(() => {
       store.dispatch(
-        setLinkingAppInfo({
-          ...linkingAppInfo,
-          appId: notSponsoringApp.id,
+        addLinkedContext({
+          context: sponsoringApp.context,
+          contextId: 'someContextId',
+          state: 'applied',
+          dateAdded: Date.now(),
         }),
       );
     });
-
-    renderWithProviders(<AppLinkingScreen />, {
-      store,
-    });
-    // confirm linking
-    fireEvent.press(screen.getByTestId('ConfirmLinking'));
-    // should inform user that this app is not sponsoring
-    await screen.findByText(`This app is not providing sponsorships`, {
-      exact: false,
-    });
-    // click dismiss button
-    fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
+    expect(screen.getByTestId('linkedAppsCount')).toHaveTextContent('1 apps');
   });
 
-  it('linking unsponsored user', async () => {
-    renderWithProviders(<AppLinkingScreen />, {
-      store,
-    });
-    // should show app name
-    screen.getByText(sponsoringApp.name, {
-      exact: false,
-    });
-    // confirm linking
-    fireEvent.press(screen.getByTestId('ConfirmLinking'));
+  it('filters apps by "linked" state', async () => {
+    renderWithProviders(<AppsScreenController />, { store });
 
-    // should wait for sponsoring op to confirm
-    await waitFor(() => {
-      screen.getByText('Requesting sponsorship from app');
-    });
+    // filter on "Linked"
+    fireEvent.press(screen.getByText('Linked'));
 
-    // manually set operation to applied
-    const sponsorOpHash = selectSponsorOperationHash(store.getState());
+    // no app should be visible
+    for (const app of allApps) {
+      expect(screen.queryByText(app.name)).toBeNull();
+    }
+
+    // mark one app as linked
     act(() => {
       store.dispatch(
-        updateOperation({
-          id: sponsorOpHash,
-          changes: { state: operation_states.APPLIED },
+        addLinkedContext({
+          context: sponsoringApp.context,
+          contextId: 'someContextId',
+          state: 'applied',
+          dateAdded: 123456,
         }),
       );
     });
 
-    // should wait for app to sponsor me
-    await screen.findByText(
-      `Waiting for ${sponsoringApp.name} to sponsor you`,
-      {},
-      { timeout: 30000 },
-    );
+    // only linked app should be listed
+    screen.getByText(sponsoringApp.name);
+    expect(screen.queryByText(notSponsoringApp.name)).toBeNull();
 
-    // change server response to have sponsorship accepted
-    server.use(
-      rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
-        // console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
-        return res(
-          ctx.json({
-            data: {
-              app: 'testApp',
-              appHasAuthorized: true,
-              spendRequested: true,
-              timestamp: Date.now(),
-            },
-          }),
-        );
-      }),
-    );
-
-    // should wait for link operation to apply
-    await screen.findByText(
-      `Waiting for link operation to confirm`,
-      {},
-      { timeout: 30000 },
-    );
-
-    // manually mark link Context operation as applied
-    // Flaky: There should only be one pending operation existing, so it
-    // must be the linkContext Op...
-    const linkContextOp = selectPendingOperations(store.getState())[0];
-    await act(async () => {
+    // mark second app as linked
+    act(() => {
       store.dispatch(
-        updateOperation({
-          id: linkContextOp.hash,
-          changes: { state: operation_states.APPLIED },
-        }),
-      );
-      await store.dispatch(
-        handleLinkContextOpUpdate({
-          op: linkContextOp,
-          state: operation_states.APPLIED,
-          result: undefined,
+        addLinkedContext({
+          context: notSponsoringApp.context,
+          contextId: 'someOtherContextId',
+          state: 'applied',
+          dateAdded: 123456,
         }),
       );
     });
 
-    await screen.findByText(`Successfully linked!`, {}, { timeout: 30000 });
+    // both apps should be listed now
+    screen.getByText(sponsoringApp.name);
+    screen.getByText(notSponsoringApp.name);
   });
+
+  it('filters apps by "sponsoring" state', () => {
+    renderWithProviders(<AppsScreenController />, { store });
+    // initially all apps should be listed
+    for (const app of allApps) {
+      expect(screen.getByText(app.name)).toBeVisible();
+    }
+    // activate "sponsoring" filter
+    fireEvent.press(screen.getByText('Sponsoring'));
+    expect(screen.getByText(sponsoringApp.name)).toBeVisible();
+    expect(screen.queryByText(notSponsoringApp.name)).toBeNull();
+    // activate "all apps"
+    fireEvent.press(screen.getByText('All Apps'));
+    // all apps should be listed again
+    for (const app of allApps) {
+      expect(screen.getByText(app.name)).toBeVisible();
+    }
+  });
+
+  it('filters apps by search string', () => {
+    renderWithProviders(<AppsScreenController />, { store });
+    // initially all apps should be listed
+    for (const app of allApps) {
+      expect(screen.getByText(app.name)).toBeVisible();
+    }
+
+    fireEvent.changeText(
+      screen.getByPlaceholderText('App name'),
+      'not matching',
+    );
+    // no app should be visible
+    for (const app of allApps) {
+      expect(screen.queryByText(app.name)).toBeNull();
+    }
+
+    fireEvent.changeText(
+      screen.getByPlaceholderText('App name'),
+      'sponsoringApp',
+    );
+    // both apps should be visible
+    for (const app of allApps) {
+      screen.queryByText(app.name);
+    }
+
+    fireEvent.changeText(
+      screen.getByPlaceholderText('App name'),
+      'notSponsoring',
+    );
+    // only matching app should be visible
+    screen.getByText(notSponsoringApp.name);
+    expect(screen.queryByText(sponsoringApp.name)).toBeNull();
+  });
+
+  test.todo('shows number of apps meeting verification criteria');
+  test.todo('filters apps by "verified" state');
 });

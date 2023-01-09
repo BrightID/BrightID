@@ -34,6 +34,7 @@ const AppsScreenFilter = ({
     { name: 'All Apps', id: 1 },
     { name: 'Linked', id: 2 },
     { name: 'Verified', id: 3 },
+    { name: 'Sponsoring', id: 4 },
   ];
 
   return (
@@ -64,6 +65,7 @@ const AppsScreenFilter = ({
         <View style={styles.filterContainer}>
           {filters.map((item, index) => (
             <TouchableOpacity
+              testID={`btn-${item.name}`}
               key={item.id}
               style={[
                 styles.filterItemContainer,
