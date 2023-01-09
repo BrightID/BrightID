@@ -183,6 +183,18 @@ export const requestSponsoring =
     }
 
     const { appUserId, appId } = selectLinkingAppInfo(getState());
+    // check if app provides sponsoring
+    const appInfo = selectAppInfoByAppId(getState(), appId);
+    if (!appInfo.sponsoring) {
+      dispatch(
+        setLinkingAppError(
+          'You are not yet sponsored and this app is not providing sponsorships. Please ' +
+            'find another app to sponsor you.',
+        ),
+      );
+      return;
+    }
+
     const api = getGlobalNodeApi();
     if (!api) {
       dispatch(
