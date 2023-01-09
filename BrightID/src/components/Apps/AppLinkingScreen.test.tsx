@@ -3,10 +3,10 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import nacl from 'tweetnacl';
+import { PreloadedState } from '@reduxjs/toolkit';
 import { renderWithProviders } from '@/utils/test-utils';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
 import clearAllMocks = jest.clearAllMocks;
-import { PreloadedState } from '@reduxjs/toolkit';
 import {
   initialAppsState,
   selectApplinkingStep,
@@ -31,7 +31,7 @@ const mockNavigation = {
   goBack: jest.fn(),
 };
 
-// Need to mock here so we can access the mocked functions in the tests
+// Need to mock here, so we can access the mocked functions in the tests
 jest.mock('@react-navigation/native', () => {
   const actualNav = jest.requireActual('@react-navigation/native');
   return {
@@ -82,8 +82,6 @@ export const handlers = [
   }),
 ];
 const server = setupServer(...handlers);
-
-jest.setTimeout(30000);
 
 describe('AppLinkingScreen', () => {
   const preloadedState: PreloadedState<RootState> = {
