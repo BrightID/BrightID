@@ -118,9 +118,9 @@ export const UserTasks: UserTasks = {
     ),
     description: i18next.t(
       `achievements.auraVerification.description`,
-      'Get verified for Aura at aura.brightid.org',
+      'Learn more about Aura',
     ),
-    url: 'https://aura.brightid.org/',
+    url: 'https://brightid.gitbook.io/aura ',
     checkFn(state: RootState) {
       return Boolean(
         state.user.verifications.find(
