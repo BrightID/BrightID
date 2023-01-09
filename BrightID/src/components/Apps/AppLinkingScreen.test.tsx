@@ -29,7 +29,7 @@ import clearAllMocks = jest.clearAllMocks;
 const basePath = 'https://not.valid/brightId';
 export const handlers = [
   rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
-    console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
+    // console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
     return res(
       ctx.json({
         data: {
@@ -42,7 +42,7 @@ export const handlers = [
     );
   }),
   rest.post(`${basePath}/v6/operations`, async (req, res, ctx) => {
-    console.log(`Mocking post operation response`);
+    // console.log(`Mocking post operation response`);
     return res(
       ctx.json({
         data: {
@@ -52,7 +52,7 @@ export const handlers = [
     );
   }),
   rest.post(`${basePath}/v5/operations`, async (req, res, ctx) => {
-    console.log(`Mocking v5 post operation response`);
+    // console.log(`Mocking v5 post operation response`);
     return res(
       ctx.json({
         data: {
@@ -205,7 +205,7 @@ describe('AppLinkingScreen', () => {
     // change server response to have sponsorship accepted
     server.use(
       rest.get(`${basePath}/v6/sponsorships/:appUserId`, (req, res, ctx) => {
-        console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
+        // console.log(`Mocking sponsorship response for ${req.params.appUserId}`);
         return res(
           ctx.json({
             data: {

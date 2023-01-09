@@ -278,7 +278,7 @@ export const waitForSponsorOp =
           break;
       }
     }, SPONSORING_POLL_INTERVAL);
-    console.log(`Started pollSponsorOp ${intervalId}`);
+    // console.log(`Started pollSponsorOp ${intervalId}`);
   };
 
 export const waitForAppSponsoring =
@@ -308,14 +308,12 @@ export const waitForAppSponsoring =
         errorResponse = error;
       }
       if (sponsorshipInfo) {
-        console.log(
-          `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
-        );
+        // console.log(`Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`);
         if (
           sponsorshipInfo.appHasAuthorized &&
           sponsorshipInfo.spendRequested
         ) {
-          console.log(`Sponsorship complete!`);
+          // console.log(`Sponsorship complete!`);
           clearInterval(intervalId);
           dispatch(
             setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
@@ -341,7 +339,7 @@ export const waitForAppSponsoring =
         );
       }
     }, SPONSORING_POLL_INTERVAL);
-    console.log(`Started pollSponsorship ${intervalId}`);
+    // console.log(`Started pollSponsorship ${intervalId}`);
   };
 
 export const linkContextId =
