@@ -2,35 +2,12 @@ import * as React from 'react';
 import i18next from 'i18next';
 import { fireEvent, screen } from '@testing-library/react-native';
 import { PreloadedState } from '@reduxjs/toolkit';
+import { useNavigation } from '@react-navigation/native';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import { renderWithProviders } from '@/utils/test-utils';
 import { connection_levels } from '@/utils/constants';
 import clearAllMocks = jest.clearAllMocks;
 import { initialConnectionsState } from '@/reducer/connectionsSlice';
-
-const mockNavigation = {
-  navigate: jest.fn(),
-  dispatch: jest.fn(),
-  goBack: jest.fn(),
-};
-
-jest.mock('@react-navigation/native', () => {
-  const actualNav = jest.requireActual('@react-navigation/native');
-  return {
-    ...actualNav,
-    useNavigation: () => ({
-      navigate: mockNavigation.navigate,
-      dispatch: mockNavigation.dispatch,
-      goBack: mockNavigation.goBack,
-    }),
-  };
-});
-
-// mock navigation prop
-const createTestProps = (props: Record<string, unknown>) => ({
-  navigation: mockNavigation,
-  ...props,
-});
 
 describe('TrustlevelModal', () => {
   let props: any; // use type "any" to opt-out of type-checking
@@ -40,31 +17,33 @@ describe('TrustlevelModal', () => {
   });
 
   it('does not render and closes itself when connection is not existing', () => {
-    props = createTestProps({
+    props = {
       route: {
         params: {
           connectionId: '1',
         },
       },
-    });
+    };
     renderWithProviders(<TrustlevelModal {...props} />);
     // should not render anything
     expect(screen.toJSON()).toBe(null);
     // should close itself by calling navigate.back()
-    expect(mockNavigation.goBack).toBeCalledTimes(1);
+    const { goBack } = useNavigation();
+    expect(goBack).toBeCalledTimes(1);
   });
 
   it('does not render and closes itself when connection is undefined', () => {
-    props = createTestProps({
+    props = {
       route: {
         params: {},
       },
-    });
+    };
     renderWithProviders(<TrustlevelModal {...props} />);
     // should not render anything
     expect(screen.toJSON()).toBe(null);
     // should close itself by calling navigate.back()
-    expect(mockNavigation.goBack).toBeCalledTimes(1);
+    const { goBack } = useNavigation();
+    expect(goBack).toBeCalledTimes(1);
   });
 
   it('shows name and trustlevel', () => {
@@ -89,13 +68,13 @@ describe('TrustlevelModal', () => {
         },
       },
     };
-    props = createTestProps({
+    props = {
       route: {
         params: {
           connectionId: testConnection.id,
         },
       },
-    });
+    };
     renderWithProviders(<TrustlevelModal {...props} />, {
       preloadedState,
     });
@@ -116,6 +95,7 @@ describe('TrustlevelModal', () => {
     fireEvent.press(
       screen.getByText(i18next.t('connectionDetails.button.levelSave')),
     );
-    expect(mockNavigation.goBack).toBeCalledTimes(1);
+    const { goBack } = useNavigation();
+    expect(goBack).toBeCalledTimes(1);
   });
 });

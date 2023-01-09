@@ -25,25 +25,6 @@ import { setKeypair } from '@/reducer/keypairSlice';
 import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 import clearAllMocks = jest.clearAllMocks;
 
-const mockNavigation = {
-  navigate: jest.fn(),
-  dispatch: jest.fn(),
-  goBack: jest.fn(),
-};
-
-// Need to mock here so we can access the mocked functions in the tests
-jest.mock('@react-navigation/native', () => {
-  const actualNav = jest.requireActual('@react-navigation/native');
-  return {
-    ...actualNav,
-    useNavigation: () => ({
-      navigate: mockNavigation.navigate,
-      dispatch: mockNavigation.dispatch,
-      goBack: mockNavigation.goBack,
-    }),
-  };
-});
-
 // Use msw to intercept network requests
 const basePath = 'https://not.valid/brightId';
 export const handlers = [
