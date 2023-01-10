@@ -3,7 +3,6 @@ import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { InteractionManager } from 'react-native';
-import { store } from '@/store';
 import {
   setApps,
   upsertSig,
@@ -27,7 +26,7 @@ export const updateBlindSig =
   (app): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const {
-      user: { verifications, id },
+      user: { verifications, id, password },
       keypair: { secretKey },
     } = getState();
     const sigs = selectAllSigs(getState());
@@ -125,7 +124,8 @@ export const updateBlindSig =
 
         const backupData = stringify({ ...sigInfo, sig: blindSig });
         const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
-        await encryptAndBackup(backupKey, backupData);
+        const hashedId = hash(id + password);
+        await encryptAndBackup(backupKey, backupData, hashedId, password);
 
         dispatch(
           updateSig({
@@ -176,11 +176,12 @@ export const updateBlindSigs =
     });
   };
 
-const encryptAndBackup = async (key: string, data: string) => {
-  const {
-    user: { id, password },
-  } = store.getState();
-  const hashedId = hash(id + password);
+const encryptAndBackup = async (
+  key: string,
+  data: string,
+  hashedId,
+  password: string,
+) => {
   try {
     const encrypted = CryptoJS.AES.encrypt(data, password).toString();
     await backupApi.putRecovery(hashedId, key, encrypted);

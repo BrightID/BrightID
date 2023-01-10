@@ -11,7 +11,6 @@ import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
 import { useContext, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import store from '@/store';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';

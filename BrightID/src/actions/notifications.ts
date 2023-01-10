@@ -9,8 +9,7 @@ import {
   connection_levels,
 } from '@/utils/constants';
 import { getInvites } from '@/utils/invites';
-import { getGroupName } from '@/utils/groups';
-import { setInvites } from './index';
+import { selectGroupName, setInvites } from './index';
 import {
   recoveryConnectionsSelector,
   verifiedConnectionsSelector,
@@ -122,15 +121,15 @@ export const updateNotifications =
         const {
           groups: { invites: oldInvites },
         } = getState();
-        // this can not be done in reducer because it should be in an async function
-        const invites = await getInvites(api);
+        const invites = await dispatch(getInvites(api, oldInvites));
         dispatch(setInvites(invites));
         if (invites.length > oldInvites.length) {
           const activeInvites = invites.filter(
             (invite) => invite.state === INVITE_ACTIVE,
           );
-          const groupName = getGroupName(
-            activeInvites[activeInvites.length - 1].group,
+          const groupName = selectGroupName(
+            getState(),
+            activeInvites[activeInvites.length - 1].groupObj,
           );
           const message = `You've been invited to join ${groupName}`;
           dispatch(

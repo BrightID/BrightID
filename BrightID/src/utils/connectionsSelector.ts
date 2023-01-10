@@ -4,7 +4,8 @@ import { toSearchString } from '@/utils/strings';
 import { sortConnectionsBy } from '@/utils/sorting';
 
 const searchParamSelector = (state: RootState) => state.connections.searchParam;
-const connSortSelector = (state: RootState) => state.connections.connectionsSort;
+const connSortSelector = (state: RootState) =>
+  state.connections.connectionsSort;
 const filtersSelector = (state: RootState) => state.connections.filters;
 
 export const connectionsSelector = createSelector(
@@ -20,8 +21,9 @@ export const connectionsSelector = createSelector(
     return connections
       .filter(
         (conn) =>
-          toSearchString(`${conn?.name}`).includes(searchString) &&
-          filters.includes(conn?.level) &&
+          conn.name && // Ignore connections that do not have a name
+          toSearchString(`${conn.name}`).includes(searchString) &&
+          filters.includes(conn.level) &&
           !excluded?.includes(conn.id),
       )
       .sort(sortConnectionsBy(connectionsSort));

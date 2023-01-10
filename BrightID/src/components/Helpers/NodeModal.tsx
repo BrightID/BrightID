@@ -30,7 +30,7 @@ import { leaveAllChannels } from '@/components/PendingConnections/actions/channe
 import GraphQl from '@/components/Icons/GraphQl';
 import { LOCAL_HTTP_SERVER_PORT } from '@/utils/constants';
 import { startHttpServer, stopHttpServer } from '@/utils/httpServer';
-import { setLocalServerUrl } from '@/reducer/userSlice';
+import { setLocalServerUrl, userSelector } from '@/reducer/userSlice';
 
 const NodeModal = () => {
   const route = useRoute() as {
@@ -42,6 +42,7 @@ const NodeModal = () => {
   const currentBaseUrl = useSelector(selectBaseUrl);
   const defaultNodeUrls = useSelector(selectDefaultNodeUrls);
   const currentNodeUrls = useSelector(selectAllNodeUrls);
+  const user = useSelector(userSelector);
   const dispatch = useDispatch();
 
   const goBack = () => {
@@ -81,12 +82,12 @@ const NodeModal = () => {
   const localServerUrl = useSelector((state) => state.user.localServerUrl);
 
   const startHttpServerCallback = useCallback(async () => {
-    await startHttpServer();
+    await startHttpServer(user);
     const ip = await NetworkInfo.getIPV4Address();
     const serverUrl = `${ip}:${LOCAL_HTTP_SERVER_PORT}`;
     dispatch(setLocalServerUrl(serverUrl));
     return serverUrl;
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const toggleHttpServer = useCallback(async () => {
     if (!localServerUrl) {

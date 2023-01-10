@@ -1,6 +1,5 @@
 import { Alert } from 'react-native';
 import i18next from 'i18next';
-import store from '@/store';
 import {
   addConnection,
   Operation,
@@ -14,7 +13,8 @@ import { NodeApi } from '@/api/brightId';
 import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 
 const handleOpUpdate = (
-  store,
+  dispatch: AppDispatch,
+  id: string,
   op: Operation,
   state: OperationStateType,
   result,
@@ -23,16 +23,16 @@ const handleOpUpdate = (
   let showDefaultError = false;
   switch (op.name) {
     case 'Link ContextId':
-      store.dispatch(handleLinkContextOpUpdate({ op, state, result }));
+      dispatch(handleLinkContextOpUpdate({ op, state, result }));
       break;
 
     case 'Connect':
-      if (op.id1 !== store.getState().user.id) {
+      if (op.id1 !== id) {
         // ignore other side of dummy test connections
         break;
       }
       if (state === operation_states.APPLIED) {
-        store.dispatch(addConnection({ id: op.id2, status: 'verified' }));
+        dispatch(addConnection({ id: op.id2, status: 'verified' }));
       } else {
         api.getProfile(op.id2).then((profile) => {
           const conn = {
@@ -43,7 +43,7 @@ const handleOpUpdate = (
             // @ts-ignore
             reportReason: profile.reports.find((r) => r.id === op.id1)?.reason,
           };
-          store.dispatch(addConnection(conn));
+          dispatch(addConnection(conn));
         });
         showDefaultError = true;
       }
@@ -53,13 +53,13 @@ const handleOpUpdate = (
     case 'Add Membership':
     case 'Remove Membership':
       if (state === operation_states.FAILED) {
-        if (op.id && op.id !== store.getState().user.id) {
+        if (op.id && op.id !== id) {
           // the operation was triggered by e2e-tests, using a fake userID. Ignore error.
           showDefaultError = false;
         } else {
           showDefaultError = true;
           api.getMemberships(op.id).then((memberships) => {
-            store.dispatch(updateMemberships(memberships));
+            dispatch(updateMemberships(memberships));
           });
         }
       }
@@ -82,70 +82,74 @@ const handleOpUpdate = (
   }
 };
 
-export const pollOperations = async (api: NodeApi) => {
-  const operations = selectPendingOperations(store.getState());
-  let shouldUpdateTasks = false;
-  try {
-    for (const op of operations) {
-      let queryApi = api;
-      if (op.apiUrl) {
-        // If the op has an apiUrl attached, use that instead of the default one.
-        // Background: Some operations like "link context" require to query a specific
-        // api endpoint as the op is only known on that node
-        const { id } = store.getState().user;
-        const { secretKey } = store.getState().keypair;
-        queryApi = new NodeApi({ url: op.apiUrl, id, secretKey });
-      }
-      const { state, result } = await queryApi.getOperationState(op.hash);
+export const pollOperations =
+  (api: NodeApi): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
+    const operations = selectPendingOperations(getState());
+    const { id } = getState().user;
+    const { secretKey } = getState().keypair;
+    let shouldUpdateTasks = false;
+    try {
+      for (const op of operations) {
+        let queryApi = api;
+        if (op.apiUrl) {
+          // If the op has an apiUrl attached, use that instead of the default one.
+          // Background: Some operations like "link context" require to query a specific
+          // api endpoint as the op is only known on that node
+          queryApi = new NodeApi({ url: op.apiUrl, id, secretKey });
+        }
+        const { state, result } = await queryApi.getOperationState(op.hash);
 
-      if (op.state !== state) {
-        switch (state) {
-          case operation_states.UNKNOWN:
-            // Op not found on server. It might appear in a future poll cycle, so do nothing.
-            console.log(`operation ${op.name} (${op.hash}) unknown on server`);
-            break;
-          case operation_states.INIT:
-          case operation_states.SENT:
-            // Op still waiting to be processed. Do nothing.
-            break;
-          case operation_states.APPLIED:
-          case operation_states.FAILED:
-            handleOpUpdate(store, op, state, result, api);
-            break;
-          default:
-            console.log(
-              `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+        if (op.state !== state) {
+          switch (state) {
+            case operation_states.UNKNOWN:
+              // Op not found on server. It might appear in a future poll cycle, so do nothing.
+              console.log(
+                `operation ${op.name} (${op.hash}) unknown on server`,
+              );
+              break;
+            case operation_states.INIT:
+            case operation_states.SENT:
+              // Op still waiting to be processed. Do nothing.
+              break;
+            case operation_states.APPLIED:
+            case operation_states.FAILED:
+              handleOpUpdate(dispatch, id, op, state, result, api);
+              break;
+            default:
+              console.log(
+                `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+              );
+          }
+          dispatch(updateOperation({ id: op.hash, changes: { state } }));
+          if (state === operation_states.APPLIED) {
+            // if an op was applied we should check achievements
+            shouldUpdateTasks = true;
+          }
+        } else {
+          // stop polling for op if trace time is expired
+          if (
+            (op.postTimestamp || op.timestamp) + OPERATION_TRACE_TIME <
+            Date.now()
+          ) {
+            dispatch(
+              updateOperation({
+                id: op.hash,
+                changes: { state: operation_states.EXPIRED },
+              }),
             );
-        }
-        store.dispatch(updateOperation({ id: op.hash, changes: { state } }));
-        if (state === operation_states.APPLIED) {
-          // if an op was applied we should check achievements
-          shouldUpdateTasks = true;
-        }
-      } else {
-        // stop polling for op if trace time is expired
-        if (
-          (op.postTimestamp || op.timestamp) + OPERATION_TRACE_TIME <
-          Date.now()
-        ) {
-          store.dispatch(
-            updateOperation({
-              id: op.hash,
-              changes: { state: operation_states.EXPIRED },
-            }),
-          );
+          }
         }
       }
+    } catch (err) {
+      if (err instanceof Error) {
+        console.warn(err.message);
+      } else {
+        console.warn(err);
+      }
+    } finally {
+      if (shouldUpdateTasks) {
+        dispatch(checkTasks());
+      }
     }
-  } catch (err) {
-    if (err instanceof Error) {
-      console.warn(err.message);
-    } else {
-      console.warn(err);
-    }
-  } finally {
-    if (shouldUpdateTasks) {
-      store.dispatch(checkTasks());
-    }
-  }
-};
+  };

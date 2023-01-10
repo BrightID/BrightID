@@ -9,21 +9,24 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Clipboard from '@react-native-community/clipboard';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useIsDrawerOpen } from '@react-navigation/drawer';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from 'react-redux';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { BLUE, BLACK, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { userSelector } from '@/reducer/userSlice';
 
 export const GraphExplorerScreen = function () {
+  const { id, password } = useSelector(userSelector);
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
   const isDrawerOpen = useIsDrawerOpen();
-  const explorerCode = getExplorerCode();
+  const explorerCode = getExplorerCode(id, password);
   const { t } = useTranslation();
 
   const copyText = () => {

@@ -19,7 +19,7 @@ const sigsAdapter = createEntityAdapter<SigInfo>({
   selectId: (sig) => `${sig.uid}`,
 });
 
-const initialState: AppsState = {
+export const initialAppsState: AppsState = {
   apps: [],
   linkedContexts: linkedContextsAdapter.getInitialState(),
   sigs: sigsAdapter.getInitialState(),
@@ -33,7 +33,7 @@ const initialState: AppsState = {
 
 const appsSlice = createSlice({
   name: 'apps',
-  initialState,
+  initialState: initialAppsState,
   reducers: {
     setApps(state, action: PayloadAction<AppInfo[]>) {
       state.apps = action.payload;
@@ -105,7 +105,7 @@ const appsSlice = createSlice({
   },
   extraReducers: {
     [RESET_STORE]: () => {
-      return initialState;
+      return initialAppsState;
     },
   },
 });

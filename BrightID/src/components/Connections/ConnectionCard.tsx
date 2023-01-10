@@ -70,7 +70,7 @@ const ConnectionCard = (props: Props) => {
     level,
   } = props;
   const { t } = useTranslation();
-
+  const { secretKey } = useSelector((state) => state.keypair);
   const group = route.params?.group;
   const [imgErr, setImgErr] = useState(false);
 
@@ -192,7 +192,11 @@ const ConnectionCard = (props: Props) => {
       console.log(`Inviting connection ${id} to group ${group.id}`);
       try {
         const { signingKeys } = await api.getProfile(id);
-        const data = await encryptAesKey(group?.aesKey, signingKeys[0]);
+        const data = await encryptAesKey(
+          group?.aesKey,
+          signingKeys[0],
+          secretKey,
+        );
         const op = await api.invite(id, group?.id, data);
         dispatch(addOperation(op));
         Alert.alert(

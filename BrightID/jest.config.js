@@ -1,12 +1,13 @@
 module.exports = {
-  preset: 'react-native',
+  preset: '@testing-library/react-native',
+  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   setupFiles: [
-    './jestSetupFile.js',
+    './jestSetupFile.ts',
     './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(@react-native|react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-platform-touchable|react-native-vector-icons|react-native-spinkit|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain|react-native-modpow)/)',
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation)',
   ],
   testPathIgnorePatterns: ['./e2e/'],
 };

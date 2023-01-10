@@ -139,12 +139,10 @@ export const startLinking =
 
     if (isSponsored || skipSponsoring) {
       // trigger app linking
-      console.log(`Sponsoring not required, proceed with linking`);
       dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }));
       await dispatch(linkAppOrContext());
     } else {
       // trigger sponsoring workflow
-      console.log(`Sponsoring required`);
       await dispatch(requestSponsoring());
     }
   };
@@ -185,7 +183,27 @@ export const requestSponsoring =
     }
 
     const { appUserId, appId } = selectLinkingAppInfo(getState());
+    // check if app provides sponsoring
+    const appInfo = selectAppInfoByAppId(getState(), appId);
+    if (!appInfo.sponsoring) {
+      dispatch(
+        setLinkingAppError(
+          'You are not yet sponsored and this app is not providing sponsorships. Please ' +
+            'find another app to sponsor you.',
+        ),
+      );
+      return;
+    }
+
     const api = getGlobalNodeApi();
+    if (!api) {
+      dispatch(
+        setLinkingAppError(
+          'No BrightID node API available. Please try again later.',
+        ),
+      );
+      return;
+    }
 
     // Check if sponsoring was already requested
     dispatch(
@@ -193,9 +211,9 @@ export const requestSponsoring =
     );
     const sp = await getSponsorship(appUserId, api);
     if (!sp || !sp.spendRequested) {
-      console.log(`Sending spend sponsorship op...`);
+      // console.log(`Sending spend sponsorship op...`);
       const op = await api.spendSponsorship(appId, appUserId);
-      console.log(`Sponsor op hash: ${op.hash}`);
+      // console.log(`Sponsor op hash: ${op.hash}`);
       dispatch(setSponsorOperationHash(op.hash));
       dispatch(addOperation(op));
       dispatch(
@@ -260,7 +278,7 @@ export const waitForSponsorOp =
           break;
       }
     }, SPONSORING_POLL_INTERVAL);
-    console.log(`Started pollSponsorOp ${intervalId}`);
+    // console.log(`Started pollSponsorOp ${intervalId}`);
   };
 
 export const waitForAppSponsoring =
@@ -290,14 +308,12 @@ export const waitForAppSponsoring =
         errorResponse = error;
       }
       if (sponsorshipInfo) {
-        console.log(
-          `Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`,
-        );
+        // console.log(`Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`);
         if (
           sponsorshipInfo.appHasAuthorized &&
           sponsorshipInfo.spendRequested
         ) {
-          console.log(`Sponsorship complete!`);
+          // console.log(`Sponsorship complete!`);
           clearInterval(intervalId);
           dispatch(
             setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
@@ -323,7 +339,7 @@ export const waitForAppSponsoring =
         );
       }
     }, SPONSORING_POLL_INTERVAL);
-    console.log(`Started pollSponsorship ${intervalId}`);
+    // console.log(`Started pollSponsorship ${intervalId}`);
   };
 
 export const linkContextId =
@@ -335,7 +351,6 @@ export const linkContextId =
       );
       return;
     }
-    dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     const { appId, appUserId, baseUrl } = selectLinkingAppInfo(getState());
 
     // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
@@ -354,6 +369,7 @@ export const linkContextId =
           state: 'pending',
         }),
       );
+      dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V5 }));
     } catch (e) {
       dispatch(setLinkingAppError(`${(e as Error).message}`));
     }

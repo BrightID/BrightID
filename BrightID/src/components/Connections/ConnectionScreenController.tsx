@@ -148,13 +148,6 @@ function ConnectionScreenController() {
     }
   }, [connection, myConnections]);
 
-  useEffect(() => {
-    if (!connection) {
-      // connection not there anymore.
-      navigation.goBack();
-    }
-  }, [navigation, connection]);
-
   // Add fake user functionality in DEV mode
   useLayoutEffect(() => {
     if (__DEV__) {
@@ -165,6 +158,7 @@ function ConnectionScreenController() {
   }, [navigation, connectionId]);
 
   if (!connection) {
+    navigation.goBack();
     return null;
   }
 

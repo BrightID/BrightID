@@ -9,6 +9,7 @@ import {
   upsertChannel,
   selectTotalChannels,
   selectAllActiveChannelIdsByType,
+  selectHydratedChannelIds,
 } from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMediaToShare } from '@/reducer/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -423,4 +424,21 @@ export const encryptAndUploadProfileToChannel =
         },
       }),
     );
+  };
+
+export const rejoinChannels =
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+    const hydratedChannels = selectHydratedChannelIds(getState());
+    console.log(
+      `Rejoining hydrated channels: ${hydratedChannels.map(
+        (channel) => channel.id,
+      )}`,
+    );
+    for (const channel of hydratedChannels) {
+      try {
+        await dispatch(joinChannel(channel));
+      } catch (e) {
+        console.log(`Failed to rejoin channel ${channel.id}`);
+      }
+    }
   };

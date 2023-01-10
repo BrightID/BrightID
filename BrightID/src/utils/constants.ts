@@ -6,6 +6,12 @@ export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
 
+export const group_states = {
+  INITIATED: 'initiated',
+  VERIFIED: 'verified',
+  DISMISSED: 'dismissed',
+};
+
 export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // helpers for time constants (milliseconds)
@@ -74,7 +80,7 @@ export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
 export const NODE_CHOOSER_TIMEOUT_MS = 20 * second; // Fail if no valid node found within timeout
-export const requiredSemVer = '^6.9.0'; // client requires this node version
+export const requiredSemVer = '^6.17.2'; // client requires this node version
 
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';

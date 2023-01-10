@@ -93,12 +93,10 @@ export const syncStoreTasks = (): AppThunk => {
     const idsToAdd = userTaskIds.filter((id) => !storeTaskIds.includes(id));
     for (const id of idsToRemove) {
       if (id !== '_persist') {
-        console.log(`Removing task ${id} from store`);
         dispatch(removeTask(id));
       }
     }
     for (const id of idsToAdd) {
-      console.log(`Adding task ${id} to store`);
       dispatch(addTask(id));
     }
   };
@@ -112,7 +110,6 @@ export const checkTasks = (): AppThunk => {
         try {
           const completed = UserTasks[task.id].checkFn(state);
           if (completed && !state.tasks[task.id].completed) {
-            console.log(`Task '${UserTasks[task.id].title}' completed.`);
             dispatch(completeTask(task.id));
             dispatch(
               setActiveNotification({
@@ -126,7 +123,7 @@ export const checkTasks = (): AppThunk => {
               }),
             );
           } else if (!completed && state.tasks[task.id].completed) {
-            console.log(`Task '${UserTasks[task.id].title}' reset.`);
+            console.log(`Task '${task.id}' reset.`);
             dispatch(resetTask(task.id));
           }
         } catch (err) {
@@ -144,7 +141,7 @@ export const selectTaskIds = createSelector(
   (tasks) => {
     return Object.keys(tasks)
       .filter((id) => id !== '_persist')
-      .sort((a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue);
+      .sort((a, b) => UserTasks[a]?.sortValue - UserTasks[b]?.sortValue);
   },
 );
 

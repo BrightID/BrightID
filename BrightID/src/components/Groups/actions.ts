@@ -13,6 +13,7 @@ import {
   backupUser,
 } from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 import { NodeApi } from '@/api/brightId';
+import { group_states } from '@/utils/constants';
 
 export const createNewGroup =
   (
@@ -26,6 +27,7 @@ export const createNewGroup =
     try {
       const {
         user: { id, backupCompleted },
+        keypair: { secretKey },
       } = getState();
 
       const invitees = newGroupInvitees.map((inv) =>
@@ -57,7 +59,7 @@ export const createNewGroup =
         });
       }
 
-      const newGroup: Group = {
+      const newGroup: JoinedGroup = {
         invites: [],
         joined: 0,
         timestamp: 0,
@@ -69,7 +71,7 @@ export const createNewGroup =
         url,
         aesKey,
         type,
-        state: 'initiated',
+        state: group_states.INITIATED,
       };
 
       const createOp = await api.createGroup(groupId, url, type);
@@ -78,7 +80,11 @@ export const createNewGroup =
 
       for (const inv of invitees) {
         const { signingKeys } = await api.getProfile(inv.id);
-        const inviteData = await encryptAesKey(aesKey, signingKeys[0]);
+        const inviteData = await encryptAesKey(
+          aesKey,
+          signingKeys[0],
+          secretKey,
+        );
         const inviteOp = await api.invite(inv.id, groupId, inviteData);
         dispatch(addOperation(inviteOp));
       }

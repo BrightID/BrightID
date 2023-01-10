@@ -41,16 +41,6 @@ export const UserTasks: UserTasks = {
       return state.user.isSponsored || state.user.isSponsoredv6;
     },
   },
-  make_two_connection: {
-    id: 'make_two_connection',
-    sortValue: 50,
-    title: i18next.t(`achievements.makeTwoConnection.title`),
-    description: i18next.t(`achievements.makeTwoConnection.description`),
-    url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state: RootState) {
-      return connectionTotal(state) > 1;
-    },
-  },
   make_three_connection: {
     id: 'make_three_connection',
     sortValue: 60,
@@ -115,6 +105,28 @@ export const UserTasks: UserTasks = {
           (verification) =>
             verification.name === 'Bitu' &&
             (verification as BituVerification).score > 0,
+        ),
+      );
+    },
+  },
+  aura_verification: {
+    id: 'aura_verification',
+    sortValue: 115,
+    title: i18next.t(
+      `achievements.auraVerification.title`,
+      'Aura verification',
+    ),
+    description: i18next.t(
+      `achievements.auraVerification.description`,
+      'Learn more about Aura',
+    ),
+    url: 'https://brightid.gitbook.io/aura ',
+    checkFn(state: RootState) {
+      return Boolean(
+        state.user.verifications.find(
+          (verification) =>
+            verification.name === 'Aura' &&
+            (verification as AuraVerification).score > 0,
         ),
       );
     },

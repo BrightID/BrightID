@@ -32,6 +32,7 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   removeDevice,
   selectIsPrimaryDevice,
+  selectKeypair,
   setLastSyncTime,
   setPrimaryDevice,
 } from '@/actions';
@@ -47,6 +48,7 @@ import {
 } from './thunks/channelUploadThunks';
 import {
   resetRecoveryData,
+  selectRecoveryChannel,
   uploadCompletedByOtherSide,
 } from '../RecoveryFlow/recoveryDataSlice';
 
@@ -66,13 +68,14 @@ export const DevicesScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const signingKey = useSelector((state) => state.keypair.publicKey);
+  const { publicKey: signingKey } = useSelector(selectKeypair);
   const devices = useSelector(selectActiveDevices).sort((a, _b) =>
     a.signingKey === signingKey ? -1 : 1,
   );
   const settings = useSelector((state) => state.settings);
   const syncCompleted = useSelector(uploadCompletedByOtherSide);
   const isPrimary = useSelector(selectIsPrimaryDevice);
+  const { url, channelId } = useSelector(selectRecoveryChannel);
 
   const shortenSigningKey = (s) => `${s.slice(0, 6)}...${s.slice(-6)}`;
   const isCurrentDevice = (d) => d.signingKey === signingKey;
@@ -83,7 +86,7 @@ export const DevicesScreen = ({ route }) => {
   useEffect(() => {
     const runEffect = async () => {
       const { isPrimaryDevice: otherPrimary, lastSyncTime } =
-        await getOtherSideDeviceInfo();
+        await getOtherSideDeviceInfo(url, channelId);
       if (otherPrimary && isPrimary) {
         setWaiting(false);
         dispatch(resetRecoveryData());
@@ -100,10 +103,10 @@ export const DevicesScreen = ({ route }) => {
         );
       }
       if (!isPrimary) {
-        await uploadDeviceInfo();
+        await dispatch(uploadDeviceInfo());
       }
       const after = isPrimary ? lastSyncTime : settings.lastSyncTime;
-      await uploadAllInfoAfter(after);
+      await dispatch(uploadAllInfoAfter(after));
       dispatch(pollImportChannel());
     };
     const showConfirmDialog = () => {
@@ -136,6 +139,8 @@ export const DevicesScreen = ({ route }) => {
     isPrimary,
     settings.lastSyncTime,
     t,
+    url,
+    channelId,
   ]);
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
-import { store, persistor } from './store';
+import { persistStore } from 'redux-persist';
 import { navigationRef } from './NavigationService';
 import InitialLoading from './components/Helpers/InitialLoadingScreen';
 import { NotificationBanner } from './components/Helpers/NotificationBanner';
@@ -14,6 +14,7 @@ import MainApp from '@/routes';
 import ErrorFallback from '@/components/ErrorFallback';
 import { bootstrap } from '@/bootstrap';
 import { notificationSubscription } from '@/NotificationService';
+import { setupStore } from '@/store';
 
 /**
  * Central part of the application
@@ -21,6 +22,9 @@ import { notificationSubscription } from '@/NotificationService';
  * read docs here: https://reactnavigation.org/
  */
 export const App = () => {
+  // create store
+  const store = setupStore();
+
   // setup deep linking
   const linking = {
     prefixes: ['brightid://', 'https://app.brightid.org'],
@@ -75,9 +79,9 @@ export const App = () => {
   // bootstrap app when Redux-Persist is done rehydrating
   const onBeforeLift = async () => {
     console.log('BOOSTRAPING APP');
-    await bootstrap();
+    await bootstrap(store.dispatch);
     console.log('SUBSCRIBING TO NOTIFICATIONS');
-    notificationSubscription();
+    notificationSubscription(store.dispatch, store.getState);
     console.log('DONE BOOTSTRAP');
   };
 
@@ -85,7 +89,7 @@ export const App = () => {
     <Provider store={store}>
       <PersistGate
         loading={<InitialLoading />}
-        persistor={persistor}
+        persistor={persistStore(store)}
         onBeforeLift={onBeforeLift}
       >
         <ActionSheetProvider>

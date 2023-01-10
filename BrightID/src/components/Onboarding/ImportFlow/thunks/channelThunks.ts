@@ -1,5 +1,4 @@
 import { hash, urlSafeRandomKey } from '@/utils/encoding';
-import { store } from '@/store';
 import ChannelAPI from '@/api/channelService';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { CHANNEL_POLL_INTERVAL } from '../../RecoveryFlow/thunks/channelThunks';
@@ -43,7 +42,7 @@ export const createSyncChannel =
     const { settings } = getState();
     let lastSyncTime = 0;
     if (!settings.isPrimaryDevice) {
-      await uploadDeviceInfo();
+      await dispatch(uploadDeviceInfo());
       console.log(
         `Finished uploading last sync time to the channel ${channelId}`,
       );
@@ -51,23 +50,21 @@ export const createSyncChannel =
       console.log(
         `Polling last sync time from the scanner of the channel ${channelId}`,
       );
-      lastSyncTime = (await pollOtherSideDeviceInfo()).lastSyncTime;
+      lastSyncTime = (await pollOtherSideDeviceInfo(url, channelId))
+        .lastSyncTime;
       console.log(`Last sync time was ${lastSyncTime}`);
     }
     const after = settings.isPrimaryDevice
       ? lastSyncTime
       : settings.lastSyncTime;
-    uploadAllInfoAfter(after).then(() => {
-      console.log(`Finished uploading sync data to the channel ${channelId}`);
-    });
+    await dispatch(uploadAllInfoAfter(after));
+    console.log(`Finished uploading sync data to the channel ${channelId}`);
   };
 
-export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
-  const {
-    recoveryData: {
-      channel: { url, channelId },
-    },
-  } = store.getState();
+export const getOtherSideDeviceInfo = async (
+  url: URL,
+  channelId: string,
+): Promise<SyncDeviceInfo> => {
   const channelApi = new ChannelAPI(url.href);
   try {
     const dataString = await channelApi.download({
@@ -85,12 +82,15 @@ export const getOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
   }
 };
 
-export const pollOtherSideDeviceInfo = async (): Promise<SyncDeviceInfo> => {
+export const pollOtherSideDeviceInfo = async (
+  url: URL,
+  channelId: string,
+): Promise<SyncDeviceInfo> => {
   // TODO: This is an endless loop. Needs refactoring and error handling.
-  let data = await getOtherSideDeviceInfo();
+  let data = await getOtherSideDeviceInfo(url, channelId);
   while (data.lastSyncTime === undefined) {
     await new Promise((r) => setTimeout(r, CHANNEL_POLL_INTERVAL));
-    data = await getOtherSideDeviceInfo();
+    data = await getOtherSideDeviceInfo(url, channelId);
   }
   return data;
 };

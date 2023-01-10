@@ -60,21 +60,24 @@ type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
 
 type GroupsState = {
   invites: Invite[];
-  groups: Group[];
+  groups: JoinedGroup[];
   searchParam: string;
   searchOpen: boolean;
+};
+
+type JoinedGroup = Group & {
+  joined: number;
+  state: GroupState_Type;
 };
 
 type Group = GroupInfo & {
   name?: string;
   photo?: Photo;
   aesKey?: string;
-  joined: number;
-  state: string;
 };
 
 type Invite = InviteInfo & {
-  group: Group;
+  groupObj: Group;
   state: string;
 };
 

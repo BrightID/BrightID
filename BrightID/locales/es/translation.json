@@ -76,6 +76,7 @@
       "text": {
         "blindSigAlreadyLinked": "Ya estás vinculado a {{app}} con el ID {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Estás intentando enlazar con {{app}} utilizando {{appUserId}}. Ya estás enlazado con {{app}} con un id diferente {{previousAppUserIds}}. Esto puede causar problemas al utilizar la aplicación.",
+        "callbackError": "La aplicación {{context}} informó un error: {{error}}",
         "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!",
         "invalidApp": "¡{{app}} no es una aplicación válida!",
         "invalidContext": "{{context}} no es un contexto válido!",
@@ -87,6 +88,7 @@
         "notPrimary": "Actualmente está utilizando un dispositivo secundario. Vincular la aplicación \"{{app}}\" requiere interacción con su dispositivo principal. Sincronice con su dispositivo principal o realice la vinculación con su dispositivo principal."
       },
       "title": {
+        "callbackError": "Error al ejecutar la aplicación",
         "invalidApp": "Fallido",
         "invalidContext": "Falló",
         "linkApp": "¿Vincular aplicación?",
@@ -192,7 +194,7 @@
     "camera": {
       "cancel": "Cancelar",
       "message": "Necesitamos su permiso para usar su cámara",
-      "ok": "Ok",
+      "ok": "DE ACUERDO",
       "title": "Permiso para usar la cámara"
     },
     "language": {
@@ -525,6 +527,31 @@
       "askScanning": "Escanee este código QR con otro dispositivo",
       "waitImporting": "Importando conexiones, por favor espere ..."
     }
+  },
+  "missingKeysScreen": {
+    "header": "Par de claves dañado",
+    "options": {
+      "import": {
+        "followWorkflow": "Siga el flujo de importación",
+        "header": "Importar desde otro dispositivo",
+        "notes": "Condición previa: Tienes tu brightId instalado en otro dispositivo",
+        "selectImport": "Seleccione la opción \"Importar\" al inicio"
+      },
+      "reinstall": "Desinstalar y volver a instalar la aplicación BrightID",
+      "restart": {
+        "header": "Empezar desde cero",
+        "notes": "Esta es la última opción. Creará un nuevo BrightID y perderá todas las conexiones y verificaciones existentes.",
+        "selectCreate": "Seleccione la opción \"Crear mi BrightID\" al inicio"
+      },
+      "socialRecovery": {
+        "followWorkflow": "Siga el flujo de trabajo de la recuperación",
+        "header": "Realizar la recuperación social",
+        "notes": "Condición previa: Tienes la recuperación social configurada",
+        "selectRecovery": "Selecciona la opción \"Recuperar\" al inicio"
+      }
+    },
+    "recoveryOptions": "Opciones de recuperación",
+    "subHeader": "Las claves de firma de este dispositivo se han perdido o corrompido. No puede utilizar la aplicación BrightID hasta que se solucione este problema."
   },
   "nodeApiGate": {
     "reset": {

@@ -6,7 +6,6 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { Draft } from 'immer';
-import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { RESET_STORE } from '@/actions';
 import { channel_states, channel_types } from '@/utils/constants';
 /*
@@ -171,23 +170,6 @@ export const selectHydratedChannelIds = createSelector(
     });
   },
 );
-
-export const rejoinChannels =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
-    const hydratedChannels = selectHydratedChannelIds(getState());
-    console.log(
-      `Rejoining hydrated channels: ${hydratedChannels.map(
-        (channel) => channel.id,
-      )}`,
-    );
-    for (const channel of hydratedChannels) {
-      try {
-        await dispatch(joinChannel(channel));
-      } catch (e) {
-        console.log(`Failed to rejoin channel ${channel.id}`);
-      }
-    }
-  };
 
 // Export reducer
 export default channelSlice.reducer;

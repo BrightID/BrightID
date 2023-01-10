@@ -10,7 +10,6 @@ import {
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import ChannelAPI from '@/api/channelService';
 import { NodeApi } from '@/api/brightId';
-import { store } from '@/store';
 import { loadRecoveryData } from '@/utils/recovery';
 import { uploadConnection, uploadGroup } from '@/utils/channels';
 
@@ -23,7 +22,7 @@ export const uploadSig =
     id: string;
     aesKey: string;
     channelApi: ChannelAPI;
-  }) =>
+  }): AppThunk<Promise<void>> =>
   async (_, getState) => {
     const {
       keypair: { secretKey },
@@ -56,79 +55,84 @@ export const uploadSig =
     });
   };
 
-export const uploadMutualInfo = async ({
-  conn,
-  aesKey,
-  channelApi,
-  nodeApi,
-}: {
-  conn: Connection;
-  aesKey: string;
-  channelApi: ChannelAPI;
-  nodeApi: NodeApi;
-}) => {
-  const {
-    keypair: { publicKey: signingKey },
-    groups: { groups },
-    user,
-  } = store.getState();
-  const dataIds = await channelApi.list(hash(aesKey));
-  if (
-    !dataIds.includes(`connection_${conn.id}:${b64ToUrlSafeB64(signingKey)}`)
-  ) {
-    console.log(`uploading recovery data for connection`);
-    await uploadConnection({
-      conn,
-      channelApi,
-      aesKey,
-      signingKey,
-    });
-  }
-  const connections = selectAllConnections(store.getState());
+export const uploadMutualInfo =
+  ({
+    conn,
+    aesKey,
+    channelApi,
+    nodeApi,
+  }: {
+    conn: Connection;
+    aesKey: string;
+    channelApi: ChannelAPI;
+    nodeApi: NodeApi;
+  }): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
+    const {
+      keypair: { publicKey: signingKey },
+      groups: { groups },
+      user,
+    } = getState();
+    const dataIds = await channelApi.list(hash(aesKey));
+    if (
+      !dataIds.includes(`connection_${conn.id}:${b64ToUrlSafeB64(signingKey)}`)
+    ) {
+      console.log(`uploading recovery data for connection`);
+      await uploadConnection({
+        conn,
+        channelApi,
+        aesKey,
+        signingKey,
+      });
+    }
+    const connections = selectAllConnections(getState());
 
-  const connectionsById = _.keyBy(connections, 'id');
-  const groupsById = _.keyBy(groups, 'id');
+    const connectionsById = _.keyBy(connections, 'id');
+    const groupsById = _.keyBy(groups, 'id');
 
-  const otherSideConnections = await nodeApi.getConnections(conn.id, 'inbound');
-  const knownLevels = ['just met', 'already known', 'recovery'];
-  const mutualConnections = otherSideConnections
-    ? otherSideConnections
-        .filter(
-          (c) =>
-            connectionsById[c.id] &&
-            connectionsById[c.id].name &&
-            knownLevels.includes(c.level) &&
-            !dataIds.includes(
-              `connection_${c.id}:${b64ToUrlSafeB64(signingKey)}`,
-            ),
-        )
-        .map((c) => connectionsById[c.id])
-    : [];
+    const otherSideConnections = await nodeApi.getConnections(
+      conn.id,
+      'inbound',
+    );
+    const knownLevels = ['just met', 'already known', 'recovery'];
+    const mutualConnections = otherSideConnections
+      ? otherSideConnections
+          .filter(
+            (c) =>
+              connectionsById[c.id] &&
+              connectionsById[c.id].name &&
+              knownLevels.includes(c.level) &&
+              !dataIds.includes(
+                `connection_${c.id}:${b64ToUrlSafeB64(signingKey)}`,
+              ),
+          )
+          .map((c) => connectionsById[c.id])
+      : [];
 
-  if (
-    !dataIds.includes(`connection_${user.id}:${b64ToUrlSafeB64(signingKey)}`)
-  ) {
-    mutualConnections.push(user);
-  }
+    if (
+      !dataIds.includes(`connection_${user.id}:${b64ToUrlSafeB64(signingKey)}`)
+    ) {
+      mutualConnections.push(user);
+    }
 
-  const otherSideGroups = await nodeApi.getMemberships(conn.id);
-  const mutualGroups = otherSideGroups
-    ? otherSideGroups
-        .filter((g) => groupsById[g.id])
-        .map((g) => groupsById[g.id])
-    : [];
+    const otherSideGroups = await nodeApi.getMemberships(conn.id);
+    const mutualGroups = otherSideGroups
+      ? otherSideGroups
+          .filter((g) => groupsById[g.id])
+          .map((g) => groupsById[g.id])
+      : [];
 
-  console.log('uploading mutual connections');
-  for (const c of mutualConnections) {
-    await uploadConnection({
-      conn: c,
-      channelApi,
-      aesKey,
-      signingKey,
-    });
-  }
-  console.log('uploading mutual groups');
-  for (const g of mutualGroups) {
-    await uploadGroup({ group: g, channelApi, aesKey, signingKey });
-  }
-};
+    console.log('uploading mutual connections');
+    for (const c of mutualConnections) {
+      await uploadConnection({
+        conn: c,
+        channelApi,
+        aesKey,
+        signingKey,
+      });
+    }
+    console.log('uploading mutual groups');
+    for (const g of mutualGroups) {
+      await uploadGroup({ group: g, channelApi, aesKey, signingKey });
+    }
+  };
