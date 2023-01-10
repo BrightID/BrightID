@@ -36,6 +36,7 @@ const mockApp: AppInfo = {
   callbackUrl:
     'https://finder.brightid.org/api/v1/social-media/check-verification/',
   soulbound: false,
+  sponsoring: true,
 };
 const socialMediaVariation = socialMediaVariations.find(
   (variation) => variation.id === SocialMediaVariationIds.PHONE_NUMBER,
