@@ -25,7 +25,7 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
       }
 
       console.log('refreshing user info', id);
-      let verifications: Verification[];
+      let verifications: Verification[] = [];
       try {
         verifications = await api.getVerifications(id);
         const memberships = await api.getMemberships(id);
