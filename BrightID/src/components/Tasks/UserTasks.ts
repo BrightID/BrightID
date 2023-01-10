@@ -120,7 +120,7 @@ export const UserTasks: UserTasks = {
       `achievements.auraVerification.description`,
       'Learn more about Aura',
     ),
-    url: 'https://brightid.gitbook.io/aura ',
+    url: 'https://brightid.gitbook.io/aura',
     checkFn(state: RootState) {
       return Boolean(
         state.user.verifications.find(
