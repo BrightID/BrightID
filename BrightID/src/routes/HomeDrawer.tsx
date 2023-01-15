@@ -42,10 +42,10 @@ import RecoveryConnectionsScreen from '@/components/RecoveryConnections/Recovery
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
-import AppSettings from '@/components/Icons/AppSettings';
 import HomeScreen from '@/components/HomeScreen';
 import Aura from '@/components/Aura';
 import AuraScreen from '@/components/Aura';
+import AppSettings from '@/components/Icons/AppSettings';
 
 const CustomItem = ({
   onPress,
@@ -151,29 +151,6 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
-        testId="drawerAuraBtn"
-        focused={state.routeNames[state.index] === 'Aura'}
-        inactiveTintColor={BLACK}
-        inactiveBackgroundColor={WHITE}
-        activeTintColor={WHITE}
-        activeBackgroundColor={ORANGE}
-        label="Aura"
-        icon={({ focused }) => (
-          <Pencil
-            width={DEVICE_LARGE ? 28 : 24}
-            height={DEVICE_LARGE ? 28 : 24}
-            color={focused ? GREY : BLACK}
-            highlight={focused ? WHITE : ORANGE}
-          />
-        )}
-        onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Aura' }],
-          });
-        }}
-      />
-      <CustomItem
         testId="drawerEditProfileBtn"
         focused={state.routeNames[state.index] === 'Edit Profile'}
         inactiveTintColor={BLACK}
@@ -235,15 +212,15 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
-        testId="drawerExplorerCodeBtn"
-        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        focused={false}
+        testId="devicesBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.copyExplorerCode')}
+        label={t('drawer.label.devices')}
         icon={({ focused }) => (
-          <GraphQl
+          <Devices
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
             color={focused ? GREY : BLACK}
@@ -273,36 +250,63 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Groups');
         }}
       />
+
       <CustomItem
-        focused={false}
-        testId="findFriendsBtn"
-        inactiveTintColor={BLACK}
+        testId="drawerContactUsBtn"
+        focused={state.routeNames[state.index] === 'ContactUs'}
         inactiveBackgroundColor={WHITE}
+        inactiveTintColor={BLACK}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.findFriends')}
-        icon={() => (
-          <SvgXml
-            xml={FindFriendsIcon}
+        label={t('drawer.label.contactUs')}
+        icon={({ focused }) => (
+          <Mail
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
           />
         )}
         onPress={() => {
-          navigation.navigate('FindFriendsScreen');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
+          });
         }}
       />
-
       <CustomItem
-        focused={false}
-        testId="devicesBtn"
+        testId="drawerAuraBtn"
+        focused={state.routeNames[state.index] === 'Aura'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.devices')}
+        label="Aura"
         icon={({ focused }) => (
-          <Devices
+          <GraphQl
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Aura' }],
+          });
+        }}
+      />
+      <CustomItem
+        testId="drawerExplorerCodeBtn"
+        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.copyExplorerCode')}
+        icon={({ focused }) => (
+          <GraphQl
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
             color={focused ? GREY : BLACK}
