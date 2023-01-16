@@ -145,6 +145,28 @@ describe('AppLinkingScreen', () => {
     expect(step).toBe(app_linking_steps.IDLE);
   });
 
+  it('will not allow to link user when verifications are missing', async () => {
+    renderWithProviders(<AppLinkingScreen />, {
+      store,
+    });
+    // confirm linking
+    fireEvent.press(screen.getByTestId('ConfirmLinking'));
+    // should inform user that verifications are missing
+    await screen.findByText(`Verifications missing:`, {
+      exact: false,
+    });
+    // click dismiss button
+    fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
+  });
+
+  test.todo(
+    'will not allow to link user when a previous sig was created with different userID',
+  );
+
+  test.todo('will relink already linked v5 app without error');
+
+  test.todo('will relink already linked v6 app without error');
+
   it('will not allow unsponsored user to link with not-sponsoring app', async () => {
     act(() => {
       store.dispatch(

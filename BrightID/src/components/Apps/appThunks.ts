@@ -1,7 +1,10 @@
 import { Alert } from 'react-native';
 import { create } from 'apisauce';
 import { t } from 'i18next';
-import { getSponsorship } from '@/components/Apps/model';
+import {
+  getSponsorship,
+  waitForBlindSigsUpdate,
+} from '@/components/Apps/model';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
 import {
   addLinkedContext,
@@ -98,6 +101,7 @@ export const requestLinking =
       return;
     }
 
+    // check app details
     if (v === 6 && !appInfo.usingBlindSig) {
       // v6 apps HAVE to use blind sigs!
       dispatch(
@@ -116,7 +120,7 @@ export const requestLinking =
           step: app_linking_steps.USER_CONFIRMED,
         }),
       );
-      await dispatch(startLinking());
+      await dispatch(preLinkCheck());
     } else {
       dispatch(
         setAppLinkingStep({
@@ -126,12 +130,192 @@ export const requestLinking =
     }
   };
 
-export const startLinking =
+export const preLinkCheck =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
     if (applinkingStep !== app_linking_steps.USER_CONFIRMED) {
       console.log(
-        `Can't start linkApp when not in USER_CONFIRMED state. Current state: ${applinkingStep}`,
+        `Can't perform prelink checks when not in USER_CONFIRMED state. Current state: ${applinkingStep}`,
+      );
+    }
+    dispatch(setAppLinkingStep({ step: app_linking_steps.PRELINK_CHECK }));
+
+    const linkingAppInfo = selectLinkingAppInfo(getState());
+    const { appId, appUserId } = linkingAppInfo;
+    const appInfo = selectAppInfoByAppId(getState(), appId);
+
+    // check if user meets required app verifications for blindsig apps
+    if (appInfo.usingBlindSig) {
+      // update blind signatures
+      const isPrimary = selectIsPrimaryDevice(getState());
+      const sigsUpdating = selectSigsUpdating(getState());
+      if (sigsUpdating) {
+        console.log(`Waiting for updating sigs before linking...`);
+        try {
+          await waitForBlindSigsUpdate(getState);
+        } catch (e) {
+          dispatch(
+            setLinkingAppError(`Timeout waiting for update of blind sigs!`),
+          );
+          return;
+        }
+      } else {
+        dispatch(setSigsUpdating(true));
+        // generate blind sig for apps with no verification expiration at linking time
+        // and also ensure blind sig is not missed because of delay in generation for all apps
+        await dispatch(updateBlindSig(appInfo));
+        dispatch(setSigsUpdating(false));
+      }
+
+      // double-check app is still in linking workflow
+      const currentStep = selectApplinkingStep(getState());
+      if (currentStep !== app_linking_steps.PRELINK_CHECK) {
+        console.log(
+          `Can't continue linkAppId when not in PRELINK_CHECK state. Current state: ${applinkingStep}`,
+        );
+        return;
+      }
+
+      const vel = appInfo.verificationExpirationLength;
+      const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+
+      // existing linked verifications
+      const previousSigs = selectAllSigs(getState()).filter(
+        (sig) =>
+          sig.app === appId &&
+          sig.linked === true &&
+          sig.roundedTimestamp === roundedTimestamp,
+      );
+      // not yet linked verifications
+      const sigsToLink = selectAllSigs(getState()).filter(
+        (sig) =>
+          sig.app === appId &&
+          sig.linked === false &&
+          sig.roundedTimestamp === roundedTimestamp,
+      );
+      // make sure that always the same appUserId is used.
+      if (previousSigs.length) {
+        const previousAppUserIds: Set<string> = new Set();
+        for (const previousSig of previousSigs) {
+          if (previousSig.appUserId !== appUserId) {
+            previousAppUserIds.add(previousSig.appUserId);
+          }
+        }
+        if (previousAppUserIds.size) {
+          // don't link app when userId is different
+          const text = t(
+            'apps.alert.text.blindSigAlreadyLinkedDifferent',
+            'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
+            {
+              app: appInfo.name,
+              appUserId,
+              previousAppUserIds: Array.from(previousAppUserIds).join(', '),
+            },
+          );
+          dispatch(setLinkingAppError(text));
+          return;
+        }
+
+        // check if all app verifications are already linked
+        const allVerificationsLinked = appInfo.verifications.every(
+          (verification) => {
+            for (const prevSig of previousSigs) {
+              if (prevSig.verification === verification) return true;
+            }
+            return false;
+          },
+        );
+        if (allVerificationsLinked) {
+          const text = t(
+            'apps.alert.text.blindSigAlreadyLinked',
+            'You are already linked with {{app}} with id {{appUserId}}',
+            {
+              app: appInfo.name,
+              appUserId,
+            },
+          );
+          dispatch(
+            setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS, text }),
+          );
+          return;
+        }
+      }
+
+      // get list of all missing verifications
+      const missingVerifications = appInfo.verifications.filter(
+        (verification) => {
+          // exclude verification if it is already linked
+          for (const prevSig of previousSigs) {
+            if (prevSig.verification === verification) {
+              console.log(
+                `Verification ${verification} already linked with sig ${prevSig.uid}`,
+              );
+              return false;
+            }
+          }
+          // exclude verification if not yet linked, but sig is available
+          for (const sig of sigsToLink) {
+            if (sig.verification === verification) {
+              console.log(
+                `Verification ${verification} has sig available and ready to link`,
+              );
+              return false;
+            }
+          }
+          console.log(`Verification ${verification} is missing`);
+          return true;
+        },
+      );
+      // get list of all already linked verifications
+      const linkedVerifications = previousSigs.map((sig) => sig.verification);
+
+      if (sigsToLink.length === 0) {
+        const text = t(
+          'apps.alert.text.missingBlindSig',
+          'Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
+          {
+            missingVerifications: missingVerifications.join(),
+            linkedVerifications: linkedVerifications.join() || 'None',
+          },
+        );
+        dispatch(setLinkingAppError(text));
+        return;
+      }
+
+      // check if blind sigs are existing if this is a secondary device
+      if (!isPrimary) {
+        const missingSigs = sigsToLink.filter((sig) => sig.sig === undefined);
+        if (missingSigs.length) {
+          const text = t(
+            'apps.alert.text.notPrimary',
+            'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
+            { app: appInfo.name },
+          );
+          dispatch(setLinkingAppError(text));
+          return;
+        }
+      }
+
+      // all checks passed! Store sigs to link for the linking step.
+      dispatch(
+        setLinkingAppInfo({
+          ...linkingAppInfo,
+          sigsToLink,
+        }),
+      );
+    }
+    dispatch(
+      setAppLinkingStep({ step: app_linking_steps.PRELINK_CHECK_PASSED }),
+    );
+    dispatch(startLinking());
+  };
+
+export const startLinking =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.PRELINK_CHECK_PASSED) {
+      console.log(
+        `Can't start linking when not in PRELINK_CHECK_PASSED state. Current state: ${applinkingStep}`,
       );
     }
     const isSponsored = selectIsSponsored(getState());
@@ -147,37 +331,12 @@ export const startLinking =
     }
   };
 
-export const linkAppOrContext =
-  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
-      console.log(
-        `Can't start linkApp when not in SUCCESS state. Current state: ${applinkingStep}`,
-      );
-    }
-    // sponsoring ok, now start linking.
-    const { v } = selectLinkingAppInfo(getState());
-    switch (v) {
-      case 5:
-        // v5 app
-        await dispatch(linkContextId());
-        break;
-      case 6:
-        // v6 app
-        await dispatch(linkAppId());
-        break;
-      default:
-        console.log(`Unhandled app version v: ${v}`);
-        throw new Error(`Unhandled app version v: ${v}`);
-    }
-  };
-
 export const requestSponsoring =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.USER_CONFIRMED) {
+    if (applinkingStep !== app_linking_steps.PRELINK_CHECK_PASSED) {
       console.log(
-        `Can't request sponsoring when not in USER_CONFIRMED state. Current state: ${applinkingStep}`,
+        `Can't request sponsoring when not in PRELINK_CHECK_PASSED state. Current state: ${applinkingStep}`,
       );
       return;
     }
@@ -342,6 +501,31 @@ export const waitForAppSponsoring =
     // console.log(`Started pollSponsorship ${intervalId}`);
   };
 
+export const linkAppOrContext =
+  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep !== app_linking_steps.SPONSOR_SUCCESS) {
+      console.log(
+        `Can't start linkApp when not in SPONSOR_SUCCESS state. Current state: ${applinkingStep}`,
+      );
+    }
+    // sponsoring ok, now start linking.
+    const { v } = selectLinkingAppInfo(getState());
+    switch (v) {
+      case 5:
+        // v5 app
+        await dispatch(linkContextId());
+        break;
+      case 6:
+        // v6 app
+        await dispatch(linkAppId());
+        break;
+      default:
+        console.log(`Unhandled app version v: ${v}`);
+        throw new Error(`Unhandled app version v: ${v}`);
+    }
+  };
+
 export const linkContextId =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
     const applinkingStep = selectApplinkingStep(getState());
@@ -428,184 +612,10 @@ export const linkAppId =
     const {
       keypair: { secretKey },
     } = getState();
-    const { appId, appUserId } = selectLinkingAppInfo(getState());
+    const { appId, appUserId, sigsToLink } = selectLinkingAppInfo(getState());
     const appInfo = selectAppInfoByAppId(getState(), appId);
-    const isPrimary = selectIsPrimaryDevice(getState());
-    const sigsUpdating = selectSigsUpdating(getState());
 
     dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_WAITING_V6 }));
-
-    if (sigsUpdating) {
-      console.log(`Waiting for updating sigs before linking...`);
-      // Create promise that polls on sigsUpdating state and resolves once it is false.
-      const sigsUpdatingPromise = new Promise<void>((resolve, reject) => {
-        const waitingStartTime = Date.now();
-        const intervalId = setInterval(() => {
-          const timeElapsed = Date.now() - waitingStartTime;
-          const stillUpdating = selectSigsUpdating(getState());
-          if (!stillUpdating) {
-            console.log(`blindSigs update finished! Continue with linking...`);
-            clearInterval(intervalId);
-            resolve();
-          }
-          if (timeElapsed > UPDATE_BLIND_SIG_WAIT_TIME) {
-            clearInterval(intervalId);
-            reject(new Error(`Timeout waiting for sigsUpdating to finish!`));
-          } else {
-            console.log(
-              `Still waiting for sigsUpdating to finish. Time elapsed: ${timeElapsed}ms`,
-            );
-          }
-        }, 500);
-      });
-
-      try {
-        await sigsUpdatingPromise;
-      } catch (e) {
-        dispatch(
-          setLinkingAppError(`Timeout waiting for update of blind sigs!`),
-        );
-        return;
-      }
-
-      // double-check app is still in linking workflow
-      const currentStep = selectApplinkingStep(getState());
-      if (currentStep !== app_linking_steps.SPONSOR_SUCCESS) {
-        console.log(
-          `Can't continue linkAppId when not in SPONSOR_SUCCESS state. Current state: ${applinkingStep}`,
-        );
-        return;
-      }
-    } else {
-      dispatch(setSigsUpdating(true));
-      // generate blind sig for apps with no verification expiration at linking time
-      // and also ensure blind sig is not missed because of delay in generation for all apps
-      await dispatch(updateBlindSig(appInfo));
-      dispatch(setSigsUpdating(false));
-    }
-
-    const vel = appInfo.verificationExpirationLength;
-    const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
-
-    // existing linked verifications
-    const previousSigs = selectAllSigs(getState()).filter(
-      (sig) =>
-        sig.app === appId &&
-        sig.linked === true &&
-        sig.roundedTimestamp === roundedTimestamp,
-    );
-    // not yet linked verifications
-    const sigs = selectAllSigs(getState()).filter(
-      (sig) =>
-        sig.app === appId &&
-        sig.linked === false &&
-        sig.roundedTimestamp === roundedTimestamp,
-    );
-
-    // make sure that always the same appUserId is used.
-    if (previousSigs.length) {
-      const previousAppUserIds: Set<string> = new Set();
-      for (const previousSig of previousSigs) {
-        if (previousSig.appUserId !== appUserId) {
-          previousAppUserIds.add(previousSig.appUserId);
-        }
-      }
-      if (previousAppUserIds.size) {
-        // don't link app when userId is different
-        const text = t(
-          'apps.alert.text.blindSigAlreadyLinkedDifferent',
-          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
-          {
-            app: appInfo.name,
-            appUserId,
-            previousAppUserIds: Array.from(previousAppUserIds).join(', '),
-          },
-        );
-        dispatch(setLinkingAppError(text));
-        return;
-      }
-
-      // check if all app verifications are already linked
-      const allVerificationsLinked = appInfo.verifications.every(
-        (verification) => {
-          for (const prevSig of previousSigs) {
-            if (prevSig.verification === verification) return true;
-          }
-          return false;
-        },
-      );
-      if (allVerificationsLinked) {
-        const text = t(
-          'apps.alert.text.blindSigAlreadyLinked',
-          'You are already linked with {{app}} with id {{appUserId}}',
-          {
-            app: appInfo.name,
-            appUserId,
-          },
-        );
-        dispatch(
-          setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS, text }),
-        );
-        return;
-      }
-    }
-
-    // get list of all missing verifications
-    const missingVerifications = appInfo.verifications.filter(
-      (verification) => {
-        // exclude verification if it is already linked
-        for (const prevSig of previousSigs) {
-          if (prevSig.verification === verification) {
-            console.log(
-              `Verification ${verification} already linked with sig ${prevSig.uid}`,
-            );
-            return false;
-          }
-        }
-        // exclude verification if not yet linked, but sig is available
-        for (const sig of sigs) {
-          if (sig.verification === verification) {
-            console.log(
-              `Verification ${verification} has sig available and ready to link`,
-            );
-            return false;
-          }
-        }
-        console.log(`Verification ${verification} is missing`);
-        return true;
-      },
-    );
-
-    // get list of all already linked verifications
-    const linkedVerifications = previousSigs.map((sig) => sig.verification);
-
-    if (sigs.length === 0) {
-      const text = t(
-        'apps.alert.text.missingBlindSig',
-        'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
-        {
-          appId: appInfo.name,
-          missingVerifications: missingVerifications.join(),
-          linkedVerifications: linkedVerifications.join() || 'None',
-        },
-      );
-      dispatch(setLinkingAppError(text));
-      return;
-    }
-
-    // check if blind sigs are existing if this is a secondary device
-    if (!isPrimary) {
-      const missingSigs = sigs.filter((sig) => sig.sig === undefined);
-      if (missingSigs.length) {
-        const text = t(
-          'apps.alert.text.notPrimary',
-          'You are currently using a secondary device. Linking app "{{app}}" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device.',
-          { app: appInfo.name },
-        );
-        dispatch(setLinkingAppError(text));
-        return;
-      }
-    }
 
     // Create temporary NodeAPI object, since the node at the specified nodeUrl will
     // be queried for the verification
@@ -615,7 +625,7 @@ export const linkAppId =
     const linkedTimestamp = Date.now();
     const sigErrors = [];
     let linkSuccess = false;
-    for (const sig of sigs) {
+    for (const sig of sigsToLink) {
       if (!sig.sig) {
         // ignore invalid signatures
         sigErrors.push(
@@ -630,7 +640,11 @@ export const linkAppId =
         dispatch(
           updateSig({
             id: sig.uid,
-            changes: { linked: true, linkedTimestamp, appUserId },
+            changes: {
+              linked: true,
+              linkedTimestamp,
+              appUserId,
+            },
           }),
         );
         linkSuccess = true;
