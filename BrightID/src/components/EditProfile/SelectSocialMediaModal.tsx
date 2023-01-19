@@ -26,12 +26,8 @@ import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllSocialMediaVariations } from '@/reducer/socialMediaVariationSlice';
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
-import {
-  saveAndSyncSocialMedia,
-} from '@/components/EditProfile/socialMediaThunks';
-import {
-\  DEFAULT_SHARE_WITH_CONNECTIONS_VALUE,
-} from '@/utils/constants';
+import { saveAndSyncSocialMedia } from '@/components/EditProfile/socialMediaThunks';
+import { DEFAULT_SHARE_WITH_CONNECTIONS_VALUE } from '@/utils/constants';
 import {
   SocialMediaShareType,
   SocialMediaVariationIds,

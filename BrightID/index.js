@@ -2,12 +2,12 @@ import 'react-native-gesture-handler';
 import './src/i18n';
 // import { enableScreens } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// import Octicons from 'react-native-vector-icons/Octicons';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
 import codePush from 'react-native-code-push';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
 import codePushOptions from './codepush.config';
@@ -35,12 +35,12 @@ if (__DEV__) {
 // enableScreens();
 
 // Bootstrap fonts
-Ionicons.loadFont();
-SimpleLineIcons.loadFont();
-MaterialCommunityIcons.loadFont();
-Octicons.loadFont();
-AntDesign.loadFont();
-MaterialIcons.loadFont();
+// Ionicons.loadFont();
+// SimpleLineIcons.loadFont();
+// MaterialCommunityIcons.loadFont();
+// Octicons.loadFont();
+// AntDesign.loadFont();
+// MaterialIcons.loadFont();
 
 // Fix Font Scaling
 

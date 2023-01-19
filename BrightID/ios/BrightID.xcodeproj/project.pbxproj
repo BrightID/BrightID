@@ -12,17 +12,17 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		5C43593C6F8CC0F3EDAABCEF /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0094FFF99F69AF8388AA8E /* libPods-BrightID-BrightIDTests.a */; };
-		8F061A88291230BB008C5A5E /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A7F291230BB008C5A5E /* ApexNew-Book.otf */; };
-		8F061A89291230BB008C5A5E /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A80291230BB008C5A5E /* Poppins-Bold.otf */; };
-		8F061A8A291230BB008C5A5E /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A81291230BB008C5A5E /* Poppins-ExtraLight.otf */; };
-		8F061A8B291230BB008C5A5E /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A82291230BB008C5A5E /* EurostileRegular.ttf */; };
-		8F061A8C291230BB008C5A5E /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A83291230BB008C5A5E /* ApexNew-Light.otf */; };
-		8F061A8D291230BB008C5A5E /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A84291230BB008C5A5E /* Poppins-Light.otf */; };
-		8F061A8E291230BB008C5A5E /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A85291230BB008C5A5E /* ApexNew-Medium.otf */; };
-		8F061A8F291230BB008C5A5E /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A86291230BB008C5A5E /* Poppins-Regular.otf */; };
-		8F061A90291230BB008C5A5E /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F061A87291230BB008C5A5E /* Poppins-Medium.otf */; };
 		8F0F8956291252D500FE12BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F0F8955291252D500FE12BB /* LaunchScreen.storyboard */; };
 		8F1F5F8F2912563F003AFC04 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8F1F5F8E2912563F003AFC04 /* AppCenter-Config.plist */; };
+		8F796AFD297901B600F219B9 /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF4297901B500F219B9 /* ApexNew-Book.otf */; };
+		8F796AFE297901B600F219B9 /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF5297901B500F219B9 /* ApexNew-Medium.otf */; };
+		8F796AFF297901B600F219B9 /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF6297901B500F219B9 /* Poppins-Medium.otf */; };
+		8F796B00297901B600F219B9 /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF7297901B500F219B9 /* Poppins-Bold.otf */; };
+		8F796B01297901B600F219B9 /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF8297901B600F219B9 /* Poppins-ExtraLight.otf */; };
+		8F796B02297901B600F219B9 /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AF9297901B600F219B9 /* ApexNew-Light.otf */; };
+		8F796B03297901B600F219B9 /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AFA297901B600F219B9 /* Poppins-Light.otf */; };
+		8F796B04297901B600F219B9 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AFB297901B600F219B9 /* EurostileRegular.ttf */; };
+		8F796B05297901B600F219B9 /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F796AFC297901B600F219B9 /* Poppins-Regular.otf */; };
 		9FD536E19C400A8746B73A78 /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D74B2767CBC9557FD54DAA83 /* libPods-BrightID.a */; };
 /* End PBXBuildFile section */
 
@@ -48,18 +48,18 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrightID/main.m; sourceTree = "<group>"; };
 		601EE14EFAE1BD27E778E650 /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
 		8BA981931584E517710C2C1B /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
-		8F061A7F291230BB008C5A5E /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
-		8F061A80291230BB008C5A5E /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
-		8F061A81291230BB008C5A5E /* Poppins-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-ExtraLight.otf"; path = "../assets/fonts/Poppins-ExtraLight.otf"; sourceTree = "<group>"; };
-		8F061A82291230BB008C5A5E /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
-		8F061A83291230BB008C5A5E /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
-		8F061A84291230BB008C5A5E /* Poppins-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Light.otf"; path = "../assets/fonts/Poppins-Light.otf"; sourceTree = "<group>"; };
-		8F061A85291230BB008C5A5E /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
-		8F061A86291230BB008C5A5E /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
-		8F061A87291230BB008C5A5E /* Poppins-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Medium.otf"; path = "../assets/fonts/Poppins-Medium.otf"; sourceTree = "<group>"; };
 		8F0F8955291252D500FE12BB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F0F89572912531900FE12BB /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		8F1F5F8E2912563F003AFC04 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
+		8F796AF4297901B500F219B9 /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
+		8F796AF5297901B500F219B9 /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
+		8F796AF6297901B500F219B9 /* Poppins-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Medium.otf"; path = "../assets/fonts/Poppins-Medium.otf"; sourceTree = "<group>"; };
+		8F796AF7297901B500F219B9 /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
+		8F796AF8297901B600F219B9 /* Poppins-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-ExtraLight.otf"; path = "../assets/fonts/Poppins-ExtraLight.otf"; sourceTree = "<group>"; };
+		8F796AF9297901B600F219B9 /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
+		8F796AFA297901B600F219B9 /* Poppins-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Light.otf"; path = "../assets/fonts/Poppins-Light.otf"; sourceTree = "<group>"; };
+		8F796AFB297901B600F219B9 /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
+		8F796AFC297901B600F219B9 /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
 		AE9E1954FA591908A89C0E09 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		C3201F4F60873EF13647AF15 /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CE0094FFF99F69AF8388AA8E /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,17 +139,17 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				8F796AF4297901B500F219B9 /* ApexNew-Book.otf */,
+				8F796AF9297901B600F219B9 /* ApexNew-Light.otf */,
+				8F796AF5297901B500F219B9 /* ApexNew-Medium.otf */,
+				8F796AFB297901B600F219B9 /* EurostileRegular.ttf */,
+				8F796AF7297901B500F219B9 /* Poppins-Bold.otf */,
+				8F796AF8297901B600F219B9 /* Poppins-ExtraLight.otf */,
+				8F796AFA297901B600F219B9 /* Poppins-Light.otf */,
+				8F796AF6297901B500F219B9 /* Poppins-Medium.otf */,
+				8F796AFC297901B600F219B9 /* Poppins-Regular.otf */,
 				8F1F5F8E2912563F003AFC04 /* AppCenter-Config.plist */,
 				8F0F8955291252D500FE12BB /* LaunchScreen.storyboard */,
-				8F061A7F291230BB008C5A5E /* ApexNew-Book.otf */,
-				8F061A83291230BB008C5A5E /* ApexNew-Light.otf */,
-				8F061A85291230BB008C5A5E /* ApexNew-Medium.otf */,
-				8F061A82291230BB008C5A5E /* EurostileRegular.ttf */,
-				8F061A80291230BB008C5A5E /* Poppins-Bold.otf */,
-				8F061A81291230BB008C5A5E /* Poppins-ExtraLight.otf */,
-				8F061A84291230BB008C5A5E /* Poppins-Light.otf */,
-				8F061A87291230BB008C5A5E /* Poppins-Medium.otf */,
-				8F061A86291230BB008C5A5E /* Poppins-Regular.otf */,
 				13B07FAE1A68108700A75B9A /* BrightID */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BrightIDTests */,
@@ -278,16 +278,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F061A88291230BB008C5A5E /* ApexNew-Book.otf in Resources */,
-				8F061A89291230BB008C5A5E /* Poppins-Bold.otf in Resources */,
-				8F061A8A291230BB008C5A5E /* Poppins-ExtraLight.otf in Resources */,
-				8F061A8B291230BB008C5A5E /* EurostileRegular.ttf in Resources */,
-				8F061A8C291230BB008C5A5E /* ApexNew-Light.otf in Resources */,
+				8F796AFD297901B600F219B9 /* ApexNew-Book.otf in Resources */,
+				8F796AFE297901B600F219B9 /* ApexNew-Medium.otf in Resources */,
+				8F796AFF297901B600F219B9 /* Poppins-Medium.otf in Resources */,
+				8F796B00297901B600F219B9 /* Poppins-Bold.otf in Resources */,
+				8F796B01297901B600F219B9 /* Poppins-ExtraLight.otf in Resources */,
+				8F796B02297901B600F219B9 /* ApexNew-Light.otf in Resources */,
+				8F796B03297901B600F219B9 /* Poppins-Light.otf in Resources */,
+				8F796B04297901B600F219B9 /* EurostileRegular.ttf in Resources */,
+				8F796B05297901B600F219B9 /* Poppins-Regular.otf in Resources */,
 				8F1F5F8F2912563F003AFC04 /* AppCenter-Config.plist in Resources */,
-				8F061A8D291230BB008C5A5E /* Poppins-Light.otf in Resources */,
-				8F061A8E291230BB008C5A5E /* ApexNew-Medium.otf in Resources */,
-				8F061A8F291230BB008C5A5E /* Poppins-Regular.otf in Resources */,
-				8F061A90291230BB008C5A5E /* Poppins-Medium.otf in Resources */,
 				8F0F8956291252D500FE12BB /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
