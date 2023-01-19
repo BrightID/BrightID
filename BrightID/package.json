@@ -20,8 +20,8 @@
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
     "build:staging": "cd android && ./gradlew assembleStaging && cd ..",
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
-    "check-dependencies": "rnx-dep-check",
-    "fix-dependencies": "rnx-dep-check --write"
+    "check-dependencies": "rnx-align-deps",
+    "fix-dependencies": "rnx-align-deps --write"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "4.0.0",
@@ -81,8 +81,8 @@
     "react-native-country-picker-modal": "2.0.0",
     "react-native-dropdownalert": "4.5.1",
     "react-native-error-boundary": "^1.1.16",
-    "react-native-http-bridge": "https://github.com/BrightID/react-native-http-bridge",
     "react-native-gesture-handler": "2.8.0",
+    "react-native-http-bridge": "https://github.com/BrightID/react-native-http-bridge",
     "react-native-image-crop-picker": "0.38.1",
     "react-native-keyboard-aware-scroll-view": "0.9.5",
     "react-native-keychain": "8.1.1",
@@ -118,9 +118,9 @@
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^2.0.0",
     "@react-native-community/eslint-plugin": "^1.0.0",
+    "@rnx-kit/align-deps": "^2.0.3",
     "@testing-library/jest-native": "^5.3.3",
     "@testing-library/react-native": "^11.5.0",
-    "@rnx-kit/dep-check": "^1.13.3",
     "@types/jest": "^27.4.1",
     "@types/ramda": "^0.27.38",
     "@types/react-native-vector-icons": "^6.4.6",
@@ -191,6 +191,31 @@
       "screens",
       "storage",
       "svg"
-    ]
+    ],
+    "alignDeps": {
+      "requirements": [
+        "react-native@0.71"
+      ],
+      "capabilities": [
+        "animation",
+        "babel-preset-react-native",
+        "checkbox",
+        "core",
+        "core-android",
+        "core-ios",
+        "gestures",
+        "jest",
+        "masked-view",
+        "navigation/native",
+        "navigation/stack",
+        "react",
+        "react-dom",
+        "react-test-renderer",
+        "safe-area",
+        "screens",
+        "storage",
+        "svg"
+      ]
+    }
   }
 }
