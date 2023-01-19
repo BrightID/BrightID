@@ -44,7 +44,7 @@ export const waitForBlindSigsUpdate = (getState) => {
       const timeElapsed = Date.now() - waitingStartTime;
       const stillUpdating = selectSigsUpdating(getState());
       if (!stillUpdating) {
-        console.log(`blindSigs update finished! Continue with linking...`);
+        console.log(`blindSigs update finished`);
         clearInterval(intervalId);
         resolve();
       }

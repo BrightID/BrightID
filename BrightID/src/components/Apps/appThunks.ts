@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { create } from 'apisauce';
 import { t } from 'i18next';
+import _ from 'lodash';
 import {
   getSponsorship,
   waitForBlindSigsUpdate,
@@ -41,10 +42,12 @@ import {
 import { NodeApi } from '@/api/brightId';
 import {
   selectIsSponsored,
+  selectUserVerifications,
   setIsSponsoredv6,
   userSelector,
 } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
+import { isVerified } from '@/utils/verifications';
 
 type requestLinkingParams = {
   linkingAppInfo: LinkingAppInfo;
@@ -143,8 +146,34 @@ export const preLinkCheck =
     const linkingAppInfo = selectLinkingAppInfo(getState());
     const { appId, appUserId } = linkingAppInfo;
     const appInfo = selectAppInfoByAppId(getState(), appId);
+    const userVerifications = selectUserVerifications(getState());
 
-    // check if user meets required app verifications for blindsig apps
+    // check if user is verified for app
+    const metVerifications = [];
+    const missingVerifications = [];
+    for (const verification of appInfo.verifications) {
+      const verified = isVerified(
+        _.keyBy(userVerifications, (v) => v.name),
+        verification,
+      );
+      verified
+        ? metVerifications.push(verification)
+        : missingVerifications.push(verification);
+    }
+    if (missingVerifications.length) {
+      const text = t(
+        'apps.alert.text.missingVerification',
+        'You are missing verifications: {{verifications}}.',
+        {
+          app: appInfo.name,
+          verifications: missingVerifications.map((v) => `"${v}"`).join(', '),
+        },
+      );
+      dispatch(setLinkingAppError(text));
+      return;
+    }
+
+    // update/check blind signatures
     if (appInfo.usingBlindSig) {
       // update blind signatures
       const isPrimary = selectIsPrimaryDevice(getState());

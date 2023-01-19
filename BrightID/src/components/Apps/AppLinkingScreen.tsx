@@ -12,7 +12,15 @@ import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import {
+  BLACK,
+  DARK_BLUE,
+  DARKER_GREY,
+  GREEN,
+  ORANGE,
+  RED,
+  WHITE,
+} from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
@@ -74,11 +82,10 @@ const ConfirmationView = ({ appName }) => {
 };
 
 type EarlyErrorViewProps = {
-  appName: string;
   error: string;
 };
-const EarlyErrorView = ({ appName, error }: EarlyErrorViewProps) => {
-  const iconData = { color: RED, name: 'alert-circle-outline' };
+const EarlyErrorView = ({ error }: EarlyErrorViewProps) => {
+  const iconData = { color: DARK_BLUE, name: 'information-circle-outline' };
 
   return (
     <View style={styles.stepContainer}>
@@ -277,7 +284,7 @@ const AppLinkingScreen = () => {
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerText}>Can not link with {appName}</Text>
         </View>
-        <EarlyErrorView appName={appName} error={error} />
+        <EarlyErrorView error={error} />
       </>
     );
   } else if (showProgress) {
