@@ -24,6 +24,7 @@ import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 import { setKeypair } from '@/reducer/keypairSlice';
 import { handleLinkContextOpUpdate } from '@/components/Apps/appThunks';
 import clearAllMocks = jest.clearAllMocks;
+import { verificationFriendlyName } from '@/utils/verifications';
 
 // Use msw to intercept network requests
 const basePath = 'https://not.valid/brightId';
@@ -197,7 +198,9 @@ describe('AppLinkingScreen', () => {
     // should inform user that a verification is missing
     await screen.findByText(
       i18next.t('apps.alert.text.missingVerification', {
-        verifications: '"BrightID"',
+        verifications: `"${verificationFriendlyName(
+          sponsoringV5App.verifications[0],
+        )}"`,
       }),
       {
         exact: false,
