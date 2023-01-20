@@ -117,44 +117,70 @@ type AppLinkingViewProps = {
 const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
   const isSponsored = useSelector(selectIsSponsored);
   const error = useSelector(selectLinkingAppError);
+  const { t } = useTranslation();
 
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
   switch (step) {
     case app_linking_steps.REFRESHING_APPS:
-      stateDescription = `Verifying app details`;
+      stateDescription = t(
+        'apps.linking.refreshingApps',
+        'Verifying app details',
+      );
       break;
     case app_linking_steps.PRELINK_CHECK:
     case app_linking_steps.PRELINK_CHECK_PASSED:
-      stateDescription = `Checking preconditions for linking`;
+      stateDescription = t(
+        'apps.linking.prelinkCheck',
+        'Checking preconditions for linking',
+      );
       break;
     case app_linking_steps.SPONSOR_PRECHECK_APP:
-      stateDescription = `Checking for prior sponsoring request`;
+      stateDescription = t(
+        'apps.linking.precheckApp',
+        'Checking for prior sponsoring request',
+      );
       break;
     case app_linking_steps.SPONSOR_WAITING_OP:
-      stateDescription = `Requesting sponsorship from app`;
+      stateDescription = t(
+        'apps.linking.sponsorWaitingOp',
+        'Requesting sponsorship from app',
+      );
       break;
     case app_linking_steps.SPONSOR_WAITING_APP:
-      stateDescription = `Waiting for ${appName} to sponsor you`;
+      stateDescription = t(
+        'apps.linking.sponsorWaitingApp',
+        'Waiting for {{app}} to sponsor you',
+        { app: appName },
+      );
       break;
     case app_linking_steps.LINK_WAITING_V5:
-      stateDescription = `Waiting for link operation to confirm`;
+      stateDescription = t(
+        'apps.linking.linkWaitingV5',
+        'Waiting for link operation to confirm',
+      );
       break;
     case app_linking_steps.LINK_WAITING_V6:
-      stateDescription = `Waiting for link function to complete`;
+      stateDescription = t(
+        'apps.linking.waitingV6',
+        'Waiting for link function to complete',
+      );
       break;
     case app_linking_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully linked!`;
+      stateDescription = t('apps.linking.success', 'Successfully linked!');
       break;
     default:
       if (isSponsored) {
         iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-        stateDescription = `You are sponsored.`;
+        stateDescription = t('apps.linking.sponsored', 'You are sponsored.');
       } else {
         iconData = { color: RED, name: 'alert-circle-outline' };
-        stateDescription = `You are not sponsored.`;
+        stateDescription = t(
+          'apps.linking.notSponsored',
+          'You are not sponsored.',
+        );
       }
   }
 
@@ -282,7 +308,11 @@ const AppLinkingScreen = () => {
     content = (
       <>
         <View style={styles.headerTextContainer}>
-          <Text style={styles.headerText}>Can not link with {appName}</Text>
+          <Text style={styles.headerText}>
+            {t('apps.linking.notPossible', 'Can not link with {{app}}', {
+              app: appName,
+            })}
+          </Text>
         </View>
         <EarlyErrorView error={error} />
       </>
@@ -292,7 +322,8 @@ const AppLinkingScreen = () => {
       <>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerText}>
-            Linking with <Text style={styles.headerTextAppname}>{appName}</Text>
+            {t('apps.linking.active', 'Linking with')}
+            <Text style={styles.headerTextAppname}>{` ${appName}`}</Text>
           </Text>
         </View>
         <AppLinkingView

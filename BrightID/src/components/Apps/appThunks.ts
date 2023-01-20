@@ -85,7 +85,15 @@ export const requestLinking =
       dispatch(setApps(apps));
     } catch (e) {
       const msg = e instanceof Error ? e.message : `${e}`;
-      dispatch(setLinkingAppError(`Failed to fetch latest appInfo: ${msg}`));
+      dispatch(
+        setLinkingAppError(
+          t(
+            'alert.text.appInfoFailure',
+            `Failed to fetch latest appInfo: {{message}}. Please try again later.`,
+            { message: msg },
+          ),
+        ),
+      );
       return;
     }
 
@@ -164,7 +172,6 @@ export const preLinkCheck =
         'apps.alert.text.missingVerification',
         'You are missing verifications: {{verifications}}.',
         {
-          app: appInfo.name,
           verifications: missingVerifications.map((v) => `"${v}"`).join(', '),
         },
       );
@@ -379,8 +386,13 @@ export const requestSponsoring =
     if (!appInfo.sponsoring) {
       dispatch(
         setLinkingAppError(
-          'You are not yet sponsored and this app is not providing sponsorships. Please ' +
-            'find another app to sponsor you.',
+          t(
+            'alert.text.appNotSponsoring',
+            'You are not yet sponsored and {{app}} is not providing sponsorships. Please find another app to sponsor you.',
+            {
+              app: appInfo.name,
+            },
+          ),
         ),
       );
       return;
@@ -390,7 +402,10 @@ export const requestSponsoring =
     if (!api) {
       dispatch(
         setLinkingAppError(
-          'No BrightID node API available. Please try again later.',
+          t(
+            'apps.alert.nodeError',
+            'BrightID node API not available. Please try again later.',
+          ),
         ),
       );
       return;
@@ -450,11 +465,22 @@ export const waitForSponsorOp =
           break;
         case operation_states.FAILED:
           clearInterval(intervalId);
-          dispatch(setLinkingAppError('spend sponsor operation failed'));
+          dispatch(
+            setLinkingAppError(
+              t('alert.text.sponsorOpFailed', 'Spend sponsor operation failed'),
+            ),
+          );
           break;
         case operation_states.EXPIRED:
           clearInterval(intervalId);
-          dispatch(setLinkingAppError('spend sponsor operation timed out'));
+          dispatch(
+            setLinkingAppError(
+              t(
+                'alert.text.sponsorOpTimeout',
+                'Spend sponsor operation timed out',
+              ),
+            ),
+          );
           break;
         case operation_states.UNKNOWN:
         case operation_states.INIT:
@@ -464,7 +490,7 @@ export const waitForSponsorOp =
           if (timeElapsed > OPERATION_TRACE_TIME) {
             console.log(`Timeout waiting for sponsoring!`);
             clearInterval(intervalId);
-            dispatch(setLinkingAppError('spend sponsor operation timed out'));
+            setLinkingAppError(t('alert.text.sponsorOpTimeout'));
           }
           break;
       }
@@ -526,7 +552,15 @@ export const waitForAppSponsoring =
           lastResult = `Error: Node has not registered the sponsor request`;
         }
         dispatch(
-          setLinkingAppError(`Timeout waiting for sponsoring!. ${lastResult}`),
+          setLinkingAppError(
+            t(
+              'alert.text.appSponsorTimeout',
+              'Timeout waiting for sponsoring. {{lastResult}}',
+              {
+                lastResult,
+              },
+            ),
+          ),
         );
       }
     }, SPONSORING_POLL_INTERVAL);
