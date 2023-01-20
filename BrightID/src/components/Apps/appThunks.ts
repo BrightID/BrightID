@@ -31,7 +31,6 @@ import {
   SPONSOR_WAIT_TIME,
   SPONSORING_POLL_INTERVAL,
   app_linking_steps,
-  UPDATE_BLIND_SIG_WAIT_TIME,
   OPERATION_TRACE_TIME,
 } from '@/utils/constants';
 import {
@@ -173,41 +172,9 @@ export const preLinkCheck =
       return;
     }
 
-    // update/check blind signatures
+    // perform blind-sig specific checks
     if (appInfo.usingBlindSig) {
-      // update blind signatures
-      const isPrimary = selectIsPrimaryDevice(getState());
-      const sigsUpdating = selectSigsUpdating(getState());
-      if (sigsUpdating) {
-        console.log(`Waiting for updating sigs before linking...`);
-        try {
-          await waitForBlindSigsUpdate(getState);
-        } catch (e) {
-          dispatch(
-            setLinkingAppError(`Timeout waiting for update of blind sigs!`),
-          );
-          return;
-        }
-      } else {
-        dispatch(setSigsUpdating(true));
-        // generate blind sig for apps with no verification expiration at linking time
-        // and also ensure blind sig is not missed because of delay in generation for all apps
-        await dispatch(updateBlindSig(appInfo));
-        dispatch(setSigsUpdating(false));
-      }
-
-      // double-check app is still in linking workflow
-      const currentStep = selectApplinkingStep(getState());
-      if (currentStep !== app_linking_steps.PRELINK_CHECK) {
-        console.log(
-          `Can't continue linkAppId when not in PRELINK_CHECK state. Current state: ${applinkingStep}`,
-        );
-        return;
-      }
-
-      const vel = appInfo.verificationExpirationLength;
-      const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
-
+      // 1. Already linked?
       // existing linked verifications
       const previousSigs = selectAllSigs(getState()).filter(
         (sig) =>
@@ -215,13 +182,31 @@ export const preLinkCheck =
           sig.linked === true &&
           sig.roundedTimestamp === roundedTimestamp,
       );
-      // not yet linked verifications
-      const sigsToLink = selectAllSigs(getState()).filter(
-        (sig) =>
-          sig.app === appId &&
-          sig.linked === false &&
-          sig.roundedTimestamp === roundedTimestamp,
+      // check if all app verifications are already linked
+      const allVerificationsLinked = appInfo.verifications.every(
+        (verification) => {
+          for (const prevSig of previousSigs) {
+            if (prevSig.verification === verification) return true;
+          }
+          return false;
+        },
       );
+      if (allVerificationsLinked) {
+        const text = t(
+          'apps.alert.text.blindSigAlreadyLinked',
+          'You are already linked with {{app}} with id {{appUserId}}',
+          {
+            app: appInfo.name,
+            appUserId,
+          },
+        );
+        dispatch(
+          setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS, text }),
+        );
+        return;
+      }
+
+      // 2. Using the same AppUserId?
       // make sure that always the same appUserId is used.
       if (previousSigs.length) {
         const previousAppUserIds: Set<string> = new Set();
@@ -244,31 +229,51 @@ export const preLinkCheck =
           dispatch(setLinkingAppError(text));
           return;
         }
+      }
 
-        // check if all app verifications are already linked
-        const allVerificationsLinked = appInfo.verifications.every(
-          (verification) => {
-            for (const prevSig of previousSigs) {
-              if (prevSig.verification === verification) return true;
-            }
-            return false;
-          },
-        );
-        if (allVerificationsLinked) {
-          const text = t(
-            'apps.alert.text.blindSigAlreadyLinked',
-            'You are already linked with {{app}} with id {{appUserId}}',
-            {
-              app: appInfo.name,
-              appUserId,
-            },
-          );
+      // 3. update and check blind signatures
+      const isPrimary = selectIsPrimaryDevice(getState());
+      const sigsUpdating = selectSigsUpdating(getState());
+      if (sigsUpdating) {
+        console.log(`Waiting for updating sigs before linking...`);
+        try {
+          await waitForBlindSigsUpdate(getState);
+        } catch (e) {
           dispatch(
-            setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS, text }),
+            setLinkingAppError(`Timeout waiting for update of blind sigs!`),
           );
           return;
         }
+      } else {
+        dispatch(setSigsUpdating(true));
+        // generate blind sig for apps with no verification expiration at linking time
+        // and also ensure blind sig is not missed because of delay in generation for all apps
+        await dispatch(updateBlindSig(appInfo));
+        dispatch(setSigsUpdating(false));
       }
+
+      // double-check app is still in linking workflow after waiting for signature update
+      const currentStep = selectApplinkingStep(getState());
+      if (currentStep !== app_linking_steps.PRELINK_CHECK) {
+        console.log(
+          `Can't continue linkAppId when not in PRELINK_CHECK state. Current state: ${applinkingStep}`,
+        );
+        return;
+      }
+
+      const vel = appInfo.verificationExpirationLength;
+      const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+
+      // get all already linked verifications
+      const linkedVerifications = previousSigs.map((sig) => sig.verification);
+
+      // get all signatures that should be linked
+      const sigsToLink = selectAllSigs(getState()).filter(
+        (sig) =>
+          sig.app === appId &&
+          sig.linked === false &&
+          sig.roundedTimestamp === roundedTimestamp,
+      );
 
       // get list of all missing verifications
       const missingVerifications = appInfo.verifications.filter(
@@ -295,8 +300,6 @@ export const preLinkCheck =
           return true;
         },
       );
-      // get list of all already linked verifications
-      const linkedVerifications = previousSigs.map((sig) => sig.verification);
 
       if (sigsToLink.length === 0) {
         const text = t(

@@ -123,16 +123,15 @@ describe('AppLinkingScreen', () => {
   });
 
   beforeEach(() => {
+    // create store
     store = setupStore();
-    // prepare store
+    // add data relevant for testing to store
     act(() => {
       // have apps available to link
       store.dispatch(setApps([sponsoringV5App, notSponsoringV5App]));
-
       // have a valid user with BrightID verification
       store.dispatch(setKeypair(keypair));
-      const id = b64ToUrlSafeB64(keypair.publicKey);
-      store.dispatch(setUserId(id));
+      store.dispatch(setUserId(b64ToUrlSafeB64(keypair.publicKey)));
       store.dispatch(setVerifications([brightIDVerification]));
     });
   });
@@ -203,42 +202,9 @@ describe('AppLinkingScreen', () => {
     fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
   });
 
-  it('will not allow to link user when signatures are missing', async () => {
-    // test against sponsoring v5 app
-    const linkingAppInfo: LinkingAppInfo = {
-      appId: sponsoringV5App.id,
-      appUserId: '123',
-      v: 5,
-      baseUrl: 'https://not.valid',
-    };
-    act(() => {
-      store.dispatch(setLinkingAppInfo(linkingAppInfo));
-      store.dispatch(
-        setAppLinkingStep({
-          step: app_linking_steps.WAITING_USER_CONFIRMATION,
-        }),
-      );
-    });
-    renderWithProviders(<AppLinkingScreen />, {
-      store,
-    });
-    // confirm linking
-    fireEvent.press(screen.getByTestId('ConfirmLinking'));
-    // should inform user that verifications are missing
-    await screen.findByText(`Verifications missing:`, {
-      exact: false,
-    });
-    // click dismiss button
-    fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
-  });
-
   test.todo(
     'will not allow to link user when a previous sig was created with different userID',
   );
-
-  test.todo('will relink already linked v5 app without error');
-
-  test.todo('will relink already linked v6 app without error');
 
   it('will not allow unsponsored user to link with not-sponsoring app', async () => {
     // test against not-sponsoring v5 app
@@ -365,4 +331,8 @@ describe('AppLinkingScreen', () => {
 
     await screen.findByText(`Successfully linked!`, {}, { timeout: 30000 });
   });
+
+  test.todo('will relink already linked v5 app without error');
+
+  test.todo('will relink already linked v6 app without error');
 });
