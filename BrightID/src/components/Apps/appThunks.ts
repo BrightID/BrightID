@@ -46,7 +46,7 @@ import {
   userSelector,
 } from '@/reducer/userSlice';
 import { selectIsPrimaryDevice, updateBlindSig } from '@/actions';
-import { isVerified } from '@/utils/verifications';
+import { isVerified, verificationFriendlyName } from '@/utils/verifications';
 
 type requestLinkingParams = {
   linkingAppInfo: LinkingAppInfo;
@@ -172,7 +172,9 @@ export const preLinkCheck =
         'apps.alert.text.missingVerification',
         'You are missing verifications: {{verifications}}.',
         {
-          verifications: missingVerifications.map((v) => `"${v}"`).join(', '),
+          verifications: missingVerifications
+            .map((v) => `"${verificationFriendlyName(v)}"`)
+            .join(', '),
         },
       );
       dispatch(setLinkingAppError(text));
