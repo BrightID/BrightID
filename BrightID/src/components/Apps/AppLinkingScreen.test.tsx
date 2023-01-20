@@ -195,9 +195,14 @@ describe('AppLinkingScreen', () => {
     // confirm linking
     fireEvent.press(screen.getByTestId('ConfirmLinking'));
     // should inform user that a verification is missing
-    await screen.findByText(`You are missing verifications: "BrightID"`, {
-      exact: false,
-    });
+    await screen.findByText(
+      i18next.t('apps.alert.text.missingVerification', {
+        verifications: '"BrightID"',
+      }),
+      {
+        exact: false,
+      },
+    );
     // click dismiss button
     fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
   });
@@ -229,9 +234,14 @@ describe('AppLinkingScreen', () => {
     // confirm linking
     fireEvent.press(screen.getByTestId('ConfirmLinking'));
     // should inform user that this app is not sponsoring
-    await screen.findByText(`This app is not providing sponsorships`, {
-      exact: false,
-    });
+    await screen.findByText(
+      i18next.t('alert.text.appNotSponsoring', {
+        app: `${notSponsoringV5App.name}`,
+      }),
+      {
+        exact: false,
+      },
+    );
     // click dismiss button
     fireEvent.press(screen.getByText(i18next.t('common.alert.dismiss')));
   });
@@ -264,7 +274,7 @@ describe('AppLinkingScreen', () => {
 
     // should wait for sponsoring op to confirm
     await waitFor(() => {
-      screen.getByText('Requesting sponsorship from app');
+      screen.getByText(i18next.t('apps.linking.sponsorWaitingOp'));
     });
 
     // manually set operation to applied
@@ -280,7 +290,9 @@ describe('AppLinkingScreen', () => {
 
     // should wait for app to sponsor me
     await screen.findByText(
-      `Waiting for ${sponsoringV5App.name} to sponsor you`,
+      i18next.t('apps.linking.sponsorWaitingApp', {
+        app: sponsoringV5App.name,
+      }),
       {},
       { timeout: 30000 },
     );
@@ -304,7 +316,7 @@ describe('AppLinkingScreen', () => {
 
     // should wait for link operation to apply
     await screen.findByText(
-      `Waiting for link operation to confirm`,
+      i18next.t('apps.linking.linkWaitingV5'),
       {},
       { timeout: 30000 },
     );
@@ -329,7 +341,11 @@ describe('AppLinkingScreen', () => {
       );
     });
 
-    await screen.findByText(`Successfully linked!`, {}, { timeout: 30000 });
+    await screen.findByText(
+      i18next.t('apps.linking.success'),
+      {},
+      { timeout: 30000 },
+    );
   });
 
   test.todo('will relink already linked v5 app without error');
