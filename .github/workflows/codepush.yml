@@ -14,23 +14,16 @@ jobs:
 
         steps:
             - name: Checkout Repo
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Use Node.js 16
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
                 node-version: 16.x
-
-            - name: Cache node modules
-              id: yarn-cache-debug # needed below to check for cache hit or miss
-              uses: actions/cache@v2
-              with:
-                path: './BrightID/node_modules'
-                key: ${{ runner.os }}-modules-16x-${{ hashFiles('./BrightID/yarn.lock') }}
+                cache: 'yarn'
 
             - name: Install Dependencies
-              if: steps.yarn-cache-debug.outputs.cache-hit != 'true'  # only install when no cache found
-              run: yarn --frozen-lockfile
+              run: yarn install --frozen-lockfile
 
             - name: Deploy to Codepush - Android
               uses: TripleSpeeder/codepush-action@master
