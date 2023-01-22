@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "auraVerification": {
+      "description": "Meer informatie over Aura",
+      "title": "Aura-verificatie"
+    },
     "bituVerification": {
       "description": "Meer inforrmatie",
       "title": "Bitu-verificatie"
@@ -56,11 +60,21 @@
       "error": "De sleutel kan niet worden toegevoegd"
     }
   },
+  "alert": {
+    "text": {
+      "appInfoFailure": "De recentste appInfo kan niet worden opgehaald: {{message}}. Probeer het later opnieuw.",
+      "appNotSponsoring": "Je wordt nog niet gesponsord en {{app}} biedt geen sponsoring aan. Zoek een andere app die je kan sponsoren.",
+      "appSponsorTimeout": "De sponsoring reageert niet. {{lastResult}}",
+      "sponsorOpFailed": "De sponsoractie is mislukt",
+      "sponsorOpTimeout": "De sponsoractie reageert niet"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
         "visitWebsite": "Prima"
       },
+      "nodeError": "De BrightID-node-api is niet beschikbaar. Probeer het later opnieuw.",
       "text": {
         "blindSigAlreadyLinked": "Je hebt {{app}} al gekoppeld via {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Je probeert {{app}} te koppelen via {{appUserId}}, maar {{app}} is al gekoppeld aan een andere id: {{previousAppUserIds}}. Dit kan problemen veroorzaken tijdens het gebruik van de app.",
@@ -73,6 +87,7 @@
         "linkSigFailed": "De verificatie, {{verification}}, kan niet worden gekoppeld aan {{appId}}. Foutmelding: {{msg}}",
         "linkSuccess": "Je account in {{context}} is gekoppeld aan je BrightID",
         "missingBlindSig": "Er is geen ondertekening aangetroffen in {{appId}}. Ontbrekend: {{missingVerifications}} - Reeds gekoppeld: {{linkedVerifications}}",
+        "missingVerification": "Er ontbreken verificaties: {{verifications}}.",
         "notPrimary": "Je maakt momenteel gebruik van een tweede apparaat. Je kunt ‘{{app}}’ alléén koppelen via je gebruikelijke apparaat."
       },
       "title": {
@@ -85,6 +100,20 @@
         "linkingFailed": "De app kan niet worden gekoppeld",
         "notPrimary": "Het koppelen is mislukt"
       }
+    },
+    "linking": {
+      "active": "Koppelen met",
+      "linkWaitingV5": "Status: wachten op koppelingsbevestiging",
+      "notPossible": "Er kan geen koppeling met {{app}} worden gemaakt",
+      "notSponsored": "Je wordt niet gesponsord.",
+      "precheckApp": "Bezig met controleren van eerder sponsorverzoek…",
+      "prelinkCheck": "Bezig met controleren van koppelvoorwaarden…",
+      "refreshingApps": "Bezig met verifiëren van appinformatie…",
+      "sponsorWaitingApp": "Bezig met wachten op sponsoring van {{app}}…",
+      "sponsorWaitingOp": "Bezig met verzoeken van sponsoring door app…",
+      "sponsored": "Je wordt gesponsord.",
+      "success": "De koppeling is gemaakt!",
+      "waitingV6": "Bezig met wachten op afronden van koppelfunctie…"
     },
     "text": {
       "noApps": "Geen apps",
