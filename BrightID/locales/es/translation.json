@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "auraVerification": {
+      "description": "Más información sobre Aura",
+      "title": "Verificación del aura"
+    },
     "bituVerification": {
       "description": "Más detalles",
       "title": "Verificación bitu"
@@ -68,11 +72,21 @@
       "error": "No se pudo agregar la llave de firmada"
     }
   },
+  "alert": {
+    "text": {
+      "appInfoFailure": "No se ha podido obtener la última información de la aplicación: {{message}}. Inténtalo de nuevo más tarde.",
+      "appNotSponsoring": "Aún no estás patrocinado y {{app}} no ofrece patrocinios. Busca otra aplicación que te patrocine.",
+      "appSponsorTimeout": "Tiempo de espera para el patrocinio. {{lastResult}}",
+      "sponsorOpFailed": "Error en la operación del patrocinio de los gastos",
+      "sponsorOpTimeout": "Operación del patrocinador de gastos finalizada"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
         "visitWebsite": "Si"
       },
+      "nodeError": "La API del nodo BrightID no está disponible. Vuelva a intentarlo más tarde.",
       "text": {
         "blindSigAlreadyLinked": "Ya estás vinculado a {{app}} con el ID {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "Estás intentando enlazar con {{app}} utilizando {{appUserId}}. Ya estás enlazado con {{app}} con un id diferente {{previousAppUserIds}}. Esto puede causar problemas al utilizar la aplicación.",
@@ -85,6 +99,7 @@
         "linkSigFailed": "Error al realizar la verificación {{verification}} a la aplicación {{appId}}. Mensaje de error: {{msg}}",
         "linkSuccess": "Vinculó correctamente su cuenta en {{context}} a su BrightID",
         "missingBlindSig": "No se encontró ninguna firma ciega para la aplicación {{appId}}. Faltan verificaciones: {{missingVerifications}}. Verificaciones ya vinculadas: {{linkedVerifications}}",
+        "missingVerification": "Te faltan verificaciones: {{verifications}}.",
         "notPrimary": "Actualmente está utilizando un dispositivo secundario. Vincular la aplicación \"{{app}}\" requiere interacción con su dispositivo principal. Sincronice con su dispositivo principal o realice la vinculación con su dispositivo principal."
       },
       "title": {
@@ -97,6 +112,20 @@
         "linkingFailed": "Error al vincular la aplicación",
         "notPrimary": "Enlace imposible"
       }
+    },
+    "linking": {
+      "active": "Enlazar con",
+      "linkWaitingV5": "Esperando la confirmación de la operación de enlace",
+      "notPossible": "No se puede enlazar con {{app}}",
+      "notSponsored": "No estás patrocinado.",
+      "precheckApp": "Comprobación de la solicitud previa de patrocinio",
+      "prelinkCheck": "Comprobación de las condiciones previas a la vinculación",
+      "refreshingApps": "Verificación de los datos de la aplicación",
+      "sponsorWaitingApp": "Esperando a que {{app}} te patrocine",
+      "sponsorWaitingOp": "Solicitud de patrocinio de la aplicación",
+      "sponsored": "Te patrocinan.",
+      "success": "¡Vinculado con éxito!",
+      "waitingV6": "Esperando a que se complete el enlace"
     },
     "tag": {
       "hasSponsorships": "Tiene patrocinios",
