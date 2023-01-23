@@ -519,7 +519,8 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 100 : 90,
     borderRadius: 10,
     elevation: 5,
-    shadowColor: 'rgba(221, 179, 169, 0.3)',
+    // shadowColor: 'rgba(221, 179, 169, 0.3)',
+    shadowColor: 'black',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,

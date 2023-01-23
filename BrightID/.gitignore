@@ -32,6 +32,8 @@ local.properties
 .secret
 .log
 .cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
@@ -39,11 +41,6 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
 
 # fastlane
 #
@@ -65,6 +62,9 @@ buck-out/
 /vendor/bundle/
 package-lock.json
 
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
 Setting
 core-js-pure@*
 opencollective-postinstall
@@ -79,3 +79,4 @@ ios/Pods/
 keystore.properties
 android/app/google-services.json-prod
 android/app/google-services.json
+

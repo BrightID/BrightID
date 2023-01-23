@@ -78,7 +78,6 @@
     "react-native-dropdownalert": "4.5.1",
     "react-native-error-boundary": "1.1.16",
     "react-native-gesture-handler": "2.9.0",
-    "react-native-http-bridge": "https://github.com/BrightID/react-native-http-bridge",
     "react-native-image-crop-picker": "0.39.0",
     "react-native-keyboard-aware-scroll-view": "0.9.5",
     "react-native-keychain": "8.1.1",
