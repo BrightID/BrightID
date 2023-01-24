@@ -89,3 +89,13 @@ export const getBituReportedByText = (
     );
   return `Reported by ${joinParts(parts)}`;
 };
+
+/* map complex expression verification to a simple name */
+export const verificationFriendlyName = (expression: string) => {
+  switch (expression) {
+    case 'SeedConnected and SeedConnected.rank>0':
+      return `Meets (${expression})`;
+    default:
+      return expression;
+  }
+};
