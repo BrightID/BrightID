@@ -75,7 +75,7 @@
       },
       "text": {
         "blindSigAlreadyLinked": "Vous êtes déjà lié·e à {{app}} avec l’identifiant {{appUserId}}",
-        "blindSigAlreadyLinkedDifferent": "Vous essayez d'établir un lien avec {{app}} en utilisant {{appUserId}}. Vous êtes déjà lié·e à {{app}} avec un idientifiant différent {{previousAppUserIds}}. Ceci peut entraîner des problèmes d'utilisation de l'application.",
+        "blindSigAlreadyLinkedDifferent": "Vous essayez d'établir un lien avec {{app}} en utilisant {{appUserId}}. Vous êtes déjà lié·e à {{app}} avec un identifiant différent {{previousAppUserIds}}. Ceci peut entraîner des problèmes d'utilisation de l'application.",
         "callbackError": "L'application {{context}} a signalé une erreur : {{error}}",
         "checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
         "invalidApp": "{{app}} n'est pas une application valide !",
@@ -173,7 +173,7 @@
         "invalidSigningKey": "Votre clé de signature n'est pas valide. Ceci peut être dû au fait que :\n- Vous avez récupéré votre BrightID sur un autre périphérique.\n- Vous avez supprimé ce dispositif de votre liste de dispositifs actifs.\n- Votre récupération a échoué.\n- Le nœud auquel vous êtes connecté·e a un problème.",
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
         "passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
-        "passwordShort": "Votre motre de passe doit comporter au moins 8 caractères.",
+        "passwordShort": "Votre mot de passe doit comporter au moins 8 caractères.",
         "recoverySigned": "Une de vos connexions de récupération a signé votre demande",
         "trustedSigned": "Une de vos connexions de récupération a signé votre requête"
       },
@@ -587,7 +587,7 @@
       },
       "title": {
         "backupBrightId": "Définir le mot de passe de sauvegarde",
-        "socialRecovery": "Définir la récupérarion sociale"
+        "socialRecovery": "Définir la récupération sociale"
       }
     },
     "tab": {
@@ -890,7 +890,7 @@
       "passwordInfo": "Ce mot de passe chiffrera les noms et les photos de vos connexions si vous avez besoin de les récupérer. Il n’autorise personne à prendre en charge votre BrightID.",
       "photoNotShared": "Votre photo ne sera jamais partagée avec des applications ou\nstockés sur notre chaîne de blocs.",
       "pleaseAddPhoto": "Veuillez ajouter une photo",
-      "whatsYouName": "Comment vous appellez-vous ?"
+      "whatsYouName": "Comment vous appelez-vous ?"
     }
   },
   "sync": {
