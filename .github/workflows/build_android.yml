@@ -2,7 +2,6 @@ name: Build Android
 on: [push, pull_request]
 
 jobs:
-
   build_debug_apk:
     if: github.repository_owner == 'BrightID'
 
@@ -24,10 +23,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: debug build
         run: |
@@ -63,10 +62,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/staging.sh
@@ -91,7 +90,6 @@ jobs:
           name: brightId-staging.aab
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/staging/app-staging.aab
 
-
   build_release_apk:
     if: github.repository_owner == 'BrightID'
 
@@ -113,10 +111,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh

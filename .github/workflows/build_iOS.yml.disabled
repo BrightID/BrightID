@@ -33,7 +33,7 @@ jobs:
       - name: Install npm dependencies
         if: steps.yarn-cache-debug.outputs.cache-hit != 'true'  # only install when no cache found
         run: |
-          yarn install --frozen-lockfile
+          yarn install
 
       - name: Install pod dependencies
         run: |
@@ -80,7 +80,7 @@ jobs:
       - name: Install npm dependencies
         if: steps.yarn-cache-release.outputs.cache-hit != 'true'  # only install when no cache found
         run: |
-          yarn install --frozen-lockfile
+          yarn install
 
       - name: Install pod dependencies
         run: |

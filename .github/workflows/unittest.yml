@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   unittest:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -23,10 +22,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: execute tests
         run: yarn test
