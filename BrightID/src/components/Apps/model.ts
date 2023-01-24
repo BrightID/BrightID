@@ -1,5 +1,7 @@
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
+import { selectSigsUpdating } from '@/reducer/appsSlice';
+import { UPDATE_BLIND_SIG_WAIT_TIME } from '@/utils/constants';
 
 export const getSignedTimestamp = (app: AppInfo, sigs: SigInfo[]) => {
   const vel = app.verificationExpirationLength;
@@ -32,4 +34,28 @@ export const getSponsorship = async (
       throw e;
     }
   }
+};
+
+// Create promise that polls on sigsUpdating state and resolves once it is false.
+export const waitForBlindSigsUpdate = (getState) => {
+  return new Promise<void>((resolve, reject) => {
+    const waitingStartTime = Date.now();
+    const intervalId = setInterval(() => {
+      const timeElapsed = Date.now() - waitingStartTime;
+      const stillUpdating = selectSigsUpdating(getState());
+      if (!stillUpdating) {
+        console.log(`blindSigs update finished`);
+        clearInterval(intervalId);
+        resolve();
+      }
+      if (timeElapsed > UPDATE_BLIND_SIG_WAIT_TIME) {
+        clearInterval(intervalId);
+        reject(new Error(`Timeout waiting for sigsUpdating to finish!`));
+      } else {
+        console.log(
+          `Still waiting for sigsUpdating to finish. Time elapsed: ${timeElapsed}ms`,
+        );
+      }
+    }, 500);
+  });
 };

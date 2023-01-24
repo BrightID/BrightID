@@ -12,22 +12,30 @@ import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import {
+  BLACK,
+  DARK_BLUE,
+  DARKER_GREY,
+  GREEN,
+  ORANGE,
+  RED,
+  WHITE,
+} from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import {
   resetLinkingAppState,
   selectAppInfoByAppId,
-  selectLinkingAppError,
-  selectLinkingAppInfo,
   selectApplinkingStep,
   selectApplinkingStepText,
+  selectLinkingAppError,
+  selectLinkingAppInfo,
   setAppLinkingStep,
 } from '@/reducer/appsSlice';
 import { app_linking_steps } from '@/utils/constants';
 import { selectIsSponsored } from '@/reducer/userSlice';
-import { startLinking } from '@/components/Apps/appThunks';
+import { preLinkCheck } from '@/components/Apps/appThunks';
 
 const ConfirmationView = ({ appName }) => {
   const { t } = useTranslation();
@@ -35,7 +43,7 @@ const ConfirmationView = ({ appName }) => {
 
   const confirmHandler = () => {
     dispatch(setAppLinkingStep({ step: app_linking_steps.USER_CONFIRMED }));
-    dispatch(startLinking());
+    dispatch(preLinkCheck());
   };
 
   const rejectHandler = () => {
@@ -73,6 +81,33 @@ const ConfirmationView = ({ appName }) => {
   );
 };
 
+type EarlyErrorViewProps = {
+  error: string;
+};
+const EarlyErrorView = ({ error }: EarlyErrorViewProps) => {
+  const iconData = { color: DARK_BLUE, name: 'information-circle-outline' };
+
+  return (
+    <View style={styles.stepContainer}>
+      <View style={styles.statusContainer}>
+        <View>
+          {iconData && (
+            <IonIcons
+              style={{ alignSelf: 'center' }}
+              size={DEVICE_LARGE ? 64 : 44}
+              name={iconData.name}
+              color={iconData.color}
+            />
+          )}
+        </View>
+        <View style={styles.infoTextContainer}>
+          <Text style={styles.infoText}>{error}</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 type AppLinkingViewProps = {
   step: AppLinkingStep_Type;
   appName: string;
@@ -82,40 +117,70 @@ type AppLinkingViewProps = {
 const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
   const isSponsored = useSelector(selectIsSponsored);
   const error = useSelector(selectLinkingAppError);
+  const { t } = useTranslation();
 
   let iconData: { color: string; name: string };
   let stateDescription: string;
   const stateDetails = text;
   switch (step) {
     case app_linking_steps.REFRESHING_APPS:
-      stateDescription = `Verifying app details`;
+      stateDescription = t(
+        'apps.linking.refreshingApps',
+        'Verifying app details',
+      );
+      break;
+    case app_linking_steps.PRELINK_CHECK:
+    case app_linking_steps.PRELINK_CHECK_PASSED:
+      stateDescription = t(
+        'apps.linking.prelinkCheck',
+        'Checking preconditions for linking',
+      );
       break;
     case app_linking_steps.SPONSOR_PRECHECK_APP:
-      stateDescription = `Checking for prior sponsoring request`;
+      stateDescription = t(
+        'apps.linking.precheckApp',
+        'Checking for prior sponsoring request',
+      );
       break;
     case app_linking_steps.SPONSOR_WAITING_OP:
-      stateDescription = `Requesting sponsorship from app`;
+      stateDescription = t(
+        'apps.linking.sponsorWaitingOp',
+        'Requesting sponsorship from app',
+      );
       break;
     case app_linking_steps.SPONSOR_WAITING_APP:
-      stateDescription = `Waiting for ${appName} to sponsor you`;
+      stateDescription = t(
+        'apps.linking.sponsorWaitingApp',
+        'Waiting for {{app}} to sponsor you',
+        { app: appName },
+      );
       break;
     case app_linking_steps.LINK_WAITING_V5:
-      stateDescription = `Waiting for link operation to confirm`;
+      stateDescription = t(
+        'apps.linking.linkWaitingV5',
+        'Waiting for link operation to confirm',
+      );
       break;
     case app_linking_steps.LINK_WAITING_V6:
-      stateDescription = `Waiting for link function to complete`;
+      stateDescription = t(
+        'apps.linking.waitingV6',
+        'Waiting for link function to complete',
+      );
       break;
     case app_linking_steps.LINK_SUCCESS:
       iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-      stateDescription = `Successfully linked!`;
+      stateDescription = t('apps.linking.success', 'Successfully linked!');
       break;
     default:
       if (isSponsored) {
         iconData = { color: GREEN, name: 'checkmark-circle-outline' };
-        stateDescription = `You are sponsored.`;
+        stateDescription = t('apps.linking.sponsored', 'You are sponsored.');
       } else {
         iconData = { color: RED, name: 'alert-circle-outline' };
-        stateDescription = `You are not sponsored.`;
+        stateDescription = t(
+          'apps.linking.notSponsored',
+          'You are not sponsored.',
+        );
       }
   }
 
@@ -171,6 +236,8 @@ const AppLinkingScreen = () => {
 
   const showConfirm =
     appLinkingStep === app_linking_steps.WAITING_USER_CONFIRMATION;
+  const showEarlyError =
+    appLinkingStep === app_linking_steps.PRELINK_CHECK && error;
   const showProgress =
     appLinkingStep > app_linking_steps.IDLE &&
     appLinkingStep <= app_linking_steps.LINK_SUCCESS;
@@ -179,29 +246,34 @@ const AppLinkingScreen = () => {
 
   let resultContainer;
   if (error || isSuccess) {
+    let resultText;
+    if (isSuccess) {
+      resultText = (
+        <Text style={styles.resultContainerSuccessText}>
+          {t('apps.alert.text.linkSuccess', {
+            context: `${appName}`,
+          })}
+        </Text>
+      );
+    } else if (error && showEarlyError) {
+      resultText = undefined;
+    } else if (error) {
+      resultText = (
+        <>
+          <Text
+            style={styles.resultContainerErrorText}
+            testID={`AppLinkingError-${appLinkingStep}`}
+          >
+            {t('apps.alert.title.linkingFailed')}
+          </Text>
+          <Text style={styles.infoSubText}>{error}</Text>
+        </>
+      );
+    }
     resultContainer = (
       <>
         <View style={styles.resultContainer}>
-          <View style={styles.resultTextContainer}>
-            {isSuccess && (
-              <Text style={styles.resultContainerSuccessText}>
-                {t('apps.alert.text.linkSuccess', {
-                  context: `${appName}`,
-                })}
-              </Text>
-            )}
-            {error ? (
-              <>
-                <Text
-                  style={styles.resultContainerErrorText}
-                  testID={`AppLinkingError-${appLinkingStep}`}
-                >
-                  {t('apps.alert.title.linkingFailed')}
-                </Text>
-                <Text style={styles.infoSubText}>{error}</Text>
-              </>
-            ) : null}
-          </View>
+          <View style={styles.resultTextContainer}>{resultText}</View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               testID="ResetAppLinkingState"
@@ -232,12 +304,26 @@ const AppLinkingScreen = () => {
         <ConfirmationView appName={appName} />
       </>
     );
+  } else if (showEarlyError) {
+    content = (
+      <>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>
+            {t('apps.linking.notPossible', 'Can not link with {{app}}', {
+              app: appName,
+            })}
+          </Text>
+        </View>
+        <EarlyErrorView error={error} />
+      </>
+    );
   } else if (showProgress) {
     content = (
       <>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerText}>
-            Linking with <Text style={styles.headerTextAppname}>{appName}</Text>
+            {t('apps.linking.active', 'Linking with')}
+            <Text style={styles.headerTextAppname}>{` ${appName}`}</Text>
           </Text>
         </View>
         <AppLinkingView

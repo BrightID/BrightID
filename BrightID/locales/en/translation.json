@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "auraVerification": {
+      "description": "Learn more about Aura",
+      "title": "Aura verification"
+    },
     "bituVerification": {
       "description": "More details",
       "title": "Bitu verification"
@@ -23,10 +27,6 @@
     "makeThreeConnection": {
       "description": "Connect with 3 BrightID users",
       "title": "Three connections"
-    },
-    "makeTwoConnection": {
-      "description": "Connect with 2 BrightID users",
-      "title": "Two connections"
     },
     "notification": {
       "message": "You completed the task \"{{title}}\".",
@@ -56,11 +56,21 @@
       "error": "Adding signing key failed"
     }
   },
+  "alert": {
+    "text": {
+      "appInfoFailure": "Failed to fetch latest appInfo: {{message}}. Please try again later.",
+      "appNotSponsoring": "You are not yet sponsored and {{app}} is not providing sponsorships. Please find another app to sponsor you.",
+      "appSponsorTimeout": "Timeout waiting for sponsoring. {{lastResult}}",
+      "sponsorOpFailed": "Spend sponsor operation failed",
+      "sponsorOpTimeout": "Spend sponsor operation timed out"
+    }
+  },
   "apps": {
     "alert": {
       "button": {
         "visitWebsite": "Sure"
       },
+      "nodeError": "BrightID node API not available. Please try again later.",
       "text": {
         "blindSigAlreadyLinked": "You are already linked with {{app}} with the ID {{appUserId}}",
         "blindSigAlreadyLinkedDifferent": "You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.",
@@ -73,6 +83,7 @@
         "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
         "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
         "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}",
+        "missingVerification": "You are missing verifications: {{verifications}}.",
         "notPrimary": "You are currently using a secondary device. Linking app \"{{app}}\" requires interaction with your primary device. Please sync with your primary device or perform the linking with your primary device."
       },
       "title": {
@@ -80,6 +91,20 @@
         "linkApp": "Link App?",
         "linkingFailed": "App linking failed"
       }
+    },
+    "linking": {
+      "active": "Linking with",
+      "linkWaitingV5": "Waiting for link operation to confirm",
+      "notPossible": "Can not link with {{app}}",
+      "notSponsored": "You are not sponsored.",
+      "precheckApp": "Checking for prior sponsoring request",
+      "prelinkCheck": "Checking preconditions for linking",
+      "refreshingApps": "Verifying app details",
+      "sponsored": "You are sponsored.",
+      "sponsorWaitingApp": "Waiting for {{app}} to sponsor you",
+      "sponsorWaitingOp": "Requesting sponsorship from app",
+      "success": "Successfully linked!",
+      "waitingV6": "Waiting for link function to complete"
     },
     "text": {
       "noApps": "No Apps",

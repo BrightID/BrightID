@@ -8,6 +8,7 @@ type LinkingAppInfo = {
   baseUrl?: string;
   v: number;
   skipSponsoring?: boolean;
+  sigsToLink?: Array<SigInfo>;
 };
 
 type AppsState = {
