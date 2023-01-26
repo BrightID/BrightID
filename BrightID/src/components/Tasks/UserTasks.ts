@@ -78,10 +78,10 @@ export const UserTasks: UserTasks = {
   },
   join_meet: {
     id: 'join_meet',
-    sortValue: 110,
+    sortValue: 5,
     title: i18next.t(`achievements.joinMeet.title`),
     description: i18next.t(`achievements.joinMeet.description`),
-    url: 'https://www.brightid.org/meet',
+    url: 'https://meet.brightid.org/#/',
     checkFn(state: RootState) {
       return Boolean(
         state.user.verifications.find(
