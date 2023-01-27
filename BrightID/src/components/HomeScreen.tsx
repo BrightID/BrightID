@@ -31,7 +31,7 @@ import { BLACK, BLUE, DARKER_GREY, ORANGE, WHITE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import Camera from '@/components/Icons/Camera';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import {
@@ -519,8 +519,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 100 : 90,
     borderRadius: 10,
     elevation: 5,
-    // shadowColor: 'rgba(221, 179, 169, 0.3)',
-    shadowColor: 'black',
+    shadowColor: DEVICE_ANDROID ? 'black' : 'rgba(221, 179, 169, 0.3)',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
