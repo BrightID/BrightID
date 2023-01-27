@@ -20,12 +20,7 @@ import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/PendingConnections/pendingConnectionSlice';
-import {
-  toggleDrawer,
-  resetHome,
-  resetNotifications,
-  navigate,
-} from '@/NavigationService';
+import { toggleDrawer, navigate } from '@/NavigationService';
 import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
@@ -64,7 +59,6 @@ const NotificationBell = () => {
       style={{ marginRight: 25 }}
       onPress={() => {
         Keyboard.dismiss();
-        // resetNotifications();
         navigate('Notifications');
       }}
     >
@@ -80,7 +74,7 @@ const BrightIdLogo = () => {
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
-        resetHome();
+        navigate('HomeScreen');
       }}
       testID="BrightIdLogo"
     >

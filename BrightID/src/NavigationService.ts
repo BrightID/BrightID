@@ -51,7 +51,7 @@ export const resetNotifications = () => {
   if (navigationRef.isReady()) {
     navigationRef.reset({
       index: 1,
-      routes: [{ name: 'Home' }, { name: 'Notifications' }],
+      routes: [{ name: 'HomeScreen' }, { name: 'Notifications' }],
     });
   }
 };
