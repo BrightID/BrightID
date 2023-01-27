@@ -145,10 +145,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Home' }],
-          });
+          navigation.navigate('HomeScreen');
         }}
       />
       <CustomItem
@@ -168,10 +165,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Edit Profile' }],
-          });
+          navigation.navigate('Edit Profile');
         }}
       />
       <CustomItem
@@ -191,10 +185,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Recovery Connections' }],
-          });
+          navigation.navigate('Recovery Connections');
         }}
       />
       <CustomItem
@@ -214,10 +205,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Achievements' }],
-          });
+          navigation.navigate('Achievements');
         }}
       />
 
@@ -238,10 +226,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Copy Explorer Code' }],
-          });
+          navigation.navigate('Copy Explorer Code');
         }}
       />
       <CustomItem
@@ -261,10 +246,6 @@ const CustomDrawerContent = (props) => {
         )}
         onPress={() => {
           navigation.navigate('Groups');
-          // navigation.reset({
-          //   index: 1,
-          //   routes: [{ name: 'Home' }, { name: 'Groups' }],
-          // });
         }}
       />
       <CustomItem
@@ -283,10 +264,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'FindFriendsScreen' }],
-          });
+          navigation.navigate('FindFriendsScreen');
         }}
       />
 
@@ -307,13 +285,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [
-              { name: 'Devices' },
-              { name: 'Devices', params: { syncing: false, asScanner: false } },
-            ],
-          });
+          navigation.navigate('Devices', { syncing: false, asScanner: false });
         }}
       />
 
@@ -333,10 +305,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Settings' }],
-          });
+          navigation.navigate('Settings');
         }}
       />
       <CustomItem
@@ -389,10 +358,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
-          });
+          navigation.navigate('ContactUs');
         }}
       />
       {__DEV__ && (
@@ -415,10 +381,7 @@ const CustomDrawerContent = (props) => {
             />
           )}
           onPress={() => {
-            navigation.reset({
-              index: 1,
-              routes: [{ name: 'Home' }, { name: 'SampleIconPage' }],
-            });
+            navigation.navigate('SampleIconPage');
           }}
         />
       )}
@@ -451,7 +414,7 @@ export const HomeDrawer = () => {
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="HomeScreen" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
       <Drawer.Screen name="FindFriendsScreen" component={FindFriendsScreen} />
       <Drawer.Screen
