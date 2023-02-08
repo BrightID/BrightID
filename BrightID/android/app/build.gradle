@@ -141,6 +141,8 @@ android {
         // multiDexEnabled true
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // for react-native-image-picker
+        vectorDrawables.useSupportLibrary = true
     }
 
     splits {
