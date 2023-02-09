@@ -1,12 +1,21 @@
 package org.brightid;
 
+import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+// import androidx.core.splashscreen.SplashScreen;
+import androidx.core.splashscreen.SplashScreen;
 
 
 public class MainActivity extends ReactActivity {
+  // splash screen
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      SplashScreen.installSplashScreen(this);
+      super.onCreate(savedInstanceState);
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
