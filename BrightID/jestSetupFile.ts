@@ -69,7 +69,7 @@ jest.mock('react-native-modpow', () => {});
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // useHeaderHeight hook
-jest.mock('@react-navigation/stack', () => ({
+jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
 
