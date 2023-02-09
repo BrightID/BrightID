@@ -28,23 +28,17 @@ const RecoverInProgressModal = () => {
   const restartRecoveryHandler = () => {
     console.log(`Restarting recovery`);
     dispatch(resetRecoveryData());
-    navigation.navigate('Restore', {
-      screen: 'RecoveryCode',
-      params: {
-        urlType: qrCodeURL_types.RECOVERY,
-        action: 'recovery',
-      },
+    navigation.navigate('RecoveryCode', {
+      urlType: qrCodeURL_types.RECOVERY,
+      action: 'recovery',
     });
   };
 
   const continueRecoveryHandler = () => {
     console.log(`Continue recovery`);
-    navigation.navigate('Restore', {
-      screen: 'RecoveryCode',
-      params: {
-        urlType: qrCodeURL_types.RECOVERY,
-        action: 'recovery',
-      },
+    navigation.navigate('RecoveryCode', {
+      urlType: qrCodeURL_types.RECOVERY,
+      action: 'recovery',
     });
   };
 
