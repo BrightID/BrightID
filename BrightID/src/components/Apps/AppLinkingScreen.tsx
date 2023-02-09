@@ -11,7 +11,7 @@ import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { useNavigation } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import {
   BLACK,
   DARK_BLUE,

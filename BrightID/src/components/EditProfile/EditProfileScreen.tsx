@@ -20,8 +20,8 @@ import CheckBox from '@react-native-community/checkbox';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -557,7 +557,7 @@ export const EditProfileScreen = ({ navigation }) => {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   // selectors
   const id = useSelector((state) => state.user.id);
@@ -693,7 +693,7 @@ export const EditProfileScreen = ({ navigation }) => {
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="editProfileScreen"
     >

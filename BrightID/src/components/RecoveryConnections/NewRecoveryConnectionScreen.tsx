@@ -153,7 +153,7 @@ export const NewRecoveryConnectionList = (props) => {
         ) {
           navigation.navigate('RecoveryCooldownInfo', {
             successCallback: () => {
-              navigation.navigate('Home');
+              navigation.navigate('HomeScreen');
             },
           });
         } else {
@@ -164,7 +164,7 @@ export const NewRecoveryConnectionList = (props) => {
               'Recovery connections have been successfully added',
             ),
           );
-          navigation.navigate('Home');
+          navigation.navigate('HomeScreen');
         }
       }
     } catch (error) {
@@ -223,7 +223,9 @@ export const NewRecoveryConnectionList = (props) => {
           sortable={false}
           setSearchValue={setConnectionsSearch}
           setSearchOpen={setConnectionsSearchOpen}
-          searchOpenSelector={(state: RootState) => state.connections.searchOpen}
+          searchOpenSelector={(state: RootState) =>
+            state.connections.searchOpen
+          }
         />
         {ConnectionsList}
         <View

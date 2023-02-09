@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import i18next from 'i18next';
 import { useSelector } from '@/store/hooks';
 import NodeApiGate from '@/components/NodeApiGate';
+import { selectLanguageTag } from '@/reducer/settingsSlice';
+import MissingKeysScreen from '@/routes/MissingKeysScreen';
+import { verifyKeypair } from '@/utils/cryptoHelper';
 import Apps from './Apps';
 import RecoveringConnection from './RecoveringConnection';
 import Devices from './Devices';
@@ -16,16 +20,12 @@ import Modals from './Modals';
 import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
-import { selectLanguageTag } from '@/reducer/settingsSlice';
-import MissingKeysScreen from '@/routes/MissingKeysScreen';
-import { verifyKeypair } from '@/utils/cryptoHelper';
 
 const TopStack = createStackNavigator();
-const Stack = createStackNavigator();
 
-const MainTabs = () => {
+const MainTabs = (id: string) => {
   return (
-    <Stack.Navigator headerMode="screen">
+    <TopStack.Group navigationKey={id || 'nope'}>
       {Home()}
       {PendingConnections()}
       {Connections()}
@@ -36,7 +36,7 @@ const MainTabs = () => {
       {Apps()}
       {Modals()}
       {RecoveringConnection()}
-    </Stack.Navigator>
+    </TopStack.Group>
   );
 };
 
@@ -75,29 +75,11 @@ const MainApp = () => {
   // decide which screen/navigator to render
   let topStack;
   if (!eula) {
-    topStack = (
-      <TopStack.Screen
-        name="Eula"
-        component={Eula}
-        options={{ headerShown: false }}
-      />
-    );
+    topStack = Eula(eula);
   } else if (!id) {
-    topStack = (
-      <TopStack.Screen
-        name="Onboarding"
-        component={Onboarding}
-        options={{ headerShown: false }}
-      />
-    );
+    topStack = Onboarding();
   } else {
-    topStack = (
-      <TopStack.Screen
-        name="App"
-        component={MainTabs}
-        options={{ headerShown: false }}
-      />
-    );
+    topStack = MainTabs(id);
   }
 
   return (

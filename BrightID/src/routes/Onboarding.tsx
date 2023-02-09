@@ -7,18 +7,18 @@ import PhotoScreen from '@/components/Onboarding/SignUpFlow/PhotoScreen';
 import PasswordScreen from '@/components/Onboarding/SignUpFlow/PasswordScreen';
 import SuccessScreen from '@/components/Onboarding/SignUpFlow/SuccessScreen';
 
+import RecoverInProgressModal from '@/components/Helpers/RecoverInProgressModal';
+import { modalOptions } from '@/routes/Modals';
 import Restore from './Restore';
 import Import from './Import';
 import { headerOptions } from './helpers';
-import RecoverInProgressModal from '@/components/Helpers/RecoverInProgressModal';
-import { modalOptions } from '@/routes/Modals';
 
 const Stack = createStackNavigator();
 
 const Onboarding = () => {
   const { t } = useTranslation();
   return (
-    <Stack.Navigator screenOptions={headerOptions}>
+    <Stack.Group screenOptions={headerOptions}>
       <Stack.Screen
         name="Onboard"
         component={OnboardScreen}
@@ -44,22 +44,20 @@ const Onboarding = () => {
         component={SuccessScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Restore"
-        component={Restore}
-        options={{ title: t('restore.header.accountRecovery') }}
-      />
-      <Stack.Screen
-        name="Import"
-        component={Import}
-        options={{ title: t('import.header.title') }}
-      />
+      <Stack.Group
+        screenOptions={{ title: t('restore.header.accountRecovery') }}
+      >
+        {Restore()}
+      </Stack.Group>
+      <Stack.Group screenOptions={{ title: t('import.header.title') }}>
+        {Import()}
+      </Stack.Group>
       <Stack.Screen
         name="RecoverInProgress"
         options={modalOptions}
         component={RecoverInProgressModal}
       />
-    </Stack.Navigator>
+    </Stack.Group>
   );
 };
 
