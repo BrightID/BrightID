@@ -64,7 +64,10 @@ const TrustlevelSlider = ({
   }
 
   // map connectionLevel to index value
-  const initialValue = Object.keys(trustLevelDetails).indexOf(currentLevel);
+  let initialValue = Object.keys(trustLevelDetails).indexOf(currentLevel);
+  // fixes error where component crashes in some cases
+  if (initialValue === -1) initialValue = 1;
+
   const valueChangeHandler = (value: number) => {
     console.log(`Slider value: ${value}`);
     // map index value back to connectionLevel

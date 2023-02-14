@@ -81,14 +81,19 @@ export const RecoveryConnectionsScreen = (props) => {
           return;
         }
         console.log(`fetching own recovery connections`);
-        const profile: ProfileInfo = await api.getProfile(me.id);
-        setConnectionProfile(profile);
-        const recoveryConnections = profile.recoveryConnections.map((rc) => {
-          const conn = myConnections.find((c) => rc.id === c.id);
-          return conn || { id: rc.id };
-        });
-        setRecoveryConnections(recoveryConnections);
-        setLoading(false);
+        try {
+          const profile: ProfileInfo = await api.getProfile(me.id);
+          setConnectionProfile(profile);
+          const recoveryConnections = profile.recoveryConnections.map((rc) => {
+            const conn = myConnections.find((c) => rc.id === c.id);
+            return conn || { id: rc.id };
+          });
+          setRecoveryConnections(recoveryConnections);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
       };
       fetchData();
     }, [api, me.id, myConnections, pendingOpsCount]),
