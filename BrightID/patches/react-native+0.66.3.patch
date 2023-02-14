@@ -1,0 +1,28 @@
+diff --git a/node_modules/react-native/scripts/find-node.sh b/node_modules/react-native/scripts/find-node.sh
+index c498ba6..2dd31b2 100755
+--- a/node_modules/react-native/scripts/find-node.sh
++++ b/node_modules/react-native/scripts/find-node.sh
+@@ -13,15 +13,15 @@ if [[ -d $HOMEBREW_M1_BIN && ! $PATH =~ $HOMEBREW_M1_BIN ]]; then
+ fi
+ 
+ # Define NVM_DIR and source the nvm.sh setup script
+-[ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
++# [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+ 
+-if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
+-  # shellcheck source=/dev/null
+-  . "$HOME/.nvm/nvm.sh"
+-elif [[ -x "$(command -v brew)" && -s "$(brew --prefix nvm)/nvm.sh" ]]; then
+-  # shellcheck source=/dev/null
+-  . "$(brew --prefix nvm)/nvm.sh"
+-fi
++# if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
++#   # shellcheck source=/dev/null
++#   . "$HOME/.nvm/nvm.sh"
++# elif [[ -x "$(command -v brew)" && -s "$(brew --prefix nvm)/nvm.sh" ]]; then
++#   # shellcheck source=/dev/null
++#   . "$(brew --prefix nvm)/nvm.sh"
++# fi
+ 
+ # Set up the nodenv node version manager if present
+ if [[ -x "$HOME/.nodenv/bin/nodenv" ]]; then

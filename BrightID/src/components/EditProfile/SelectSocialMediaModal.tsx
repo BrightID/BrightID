@@ -256,7 +256,6 @@ const SelectMediaModal = ({ route }: props) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
-              navigation.navigate('Eula');
               // if initial page is 1, users only want to edit text
               page === 1 && initialPage !== 1
                 ? setPage(0)

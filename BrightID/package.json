@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios  --simulator 'iPhone 14'",
     "start": "react-native start",
     "start:detox": "RN_SRC_EXT=e2e.js,e2e.ts react-native start",
     "build:detox:android": "detox build -c android.emu.debug",
@@ -14,7 +14,7 @@
     "test:ios": "detox test -c ios.sim.debug",
     "test": "jest",
     "lint": "eslint 'src' --quiet --fix",
-    "postinstall": "npx jetify",
+    "postinstall": "npx jetify && npx patch-package",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
