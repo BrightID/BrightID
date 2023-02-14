@@ -23,10 +23,10 @@
     }
   },
   "apps": {
-    "ios.release": {
+    "ios.debug": {
       "name": "BrightID",
       "type": "ios.app",
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/BrightID.app",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/BrightID.app",
       "build": "RN_SRC_EXT=e2e.js,e2e.ts xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -sdk iphonesimulator -derivedDataPath ios/build"
     },
     "android.debug": {
@@ -50,9 +50,9 @@
       "device": "emulator",
       "app": "android.release"
     },
-    "ios.sim.release": {
+    "ios.debug": {
       "device": "simulator",
-      "app": "ios.release"
+      "app": "ios.debug"
     }
   }
 }
