@@ -1,5 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Alert,
+  StatusBar,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -214,6 +220,11 @@ const RestoreScreen = () => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <KeyboardAvoidingView style={styles.container} behavior="position">
         <View style={styles.recoverAccountContainer}>
