@@ -10,7 +10,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useFocusEffect } from '@react-navigation/native';
 import { selectPendingOperations } from '@/reducer/operationsSlice';
 import { selectAllConnections } from '@/reducer/connectionsSlice';

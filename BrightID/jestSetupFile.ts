@@ -69,7 +69,7 @@ jest.mock('react-native-modpow', () => {});
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // useHeaderHeight hook
-jest.mock('@react-navigation/stack', () => ({
+jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
 
@@ -98,9 +98,9 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-// useIsDrawerOpen hook
+// useDrawerStatus hook
 jest.mock('@react-navigation/drawer', () => ({
-  useIsDrawerOpen: jest.fn().mockImplementation(() => false),
+  useDrawerStatus: jest.fn().mockImplementation(() => false),
 }));
 
 // nodeAPI checkhash static method

@@ -7,14 +7,14 @@ import {
   Linking,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useDrawerStatus } from '@react-navigation/drawer';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTranslation } from 'react-i18next';
 import { DARK_ORANGE, BLUE, WHITE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import keybaseLogo from '@/static/keybase_logo.svg';
-import { useTranslation } from 'react-i18next';
 
 const SocialItem = ({ icon, color, url }) => {
   return (
@@ -46,14 +46,14 @@ export const ContactUsScreen = function () {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   return (
     <View
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="contactUsScreen"
     >

@@ -30,26 +30,22 @@ export const App = () => {
     prefixes: ['brightid://', 'https://app.brightid.org'],
     config: {
       screens: {
-        App: {
-          screens: {
-            Apps: {
-              path: 'link-verification/:baseUrl?/:appId/:appUserId/',
-              exact: true,
-              parse: {
-                baseUrl: (baseUrl) => {
-                  return decodeURIComponent(baseUrl);
-                },
-              },
-            },
-            NodeModal: {
-              path: 'local-server',
-              exact: true,
-            },
-            ScanCode: {
-              path: 'connection-code/:qrcode',
-              exact: true,
+        Apps: {
+          path: 'link-verification/:baseUrl?/:appId/:appUserId/',
+          exact: true,
+          parse: {
+            baseUrl: (baseUrl) => {
+              return decodeURIComponent(baseUrl);
             },
           },
+        },
+        NodeModal: {
+          path: 'local-server',
+          exact: true,
+        },
+        ScanCode: {
+          path: 'connection-code/:qrcode',
+          exact: true,
         },
       },
     },
