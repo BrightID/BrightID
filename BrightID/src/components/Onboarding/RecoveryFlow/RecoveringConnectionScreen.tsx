@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, StatusBar } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from '@/store/hooks';
@@ -34,6 +34,11 @@ const RecoveringConnectionScreen = () => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         {!uploadingData ? (

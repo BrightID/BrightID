@@ -30,9 +30,9 @@ describe('OnboardScreen', () => {
     fireEvent.press(screen.getByTestId('recoverBrightID'));
     const { navigate } = useNavigation();
     await waitFor(() =>
-      expect(navigate).toHaveBeenCalledWith('Restore', {
-        params: { action: 'recovery', urlType: qrCodeURL_types.RECOVERY },
-        screen: 'RecoveryCode',
+      expect(navigate).toHaveBeenCalledWith('RecoveryCode', {
+        action: 'recovery',
+        urlType: qrCodeURL_types.RECOVERY,
       }),
     );
   });
@@ -42,9 +42,9 @@ describe('OnboardScreen', () => {
     fireEvent.press(screen.getByTestId('importBrightID'));
     const { navigate } = useNavigation();
     await waitFor(() =>
-      expect(navigate).toHaveBeenCalledWith('Import', {
-        params: { action: 'import', urlType: qrCodeURL_types.IMPORT },
-        screen: 'ImportCode',
+      expect(navigate).toHaveBeenCalledWith('ImportCode', {
+        action: 'import',
+        urlType: qrCodeURL_types.IMPORT,
       }),
     );
   });

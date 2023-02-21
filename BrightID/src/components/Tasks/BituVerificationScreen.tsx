@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import { getBituReportedByText } from '@/utils/verifications';

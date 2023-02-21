@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Clipboard from '@react-native-community/clipboard';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
@@ -25,7 +25,7 @@ export const GraphExplorerScreen = function () {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
   const explorerCode = getExplorerCode(id, password);
   const { t } = useTranslation();
 
@@ -39,7 +39,7 @@ export const GraphExplorerScreen = function () {
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="graphExplorerScreen"
     >

@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
@@ -318,6 +325,11 @@ const RecoveryCodeScreen = ({ route }) => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <Text style={styles.recoveryCodeInfoText}>
@@ -325,7 +337,6 @@ const RecoveryCodeScreen = ({ route }) => {
           {action === 'import' && t('import.text.askScanning')}
           {action === 'sync' && t('sync.text.askScanning')}
         </Text>
-
         {qrsvg ? (
           <View style={styles.qrsvgContainer}>
             <Text style={styles.signatures}>

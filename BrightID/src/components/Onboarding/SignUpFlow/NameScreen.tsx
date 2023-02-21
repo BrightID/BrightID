@@ -43,8 +43,8 @@ export const NameScreen = () => {
   return (
     <>
       <StatusBar
-        barStyle="dark-content"
-        backgroundColor={WHITE}
+        barStyle="light-content"
+        backgroundColor={ORANGE}
         animated={true}
       />
       <View style={styles.orangeTop} />

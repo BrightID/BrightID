@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
@@ -35,7 +35,7 @@ export const TasksScreen = function () {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-  const isDrawerOpen = useIsDrawerOpen();
+  const isDrawerOpen = useDrawerStatus();
 
   const refreshTasks = useCallback(() => {
     dispatch(checkTasks());
@@ -50,7 +50,7 @@ export const TasksScreen = function () {
       style={[
         styles.container,
         { marginTop: headerHeight },
-        !isDrawerOpen && styles.shadow,
+        isDrawerOpen === 'closed' && styles.shadow,
       ]}
       testID="tasksScreen"
     >

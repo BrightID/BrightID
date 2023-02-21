@@ -195,7 +195,7 @@ const AddDeviceScreen = ({ route }) => {
           {
             text: t('common.alert.no'),
             onPress: () => {
-              navigation.navigate('Home');
+              navigation.navigate('HomeScreen');
             },
           },
         ],

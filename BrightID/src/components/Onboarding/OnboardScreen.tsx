@@ -16,14 +16,14 @@ import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
-import { createKeypair } from './SignUpFlow/thunks';
-import VerifiedBadge from '../Icons/VerifiedBadge';
 import { qrCodeURL_types } from '@/utils/constants';
-import { version as app_version } from '../../../package.json';
 import {
   resetRecoveryData,
   selectRecoveryChannel,
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import { createKeypair } from './SignUpFlow/thunks';
+import VerifiedBadge from '../Icons/VerifiedBadge';
+import { version as app_version } from '../../../package.json';
 
 /* Description */
 
@@ -59,20 +59,17 @@ export const Onboard = () => {
     if (channel.channelId) {
       navigation.navigate('RecoverInProgress');
     } else {
-      navigation.navigate('Restore', {
-        screen: 'RecoveryCode',
-        params: {
-          urlType: qrCodeURL_types.RECOVERY,
-          action: 'recovery',
-        },
+      navigation.navigate('RecoveryCode', {
+        urlType: qrCodeURL_types.RECOVERY,
+        action: 'recovery',
       });
     }
   };
 
   const handleImport = () => {
-    navigation.navigate('Import', {
-      screen: 'ImportCode',
-      params: { urlType: qrCodeURL_types.IMPORT, action: 'import' },
+    navigation.navigate('ImportCode', {
+      urlType: qrCodeURL_types.IMPORT,
+      action: 'import',
     });
   };
 

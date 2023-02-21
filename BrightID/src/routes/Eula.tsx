@@ -23,10 +23,13 @@ export const headerOptions: StackNavigationOptions = {
 
 const Stack = createStackNavigator();
 
-const EulaStack = () => {
+const EulaStack = (eula: boolean) => {
   const { t } = useTranslation();
   return (
-    <Stack.Navigator screenOptions={headerOptions}>
+    <Stack.Group
+      navigationKey={eula ? 'yes' : 'no'}
+      screenOptions={headerOptions}
+    >
       <Stack.Screen
         name="LicenseAgreement"
         component={Eula}
@@ -35,7 +38,7 @@ const EulaStack = () => {
           headerTitleAlign: 'center',
         }}
       />
-    </Stack.Navigator>
+    </Stack.Group>
   );
 };
 

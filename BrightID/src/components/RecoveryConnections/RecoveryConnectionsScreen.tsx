@@ -10,7 +10,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useFocusEffect } from '@react-navigation/native';
 import { selectPendingOperations } from '@/reducer/operationsSlice';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
@@ -81,14 +81,19 @@ export const RecoveryConnectionsScreen = (props) => {
           return;
         }
         console.log(`fetching own recovery connections`);
-        const profile: ProfileInfo = await api.getProfile(me.id);
-        setConnectionProfile(profile);
-        const recoveryConnections = profile.recoveryConnections.map((rc) => {
-          const conn = myConnections.find((c) => rc.id === c.id);
-          return conn || { id: rc.id };
-        });
-        setRecoveryConnections(recoveryConnections);
-        setLoading(false);
+        try {
+          const profile: ProfileInfo = await api.getProfile(me.id);
+          setConnectionProfile(profile);
+          const recoveryConnections = profile.recoveryConnections.map((rc) => {
+            const conn = myConnections.find((c) => rc.id === c.id);
+            return conn || { id: rc.id };
+          });
+          setRecoveryConnections(recoveryConnections);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
       };
       fetchData();
     }, [api, me.id, myConnections, pendingOpsCount]),

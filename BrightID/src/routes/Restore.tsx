@@ -9,10 +9,10 @@ const Stack = createStackNavigator();
 const Restore = () => {
   // const { t } = useTranslation();
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <>
       <Stack.Screen name="RecoveryCode" component={RecoveryCodeScreen} />
       <Stack.Screen name="Restore" component={RestoreScreen} />
-    </Stack.Navigator>
+    </>
   );
 };
 

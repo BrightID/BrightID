@@ -9,7 +9,7 @@ import {
   Easing,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { WHITE } from '@/theme/colors';

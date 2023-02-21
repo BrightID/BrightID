@@ -13,7 +13,7 @@ import {
 import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
-import { useHeaderHeight } from '@react-navigation/stack';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -283,17 +283,29 @@ export const HomeScreen = (props) => {
                 <ActivityIndicator size="small" color={DARKER_GREY} animating />
               </View>
             ) : (
-              <View style={styles.verificationBox}>
-                <Text
-                  style={{
-                    ...styles.verificationText,
-                    color: DARKER_GREY,
-                    borderColor: DARKER_GREY,
+              <>
+                <View style={styles.verificationBox}>
+                  <Text
+                    style={{
+                      ...styles.verificationText,
+                      color: DARKER_GREY,
+                      borderColor: DARKER_GREY,
+                    }}
+                  >
+                    Verifications: None
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.orangeButton}
+                  onPress={() => {
+                    Linking.openURL('https://meet.brightid.org');
                   }}
                 >
-                  Verifications: None
-                </Text>
-              </View>
+                  <Text style={styles.orangeButtonLabel}>
+                    {t('home.button.joinmeet', 'Join a BrightID Meet')}
+                  </Text>
+                </TouchableOpacity>
+              </>
             )}
           </View>
         </View>
@@ -494,6 +506,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 10 : 0,
     width: '100%',
     backgroundColor: WHITE,
+    flexWrap: 'wrap',
   },
   verificationBox: {
     margin: 2,
@@ -626,6 +639,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: WHITE,
+  },
+  orangeButton: {
+    height: 34,
+    marginTop: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 34,
+    backgroundColor: ORANGE,
+    width: '100%',
+  },
+  orangeButtonLabel: {
+    fontFamily: 'Poppins-Bold',
+    color: WHITE,
+    fontSize: fontSize[12],
   },
 });
 
