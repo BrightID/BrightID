@@ -32,7 +32,8 @@ if (__DEV__) {
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
 // enable screens might be causing ios swipe navigation to freeze
-// enableScreens();
+// this disables react-native-screen
+// enableScreens(false);
 
 // Bootstrap fonts
 Ionicons.loadFont();
