@@ -25,7 +25,14 @@ const TopStack = createStackNavigator();
 
 const MainTabs = (id: string) => {
   return (
-    <TopStack.Group navigationKey={id || 'nope'}>
+    <TopStack.Group
+      navigationKey={id || 'nope'}
+      screenOptions={{
+        cardOverlayEnabled: false,
+        cardShadowEnabled: false,
+        freezeOnBlur: true,
+      }}
+    >
       {Home()}
       {PendingConnections()}
       {Connections()}
@@ -82,12 +89,16 @@ const MainApp = () => {
     topStack = MainTabs(id);
   }
 
+  // detachInactiveScreens={false}
+
   return (
     <NodeApiGate>
       {keyError ? (
         <MissingKeysScreen keyError={keyError} />
       ) : (
-        <TopStack.Navigator>{topStack}</TopStack.Navigator>
+        <TopStack.Navigator detachInactiveScreens={false}>
+          {topStack}
+        </TopStack.Navigator>
       )}
     </NodeApiGate>
   );
