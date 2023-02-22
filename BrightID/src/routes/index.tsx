@@ -30,7 +30,7 @@ const MainTabs = (id: string) => {
       screenOptions={{
         cardOverlayEnabled: false,
         cardShadowEnabled: false,
-        freezeOnBlur: true,
+        // freezeOnBlur: false,
       }}
     >
       {Home()}

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import './src/i18n';
 // import { enableScreens } from 'react-native-screens';
-import { enableFreeze } from 'react-native-screens';
+// import { enableFreeze } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -35,7 +35,7 @@ if (__DEV__) {
 // enable screens might be causing ios swipe navigation to freeze
 // this disables react-native-screen
 // enableScreens(false);
-enableFreeze(true);
+// enableFreeze(true);
 
 // Bootstrap fonts
 Ionicons.loadFont();
