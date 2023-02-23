@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  createStackNavigator,
   StackNavigationOptions,
   TransitionPresets,
 } from '@react-navigation/stack';
+
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
@@ -13,8 +13,7 @@ import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
 import NodeModal from '@/components/Helpers/NodeModal';
-
-const Stack = createStackNavigator<ModalStackParamList>();
+import { Stack } from './Navigator';
 
 export const modalOptions: StackNavigationOptions = {
   headerShown: false,
