@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "6.28.0",
+  "version": "4.28.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -27,7 +27,7 @@
   "dependencies": {
     "@expo/react-native-action-sheet": "4.0.1",
     "@react-native-async-storage/async-storage": "1.17.11",
-    "@react-native-community/blur": "3.6.0",
+    "@react-native-community/blur": "4.3.0",
     "@react-native-community/checkbox": "0.5.14",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/push-notification-ios": "1.10.1",
@@ -52,7 +52,7 @@
     "buffer": "5.6.0",
     "compare-versions": "^4.1.3",
     "crypto-js": "3.3.0",
-    "detox": "^19.12.6",
+    "detox": "19",
     "ed2curve": "0.3.0",
     "emittery": "0.6.0",
     "events": "3.2.0",

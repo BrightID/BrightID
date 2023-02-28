@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-native-community/blur/android/src/main/java/com/reactnativecommunity/blurview/BlurViewManagerImpl.java b/node_modules/@react-native-community/blur/android/src/main/java/com/reactnativecommunity/blurview/BlurViewManagerImpl.java
+index 47030e5..b059acc 100644
+--- a/node_modules/@react-native-community/blur/android/src/main/java/com/reactnativecommunity/blurview/BlurViewManagerImpl.java
++++ b/node_modules/@react-native-community/blur/android/src/main/java/com/reactnativecommunity/blurview/BlurViewManagerImpl.java
+@@ -29,7 +29,7 @@ class BlurViewManagerImpl {
+       .getDecorView();
+     ViewGroup rootView = decorView.findViewById(android.R.id.content);
+     Drawable windowBackground = decorView.getBackground();
+-    if (Build.VERSION.SDK_INT >= 31) {
++    if (Build.VERSION.SDK_INT >= 31 && blurView.isHardwareAccelerated()) {
+       blurView
+         .setupWith(rootView, new RenderEffectBlur())
+         .setFrameClearDrawable(windowBackground)
