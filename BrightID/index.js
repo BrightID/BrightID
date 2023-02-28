@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import './src/i18n';
 // import { enableScreens } from 'react-native-screens';
+// import { enableFreeze } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -32,15 +33,17 @@ if (__DEV__) {
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
 // enable screens might be causing ios swipe navigation to freeze
-// enableScreens();
+// this disables react-native-screen
+// enableScreens(false);
+// enableFreeze(true);
 
 // Bootstrap fonts
-Ionicons.loadFont();
-SimpleLineIcons.loadFont();
-MaterialCommunityIcons.loadFont();
-Octicons.loadFont();
-AntDesign.loadFont();
-MaterialIcons.loadFont();
+Ionicons.loadFont().catch((err) => console.log(err));
+SimpleLineIcons.loadFont().catch((err) => console.log(err));
+MaterialCommunityIcons.loadFont().catch((err) => console.log(err));
+Octicons.loadFont().catch((err) => console.log(err));
+AntDesign.loadFont().catch((err) => console.log(err));
+MaterialIcons.loadFont().catch((err) => console.log(err));
 
 // Fix Font Scaling
 

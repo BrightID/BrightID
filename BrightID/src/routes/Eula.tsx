@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import Eula from '@/components/Onboarding/Eula';
 import { fontSize } from '@/theme/fonts';
 import { BLACK } from '@/theme/colors';
+import { Stack } from './Navigator';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Medium',
@@ -20,8 +18,6 @@ export const headerOptions: StackNavigationOptions = {
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
 };
-
-const Stack = createStackNavigator();
 
 const EulaStack = (eula: boolean) => {
   const { t } = useTranslation();

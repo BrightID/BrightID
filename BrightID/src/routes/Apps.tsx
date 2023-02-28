@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { headerOptions, NavHome } from './helpers';
 import AppsScreenController from '@/components/Apps/AppsScreenController';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const topOptions: StackNavigationOptions = {
   ...headerOptions,

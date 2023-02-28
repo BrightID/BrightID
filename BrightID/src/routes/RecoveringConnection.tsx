@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
+import i18next from 'i18next';
 import RecoveringConnectionScreen from '@/components/Onboarding/RecoveryFlow/RecoveringConnectionScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import i18next from 'i18next';
 import { headerOptions, AnimatedHeaderTitle } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const recoveringScreenOptions: StackNavigationOptions = {
   ...headerOptions,

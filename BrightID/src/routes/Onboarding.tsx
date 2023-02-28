@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import OnboardScreen from '@/components/Onboarding/OnboardScreen';
 import NameScreen from '@/components/Onboarding/SignUpFlow/NameScreen';
@@ -12,8 +11,7 @@ import { modalOptions } from '@/routes/Modals';
 import Restore from './Restore';
 import Import from './Import';
 import { headerOptions } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const Onboarding = () => {
   const { t } = useTranslation();

@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { fontSize } from '@/theme/fonts';
@@ -14,8 +11,7 @@ import { GroupInfoScreen } from '@/components/Groups/NewGroups/GroupInfoScreen';
 import { MembersScreen } from '@/components/Groups/Members/MembersScreen';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const groupsOptions: StackNavigationOptions = {
   ...headerOptions,

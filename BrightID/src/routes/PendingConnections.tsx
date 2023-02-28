@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  createStackNavigator,
   CardStyleInterpolators,
   StackNavigationOptions,
 } from '@react-navigation/stack';
@@ -9,8 +8,7 @@ import ScanCodeScreen from '@/components/PendingConnections/ScanCodeScreen';
 import PendingConnectionsScreen from '@/components/PendingConnections/PendingConnectionsScreen';
 import GroupConnectionScreen from '@/components/PendingConnections/GroupConnectionScreen';
 import { NavHome, headerOptions } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const newConnectionOptions: StackNavigationOptions = {
   ...headerOptions,
