@@ -38,12 +38,12 @@ if (__DEV__) {
 // enableFreeze(true);
 
 // Bootstrap fonts
-Ionicons.loadFont();
-SimpleLineIcons.loadFont();
-MaterialCommunityIcons.loadFont();
-Octicons.loadFont();
-AntDesign.loadFont();
-MaterialIcons.loadFont();
+Ionicons.loadFont().catch((err) => console.log(err));
+SimpleLineIcons.loadFont().catch((err) => console.log(err));
+MaterialCommunityIcons.loadFont().catch((err) => console.log(err));
+Octicons.loadFont().catch((err) => console.log(err));
+AntDesign.loadFont().catch((err) => console.log(err));
+MaterialIcons.loadFont().catch((err) => console.log(err));
 
 // Fix Font Scaling
 
