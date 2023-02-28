@@ -1,12 +1,8 @@
 import * as React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import NotificationsScreen from '@/components/Notifications/NotificationsScreen';
 import { headerOptions, NavHome } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const topOptions: StackNavigationOptions = {
   ...headerOptions,

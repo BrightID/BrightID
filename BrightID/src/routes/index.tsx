@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import i18next from 'i18next';
 import { useSelector } from '@/store/hooks';
 import NodeApiGate from '@/components/NodeApiGate';
@@ -20,12 +19,18 @@ import Modals from './Modals';
 import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
-
-const TopStack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const MainTabs = (id: string) => {
   return (
-    <TopStack.Group navigationKey={id || 'nope'}>
+    <Stack.Group
+      navigationKey={id || 'nope'}
+      screenOptions={{
+        cardOverlayEnabled: false,
+        cardShadowEnabled: false,
+        // freezeOnBlur: false,
+      }}
+    >
       {Home()}
       {PendingConnections()}
       {Connections()}
@@ -36,7 +41,7 @@ const MainTabs = (id: string) => {
       {Apps()}
       {Modals()}
       {RecoveringConnection()}
-    </TopStack.Group>
+    </Stack.Group>
   );
 };
 
@@ -82,12 +87,16 @@ const MainApp = () => {
     topStack = MainTabs(id);
   }
 
+  // detachInactiveScreens={false}
+
   return (
     <NodeApiGate>
       {keyError ? (
         <MissingKeysScreen keyError={keyError} />
       ) : (
-        <TopStack.Navigator>{topStack}</TopStack.Navigator>
+        <Stack.Navigator detachInactiveScreens={false}>
+          {topStack}
+        </Stack.Navigator>
       )}
     </NodeApiGate>
   );

@@ -1,15 +1,11 @@
 import * as React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import i18next from 'i18next';
 import AddDeviceScreen from '@/components/Onboarding/ImportFlow/AddDeviceScreen';
 import DevicesScreen from '@/components/Onboarding/ImportFlow/DevicesScreen';
 import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCodeScreen';
 import { AnimatedHeaderTitle, headerOptions, NavHome } from './helpers';
-
-const Stack = createStackNavigator();
+import { Stack } from './Navigator';
 
 const topOptions: StackNavigationOptions = {
   ...headerOptions,

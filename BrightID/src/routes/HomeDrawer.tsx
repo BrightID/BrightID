@@ -399,6 +399,7 @@ export const HomeDrawer = () => {
 
   return (
     <Drawer.Navigator
+      detachInactiveScreens={false}
       screenOptions={{
         headerShown: false,
         drawerType: 'front',

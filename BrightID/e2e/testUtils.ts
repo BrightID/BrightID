@@ -161,9 +161,11 @@ const createFakeConnection = async (
 };
 
 const expectHomescreen = async () => {
-  await waitFor(element(by.id('homeScreen')))
+  await waitFor(element(by.id('BrightIdLogo')))
     .toBeVisible()
     .withTimeout(20000);
+  await element(by.id('BrightIdLogo')).tap();
+  await waitFor(element(by.id('homeScreen'))).toBeVisible();
 };
 
 const expectNotificationsScreen = async () => {
@@ -263,7 +265,8 @@ const inviteConnectionToGroup = async (groupName: string) => {
   await element(by.text(i18next.t('common.alert.ok'))).tap();
   // Now on members screen again. Go back to homescreen.
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await element(by.id('header-back')).tap();
+  // await element(by.id('header-back')).tap();
+  await navigateHome();
   await navigateHome();
   await expectHomescreen();
 };
@@ -289,7 +292,8 @@ const joinAllGroups = async (connectionIndex: number) => {
   await element(by.text(actionTitle)).tap();
 
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await element(by.id('header-back')).tap();
+  // await element(by.id('header-back')).tap();
+  await navigateHome();
   await navigateHome();
   await expectHomescreen();
 };
@@ -320,7 +324,8 @@ const interConnect = async (
   await element(by.text(actionTitle)).tap();
 
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await element(by.id('header-back')).tap();
+  // await element(by.id('header-back')).tap();
+  await navigateHome();
   await navigateHome();
   await expectHomescreen();
 };
@@ -362,7 +367,8 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   await element(by.text(action)).tap();
 
   // navigate to MyCodeScreen, there it will pick up the incoming connection profile
-  await element(by.id('header-back')).tap();
+  // await element(by.id('header-back')).tap();
+  await navigateHome();
   await navigateHome();
   await element(by.id('MyCodeBtn')).tap();
   await waitFor(element(by.id('ReconnectScreen')))
@@ -376,7 +382,13 @@ const clearData = async () => {
   // Alert should be open
   await expect(element(by.text('WARNING'))).toBeVisible();
   // Confirm clearing data
-  await element(by.text('SURE')).tap();
+  const platform = await device.getPlatform();
+  if (platform === 'android') {
+    await element(by.text('SURE')).tap();
+  } else {
+    await element(by.text('Sure')).tap();
+  }
+
   // EULA screen should open
   await expect(element(by.id('EulaScreen'))).toBeVisible();
 };

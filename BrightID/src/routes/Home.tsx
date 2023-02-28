@@ -6,10 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { useSelector } from '@/store/hooks';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -22,6 +19,7 @@ import {
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { toggleDrawer, navigate } from '@/NavigationService';
 import { HomeDrawer } from './HomeDrawer';
+import { Stack } from './Navigator';
 
 /** SELECTORS */
 
@@ -121,8 +119,6 @@ const homeScreenOptions: StackNavigationOptions = {
 };
 
 /** SCREENS */
-
-const Stack = createStackNavigator();
 
 const Home = () => {
   /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */
