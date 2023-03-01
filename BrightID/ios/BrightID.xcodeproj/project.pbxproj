@@ -508,6 +508,8 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arch64;
 				INFOPLIST_FILE = BrightID/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BrightID;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -545,6 +547,8 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arch64;
 				INFOPLIST_FILE = BrightID/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BrightID;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -771,6 +775,8 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arch64;
 				INFOPLIST_FILE = BrightID/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BrightID;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

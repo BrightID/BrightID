@@ -49,6 +49,7 @@
     />
     <receiver
       android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver"
+      android:exported="false"
     >
         <intent-filter>
             <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -76,12 +77,12 @@
       android:theme="@style/SplashTheme"
       android:label="@string/app_name"
       android:screenOrientation="portrait"
+      android:exported="true"
     >
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
-
     </activity>
 
     <activity
@@ -95,18 +96,14 @@
     >
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:scheme="brightid" />
       </intent-filter>
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data
           android:scheme="https"
           android:host="app.brightid.org"

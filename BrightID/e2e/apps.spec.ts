@@ -78,9 +78,11 @@ describe('Without account', () => {
     await waitFor(element(by.id('OnboardScreen'))).toBeVisible();
   });
   it('should ignore deep link when not running', async () => {
+    const url = `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`;
+    console.log(url);
     await device.launchApp({
       newInstance: true,
-      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
+      url,
     });
     // app should show onboarding carousel screen
     await waitFor(element(by.id('OnboardScreen'))).toBeVisible();
@@ -100,12 +102,14 @@ describe('With account', () => {
   });
 
   it('should start linking process when running in background', async () => {
+    const url = `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+      apps[0].context
+    }/${getRandomAddres()}`;
+    console.log(url);
     await device.sendToHome();
     await device.launchApp({
       newInstance: false,
-      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
-        apps[0].context
-      }/${getRandomAddres()}`,
+      url,
     });
     // Alert should be open
     await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
