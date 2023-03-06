@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { navigate } from '@/NavigationService';
 import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
@@ -14,30 +14,31 @@ export const headerTitleStyle = {
   color: WHITE,
 };
 
-export const headerOptions: StackNavigationOptions = {
+export const headerOptions: NativeStackNavigationOptions = {
   headerTitleStyle,
   // @ts-ignore
   headerStyle: {
     backgroundColor: ORANGE,
-    shadowRadius: 0,
-    elevation: 0,
-    shadowOffset: {
-      height: 0,
-    },
+    // shadowRadius: 0,
+    // elevation: 0,
+    // shadowOffset: {
+    //   height: 0,
+    // },
   },
   headerTintColor: WHITE,
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
-  headerBackImage: () => (
-    <View
-      style={{
-        width: SIXTY,
-        alignItems: 'center',
-      }}
-    >
-      <BackArrow height={TWENTY_TWO} color={WHITE} />
-    </View>
-  ),
+  headerShadowVisible: false,
+  // headerBackImage: () => (
+  //   <View
+  //     style={{
+  //       width: SIXTY,
+  //       alignItems: 'center',
+  //     }}
+  //   >
+  //     <BackArrow height={TWENTY_TWO} color={WHITE} />
+  //   </View>
+  // ),
 };
 
 export const NavHome = () => (

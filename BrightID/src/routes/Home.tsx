@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useSelector } from '@/store/hooks';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -87,7 +87,7 @@ const BrightIdLogo = () => {
   );
 };
 
-const homeScreenOptions: StackNavigationOptions = {
+const homeScreenOptions: NativeStackNavigationOptions = {
   headerTitle: () => <BrightIdLogo />,
   headerLeft: () => {
     return (
@@ -108,14 +108,16 @@ const homeScreenOptions: StackNavigationOptions = {
     );
   },
   headerRight: () => <NotificationBell />,
-  headerStyle: {
-    height: DEVICE_LARGE ? 80 : 70,
-    shadowRadius: 0,
-    elevation: -1,
-  },
+  // headerStyle: {
+  //   height: DEVICE_LARGE ? 80 : 70,
+  //   shadowRadius: 0,
+  //   elevation: -1,
+  // },
   headerTitleAlign: 'center',
   headerTintColor: 'transparent',
   headerTransparent: true,
+  headerBackVisible: false,
+  headerShadowVisible: false,
 };
 
 /** SCREENS */

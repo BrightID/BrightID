@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import i18next from 'i18next';
 import AddDeviceScreen from '@/components/Onboarding/ImportFlow/AddDeviceScreen';
 import DevicesScreen from '@/components/Onboarding/ImportFlow/DevicesScreen';
@@ -7,17 +7,19 @@ import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCod
 import { AnimatedHeaderTitle, headerOptions, NavHome } from './helpers';
 import { Stack } from './Navigator';
 
-const topOptions: StackNavigationOptions = {
+const topOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
+  headerBackVisible: false,
 };
 
-const devicesOptions: StackNavigationOptions = {
+const devicesOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
   headerTitle: () => (
     <AnimatedHeaderTitle text={i18next.t('drawer.label.devices')} />
   ),
+  headerBackVisible: false,
 };
 
 const Devices = () => {

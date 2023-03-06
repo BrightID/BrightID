@@ -1,9 +1,7 @@
 import React from 'react';
-import {
-  StackNavigationOptions,
-  TransitionPresets,
-} from '@react-navigation/stack';
-
+// TODO FIX THIS
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+// import { TransitionPresets } from '@react-navigation/stack';
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
@@ -15,14 +13,14 @@ import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInf
 import NodeModal from '@/components/Helpers/NodeModal';
 import { Stack } from './Navigator';
 
-export const modalOptions: StackNavigationOptions = {
+export const modalOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  cardOverlayEnabled: true,
+  // cardOverlayEnabled: true,
   gestureEnabled: true,
-  ...TransitionPresets.FadeFromBottomAndroid,
-  cardStyle: { backgroundColor: 'transparent' },
+  // ...TransitionPresets.FadeFromBottomAndroid,
+  // cardStyle: { backgroundColor: 'transparent' },
   presentation: 'transparentModal',
-  detachPreviousScreen: false,
+  // detachPreviousScreen: false,
 };
 
 const Modals = () => {

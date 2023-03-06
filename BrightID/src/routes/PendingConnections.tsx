@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {
-  CardStyleInterpolators,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+// TODO FIX THIS
+// import { CardStyleInterpolators } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import MyCodeScreen from '@/components/PendingConnections/MyCodeScreen';
 import ScanCodeScreen from '@/components/PendingConnections/ScanCodeScreen';
 import PendingConnectionsScreen from '@/components/PendingConnections/PendingConnectionsScreen';
@@ -10,21 +9,21 @@ import GroupConnectionScreen from '@/components/PendingConnections/GroupConnecti
 import { NavHome, headerOptions } from './helpers';
 import { Stack } from './Navigator';
 
-const newConnectionOptions: StackNavigationOptions = {
+const newConnectionOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
-  headerBackTitleVisible: false,
+  headerBackVisible: false,
   title: '',
 };
 
-const groupConnectionOptions: StackNavigationOptions = {
+const groupConnectionOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   title: 'Group Connection',
 };
 
-const connectionPreviewOptions: StackNavigationOptions = {
+const connectionPreviewOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+  // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 };
 
 const PendingConnections = () => (

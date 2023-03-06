@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import i18next from 'i18next';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import ConnectionScreenController from '@/components/Connections/ConnectionScreenController';
@@ -7,7 +7,7 @@ import SearchConnections from '@/components/Helpers/SearchConnections';
 import { headerOptions, AnimatedHeaderTitle, NavHome } from './helpers';
 import { Stack } from './Navigator';
 
-const connectionsScreenOptions: StackNavigationOptions = {
+const connectionsScreenOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
   headerLeft: () => <NavHome />,
@@ -16,9 +16,10 @@ const connectionsScreenOptions: StackNavigationOptions = {
       text={i18next.t('connections.header.connections', 'Connections')}
     />
   ),
+  headerBackVisible: false,
 };
 
-const connectionScreenOptions: StackNavigationOptions = {
+const connectionScreenOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerTitle: () => (
     <AnimatedHeaderTitle
@@ -28,6 +29,7 @@ const connectionScreenOptions: StackNavigationOptions = {
       )}
     />
   ),
+  // headerBackVisible: true,
 };
 
 const Connections = () => {

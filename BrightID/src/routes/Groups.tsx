@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { fontSize } from '@/theme/fonts';
@@ -13,16 +13,17 @@ import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 import { Stack } from './Navigator';
 
-const groupsOptions: StackNavigationOptions = {
+const groupsOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
   headerTitle: () => (
     <AnimatedHeaderTitle text={i18next.t('groups.header.groups', 'Groups')} />
   ),
+  headerBackVisible: false,
 };
 
-const newGroupOptions: StackNavigationOptions = {
+const newGroupOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
   headerTitle: () => (
@@ -32,12 +33,12 @@ const newGroupOptions: StackNavigationOptions = {
   ),
 };
 
-const membersScreenOptions: StackNavigationOptions = {
+const membersScreenOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerTitleStyle: {
     fontSize: fontSize[20],
-    paddingLeft: 20,
-    paddingRight: 30,
+    // paddingLeft: 20,
+    // paddingRight: 30,
   },
 };
 

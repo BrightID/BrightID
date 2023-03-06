@@ -1,14 +1,15 @@
 import React from 'react';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 // import i18next from 'i18next';
 import NewRecoveryConnectionsListScreen from '@/components/RecoveryConnections/NewRecoveryConnectionScreen';
 import { headerOptions, AnimatedHeaderTitle, NavHome } from './helpers';
 import { Stack } from './Navigator';
 
-const connectionsScreenOptions: StackNavigationOptions = {
+const connectionsScreenOptions: NativeStackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
   headerTitle: () => <AnimatedHeaderTitle text="Recovery Connections" />,
+  headerBackVisible: false,
 };
 
 const Connections = () => {

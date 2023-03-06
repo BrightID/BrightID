@@ -25,11 +25,13 @@ const MainTabs = (id: string) => {
   return (
     <Stack.Group
       navigationKey={id || 'nope'}
-      screenOptions={{
-        cardOverlayEnabled: false,
-        cardShadowEnabled: false,
-        // freezeOnBlur: false,
-      }}
+      screenOptions={
+        {
+          // cardOverlayEnabled: false,
+          // cardShadowEnabled: false,
+          // freezeOnBlur: false,
+        }
+      }
     >
       {Home()}
       {PendingConnections()}
@@ -94,9 +96,7 @@ const MainApp = () => {
       {keyError ? (
         <MissingKeysScreen keyError={keyError} />
       ) : (
-        <Stack.Navigator detachInactiveScreens={false}>
-          {topStack}
-        </Stack.Navigator>
+        <Stack.Navigator>{topStack}</Stack.Navigator>
       )}
     </NodeApiGate>
   );
