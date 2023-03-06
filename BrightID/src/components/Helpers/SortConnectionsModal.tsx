@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connection_levels } from '@/utils/constants';
@@ -41,7 +41,7 @@ const byTrust = [types.byTrustLevelDescending, types.byTrustLevelAscending];
 
 /** COMPONENT */
 
-type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
+type props = NativeStackScreenProps<ModalStackParamList, 'SortConnections'>;
 
 const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector } from '@/store/hooks';
 import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -14,7 +14,10 @@ import Arrow from '../../Icons/Arrow';
 // border radius for edit profile box
 const BR = 20;
 
-type props = StackScreenProps<ModalStackParamList, 'ViewPasswordWalkthrough'>;
+type props = NativeStackScreenProps<
+  ModalStackParamList,
+  'ViewPasswordWalkthrough'
+>;
 
 const ViewPassword = ({ navigation }: props) => {
   useFocusEffect(

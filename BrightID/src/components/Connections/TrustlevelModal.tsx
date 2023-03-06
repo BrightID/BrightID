@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
@@ -29,7 +30,7 @@ import { NodeApiContext } from '@/components/NodeApiGate';
 
 import TrustlevelSlider from './TrustlevelSlider';
 
-type TrustlevelModalProps = StackScreenProps<
+type TrustlevelModalProps = NativeStackScreenProps<
   ModalStackParamList,
   'SetTrustlevel'
 >;

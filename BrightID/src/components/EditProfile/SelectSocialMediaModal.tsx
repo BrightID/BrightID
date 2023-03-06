@@ -13,7 +13,7 @@ import { Picker } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import PhoneInput from 'react-native-phone-number-input';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
@@ -59,7 +59,7 @@ const textContentTypes: { [id: string]: TextInputProps['textContentType'] } = {
 };
 
 /** Main Component */
-type props = StackScreenProps<ModalStackParamList, 'SelectSocialMedia'>;
+type props = NativeStackScreenProps<ModalStackParamList, 'SelectSocialMedia'>;
 
 const SelectMediaModal = ({ route }: props) => {
   const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { BlurView } from '@react-native-community/blur';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch } from '@/store/hooks';
 import {
@@ -64,7 +64,7 @@ const reasons = {
   ],
 };
 
-type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
+type props = NativeStackScreenProps<ModalStackParamList, 'ReportReason'>;
 
 const ReportReasonModal = ({ route, navigation }: props) => {
   const {

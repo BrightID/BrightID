@@ -11,7 +11,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
@@ -51,7 +51,7 @@ const UploadAnimation = () => {
   );
 };
 
-type props = StackScreenProps<ModalStackParamList, 'ChangePassword'>;
+type props = NativeStackScreenProps<ModalStackParamList, 'ChangePassword'>;
 
 const ChangePasswordModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
