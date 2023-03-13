@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ###################################################
 # This script will remove files from your         #
@@ -12,18 +12,23 @@
 # Android NDK / SDK or in case of general unexplainable build errors like
 # duplicate resource files, missing libraries etc.
 
+# setup nvm
+export NVM_DIR="$HOME"/.nvm
+source "$NVM_DIR"/nvm.sh
+nvm use 16 || exit
+
 # kill all gradle daemons
 echo "killing gradle daemons..."
 cd android || exit
 ./gradlew --stop
 pkill -f '.*GradleDaemon.*'
-rm -rf /home/michael/.gradle/daemon/*
+rm -rf "$HOME"/.gradle/daemon/*
 cd ..
 echo "done"
 
 # clear gradle caches
 echo "clearing gradle caches"
-rm -rf ~/.gradle/caches
+rm -rf "$HOME"/.gradle/caches
 
 # clear all intermediate/untracked files in android folder
 echo "running \"git clean -f -d\" in android folder"
