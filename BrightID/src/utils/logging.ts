@@ -29,8 +29,10 @@ export const currentLogName = `log-${Date.now()}.txt`;
 const config: configLoggerType = {
   async: true,
   asyncFunc: InteractionManager.runAfterInteractions,
-  // log both to file and console
-  transport: [rnFetchBlobTransport, consoleTransport],
+  // log both to file and console in dev mode, only to file in production
+  transport: __DEV__
+    ? [rnFetchBlobTransport, consoleTransport]
+    : rnFetchBlobTransport,
   transportOptions: {
     filePath: logsDirectory,
     fileName: currentLogName,
