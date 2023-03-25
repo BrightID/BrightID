@@ -22,7 +22,6 @@ module.exports = {
         extensions: ['.svg'],
       },
     ],
-    inProduction && ['transform-remove-console'],
     'react-native-reanimated/plugin',
   ].filter(Boolean), // this will filter any falsy plugins (such as removing transform-remove-console when not in production)
 };
