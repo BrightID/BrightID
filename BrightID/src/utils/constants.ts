@@ -171,3 +171,6 @@ export enum BrightIdNetwork {
 }
 
 export const discordUrl = 'https://discord.gg/nTtuB2M';
+
+// Max time to keep logfiles
+export const LOGFILE_KEEP_DURATION = 3 * day;
