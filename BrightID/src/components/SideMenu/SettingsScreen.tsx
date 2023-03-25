@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -77,104 +78,106 @@ export const SettingsScreen = () => {
   }
 
   return (
-    <View
-      style={[styles.container, { marginTop: headerHeight }]}
-      testID="SettingsScreen"
-    >
-      <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>
-          <Text>{t('drawer.label.settings', 'Settings')}</Text>
-        </Text>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.settingsItemContainer}>
-        <Text style={styles.label}>
-          {t('settings.language.label', 'Language')}
-        </Text>
-        <Picker
-          selectedValue={languageTag}
-          onValueChange={setLanguageHandler}
-          style={styles.pickerStyle}
-          itemStyle={styles.pickerItemStyle}
-        >
-          {availableLanguages}
-        </Picker>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Debug Settings</Text>
-      </View>
-      <Text>
-        These settings are for troubleshooting/debugging. Usually you should not
-        need to modify anything here.
-      </Text>
-      <View style={styles.settingsItemContainer}>
-        <Text style={styles.label}>Connection channels</Text>
-        <View style={styles.debugSettingContainer}>
-          <Text>Open channels: {numChannels}</Text>
-          <TouchableOpacity
-            disabled={numChannels === 0}
-            style={styles.button}
-            onPress={() => dispatch(leaveAllChannels())}
-          >
-            <Text style={styles.buttonText}>close open channels</Text>
-          </TouchableOpacity>
+    <ScrollView>
+      <View
+        style={[styles.container, { marginTop: headerHeight }]}
+        testID="SettingsScreen"
+      >
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>
+            <Text>{t('drawer.label.settings', 'Settings')}</Text>
+          </Text>
         </View>
-      </View>
-      <View style={styles.settingsItemContainer}>
-        <Text style={styles.label}>Recovery data</Text>
-        <View style={styles.debugSettingContainer}>
-          <Text>Recovery channel id: {channel.channelId || 'none'}</Text>
-          <Text>Recover data id: {id || 'none'}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              dispatch(clearRecoveryChannel());
-              dispatch(resetRecoveryData());
-            }}
-          >
-            <Text style={styles.buttonText}>close recovery/sync channel</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.settingsItemContainer}>
-        <Text style={styles.label}>Logfiles</Text>
-        <View style={[styles.debugSettingContainer]}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setShowLogs(true);
-            }}
-          >
-            <Text style={styles.buttonText}>Access logfiles</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {__DEV__ && (
+        <View style={styles.divider} />
         <View style={styles.settingsItemContainer}>
-          <Text style={styles.label}>Error Boundary</Text>
+          <Text style={styles.label}>
+            {t('settings.language.label', 'Language')}
+          </Text>
+          <Picker
+            selectedValue={languageTag}
+            onValueChange={setLanguageHandler}
+            style={styles.pickerStyle}
+            itemStyle={styles.pickerItemStyle}
+          >
+            {availableLanguages}
+          </Picker>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>Debug Settings</Text>
+        </View>
+        <Text>
+          These settings are for troubleshooting/debugging. Usually you should
+          not need to modify anything here.
+        </Text>
+        <View style={styles.settingsItemContainer}>
+          <Text style={styles.label}>Connection channels</Text>
           <View style={styles.debugSettingContainer}>
-            <Text>Test error boundary</Text>
+            <Text>Open channels: {numChannels}</Text>
+            <TouchableOpacity
+              disabled={numChannels === 0}
+              style={styles.button}
+              onPress={() => dispatch(leaveAllChannels())}
+            >
+              <Text style={styles.buttonText}>close open channels</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.settingsItemContainer}>
+          <Text style={styles.label}>Recovery data</Text>
+          <View style={styles.debugSettingContainer}>
+            <Text>Recovery channel id: {channel.channelId || 'none'}</Text>
+            <Text>Recover data id: {id || 'none'}</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                setProduceError(true);
+                dispatch(clearRecoveryChannel());
+                dispatch(resetRecoveryData());
               }}
             >
-              <Text style={styles.buttonText}>make an error</Text>
+              <Text style={styles.buttonText}>close recovery/sync channel</Text>
             </TouchableOpacity>
-            {produceError && (
-              <Text>
-                {
-                  // @ts-ignore This is for testing error boundary screen
-                  something_undefined.length
-                }
-              </Text>
-            )}
           </View>
         </View>
-      )}
-    </View>
+        <View style={styles.settingsItemContainer}>
+          <Text style={styles.label}>Logfiles</Text>
+          <View style={[styles.debugSettingContainer]}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setShowLogs(true);
+              }}
+            >
+              <Text style={styles.buttonText}>Access logfiles</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {__DEV__ && (
+          <View style={styles.settingsItemContainer}>
+            <Text style={styles.label}>Error Boundary</Text>
+            <View style={styles.debugSettingContainer}>
+              <Text>Test error boundary</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setProduceError(true);
+                }}
+              >
+                <Text style={styles.buttonText}>make an error</Text>
+              </TouchableOpacity>
+              {produceError && (
+                <Text>
+                  {
+                    // @ts-ignore This is for testing error boundary screen
+                    something_undefined.length
+                  }
+                </Text>
+              )}
+            </View>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
