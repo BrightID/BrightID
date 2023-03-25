@@ -96,7 +96,7 @@ export const LogFileScreen = ({ handleClose }: LogFileScreenProps) => {
               scrollViewRef.current?.scrollToEnd({ animated: false })
             }
           >
-            <Text style={styles.stacktrace}>
+            <Text style={styles.stacktrace} selectable={!loading}>
               {loading ? 'loading...' : log}
             </Text>
           </ScrollView>
