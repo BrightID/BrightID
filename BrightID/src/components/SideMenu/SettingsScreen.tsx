@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Picker } from '@react-native-picker/picker';
@@ -17,6 +22,7 @@ import {
   resetRecoveryData,
   selectRecoveryData,
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import { LogFileScreen } from '@/components/SideMenu/LogFileScreen';
 
 export const SettingsScreen = () => {
   let headerHeight = useHeaderHeight();
@@ -29,6 +35,7 @@ export const SettingsScreen = () => {
   const numChannels = useSelector(selectTotalChannels);
   const { channel, id } = useSelector(selectRecoveryData);
   const [produceError, setProduceError] = useState(false);
+  const [showLogs, setShowLogs] = useState<boolean>(false);
 
   const setLanguageHandler = async (itemValue, _itemIndex) => {
     await i18next.changeLanguage(itemValue);
@@ -54,6 +61,20 @@ export const SettingsScreen = () => {
         key={key}
       />
     ));
+
+  const handleCloseLogs = () => {
+    setShowLogs(false);
+  };
+
+  if (showLogs) {
+    return (
+      <View
+        style={[styles.logfileScreenContainer, { marginTop: headerHeight }]}
+      >
+        <LogFileScreen handleClose={handleCloseLogs} />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -84,8 +105,8 @@ export const SettingsScreen = () => {
         <Text style={styles.headerText}>Debug Settings</Text>
       </View>
       <Text>
-        These settings are for troubleshooting/debugginng. Usually you should
-        not need to modify anything here.
+        These settings are for troubleshooting/debugging. Usually you should not
+        need to modify anything here.
       </Text>
       <View style={styles.settingsItemContainer}>
         <Text style={styles.label}>Connection channels</Text>
@@ -113,6 +134,19 @@ export const SettingsScreen = () => {
             }}
           >
             <Text style={styles.buttonText}>close recovery/sync channel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.settingsItemContainer}>
+        <Text style={styles.label}>Logfiles</Text>
+        <View style={[styles.debugSettingContainer]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setShowLogs(true);
+            }}
+          >
+            <Text style={styles.buttonText}>Access logfiles</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -201,5 +235,15 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: WHITE,
     marginLeft: 10,
+  },
+  logfileScreenContainer: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    right: 5,
+    bottom: 0,
+    backgroundColor: '#fafafa',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

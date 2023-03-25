@@ -78,7 +78,7 @@ export const purgeLogs = async (): Promise<void> => {
   const files = await listLogs();
   for (const file of files) {
     // parse filename to get timestamp
-    const timestamp = parseInt(file.split('-')[1].split('.')[0]);
+    const timestamp = getLogTimestamp(file);
     if (timestamp < threshold) {
       console.log(`Deleting log file ${logsDirectory}/${file}`);
       try {
@@ -88,4 +88,15 @@ export const purgeLogs = async (): Promise<void> => {
       }
     }
   }
+};
+
+// compare logfiles by timestamp, newest first
+export const compareLogs = (log1: string, log2: string): number => {
+  const t1 = getLogTimestamp(log1);
+  const t2 = getLogTimestamp(log2);
+  return t2 - t1;
+};
+
+export const getLogTimestamp = (filename: string): number => {
+  return parseInt(filename.split('-')[1].split('.')[0]);
 };
