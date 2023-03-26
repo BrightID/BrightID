@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "auraVerification": {
+      "description": "Mehr über Aura erfahren",
+      "title": "Aura-Verifizierung"
+    },
     "bituVerification": {
       "description": "Mehr Details",
       "title": "Bitu-Überprüfung"
@@ -66,6 +70,12 @@
       "complete": "Neuer Signaturschlüssel hinzugefügt",
       "downloading": "Herunterladen von neuen Gerätedaten …",
       "error": "Hinzufügen des Signierschlüssels fehlgeschlagen"
+    }
+  },
+  "alert": {
+    "text": {
+      "appInfoFailure": "Neueste appInfo konnte nicht abgerufen werden: {{message}}. Bitte versuche es später noch einmal.",
+      "appNotSponsoring": "Du bist noch nicht gesponsert und {{app}} bietet kein Sponsoring an. Bitte finde eine andere App, die dich sponsert."
     }
   },
   "apps": {
