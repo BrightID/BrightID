@@ -45,11 +45,10 @@ const MainTabs = (id: string) => {
   );
 };
 
-const MainApp = () => {
-  const id = useSelector((state) => state.user.id);
-  const eula = useSelector((state) => state.user.eula);
+const App = () => {
+  const { eula, id } = useSelector((state) => state.user);
+  const { publicKey, secretKey } = useSelector((state) => state.keypair);
   const languageTag = useSelector(selectLanguageTag);
-  const { secretKey, publicKey } = useSelector((state) => state.keypair);
   const [keyError, setKeyError] = useState('');
 
   useEffect(() => {
@@ -77,17 +76,7 @@ const MainApp = () => {
     }
   }, [id, secretKey, publicKey]);
 
-  // decide which screen/navigator to render
-  let topStack;
-  if (!eula) {
-    topStack = Eula(eula);
-  } else if (!id) {
-    topStack = Onboarding();
-  } else {
-    topStack = MainTabs(id);
-  }
-
-  // detachInactiveScreens={false}
+  const topStack = !eula ? Eula(eula) : !id ? Onboarding() : MainTabs(id);
 
   return (
     <NodeApiGate>
@@ -101,5 +90,4 @@ const MainApp = () => {
     </NodeApiGate>
   );
 };
-
-export default MainApp;
+export default App;
