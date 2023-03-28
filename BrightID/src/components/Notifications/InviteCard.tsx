@@ -43,7 +43,7 @@ const InviteCard = (props) => {
   const { backupCompleted } = useSelector((state) => state.user);
   const api = useContext(NodeApiContext);
   const groupName = useSelector((state) =>
-    selectGroupName(state, invite.group.id),
+    selectGroupName(state, invite.groupObj),
   );
 
   const handleRejectInvite = () => {
@@ -76,10 +76,10 @@ const InviteCard = (props) => {
 
   const handleAcceptInvite = async () => {
     try {
-      const op = await api.joinGroup(invite.group.id);
+      const op = await api.joinGroup(invite.groupObj.id);
       dispatch(addOperation(op));
       dispatch(acceptInvite(invite.id));
-      await dispatch(joinGroup(invite.group));
+      await dispatch(joinGroup(invite.groupObj));
       Alert.alert(
         t('common.alert.success'),
         t('notifications.alert.text.successGroupInvite', {
@@ -89,13 +89,13 @@ const InviteCard = (props) => {
       );
       if (backupCompleted) {
         await dispatch(backupUser());
-        if (invite?.group?.photo && invite?.group?.photo?.filename) {
+        if (invite.groupObj.photo && invite.groupObj.photo.filename) {
           await dispatch(
-            backupPhoto(invite.group.id, invite.group.photo.filename),
+            backupPhoto(invite.groupObj.id, invite.groupObj.photo.filename),
           );
         }
       }
-      navigation.navigate('Members', { group: invite.group });
+      navigation.navigate('Members', { group: invite.groupObj });
     } catch (err) {
       if (err instanceof BrightidError) {
         // Something went wrong in the backend while applying operation
@@ -112,7 +112,7 @@ const InviteCard = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.photoContainer}>
-        <GroupPhoto group={invite.group} />
+        <GroupPhoto group={invite.groupObj} />
       </View>
       <View style={styles.info}>
         <Text style={styles.name}>{groupName}</Text>
