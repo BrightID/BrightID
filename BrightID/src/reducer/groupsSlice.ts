@@ -241,7 +241,6 @@ export const selectConnectionsByIDs = (
 };
 
 export const selectGroupName = (state: RootState, group: Group) => {
-  console.log('group1', group);
   return (
     group?.name ||
     selectThreeKnownMembers(state, group)
@@ -259,9 +258,7 @@ export const selectThreeKnownMembers = (
   } = state;
   const connections = selectAllConnections(state);
   let members = [];
-  // this is a bug... TODO FIX THIS
-  // group is not defined
-  console.log('group2', group);
+
   if (group) {
     members = group?.members || [];
   }
