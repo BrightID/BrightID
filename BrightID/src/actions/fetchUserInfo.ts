@@ -60,12 +60,12 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
             id: undefined,
           });
           const auraNodeVerifications = await auraApi.getVerifications(id);
-          const auraVerifcation: Verification | undefined =
+          const auraVerification: Verification | undefined =
             auraNodeVerifications.find(
               (verification) => verification.name === 'Aura',
             );
-          if (auraVerifcation) {
-            verifications.push(auraVerifcation);
+          if (auraVerification) {
+            verifications.push(auraVerification);
           }
         } catch (e) {
           console.log(
