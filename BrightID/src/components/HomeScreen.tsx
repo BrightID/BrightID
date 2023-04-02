@@ -89,17 +89,19 @@ export const HomeScreen = (props) => {
 
   useFocusEffect(
     useCallback(() => {
-      retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(fetchUserInfo(api)).then(() => {
-        setLoading(false);
-      });
-      const timeoutId = setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      retrieveImage(photoFilename).then(setProfilePhoto);
+      dispatch(fetchUserInfo(api))
+        .then(() => {
+          console.log(`fetchUserInfo done`);
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(
+            `fetchUserInfo failed: ${e instanceof Error ? e.message : e}`,
+          );
+          setLoading(false);
+        });
     }, [api, dispatch, photoFilename]),
   );
 

@@ -194,8 +194,10 @@ export const fetchApps =
   (api): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, _) => {
     try {
+      console.log('fetching apps...');
       const apps = await api.getApps();
       dispatch(setApps(apps));
+      console.log(`fetched ${apps.length} apps`);
     } catch (err) {
       console.log(err);
     }
