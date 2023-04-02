@@ -107,13 +107,12 @@ export const HomeScreen = (props) => {
 
   useEffect(() => {
     if (api) {
-      console.log(`updating apps...`);
-      dispatch(fetchApps(api));
-      if (isPrimaryDevice) {
-        console.log(`updating blind sigs...`);
-        dispatch(updateBlindSigs());
-      }
-      console.log(`updating socialMediaVariations...`);
+      dispatch(fetchApps(api)).then(() => {
+        if (isPrimaryDevice) {
+          console.log(`updating blind sigs...`);
+          dispatch(updateBlindSigs());
+        }
+      });
       dispatch(updateSocialMediaVariations());
     }
   }, [api, dispatch, isPrimaryDevice]);
