@@ -79,7 +79,6 @@ export const updateBlindSig =
           );
           console.log(`using ${uid} for ${app.name} (${verification}) as uid`);
           challenge = client.GenerateWISchnorrClientChallenge(pub, info, uid);
-          console.log(challenge, 'challenge');
           // store sig info before getting sig to be able to receive sig from server again
           // if app stopped just after querying the one time sig from the server
           sigInfo = {
@@ -110,7 +109,6 @@ export const updateBlindSig =
           sig,
           challenge.e,
         );
-        console.log(response, 'response');
         const blindSig = client.GenerateWISchnorrBlindSignature(
           challenge.t,
           response,
