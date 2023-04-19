@@ -89,29 +89,30 @@ export const HomeScreen = (props) => {
 
   useFocusEffect(
     useCallback(() => {
-      retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(fetchUserInfo(api)).then(() => {
-        setLoading(false);
-      });
-      const timeoutId = setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      retrieveImage(photoFilename).then(setProfilePhoto);
+      dispatch(fetchUserInfo(api))
+        .then(() => {
+          console.log(`fetchUserInfo done`);
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(
+            `fetchUserInfo failed: ${e instanceof Error ? e.message : e}`,
+          );
+          setLoading(false);
+        });
     }, [api, dispatch, photoFilename]),
   );
 
   useEffect(() => {
     if (api) {
-      console.log(`updating apps...`);
-      dispatch(fetchApps(api));
-      if (isPrimaryDevice) {
-        console.log(`updating blind sigs...`);
-        dispatch(updateBlindSigs());
-      }
-      console.log(`updating socialMediaVariations...`);
+      dispatch(fetchApps(api)).then(() => {
+        if (isPrimaryDevice) {
+          console.log(`updating blind sigs...`);
+          dispatch(updateBlindSigs());
+        }
+      });
       dispatch(updateSocialMediaVariations());
     }
   }, [api, dispatch, isPrimaryDevice]);

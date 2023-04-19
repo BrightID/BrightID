@@ -92,7 +92,6 @@ describe('Connection details', () => {
 
     // Have first 2 accounts accept group invites
     await navigateHome();
-    await expectHomescreen();
 
     await joinAllGroups(0);
     await joinAllGroups(1);
@@ -111,7 +110,6 @@ describe('Connection details', () => {
     await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
 
     await navigateHome();
-    await expectHomescreen();
   }, 250000);
 
   describe('Information', () => {
@@ -124,7 +122,7 @@ describe('Connection details', () => {
       await expectConnectionScreen();
     });
     afterAll(async () => {
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
       await expectHomescreen();
     });
@@ -194,13 +192,12 @@ describe('Connection details', () => {
     });
 
     afterEach(async () => {
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await expectConnectionsScreen();
     });
 
     afterAll(async () => {
       await navigateHome();
-      await expectHomescreen();
     });
 
     test('should change connection level', async () => {

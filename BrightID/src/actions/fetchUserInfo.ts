@@ -13,8 +13,9 @@ import {
 } from './index';
 
 const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
-  return new Promise((resolve) => {
-    InteractionManager.runAfterInteractions(async () => {
+  return InteractionManager.runAfterInteractions({
+    name: 'fetchUserInfo',
+    gen: async () => {
       const {
         user: { id, isSponsored, isSponsoredv6 },
       } = getState();
@@ -41,9 +42,10 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
         dispatch(setIsSponsored(sponsored));
         dispatch(setActiveDevices(signingKeys));
         dispatch(updateNotifications(api));
-        resolve(null);
-      } catch (err) {
-        console.log(err.message);
+      } catch (e) {
+        console.log(
+          `Error updating verifications: ${e instanceof Error ? e.message : e}`,
+        );
       }
 
       // fetch additional aura verifications from aura node (https://github.com/BrightID/BrightID/issues/1081)
@@ -58,12 +60,12 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
             id: undefined,
           });
           const auraNodeVerifications = await auraApi.getVerifications(id);
-          const auraVerifcation: Verification | undefined =
+          const auraVerification: Verification | undefined =
             auraNodeVerifications.find(
               (verification) => verification.name === 'Aura',
             );
-          if (auraVerifcation) {
-            verifications.push(auraVerifcation);
+          if (auraVerification) {
+            verifications.push(auraVerification);
           }
         } catch (e) {
           console.log(
@@ -91,11 +93,15 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
               break;
             }
           } catch (e) {
-            continue;
+            console.log(
+              `Error checking sponsorship for ${contextInfo.contextId}: ${
+                e instanceof Error ? e.message : e
+              }`,
+            );
           }
         }
       }
-    });
+    },
   });
 };
 
