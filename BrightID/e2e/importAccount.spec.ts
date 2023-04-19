@@ -371,6 +371,8 @@ describe('Import BrightID', () => {
       await expect(element(by.id('memberItem-1'))).toBeVisible();
       await expect(element(by.id('memberItem-2'))).not.toBeVisible();
 
+      // Go back to homescreen.
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
   });

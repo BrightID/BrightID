@@ -80,7 +80,7 @@ describe('Report Connections', () => {
     });
 
     afterAll(async () => {
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
   });
@@ -118,7 +118,7 @@ describe('Report Connections', () => {
         // modal should be closed
         await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
         // go back to connections screen
-        await element(by.id('header-back')).tap();
+        await element(by.id('NavBackBtn')).tap();
         await expectConnectionsScreen();
         // remaining connections should still exist
         remainingConnections -= 1;
