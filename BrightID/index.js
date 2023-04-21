@@ -15,7 +15,7 @@ import codePushOptions from './codepush.config';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
 import 'react-native-url-polyfill/auto';
-import { LOG } from './src/utils/logging';
+import { currentLogName, LOG } from './src/utils/logging';
 
 // detox e2e tests fail when yellowboxes come up
 console.disableYellowBox = true;
@@ -33,6 +33,7 @@ if (__DEV__) {
 
 // route all console.log() to logger
 LOG.patchConsole();
+LOG.info(`Start logging to ${currentLogName}.`);
 
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
