@@ -137,8 +137,7 @@ describe('Group Management', () => {
         by.text(i18next.t('groups.groupActionSheet.copyGroupId')),
       ).tap();
       // Currently there is no way to test actual clipboard contents :-/
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
   });
@@ -172,8 +171,7 @@ describe('Group Management', () => {
       // Group should now have 4 members, so check for memberItem with index 3
       await expect(element(by.id('memberItem-3'))).toBeVisible();
       // Now on members screen. Go back to homescreen.
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
 
@@ -208,8 +206,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).toBeVisible();
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
   });
@@ -233,7 +230,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
 
@@ -293,7 +290,7 @@ describe('Group Management', () => {
       ).not.toExist();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       await navigateHome();
     });
   });

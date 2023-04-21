@@ -78,7 +78,7 @@ describe('Groups', () => {
     it('should show group creation screen and go back', async () => {
       await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
-      await element(by.id('header-back')).tap();
+      await element(by.id('NavBackBtn')).tap();
       // header-back button takes 1-2 seconds to complete switch, so use waitFor() here
       await waitFor(element(by.id('noGroupsView')))
         .toBeVisible()

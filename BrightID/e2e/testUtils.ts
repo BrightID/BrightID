@@ -187,8 +187,10 @@ const navigateHome = async () => {
       } catch (err) {
         try {
           await element(by.id('NavHomeBtn')).atIndex(3).tap();
-          // eslint-disable-next-line no-empty
-        } catch (err) {}
+        } catch (err) {
+          console.log(`No navHomeBtn found`);
+          throw err;
+        }
       }
     }
   }
@@ -264,11 +266,8 @@ const inviteConnectionToGroup = async (groupName: string) => {
     .withTimeout(20000);
   await element(by.text(i18next.t('common.alert.ok'))).tap();
   // Now on members screen again. Go back to homescreen.
-  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  // await element(by.id('header-back')).tap();
+  await element(by.id('NavBackBtn')).tap();
   await navigateHome();
-  await navigateHome();
-  await expectHomescreen();
 };
 
 const joinAllGroups = async (connectionIndex: number) => {
@@ -291,11 +290,8 @@ const joinAllGroups = async (connectionIndex: number) => {
   await waitFor(element(by.text(actionTitle))).toBeVisible();
   await element(by.text(actionTitle)).tap();
 
-  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  // await element(by.id('header-back')).tap();
+  await element(by.id('NavBackBtn')).tap();
   await navigateHome();
-  await navigateHome();
-  await expectHomescreen();
 };
 
 /* Connect a fake connection with all other fake connections */
@@ -323,11 +319,11 @@ const interConnect = async (
   await waitFor(element(by.text(actionTitle))).toBeVisible();
   await element(by.text(actionTitle)).tap();
 
-  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  // await element(by.id('header-back')).tap();
+  // navigation is a mess. Connection Screen has standard back button,
+  // connection list screen has our custom "NavHome" btn. So we need to
+  // "nav back" once and then "nav home" ...
+  await element(by.id('NavBackBtn')).tap();
   await navigateHome();
-  await navigateHome();
-  await expectHomescreen();
 };
 
 /*
@@ -367,8 +363,7 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   await element(by.text(action)).tap();
 
   // navigate to MyCodeScreen, there it will pick up the incoming connection profile
-  // await element(by.id('header-back')).tap();
-  await navigateHome();
+  await element(by.id('NavBackBtn')).tap();
   await navigateHome();
   await element(by.id('MyCodeBtn')).tap();
   await waitFor(element(by.id('ReconnectScreen')))

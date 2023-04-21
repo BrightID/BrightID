@@ -38,6 +38,7 @@ export const headerOptions: StackNavigationOptions = {
       <BackArrow height={TWENTY_TWO} color={WHITE} />
     </View>
   ),
+  headerBackTestID: 'NavBackBtn',
 };
 
 export const NavHome = () => (

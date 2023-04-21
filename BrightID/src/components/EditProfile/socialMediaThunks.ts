@@ -220,6 +220,7 @@ export const removeSocialMediaThunk =
 
 export const updateSocialMediaVariations =
   (): AppThunk => async (dispatch: AppDispatch, _) => {
+    console.log(`updating socialMediaVariations...`);
     const socialMediaVariations =
       await socialMediaService.retrieveSocialMediaVariations();
     dispatch(upsertSocialMediaVariations(socialMediaVariations));

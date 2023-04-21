@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -38,7 +39,10 @@ function TaskCard(props: TaskCardProps) {
           }
         }}
       >
-        <Text style={styles.linkifiedDescription}>{description}</Text>
+        <Text style={styles.linkifiedDescription}>
+          {description}{' '}
+          <Feather name="external-link" size={fontSize[15]} color={BLUE} />
+        </Text>
       </TouchableOpacity>
     ) : (
       <Text style={styles.description}>{description}</Text>
