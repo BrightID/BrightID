@@ -49,7 +49,6 @@ module.exports = {
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier',
-        'prettier/@typescript-eslint',
       ],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
@@ -93,7 +92,6 @@ module.exports = {
     'no-var': 'off',
     'vars-on-top': 'off',
     'block-scoped-var': 'off',
-    'flowtype/space-after-type-colon': 'off',
     'no-await-in-loop': 'off',
     'react-native/no-inline-styles': 'off',
     'react/display-name': 'off',
