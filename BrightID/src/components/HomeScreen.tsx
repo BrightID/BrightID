@@ -46,10 +46,10 @@ import {
   selectTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
-import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
 import { discordUrl } from '@/utils/constants';
+import { version as app_version } from '../../package.json';
 
 /**
  * Home screen of BrightID
@@ -435,7 +435,7 @@ export const HomeScreen = (props) => {
         <View style={styles.infoContainer}>
           <TouchableOpacity
             style={styles.nodeLinkContainer}
-            onPress={() => navigation.navigate('NodeModal')}
+            // onPress={() => navigation.navigate('NodeModal')}
           >
             <Text style={styles.nodeLink}>
               {baseUrl ? baseUrl.split('://')[1] : 'disconnected'} - v{' '}
