@@ -20,6 +20,7 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
+import HomeScreen from '@/components/HomeScreen';
 import { BLACK, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -42,10 +43,8 @@ import RecoveryConnectionsScreen from '@/components/RecoveryConnections/Recovery
 import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
-import HomeScreen from '@/components/HomeScreen';
-import Aura from '@/components/Aura';
-import AuraScreen from '@/components/Aura';
 import AppSettings from '@/components/Icons/AppSettings';
+import Aura from '@/components/Aura';
 
 const CustomItem = ({
   onPress,
@@ -212,15 +211,15 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
-        focused={false}
-        testId="devicesBtn"
+        testId="drawerExplorerCodeBtn"
+        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.devices')}
+        label={t('drawer.label.copyExplorerCode')}
         icon={({ focused }) => (
-          <Devices
+          <GraphQl
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
             color={focused ? GREY : BLACK}
@@ -250,28 +249,23 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Groups');
         }}
       />
-
       <CustomItem
-        testId="drawerContactUsBtn"
-        focused={state.routeNames[state.index] === 'ContactUs'}
-        inactiveBackgroundColor={WHITE}
+        focused={false}
+        testId="findFriendsBtn"
         inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.contactUs')}
-        icon={({ focused }) => (
-          <Mail
+        label={t('drawer.label.findFriends')}
+        icon={() => (
+          <SvgXml
+            xml={FindFriendsIcon}
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
-            color={focused ? GREY : BLACK}
-            highlight={focused ? WHITE : ORANGE}
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
-          });
+          navigation.navigate('FindFriendsScreen');
         }}
       />
       <CustomItem
@@ -291,22 +285,19 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.reset({
-            index: 1,
-            routes: [{ name: 'Home' }, { name: 'Aura' }],
-          });
+          navigation.navigate('Aura');
         }}
       />
       <CustomItem
-        testId="drawerExplorerCodeBtn"
-        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        focused={false}
+        testId="devicesBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={t('drawer.label.copyExplorerCode')}
+        label={t('drawer.label.devices')}
         icon={({ focused }) => (
-          <GraphQl
+          <Devices
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
             color={focused ? GREY : BLACK}
@@ -445,7 +436,6 @@ export const HomeDrawer = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="HomeScreen" component={HomeScreen} />
-      <Drawer.Screen name="Aura" component={AuraScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
       <Drawer.Screen name="FindFriendsScreen" component={FindFriendsScreen} />
       <Drawer.Screen
@@ -463,6 +453,7 @@ export const HomeDrawer = () => {
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
+      <Drawer.Screen name="Aura" component={Aura} />
       {__DEV__ && (
         <Drawer.Screen
           name="SampleIconPage"
