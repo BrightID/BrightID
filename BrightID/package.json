@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "4.29.2",
+  "version": "4.29.3",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -18,11 +18,15 @@
     "postinstall": "npx jetify && npx patch-package",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
+    "build:debug": "cd android && ./gradlew assembleDebug && cd ..",
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
     "build:staging": "cd android && ./gradlew assembleStaging && cd ..",
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
     "check-dependencies": "rnx-align-deps",
-    "fix-dependencies": "rnx-align-deps --write"
+    "fix-dependencies": "rnx-align-deps --write",
+    "prepare:debug": "ln -sf ./google-services.json-dev android/app/google-services.json",
+    "prepare:staging": "ln -sf ./google-services.json-staging android/app/google-services.json",
+    "prepare:production": "ln -sf ./google-services.json-prod android/app/google-services.json"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "4.0.1",
