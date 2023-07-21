@@ -100,9 +100,9 @@
       "precheckApp": "Checking for prior sponsoring request",
       "prelinkCheck": "Checking preconditions for linking",
       "refreshingApps": "Verifying app details",
-      "sponsored": "You are sponsored.",
       "sponsorWaitingApp": "Waiting for {{app}} to sponsor you",
       "sponsorWaitingOp": "Requesting sponsorship from app",
+      "sponsored": "You are sponsored.",
       "success": "Successfully linked!",
       "waitingV6": "Waiting for link function to complete"
     },
@@ -175,9 +175,9 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
+      "reportReason": " as {{reportReason}}",
       "reported": "(reported)",
-      "reportedByUser": "reported by you",
-      "reportReason": " as {{reportReason}}"
+      "reportedByUser": "reported by you"
     },
     "text": {
       "noConnection": "Couldn't connect to server",
@@ -222,9 +222,9 @@
       "reportReplaced": "The user has lost access to this old account and established a new one",
       "reportSpammer": "This person spammed me with an unwanted connection request",
       "reportSuspicious": "This account belonged to a different person before",
-      "unkownRecoveryConnection": "Unknown",
       "unReportConnection": "Restore connection",
       "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
+      "unkownRecoveryConnection": "Unknown",
       "whyRemove": "Please tell us why you want to remove this connection",
       "whyReport": "Please tell us why you are suspicious of this connection"
     }
@@ -581,8 +581,8 @@
   "onboarding": {
     "button": {
       "create": "Create My BrightID",
-      "import": "Import",
-      "recover": "Recover"
+      "import": "Device Recovery",
+      "recover": "Social Recovery"
     },
     "text": {
       "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
