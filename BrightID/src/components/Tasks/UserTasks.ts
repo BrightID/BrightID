@@ -7,16 +7,6 @@ import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
 import { linkedContextTotal, selectAllLinkedSigs } from '@/reducer/appsSlice';
 
 export const UserTasks: UserTasks = {
-  make_first_connection: {
-    id: 'make_first_connection',
-    sortValue: 10,
-    title: i18next.t(`achievements.makeFirstConnection.title`),
-    description: i18next.t(`achievements.makeFirstConnection.description`),
-    url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state: RootState) {
-      return connectionTotal(state) > 0;
-    },
-  },
   link_app: {
     id: 'link_app',
     sortValue: 20,
@@ -39,16 +29,6 @@ export const UserTasks: UserTasks = {
     url: 'https://apps.brightid.org/',
     checkFn(state: RootState) {
       return state.user.isSponsored || state.user.isSponsoredv6;
-    },
-  },
-  make_three_connection: {
-    id: 'make_three_connection',
-    sortValue: 60,
-    title: i18next.t(`achievements.makeThreeConnection.title`),
-    description: i18next.t(`achievements.makeThreeConnection.description`),
-    url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state: RootState) {
-      return connectionTotal(state) > 2;
     },
   },
   setup_backup: {
