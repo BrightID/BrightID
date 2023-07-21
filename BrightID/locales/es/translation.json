@@ -97,7 +97,7 @@
         "linkApp": "¿Vincular su cuenta en {{context}} a su BrightID?",
         "linkFailure": "No se pudo vincular su cuenta en {{context}} a su BrightID\n{{result}}",
         "linkSigFailed": "Error al realizar la verificación {{verification}} a la aplicación {{appId}}. Mensaje de error: {{msg}}",
-        "linkSuccess": "Vinculó correctamente su cuenta en {{context}} a su BrightID",
+        "linkSuccess": "Has vinculado correctamente tu cuenta en {{context}} a tu BrightID",
         "missingBlindSig": "No se encontró ninguna firma ciega para la aplicación {{appId}}. Faltan verificaciones: {{missingVerifications}}. Verificaciones ya vinculadas: {{linkedVerifications}}",
         "missingVerification": "Te faltan verificaciones: {{verifications}}.",
         "notPrimary": "Actualmente está utilizando un dispositivo secundario. Vincular la aplicación \"{{app}}\" requiere interacción con su dispositivo principal. Sincronice con su dispositivo principal o realice la vinculación con su dispositivo principal."
@@ -563,7 +563,7 @@
       "import": {
         "followWorkflow": "Siga el flujo de importación",
         "header": "Importar desde otro dispositivo",
-        "notes": "Condición previa: Tienes tu brightId instalado en otro dispositivo",
+        "notes": "Condición previa: Tienes tu brightID instalado en otro dispositivo",
         "selectImport": "Seleccione la opción \"Importar\" al inicio"
       },
       "reinstall": "Desinstalar y volver a instalar la aplicación BrightID",
@@ -658,8 +658,8 @@
     "button": {
       "create": "Crear Mi BrightID",
       "getStarted": "Empezar",
-      "import": "Importar",
-      "recover": "Recuperar"
+      "import": "Recuperación de los dispositivos",
+      "recover": "Recuperación social"
     },
     "label": {
       "maintainPrivacy": "Mantener Privacidad"
