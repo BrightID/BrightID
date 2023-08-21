@@ -1,8 +1,8 @@
-import {
-  getGenericPassword,
-  setGenericPassword,
-  resetGenericPassword,
-} from 'react-native-keychain';
+// import {
+//   getGenericPassword,
+//   setGenericPassword,
+//   resetGenericPassword,
+// } from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
@@ -14,7 +14,9 @@ import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
  */
 const getItem = async (key) => {
   try {
-    let { username, password } = await getGenericPassword();
+    // let { username, password } = await getGenericPassword();
+    let username = ''
+    let password = ''
     let { publicKey, version } = JSON.parse(username);
     if (!publicKey || !password) {
       throw new Error(`keypair does not exist in keychain!`);
@@ -58,9 +60,9 @@ const setItem = async (key, keypair) => {
 
     if (DEVICE_ANDROID) {
       let opts = { rules: 'none' };
-      await setGenericPassword(username, password, opts);
+      // await setGenericPassword(username, password, opts);
     } else {
-      await setGenericPassword(username, password);
+      // await setGenericPassword(username, password);
     }
     // we can remove this later once we have better metrics for react-native-keychain
     await AsyncStorage.setItem(
@@ -87,7 +89,7 @@ const setItem = async (key, keypair) => {
 
 const removeItem = async (key) => {
   try {
-    await resetGenericPassword();
+    // await resetGenericPassword();
     await AsyncStorage.removeItem(key);
     return true;
   } catch (err) {

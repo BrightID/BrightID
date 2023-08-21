@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';

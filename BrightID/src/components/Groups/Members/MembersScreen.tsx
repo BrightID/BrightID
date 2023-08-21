@@ -20,7 +20,7 @@ import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   leaveGroup,

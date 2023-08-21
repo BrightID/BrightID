@@ -7,9 +7,9 @@ import {
   View,
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useTranslation } from 'react-i18next';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import {
@@ -200,10 +200,9 @@ const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
               color={iconData.color}
             />
           ) : (
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 64 : 44}
-              type="Wave"
               color={ORANGE}
             />
           )}
@@ -337,12 +336,7 @@ const AppLinkingScreen = () => {
 
   return (
     <View style={[styles.container, { marginTop: -headerHeight }]}>
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <TouchableWithoutFeedback onPress={goBack}>
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>

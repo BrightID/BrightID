@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import i18next from 'i18next';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -166,12 +166,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   const submitDisabled = reporting && !reason;
   return (
     <View style={styles.container} testID="ReportReasonModal">
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>

@@ -6,12 +6,12 @@ import {
   PreloadedState,
 } from '@reduxjs/toolkit';
 import reducers from '@/reducer';
+import { ChannelsTransform, RecoveryDataTransform } from '@/store/transforms';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
-import getStoredState from './getStoredState';
 import { appsMigrate } from './migrations/apps';
 import { connectionsMigrate } from './migrations/connections';
-import { ChannelsTransform, RecoveryDataTransform } from '@/store/transforms';
+import getStoredState from './getStoredState';
 
 // update this in async migrate if changed to prevent require cycle
 

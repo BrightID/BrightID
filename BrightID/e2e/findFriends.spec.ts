@@ -18,7 +18,7 @@ describe('Find friends', () => {
     // check if mock contacts are displayed
     for (const contact of testContacts) {
       for (const variation of ['Email', 'Phone Number']) {
-        const testId = `${contact.displayName}-${variation}`;
+        const testId = `${contact.firstName} ${contact.lastName}-${variation}`;
         it(testId, async () => {
           await expect(element(by.id(testId))).toBeVisible();
         });

@@ -4,7 +4,7 @@ import { AccountSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen
 import { fontSize } from '@/theme/fonts';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
 
@@ -90,10 +90,9 @@ export const RecoverAccount = ({
               color={iconData.color}
             />
           ) : (
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 64 : 44}
-              type="Wave"
               color={ORANGE}
             />
           )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { Trans, useTranslation } from 'react-i18next';
 import { WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
@@ -45,12 +45,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
   );
   return (
     <View style={styles.container} testID="RecoveryCooldownInfo">
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <View style={styles.modalContainer}>
         <View style={styles.headerContainer}>
           <View style={styles.headerIcon}>
@@ -65,9 +60,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
             </Text>
           </View>
         </View>
-        <View style={styles.message}>
-          {messageTextCooldown}
-        </View>
+        <View style={styles.message}>{messageTextCooldown}</View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             testID="OkayBtn"

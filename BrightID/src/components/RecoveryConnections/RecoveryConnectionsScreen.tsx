@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // Redux
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -111,7 +111,7 @@ export const RecoveryConnectionsScreen = (props) => {
 
   const Loading = () => (
     <View style={styles.loadingContainer}>
-      <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={BLUE} />
+      <Wave size={DEVICE_LARGE ? 48 : 42} color={BLUE} />
     </View>
   );
 

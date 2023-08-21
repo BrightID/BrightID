@@ -5,7 +5,7 @@ import moment from 'moment';
 import * as englishTranslation from '../locales/en/translation.json';
 
 /*
-  This is mostly a copy of /i18n.js, but without dependency on react-native-localize. This way it is possible
+  This is mostly a copy of /i18n.js, but without dependency on expo-localization. This way it is possible
   to use i18n in tests specs for tests that rely on localized strings.
  */
 const translations = {

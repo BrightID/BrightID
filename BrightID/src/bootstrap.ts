@@ -1,7 +1,7 @@
-import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
+import { purgeLogs } from '@/utils/logging';
 import { scrubOps } from '@/reducer/operationsSlice';
 import { rejoinChannels } from '@/components/PendingConnections/actions/channelThunks';
-import { purgeLogs } from '@/utils/logging';
+import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 
 export const bootstrap = async (dispatch: AppDispatch) => {
   // purge logfiles

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -42,8 +42,9 @@ export const NodeApiGateScreen = ({
   const { t } = useTranslation();
   const [stateDescription, setStateDescription] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(0);
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const defaultNodeUrls = useSelector(selectDefaultNodeUrls);
   const currentNodeUrls = useSelector(selectAllNodeUrls);
   const dispatch = useDispatch();
@@ -147,10 +148,9 @@ export const NodeApiGateScreen = ({
               color={iconData.color}
             />
           ) : (
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 84 : 72}
-              type="Wave"
               color={ORANGE}
             />
           )}

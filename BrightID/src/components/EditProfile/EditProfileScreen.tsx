@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'expo-checkbox';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -397,7 +397,7 @@ const SocialMediaLink = (props: {
         </Text>
         <CheckBox
           style={styles.syncSocialMediaSwitch}
-          tintColors={{ false: GREY, true: ORANGE }}
+          // // tintColors={{ false: GREY, true: ORANGE }}
           onValueChange={(_value) => toggleShareWithConnectionsState()}
           value={getShareWithConnectionsValue(props.socialMedia)}
         />
@@ -409,7 +409,7 @@ const SocialMediaLink = (props: {
           </Text>
           <CheckBox
             style={styles.syncSocialMediaSwitch}
-            tintColors={{ false: GREY, true: ORANGE }}
+            // tintColors={{ false: GREY, true: ORANGE }}
             onValueChange={toggleDiscoverable}
             value={socialMedia.discoverable}
           />

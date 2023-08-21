@@ -8,12 +8,12 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import { NetworkInfo } from 'react-native-network-info';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { BLACK, GREEN, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -119,12 +119,7 @@ const NodeModal = () => {
 
   return (
     <View style={styles.container}>
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <TouchableWithoutFeedback onPress={goBack}>
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>

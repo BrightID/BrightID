@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { LIGHT_BLACK, ORANGE, WHITE, BLACK } from '@/theme/colors';
@@ -44,12 +44,7 @@ const RecoverInProgressModal = () => {
 
   return (
     <View style={styles.container}>
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <TouchableWithoutFeedback onPress={goBack}>
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>

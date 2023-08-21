@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -192,7 +192,7 @@ export const HomeScreen = (props) => {
             bottom: 10,
           }}
           onPress={async () => {
-            let url = await Clipboard.getString();
+            let url = await Clipboard.getStringAsync();
             if (url.startsWith('https://app.brightid.org/connection-code/')) {
               url = url.replace(
                 'https://app.brightid.org/connection-code/',

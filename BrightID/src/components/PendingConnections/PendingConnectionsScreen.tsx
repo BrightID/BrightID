@@ -15,9 +15,9 @@ import {
 } from 'react-native';
 import { isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import ViewPager from '@react-native-community/viewpager';
+import ViewPager from 'react-native-pager-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
@@ -183,8 +183,6 @@ export const PendingConnectionsScreen = () => {
           setActiveIndex(e.nativeEvent.position);
         }}
         orientation="horizontal"
-        transitionStyle="scroll"
-        showPageIndicator={false}
       >
         {Views}
       </ViewPager>
@@ -201,8 +199,8 @@ export const PendingConnectionsScreen = () => {
       <SafeAreaView style={styles.container}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 44 : 40}
               type="FadingCircleAlt"
               color={GREY}

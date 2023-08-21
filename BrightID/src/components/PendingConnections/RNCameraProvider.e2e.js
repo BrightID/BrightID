@@ -1,5 +1,5 @@
 /*
- React-native-camera mock
+ expo-camera mock
 
  Required on Android to prevent the camera permission popup from appearing.
 

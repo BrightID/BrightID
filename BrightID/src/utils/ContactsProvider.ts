@@ -1,3 +1,3 @@
-import Contacts from 'react-native-contacts';
+import * as Contacts from 'expo-contacts';
 
 export default Contacts;
