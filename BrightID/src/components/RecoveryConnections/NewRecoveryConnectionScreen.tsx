@@ -230,8 +230,8 @@ export const NewRecoveryConnectionList = (props) => {
         {ConnectionsList}
         <View
           style={styles.buttonContainer}
-          // blurType="light"
-          // blurAmount={5}
+          // tint="light"
+          // intensity={5}
           // reducedTransparencyFallbackColor={WHITE}
         >
           <TouchableOpacity

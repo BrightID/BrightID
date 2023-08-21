@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, EMaskUnits, G, Path, Mask } from 'react-native-svg';
+import Svg, { Circle, G, Path, Mask } from 'react-native-svg';
 import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   secondary?: string;
 };
 
-const maskUnits = 'userSpaceOnUse' as EMaskUnits.USER_SPACE_ON_USE;
+const maskUnits = 'userSpaceOnUse';
 
 const Avatar = ({
   color = GREY,

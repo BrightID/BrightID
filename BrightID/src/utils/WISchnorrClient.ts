@@ -3,23 +3,23 @@
 	Author : Christof Torres <christof.ferreira.001@student.uni.lu>
 	Date   : September 2016
 * */
-import modPow from 'react-native-modpow';
+// import modPow from 'react-native-modpow';
 import CryptoJS from 'crypto-js';
 import { BigInteger } from 'jsbn';
 
-if (!__DEV__) {
-  console.log(`Monkey-patching BigNumber.modPow to use react-native-modpow`);
-  BigInteger.prototype.modPow = function nativeModPow(e, m) {
-    const result = modPow({
-      target: this.toString(16),
-      value: e.toString(16),
-      modifier: m.toString(16),
-    });
-    return new BigInteger(result, 16);
-  };
-} else {
-  // console.log(`Using js implementation of BigNumber.modPow`);
-}
+// if (!__DEV__) {
+//   console.log(`Monkey-patching BigNumber.modPow to use react-native-modpow`);
+// BigInteger.prototype.modPow = function nativeModPow(e, m) {
+//   const result = modPow({
+//     target: this.toString(16),
+//     value: e.toString(16),
+//     modifier: m.toString(16),
+//   });
+//   return new BigInteger(result, 16);
+//   };
+// } else {
+// console.log(`Using js implementation of BigNumber.modPow`);
+// }
 
 function sha256(s) {
   return new BigInteger(CryptoJS.SHA256(s).toString(CryptoJS.enc.Hex), 16);

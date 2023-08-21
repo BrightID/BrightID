@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Animated, StyleSheet, PanResponder } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { BLACK } from '@/theme/colors';
 import { StackScreenProps } from '@react-navigation/stack';
 
@@ -46,12 +46,7 @@ const FullScreenPhoto = ({ route, navigation }: props) => {
   ).current;
 
   return (
-    <BlurView
-      style={[styles.container]}
-      blurType="dark"
-      blurAmount={10}
-      reducedTransparencyFallbackColor={BLACK}
-    >
+    <BlurView style={[styles.container]} tint="dark" intensity={10}>
       <Animated.Image
         source={imageSource}
         style={[

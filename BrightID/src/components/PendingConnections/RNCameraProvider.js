@@ -1,1 +1,1 @@
-export { RNCamera } from 'react-native-camera';
+export { Camera } from 'expo-camera';

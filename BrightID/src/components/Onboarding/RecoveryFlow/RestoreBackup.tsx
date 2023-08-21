@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
@@ -35,8 +35,9 @@ export const RestoreBackup = ({
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(true);
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -123,10 +124,9 @@ export const RestoreBackup = ({
               color={iconData.color}
             />
           ) : (
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 64 : 44}
-              type="Wave"
               color={ORANGE}
             />
           )}

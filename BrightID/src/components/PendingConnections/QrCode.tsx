@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { path } from 'ramda';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
@@ -186,8 +186,8 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
   ) : (
     <View style={styles.qrCodeContainer}>
       <View style={styles.emptyQr}>
-        <Spinner
-          isVisible={true}
+        <Wave
+          animating={true}
           size={47}
           type="FadingCircleAlt"
           color={LIGHT_BLACK}

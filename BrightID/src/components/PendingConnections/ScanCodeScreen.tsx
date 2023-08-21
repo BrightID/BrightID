@@ -15,10 +15,10 @@ import {
 } from '@react-navigation/native';
 import { Trans, useTranslation } from 'react-i18next';
 import BarcodeMask from 'react-native-barcode-mask';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
-import { BarCodeReadEvent } from 'react-native-camera';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
@@ -30,11 +30,11 @@ import { joinChannel } from '@/components/PendingConnections/actions/channelThun
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
 import { channel_types, qrCodeURL_types } from '@/utils/constants';
-import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,
   setRecoveryChannel,
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import QrCode from './QrCode';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -47,7 +47,7 @@ function validQrString(qrString: string) {
 /**
  * Scan code screen of BrightID
  * ==================================================================
- * displays a react-native-camera view
+ * displays a expo-camera view
  * after scanning qrcode - the rtc id is set
  *
  */
@@ -67,6 +67,7 @@ export const ScanCodeScreen = () => {
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
+  const [hasPermission, setHasPermission] = useState(null);
   const name = useSelector((state) => state.user.name);
   const { t } = useTranslation();
 
@@ -78,6 +79,15 @@ export const ScanCodeScreen = () => {
       return 0;
     }
   });
+
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
+
+    getBarCodeScannerPermissions();
+  }, []);
 
   // always show scanner when navigating to this page
   useFocusEffect(
@@ -204,10 +214,17 @@ export const ScanCodeScreen = () => {
     }
   }, [dispatch, navigation, qrData]);
 
-  const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
+  const handleBarCodeRead = ({ data }: BarCodeScannerResult) => {
     console.log(`Scanned QRCode: ${data}`);
     setQrData(data);
   };
+
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
+  }
+  if (hasPermission === false) {
+    return <NotAuthorizedView />;
+  }
 
   return (
     <>
@@ -228,20 +245,11 @@ export const ScanCodeScreen = () => {
               />
             </View>
             <View style={styles.cameraContainer} testID="CameraContainer">
-              <RNCamera
+              <BarCodeScanner
                 style={styles.cameraPreview}
-                captureAudio={false}
-                onBarCodeRead={handleBarCodeRead}
-                barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-                type={RNCamera.Constants.Type.back}
-                flashMode={RNCamera.Constants.FlashMode.off}
-                androidCameraPermissionOptions={{
-                  title: t('common.camera.title'),
-                  message: t('common.camera.message'),
-                  buttonPositive: t('common.camera.ok'),
-                  buttonNegative: t('common.camera.cancel'),
-                }}
-                notAuthorizedView={<NotAuthorizedView />}
+                onBarCodeScanned={handleBarCodeRead}
+                barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+                type={BarCodeScanner.Constants.Type.back}
               >
                 <BarcodeMask
                   edgeColor={ORANGE}
@@ -253,7 +261,7 @@ export const ScanCodeScreen = () => {
                   edgeHeight={DEVICE_LARGE ? 30 : 25}
                   edgeWidth={DEVICE_LARGE ? 30 : 25}
                 />
-              </RNCamera>
+              </BarCodeScanner>
             </View>
           </>
         ) : (
@@ -262,8 +270,8 @@ export const ScanCodeScreen = () => {
               <Text style={styles.waitingText}>
                 {t('qrcode.text.downloadingConnectionData')}
               </Text>
-              <Spinner
-                isVisible={true}
+              <Wave
+                animating={true}
                 size={DEVICE_LARGE ? 65 : 52}
                 type="ThreeBounce"
                 color={ORANGE}

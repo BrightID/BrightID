@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar } from 'react-native';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from '@/store/hooks';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -71,7 +71,7 @@ const RecoveringConnectionScreen = () => {
             <View style={styles.titleContainer}>
               <Text style={styles.infoText}>Uploading Shared Data</Text>
             </View>
-            <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={ORANGE} />
+            <Wave size={DEVICE_LARGE ? 48 : 42} color={ORANGE} />
           </View>
         )}
       </View>

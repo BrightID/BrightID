@@ -10,10 +10,10 @@ import {
   ScrollView,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'expo-checkbox';
 import { useSelector, useDispatch } from '@/store/hooks';
 import { selectActiveDevices } from '@/reducer/devicesSlice';
 import { fontSize } from '@/theme/fonts';
@@ -245,10 +245,9 @@ export const DevicesScreen = ({ route }) => {
               <Text style={styles.waitingMessage}>
                 {t('devices.text.waitSyncing')}
               </Text>
-              <Spinner
-                isVisible={waiting}
+              <Wave
+                animating={waiting}
                 size={DEVICE_LARGE ? 48 : 42}
-                type="Wave"
                 color={BLUE}
               />
             </View>
@@ -279,7 +278,7 @@ export const DevicesScreen = ({ route }) => {
             </Text>
             <CheckBox
               style={styles.primaryDeviceSwitch}
-              tintColors={{ false: GREY, true: ORANGE }}
+              // tintColors={{ false: GREY, true: ORANGE }}
               onValueChange={(value) => {
                 dispatch(setPrimaryDevice(value));
               }}

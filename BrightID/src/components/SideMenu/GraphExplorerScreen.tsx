@@ -8,7 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';

@@ -7,7 +7,7 @@ import {
   FlatList,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import i18next from 'i18next';
 import { useContext, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -118,7 +118,7 @@ export const NewGroupScreen = () => {
         <Text style={styles.textInfo}>
           {creationStateStrings[creationState]}
         </Text>
-        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
+        <Wave animating={true} size={97} color={BLUE} />
       </View>
     );
   };
@@ -240,7 +240,7 @@ export class NewGroupScreen_ extends React.Component {
         <Text style={styles.textInfo}>
           {creationStateStrings[this.state.creationState]}
         </Text>
-        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
+        <Wave animating={true} size={97}  color={BLUE} />
       </View>
     );
   };

@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import moment from 'moment';
 import { initReactI18next } from 'react-i18next';
-import * as RNLocalize from 'react-native-localize';
+import { getLocales } from 'expo-localization';
 
 /**
  * For each supported language, import the corresponding language file.
@@ -69,10 +69,10 @@ export const defaultLanguage = {
 };
 
 const { languageTag } =
-  RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
+  // RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
   defaultLanguage;
 
-console.log(RNLocalize.getLocales());
+console.log(getLocales());
 console.log(`Using languagetag ${languageTag}`);
 
 /**

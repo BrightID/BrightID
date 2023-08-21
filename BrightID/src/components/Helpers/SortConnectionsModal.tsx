@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -96,12 +96,7 @@ const SortConnectionsModal = ({ navigation }: props) => {
 
   return (
     <View style={styles.container} testID="SortConnectionsModal">
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.goBack();

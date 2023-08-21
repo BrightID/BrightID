@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18next from 'i18next';
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'expo-checkbox';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   BLACK,
@@ -355,7 +355,7 @@ const RecoveryCodeScreen = ({ route }) => {
                   set as primary device
                 </Text>
                 <CheckBox
-                  tintColors={{ false: GREY, true: ORANGE }}
+                  // tintColors={{ false: GREY, true: ORANGE }}
                   onValueChange={(value) => {
                     setChangePrimaryDevice(value);
                   }}
@@ -398,8 +398,8 @@ const RecoveryCodeScreen = ({ route }) => {
           </View>
         ) : (
           <View style={styles.qrsvgContainer}>
-            <Spinner
-              isVisible={true}
+            <Wave
+              animating={true}
               size={DEVICE_LARGE ? 48 : 42}
               type="9CubeGrid"
               color={ORANGE}

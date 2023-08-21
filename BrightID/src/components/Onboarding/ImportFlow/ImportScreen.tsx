@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Spinner from 'react-native-spinkit';
+import { Wave } from 'react-native-animated-spinkit';
 import { useTranslation } from 'react-i18next';
 import { setUserId, setPrimaryDevice } from '@/actions';
 import { useSelector, useDispatch } from '@/store/hooks';
@@ -47,12 +47,7 @@ const ImportScreen = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.waitingContainer}>
         <Text style={styles.infoText}>{t('import.text.waitImporting')}</Text>
-        <Spinner
-          isVisible={true}
-          size={DEVICE_LARGE ? 64 : 44}
-          type="Wave"
-          color={ORANGE}
-        />
+        <Wave animating={true} size={DEVICE_LARGE ? 64 : 44} color={ORANGE} />
       </View>
     </View>
   );

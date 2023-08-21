@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -114,12 +114,7 @@ const TrustlevelModal = ({ route }: TrustlevelModalProps) => {
 
   return (
     <View style={styles.container}>
-      <BlurView
-        style={styles.blurView}
-        blurType="dark"
-        blurAmount={5}
-        reducedTransparencyFallbackColor={BLACK}
-      />
+      <BlurView style={styles.blurView} tint="dark" intensity={5} />
       <TouchableWithoutFeedback onPress={goBack}>
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>

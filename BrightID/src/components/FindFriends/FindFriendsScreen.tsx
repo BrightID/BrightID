@@ -95,10 +95,10 @@ export const FindFriendsScreen = function () {
       },
     );
     if (permissionStatus === 'granted') {
-      const contacts = await Contacts.getAll();
+      const { data: contacts } = await Contacts.getContactsAsync();
       contacts.forEach((contact) => {
-        const contactName = contact.displayName;
-        contact.emailAddresses.forEach((emailAddress) => {
+        const contactName = `${contact.firstName} ${contact.lastName}`;
+        contact.emails.forEach((emailAddress) => {
           const _profile = emailAddress.email;
           _friendsRaw.push({
             name: contactName,
