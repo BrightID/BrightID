@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
+import { BLACK, DARKER_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   addDevice,
@@ -70,7 +70,16 @@ const AddDeviceScreen = ({ route }) => {
   const [uploadDataError, setUploadDataError] = useState('');
 
   const isPrimary = useSelector(selectIsPrimaryDevice);
-  const changePrimaryDevice = isPrimary && route.params.changePrimaryDevice;
+  const isSuperUserApp = route.params.isSuperUserApp === true;
+  const changePrimaryDevice =
+    !isSuperUserApp && isPrimary && route.params.changePrimaryDevice;
+  const name = route.params.name || 'Unknown App';
+
+  useEffect(() => {
+    if (name) {
+      setDeviceName(name);
+    }
+  }, [name]);
 
   const handleSubmit = async () => {
     try {
@@ -96,7 +105,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await dispatch(uploadAllInfoAfter(0));
+        await dispatch(uploadAllInfoAfter(0, true));
         setUploadDataStep(UploadDataSteps.COMPLETE);
         if (isPrimary) {
           dispatch(setPrimaryDevice(!changePrimaryDevice));
@@ -182,7 +191,9 @@ const AddDeviceScreen = ({ route }) => {
     const showConfirmDialog = () => {
       return Alert.alert(
         t('common.alert.title.pleaseConfirm'),
-        changePrimaryDevice
+        isSuperUserApp
+          ? t('devices.alert.addSuperUserApp', { name })
+          : changePrimaryDevice
           ? t('devices.alert.confirmAddPrimary')
           : t('devices.alert.confirmAdd'),
         [

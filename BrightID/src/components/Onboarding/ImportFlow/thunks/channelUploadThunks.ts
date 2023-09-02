@@ -27,7 +27,7 @@ export const getUserInfo = async (user) => {
 };
 
 export const uploadAllInfoAfter =
-  (after): AppThunk<Promise<void>> =>
+  (after: number, isSuperUserApp = false): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const {
       user,
@@ -54,58 +54,60 @@ export const uploadAllInfoAfter =
       data: encrypted,
     });
 
-    console.log('uploading connections');
-    const connections = selectAllConnections(getState()).filter(
-      (conn) => conn.timestamp > after,
-    );
-    for (const conn of connections) {
-      await uploadConnection({
-        conn,
-        channelApi,
-        aesKey,
-        signingKey,
-      });
-    }
-
-    console.log('uploading groups');
-    for (const group of groups) {
-      if (group.joined > after) {
-        await uploadGroup({
-          group,
+    if (!isSuperUserApp) {
+      console.log('uploading connections');
+      const connections = selectAllConnections(getState()).filter(
+        (conn) => conn.timestamp > after,
+      );
+      for (const conn of connections) {
+        await uploadConnection({
+          conn,
           channelApi,
           aesKey,
           signingKey,
         });
       }
-    }
 
-    console.log('uploading linked contexts');
-    const linkedContexts = selectAllLinkedContexts(getState()).filter(
-      (linkedContext) =>
-        linkedContext.dateAdded > after && linkedContext.state === 'applied',
-    );
-    for (const contextInfo of linkedContexts) {
-      await uploadContextInfo({
-        contextInfo,
-        channelApi,
-        aesKey,
-        signingKey,
-        prefix: IMPORT_PREFIX,
-      });
-    }
-
-    console.log('uploading blind sigs');
-    if (isPrimaryDevice) {
-      const sigs = selectAllSigs(getState());
-      for (const sig of sigs) {
-        if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
-          await uploadBlindSig({
-            sig,
+      console.log('uploading groups');
+      for (const group of groups) {
+        if (group.joined > after) {
+          await uploadGroup({
+            group,
             channelApi,
             aesKey,
             signingKey,
-            prefix: IMPORT_PREFIX,
           });
+        }
+      }
+
+      console.log('uploading linked contexts');
+      const linkedContexts = selectAllLinkedContexts(getState()).filter(
+        (linkedContext) =>
+          linkedContext.dateAdded > after && linkedContext.state === 'applied',
+      );
+      for (const contextInfo of linkedContexts) {
+        await uploadContextInfo({
+          contextInfo,
+          channelApi,
+          aesKey,
+          signingKey,
+          prefix: IMPORT_PREFIX,
+        });
+      }
+
+      console.log('uploading blind sigs');
+      if (isPrimaryDevice) {
+        const sigs = selectAllSigs(getState());
+        for (const sig of sigs) {
+          if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
+            await uploadBlindSig({
+              sig,
+              channelApi,
+              aesKey,
+              signingKey,
+              prefix: IMPORT_PREFIX,
+            });
+          }
         }
       }
     }
