@@ -105,7 +105,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await dispatch(uploadAllInfoAfter(0, true));
+        await dispatch(uploadAllInfoAfter(0, isSuperUserApp));
         setUploadDataStep(UploadDataSteps.COMPLETE);
         if (isPrimary) {
           dispatch(setPrimaryDevice(!changePrimaryDevice));
@@ -129,6 +129,7 @@ const AddDeviceScreen = ({ route }) => {
     dispatch,
     isPrimary,
     uploadDataStep,
+    isSuperUserApp,
   ]);
 
   // track overall progress
