@@ -133,6 +133,7 @@ export const ScanCodeScreen = () => {
           if (urlType) channelURL.searchParams.delete('t');
 
           switch (urlType) {
+            case qrCodeURL_types.ADD_SUPER_USER_APP:
             case qrCodeURL_types.RECOVERY:
             case qrCodeURL_types.SYNC:
             case qrCodeURL_types.IMPORT: {
@@ -143,6 +144,10 @@ export const ScanCodeScreen = () => {
               const changePrimaryDevice =
                 channelURL.searchParams.get('p') === 'true';
               channelURL.searchParams.delete('p');
+
+              const name = channelURL.searchParams.get('n');
+              console.log(channelURL.href);
+              channelURL.searchParams.delete('n');
 
               const channelId = hash(aesKey);
               console.log(
@@ -163,9 +168,15 @@ export const ScanCodeScreen = () => {
                   syncing: true,
                   asScanner: true,
                 });
-              } else if (urlType === qrCodeURL_types.IMPORT) {
+              } else if (
+                urlType === qrCodeURL_types.IMPORT ||
+                urlType === qrCodeURL_types.ADD_SUPER_USER_APP
+              ) {
                 navigation.navigate('Add Device', {
                   changePrimaryDevice,
+                  name,
+                  isSuperUserApp:
+                    urlType === qrCodeURL_types.ADD_SUPER_USER_APP,
                 });
               }
               break;
