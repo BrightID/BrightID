@@ -314,7 +314,7 @@
       "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them.",
       "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
       "confirmAddPrimary": "Are you sure that you want to export your BrightID into another device and set that as your primary device?",
-      "addSuperUserApp": "Are you sure that you want to add {{name}} as a super user app? Do this only if you highly trust {{name}} application because they can control your BrightID.",
+      "addSuperUserApp": "Are you sure that you want to add {{name}} as a super user app? Do this only if you highly trust {{name}} because they can control your BrightID.",
       "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
       "confirmSync": "Share and sync your BrightID data with this device?",
       "noPrimary": "Your devices can only be synced by the primary device."
