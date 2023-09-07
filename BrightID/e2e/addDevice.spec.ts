@@ -27,6 +27,7 @@ import {
   urlSafeRandomKey,
 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
+import { DEEP_LINK_PREFIX } from '@/utils/constants';
 
 describe('Add Device', () => {
   const profileServerUrl = 'http://test.brightid.org/profile';
@@ -117,7 +118,7 @@ describe('Add Device', () => {
 
   it('should add another device', async () => {
     const deviceName = 'TestDevice';
-    const deepLink = `brightid://connection-code/${encodeURIComponent(
+    const deepLink = `${DEEP_LINK_PREFIX}connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
     console.log(`Deeplink: ${deepLink}`);

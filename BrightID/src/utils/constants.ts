@@ -175,3 +175,6 @@ export const discordUrl = 'https://discord.gg/nTtuB2M';
 
 // Max time to keep logfiles
 export const LOGFILE_KEEP_DURATION = 3 * day;
+
+export const DEEP_LINK_PREFIX = 'brightid://';
+export const UNIVERSAL_LINK_PREFIX = 'https://app.brightid.org/';
