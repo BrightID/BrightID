@@ -146,7 +146,7 @@ export const ScanCodeScreen = () => {
           if (urlType) channelURL.searchParams.delete('t');
 
           switch (urlType) {
-            case qrCodeURL_types.ADD_SUPER_USER_APP:
+            case qrCodeURL_types.ADD_SUPER_APP:
             case qrCodeURL_types.RECOVERY:
             case qrCodeURL_types.SYNC:
             case qrCodeURL_types.IMPORT: {
@@ -183,13 +183,13 @@ export const ScanCodeScreen = () => {
                 });
               } else if (
                 urlType === qrCodeURL_types.IMPORT ||
-                urlType === qrCodeURL_types.ADD_SUPER_USER_APP
+                urlType === qrCodeURL_types.ADD_SUPER_APP
               ) {
                 navigation.navigate('Add Device', {
                   changePrimaryDevice,
                   name,
-                  isSuperUserApp:
-                    urlType === qrCodeURL_types.ADD_SUPER_USER_APP,
+                  isSuperApp:
+                    urlType === qrCodeURL_types.ADD_SUPER_APP,
                 });
               }
               break;

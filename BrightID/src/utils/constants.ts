@@ -114,7 +114,7 @@ export enum qrCodeURL_types {
   RECOVERY = '2', // qrcode url is for recovery channel
   IMPORT = '3', // qrcode url is for import channel
   SYNC = '4', // qrcode url is for syncing devices channel
-  ADD_SUPER_USER_APP = '5', // qrcode url is for adding super user app
+  ADD_SUPER_APP = '5', // qrcode url is for adding super app
 }
 
 export enum report_sources {

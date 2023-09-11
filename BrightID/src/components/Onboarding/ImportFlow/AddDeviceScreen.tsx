@@ -70,9 +70,9 @@ const AddDeviceScreen = ({ route }) => {
   const [uploadDataError, setUploadDataError] = useState('');
 
   const isPrimary = useSelector(selectIsPrimaryDevice);
-  const isSuperUserApp = route.params.isSuperUserApp === true;
+  const isSuper = route.params.isSuper === true;
   const changePrimaryDevice =
-    !isSuperUserApp && isPrimary && route.params.changePrimaryDevice;
+    !isSuper && isPrimary && route.params.changePrimaryDevice;
   const name = route.params.name || 'Unknown App';
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const AddDeviceScreen = ({ route }) => {
       console.log(`Starting upload of local info`);
       try {
         setUploadDataStep(UploadDataSteps.UPLOADING);
-        await dispatch(uploadAllInfoAfter(0, isSuperUserApp));
+        await dispatch(uploadAllInfoAfter(0, isSuper));
         setUploadDataStep(UploadDataSteps.COMPLETE);
         if (isPrimary) {
           dispatch(setPrimaryDevice(!changePrimaryDevice));
@@ -129,7 +129,7 @@ const AddDeviceScreen = ({ route }) => {
     dispatch,
     isPrimary,
     uploadDataStep,
-    isSuperUserApp,
+    isSuper,
   ]);
 
   // track overall progress
@@ -192,8 +192,8 @@ const AddDeviceScreen = ({ route }) => {
     const showConfirmDialog = () => {
       return Alert.alert(
         t('common.alert.title.pleaseConfirm'),
-        isSuperUserApp
-          ? t('devices.alert.addSuperUserApp', { name })
+        isSuper
+          ? t('devices.alert.addSuperApp', { name })
           : changePrimaryDevice
           ? t('devices.alert.confirmAddPrimary')
           : t('devices.alert.confirmAdd'),
