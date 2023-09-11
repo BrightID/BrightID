@@ -27,7 +27,7 @@ import { extractDigits } from '@/utils/phoneUtils';
 import { hashSocialProfile } from '@/utils/cryptoHelper';
 import EmptyList from '@/components/Helpers/EmptyList';
 import socialMediaService from '@/utils/socialMediaServiceProvider';
-import { BrightIdNetwork } from '@/utils/constants';
+import { BrightIdNetwork, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 
 const FlatListItemSeparator = () => {
   return (
@@ -163,7 +163,7 @@ export const FindFriendsScreen = function () {
   function sendInvitation(item: FriendProfile) {
     const subject = "Let's connect on BrightID";
     // TODO: generate connection link
-    const connectionLink = 'https://app.brightid.org/connection-code/xxx';
+    const connectionLink = `${UNIVERSAL_LINK_PREFIX}connection-code/xxx`;
     const body = `Hi\nLet's connect on BrightID!\n${connectionLink}`;
     if (item.variation.id === SocialMediaVariationIds.PHONE_NUMBER) {
       const smsDivider = Platform.OS === 'ios' ? '&' : '?';

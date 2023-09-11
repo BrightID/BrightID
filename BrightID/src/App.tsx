@@ -15,6 +15,7 @@ import ErrorFallback from '@/components/ErrorFallback';
 import { bootstrap } from '@/bootstrap';
 import { notificationSubscription } from '@/NotificationService';
 import { setupStore } from '@/store';
+import { DEEP_LINK_PREFIX, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 
 /**
  * Central part of the application
@@ -27,7 +28,7 @@ export const App = () => {
 
   // setup deep linking
   const linking = {
-    prefixes: ['brightid://', 'https://app.brightid.org'],
+    prefixes: [DEEP_LINK_PREFIX, UNIVERSAL_LINK_PREFIX],
     config: {
       screens: {
         Apps: {

@@ -48,7 +48,7 @@ import {
   pollImportChannel,
   setupSync,
 } from '../ImportFlow/thunks/channelThunks';
-import { recover_steps } from '@/utils/constants';
+import { recover_steps, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 import { userSelector } from '@/reducer/userSlice';
 
 /**
@@ -243,7 +243,7 @@ const RecoveryCodeScreen = ({ route }) => {
   );
 
   const copyQr = () => {
-    const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
+    const universalLink = `${UNIVERSAL_LINK_PREFIX}connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
 

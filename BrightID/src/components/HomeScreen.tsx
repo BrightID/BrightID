@@ -49,7 +49,11 @@ import {
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
-import { discordUrl } from '@/utils/constants';
+import {
+  DEEP_LINK_PREFIX,
+  discordUrl,
+  UNIVERSAL_LINK_PREFIX,
+} from '@/utils/constants';
 
 /**
  * Home screen of BrightID
@@ -193,15 +197,12 @@ export const HomeScreen = (props) => {
           }}
           onPress={async () => {
             let url = await Clipboard.getString();
-            if (url.startsWith('https://app.brightid.org/connection-code/')) {
-              url = url.replace(
-                'https://app.brightid.org/connection-code/',
-                '',
-              );
+            if (url.startsWith(`${UNIVERSAL_LINK_PREFIX}connection-code/`)) {
+              url = url.replace(`${UNIVERSAL_LINK_PREFIX}connection-code/`, '');
 
               navigation.navigate('ScanCode', { qrcode: url });
             } else {
-              url = url.replace('https://app.brightid.org', 'brightid://');
+              url = url.replace(UNIVERSAL_LINK_PREFIX, DEEP_LINK_PREFIX);
               console.log(`Linking.openURL with ${url}`);
               Linking.openURL(url);
             }
