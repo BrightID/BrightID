@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
@@ -23,6 +23,7 @@ import {
   channel_states,
   channel_types,
   MAX_TOTAL_CHANNELS,
+  UNIVERSAL_LINK_PREFIX,
 } from '@/utils/constants';
 
 const Timer = ({ channel }: { channel: Channel }) => {
@@ -89,7 +90,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
   }, [channel, qrString]);
 
   const copyQr = () => {
-    const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
+    const universalLink = `${UNIVERSAL_LINK_PREFIX}connection-code/${encodeURIComponent(
       qrString,
     )}`;
 

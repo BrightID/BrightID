@@ -27,7 +27,7 @@ export const getUserInfo = async (user) => {
 };
 
 export const uploadAllInfoAfter =
-  (after: number, isSuperUserApp = false): AppThunk<Promise<void>> =>
+  (after: number, isSuperApp = false): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch, getState) => {
     const {
       user,
@@ -54,7 +54,7 @@ export const uploadAllInfoAfter =
       data: encrypted,
     });
 
-    if (!isSuperUserApp) {
+    if (!isSuperApp) {
       console.log('uploading connections');
       const connections = selectAllConnections(getState()).filter(
         (conn) => conn.timestamp > after,

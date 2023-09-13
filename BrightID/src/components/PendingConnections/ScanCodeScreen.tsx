@@ -29,7 +29,12 @@ import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { hash } from '@/utils/encoding';
-import { channel_types, qrCodeURL_types } from '@/utils/constants';
+import {
+  channel_types,
+  DEEP_LINK_PREFIX,
+  qrCodeURL_types,
+  UNIVERSAL_LINK_PREFIX,
+} from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
 import {
   setRecoveryAesKey,
@@ -123,9 +128,17 @@ export const ScanCodeScreen = () => {
   useEffect(() => {
     const handleQrData = async (qrData) => {
       try {
-        if (qrData.startsWith('brightid://')) {
+        if (qrData.startsWith(DEEP_LINK_PREFIX)) {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
           await Linking.openURL(qrData);
+        } else if (qrData.startsWith(UNIVERSAL_LINK_PREFIX)) {
+          const deepLink = `${DEEP_LINK_PREFIX}${qrData.slice(
+            UNIVERSAL_LINK_PREFIX.length,
+          )}`;
+          console.log(
+            `handleQrData: calling Linking.openURL() with ${deepLink}`,
+          );
+          await Linking.openURL(deepLink);
         } else if (validQrString(qrData)) {
           const channelURL = new URL(qrData);
           // Pop 'type' parameter from url if it is included
@@ -133,7 +146,7 @@ export const ScanCodeScreen = () => {
           if (urlType) channelURL.searchParams.delete('t');
 
           switch (urlType) {
-            case qrCodeURL_types.ADD_SUPER_USER_APP:
+            case qrCodeURL_types.ADD_SUPER_APP:
             case qrCodeURL_types.RECOVERY:
             case qrCodeURL_types.SYNC:
             case qrCodeURL_types.IMPORT: {
@@ -170,13 +183,13 @@ export const ScanCodeScreen = () => {
                 });
               } else if (
                 urlType === qrCodeURL_types.IMPORT ||
-                urlType === qrCodeURL_types.ADD_SUPER_USER_APP
+                urlType === qrCodeURL_types.ADD_SUPER_APP
               ) {
                 navigation.navigate('Add Device', {
                   changePrimaryDevice,
                   name,
-                  isSuperUserApp:
-                    urlType === qrCodeURL_types.ADD_SUPER_USER_APP,
+                  isSuperApp:
+                    urlType === qrCodeURL_types.ADD_SUPER_APP,
                 });
               }
               break;

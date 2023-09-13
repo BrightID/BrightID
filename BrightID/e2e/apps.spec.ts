@@ -5,9 +5,8 @@ import {
   expectAppsScreen,
   expectHomescreen,
   navigateHome,
-  operationTimeout,
 } from './testUtils';
-import { app_linking_steps, SPONSOR_WAIT_TIME } from '@/utils/constants';
+import { DEEP_LINK_PREFIX } from '@/utils/constants';
 
 function getRandomAddres() {
   const letters = '0123456789ABCDEF';
@@ -72,13 +71,13 @@ describe('Without account', () => {
     await device.sendToHome();
     await device.launchApp({
       newInstance: false,
-      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
+      url: `${DEEP_LINK_PREFIX}link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
     });
     // app should show onboarding carousel screen
     await waitFor(element(by.id('OnboardScreen'))).toBeVisible();
   });
   it('should ignore deep link when not running', async () => {
-    const url = `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`;
+    const url = `${DEEP_LINK_PREFIX}link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`;
     console.log(url);
     await device.launchApp({
       newInstance: true,
@@ -102,7 +101,7 @@ describe('With account', () => {
   });
 
   it('should start linking process when running in background', async () => {
-    const url = `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+    const url = `${DEEP_LINK_PREFIX}link-verification/http:%2f%2ftest.brightid.org/${
       apps[0].context
     }/${getRandomAddres()}`;
     console.log(url);
@@ -121,7 +120,7 @@ describe('With account', () => {
   it('should start linking process when not running', async () => {
     await device.launchApp({
       newInstance: true,
-      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+      url: `${DEEP_LINK_PREFIX}link-verification/http:%2f%2ftest.brightid.org/${
         apps[0].context
       }/${getRandomAddres()}`,
     });
