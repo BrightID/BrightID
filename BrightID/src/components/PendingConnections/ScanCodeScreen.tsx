@@ -188,8 +188,7 @@ export const ScanCodeScreen = () => {
                 navigation.navigate('Add Device', {
                   changePrimaryDevice,
                   name,
-                  isSuperApp:
-                    urlType === qrCodeURL_types.ADD_SUPER_APP,
+                  isSuper: urlType === qrCodeURL_types.ADD_SUPER_APP,
                 });
               }
               break;
