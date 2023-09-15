@@ -380,6 +380,7 @@
   },
   "devices": {
     "alert": {
+      "addSuperApp": "¿Está seguro de que deseas añadir {{name}} como super aplicación? Hazlo sólo si confías plenamente en {{name}} porque puedes controlar tu BrightID.",
       "bothPrimary": "Ambos dispositivos están configurados como dispositivos principales. Solo puede tener un dispositivo principal. Configura uno de los dispositivos como secundario para poder sincronizarlos.",
       "confirmAdd": "¿Está seguro de que desea exportar su BrightID a otro dispositivo?",
       "confirmAddPrimary": "¿Está seguro de que desea exportar su BrightID a otro dispositivo y configurarlo como su dispositivo principal?",
