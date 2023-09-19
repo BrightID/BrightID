@@ -76,10 +76,10 @@ const AddDeviceScreen = ({ route }) => {
   const name = route.params.name || 'Unknown App';
 
   useEffect(() => {
-    if (name) {
+    if (isSuper && name) {
       setDeviceName(name);
     }
-  }, [name]);
+  }, [name, isSuper]);
 
   const handleSubmit = async () => {
     try {
