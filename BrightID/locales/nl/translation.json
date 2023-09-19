@@ -327,6 +327,7 @@
   },
   "devices": {
     "alert": {
+      "addSuperApp": "Weet je zeker dat je {{name}} wilt toevoegen als superapp? Doe dit alléén als je {{name}} volledig vertrouwt, want de app kan omgaan met al je accountgegevens.",
       "bothPrimary": "Beide apparaten zijn ingesteld als primair, maar er is ruimte voor slechts één primair apparaat. Stel een van de apparaten in als secundair om ze te synchroniseren.",
       "confirmAdd": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat?",
       "confirmAddPrimary": "Weet je zeker dat je je BrightID wilt exporteren naar een ander apparaat en dat als primair apparaat instellen?",
@@ -597,8 +598,8 @@
   "onboarding": {
     "button": {
       "create": "BrightID aanmaken",
-      "import": "Importeren",
-      "recover": "Herstellen"
+      "import": "Apparaatherstel",
+      "recover": "Sociaal herstel"
     },
     "text": {
       "congratulations": "Gefeliciteerd!\nJe BrightID is aangemaakt.\nNu wordt het tijd om je te koppelen.",
@@ -784,9 +785,9 @@
   "restore": {
     "alert": {
       "text": {
-        "requestRecovering": "Je herstelverzoek is ingediend!",
+        "requestRecovering": "Je herstelverzoek is ingediend",
         "restoreConfirm": "Is {{name}} de naam van het account dat je wilt helpen?",
-        "restoreSuccess": "Je account is hersteld!"
+        "restoreSuccess": "Je account is hersteld"
       }
     },
     "emptyList": {
