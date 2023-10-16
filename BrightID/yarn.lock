@@ -9367,6 +9367,11 @@ react-native-camera@4.2.1:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-clean-project@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-clean-project/-/react-native-clean-project-4.0.1.tgz#c0e2b17eebf32a683aa67da45fe7932857166da7"
+  integrity sha512-B7rXdFC4bfA+Vv7lZ9bKS6cUDgqg04OR5D69sNnhheFBJQ1V04cIfJ1Fu0sbqRsIehqlOcySQRpp8tm7r7PvLQ==
+
 react-native-code-push@7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-7.1.0.tgz#9767518d684017993ff32875bfd349ce01298d35"
