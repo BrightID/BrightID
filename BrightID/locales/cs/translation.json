@@ -1,1 +1,12 @@
-{}
+{
+  "achievements": {
+    "auraVerification": {
+      "description": "Naučte se více o Aura",
+      "title": "Aura ověření"
+    },
+    "bituVerification": {
+      "description": "Více informací",
+      "title": "Bitu ověření"
+    }
+  }
+}
