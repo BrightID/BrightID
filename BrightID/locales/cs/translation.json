@@ -7,6 +7,36 @@
     "bituVerification": {
       "description": "Více informací",
       "title": "Bitu ověření"
+    },
+    "getSponsored": {
+      "title": "Být sponzorován"
+    },
+    "joinMeet": {
+      "description": "Připojte se na BrightID setkání",
+      "title": "BrightID setkání"
+    },
+    "linkApp": {
+      "description": "Připojte svůj BrightID s aplikací",
+      "title": "Připojit s aplikací"
+    },
+    "makeFirstConnection": {
+      "description": "Připojit jiný BrightID účet",
+      "title": "První připojení"
+    },
+    "makeThreeConnection": {
+      "description": "Připojit se s třemi BrightID uživateli",
+      "title": "Tři připojení"
+    },
+    "notification": {
+      "message": "Dokončil jsi úkol \"{{title}}\".",
+      "title": "Úspěch dokončen!"
+    },
+    "progress": {
+      "title": "Dokončení:"
+    },
+    "setupBackup": {
+      "description": "Nastavte si heslo pro povolení zašifrování zálohy vašech dat",
+      "title": "Nastavit si záložní heslo"
     }
   }
 }
