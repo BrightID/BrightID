@@ -107,7 +107,15 @@
       "waitingV6": "Čeká se na dokončení propojování"
     },
     "text": {
-      "noApps": "Žádné aplikace"
+      "noApps": "Žádné aplikace",
+      "notSponsored": "Nejste sponzorován.\nProsím najděte aplikaci která vás bude sponzorovat."
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "Verze klienta je zastaralá - prosím aktualizujte kliena a zkuste to znovu"
+      }
     }
   }
 }
