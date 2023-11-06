@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ImportScreen from '@/components/Onboarding/ImportFlow/ImportScreen';
-import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCodeScreen';
+// import RecoveryCodeScreen from '@/components/Onboarding/RecoveryFlow/RecoveryCodeScreen';
+import RecoveryCodeScreen from '@/components/OnboardingRedesigned/RecoveryFlow/RecoveryCodeScreen';
 import { Stack } from './Navigator';
 
 const Import = () => {

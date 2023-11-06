@@ -157,7 +157,8 @@
       "cancel": "Cancel",
       "copy": "Copy",
       "retry": "Retry",
-      "save": "Save"
+      "save": "Save",
+      "copyLink": "Copy Link"
     },
     "camera": {
       "cancel": "Cancel",
@@ -818,7 +819,8 @@
     "placeholder": {
       "confirmPassword": "confirm your password",
       "name": "Your name",
-      "password": "password"
+      "password": "password",
+      "newName": "name"
     },
     "text": {
       "createPassword": "Create your BrightID password",
@@ -826,7 +828,8 @@
       "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID.",
       "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
       "pleaseAddPhoto": "Please add a photo",
-      "whatsYouName": "What do your friends know you by?"
+      "whatsYouName": "What do your friends know you by?",
+      "nameAndPhotoNotShared": "Your name and photo will never be shared with apps or stored on servers."
     }
   },
   "sync": {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import Eula from '@/components/Onboarding/Eula';
+// import Eula from '@/components/Onboarding/Eula';
+import Eula from '@/components/OnboardingRedesigned/Eula';
 import { fontSize } from '@/theme/fonts';
 import { BLACK } from '@/theme/colors';
 import { Stack } from './Navigator';
