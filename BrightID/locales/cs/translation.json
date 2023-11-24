@@ -117,5 +117,10 @@
         "localOutdated": "Verze klienta je zastaralá - prosím aktualizujte kliena a zkuste to znovu"
       }
     }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "Přidat fotografii"
+    }
   }
 }
