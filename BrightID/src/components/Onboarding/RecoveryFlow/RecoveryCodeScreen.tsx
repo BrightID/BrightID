@@ -22,9 +22,13 @@ import { useDispatch, useSelector } from '@/store/hooks';
 import {
   BLACK,
   DARKER_GREY,
+  DARK_PRIMARY,
+  GRAY8,
+  GRAY9,
   GREY,
   LIGHT_BLACK,
   ORANGE,
+  SUCCESS,
   WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -50,6 +54,9 @@ import {
 } from '../ImportFlow/thunks/channelThunks';
 import { recover_steps, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 import { userSelector } from '@/reducer/userSlice';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import BrightIDLogo from '@/components/Icons/BrightIDLogo';
+import Copy from '@/components/Icons/Copy';
 
 /**
  * Recovery Code screen of BrightID
@@ -73,7 +80,7 @@ const RecoveryCodeScreen = ({ route }) => {
   );
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const step = useSelector(selectRecoveryStep);
 
   const sigCount = recoveryData.sigs
@@ -325,13 +332,17 @@ const RecoveryCodeScreen = ({ route }) => {
 
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
-        animated={true}
-      />
-      <View style={styles.orangeTop} />
+        <StatusBar
+            barStyle="dark-content"
+            backgroundColor={WHITE}
+            animated={true}
+        />
       <View style={styles.container}>
+        
+        <View style={styles.LogoContainer}>
+            <BrightIDLogo />
+        </View>
+
         <Text style={styles.recoveryCodeInfoText}>
           {action === 'recovery' && t('recovery.text.askScanning')}
           {action === 'import' && t('import.text.askScanning')}
@@ -346,6 +357,13 @@ const RecoveryCodeScreen = ({ route }) => {
             </Text>
             {action === 'import' && (
               <View style={styles.changePrimaryDeviceSwitchContainer}>
+                <CheckBox
+                  tintColors={{ false: GREY, true: ORANGE }}
+                  onValueChange={(value) => {
+                    setChangePrimaryDevice(value);
+                  }}
+                  value={changePrimaryDevice}
+                />
                 <Text
                   style={styles.changePrimaryDeviceSwitchLabel}
                   onPress={() => {
@@ -354,13 +372,6 @@ const RecoveryCodeScreen = ({ route }) => {
                 >
                   set as primary device
                 </Text>
-                <CheckBox
-                  tintColors={{ false: GREY, true: ORANGE }}
-                  onValueChange={(value) => {
-                    setChangePrimaryDevice(value);
-                  }}
-                  value={changePrimaryDevice}
-                />
               </View>
             )}
             <Svg
@@ -380,21 +391,16 @@ const RecoveryCodeScreen = ({ route }) => {
             </Svg>
 
             <TouchableOpacity style={styles.copyContainer} onPress={copyQr}>
-              <Material
-                size={24}
-                name="content-copy"
-                color={LIGHT_BLACK}
-                style={{ width: 24, height: 24 }}
-              />
-              <Text style={styles.copyText}> {t('common.button.copy')}</Text>
+              <Copy/>
+              <Text style={styles.copyText}> {t('common.button.copyLink')}</Text>
             </TouchableOpacity>
-            {__DEV__ && (
+            {/* {__DEV__ && (
               <View>
                 <Text style={{ fontSize: 6 }} testID="qrcode">
                   {qrUrl?.href}
                 </Text>
               </View>
-            )}
+            )} */}
           </View>
         ) : (
           <View style={styles.qrsvgContainer}>
@@ -417,22 +423,19 @@ const RecoveryCodeScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 65,
-    width: '100%',
-    zIndex: 1,
+
+  LogoContainer: {
+    // marginTop: 58,
+    // marginBottom: 58,
   },
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     backgroundColor: WHITE,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-evenly',
     flexDirection: 'column',
-    borderTopLeftRadius: 58,
-    marginTop: -58,
+    paddingLeft: 20,
+    paddingRight: 20,
     zIndex: 10,
     overflow: 'hidden',
   },
@@ -443,36 +446,37 @@ const styles = StyleSheet.create({
   },
   changePrimaryDeviceSwitchLabel: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[14],
+    fontSize: fontSize[16],
     textAlign: 'center',
-    color: DARKER_GREY,
+    color: GRAY9,
   },
   qrsvgContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   recoveryCodeInfoText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
+    fontSize: fontSize[17],
     textAlign: 'center',
-    color: BLACK,
+    color: GRAY9,
     width: '80%',
-    marginTop: DEVICE_LARGE ? 30 : 26,
+    lineHeight: 24,
+    // marginTop: DEVICE_LARGE ? 30 : 26,
   },
   additionalInfo: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[14],
     textAlign: 'center',
-    color: DARKER_GREY,
-    width: '80%',
+    color: GRAY8,
+    // width: '80%',
+    lineHeight: 24,
     marginBottom: DEVICE_LARGE ? 50 : 45,
   },
   signatures: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     textAlign: 'center',
-    color: BLACK,
+    color: SUCCESS,
   },
   copyContainer: {
     flexDirection: 'row',
@@ -480,10 +484,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 25,
     minWidth: 100,
+    marginTop: 20,
   },
   copyText: {
-    color: BLACK,
-    fontFamily: 'Poppins-Medium',
+    color: DARK_PRIMARY,
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    marginLeft: 12,
   },
 });
 

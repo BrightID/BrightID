@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AccountSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import { fontSize } from '@/theme/fonts';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED } from '@/theme/colors';
+import { BLACK, DARKER_GREY, GRAY9, GREEN, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -68,8 +68,8 @@ export const RecoverAccount = ({
     <View style={styles.container}>
       <View style={styles.headerTextContainer}>
         <Text style={styles.headerText}>
-          {t('recovery.header.text', {
-            defaultValue: 'Part 1: Recover account',
+          {t('recovery.header.newText', {
+            defaultValue: 'Recover account',
           })}
         </Text>
 
@@ -81,7 +81,7 @@ export const RecoverAccount = ({
         </Text>
       </View>
       <View style={styles.statusContainer}>
-        <View>
+        <View style={{marginTop: 20, marginBottom: 20}}>
           {iconData ? (
             <IonIcons
               style={{ alignSelf: 'center' }}
@@ -103,9 +103,9 @@ export const RecoverAccount = ({
           <Text style={styles.infoSubText}>
             {currentStep === AccountSteps.ERROR
               ? errorMessage
-              : t('recovery.state', {
+              : t('recovery.newState', {
                   defaultValue:
-                    'Recovered {{recoveredConnections}} connections, {{recoveredGroups}} groups',
+                    '{{recoveredConnections}} Connections Recovered\n{{recoveredGroups}} Groups Recovered',
                   recoveredConnections,
                   recoveredGroups,
                 })}
@@ -118,9 +118,9 @@ export const RecoverAccount = ({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    // width: '100%',
+    // height: 252
   },
   headerTextContainer: {
     justifyContent: 'center',
@@ -128,34 +128,37 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[20],
-    color: BLACK,
+    fontSize: fontSize[14],
+    color: GRAY9,
+    lineHeight: 24,
   },
   headerInfoText: {
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    color: DARKER_GREY,
+    color: GRAY9,
     fontSize: fontSize[12],
-    maxWidth: '90%',
+    lineHeight: 24,
+    // maxWidth: '90%',
   },
   statusContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: 10,
     marginLeft: 20,
     alignItems: 'center',
   },
   infoTextContainer: {
-    flex: 1,
     marginLeft: 10,
   },
   infoText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: BLACK,
+    color: GRAY9,
+    textAlign: 'center'
   },
   infoSubText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[10],
-    color: BLACK,
+    color: GRAY9,
+    textAlign: 'center'
   },
 });
