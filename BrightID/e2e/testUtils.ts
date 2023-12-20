@@ -24,17 +24,13 @@ const createKeypair = async () => {
 };
 
 const addName = async (name: string) => {
-  await expect(element(by.id('NameScreen'))).toBeVisible();
   await expect(element(by.id('editName'))).toExist();
   await element(by.id('editName')).tap();
   await element(by.id('editName')).replaceText(name);
   await element(by.id('editName')).tapReturnKey();
-  await expect(element(by.id('submitName'))).toExist();
-  await element(by.id('submitName')).tap();
 };
 
 const addPhoto = async () => {
-  await expect(element(by.id('PhotoScreen'))).toBeVisible();
   await expect(element(by.id('addPhoto'))).toExist();
   await element(by.id('addPhoto')).tap();
   // ActionSheet does not support testID prop, so match based on text.
@@ -49,45 +45,24 @@ const addPhoto = async () => {
   await waitFor(element(by.id('addPhoto')))
     .toBeVisible()
     .withTimeout(15000);
-
-  const submitPhoto = element(by.id('submitPhoto'));
-  await expect(submitPhoto).toExist();
-  // wait for the button to be enabled after setting the photo
-  await new Promise((r) => setTimeout(r, 2000));
-  // submit photo
-  await submitPhoto.tap();
-};
-
-const skipPassword = async () => {
-  await expect(element(by.id('PasswordScreen'))).toBeVisible();
-  await expect(element(by.id('skipBtn'))).toExist();
-  await element(by.id('skipBtn')).tap();
 };
 
 const setPassword = async () => {
   const password = '12345678';
-  await expect(element(by.id('PasswordScreen'))).toBeVisible();
-
   await element(by.id('password')).tap();
   await element(by.id('password')).replaceText(password);
   await element(by.id('password')).tapReturnKey();
+};
 
-  await element(by.id('confirmpassword')).tap();
-  await element(by.id('confirmpassword')).replaceText(password);
-  await element(by.id('confirmpassword')).tapReturnKey();
-
+const submitData = async () => {
   await expect(element(by.id('submitBtn'))).toExist();
   await element(by.id('submitBtn')).tap();
 };
 
-const skipWalkthrough = async () => {
-  await waitFor(element(by.id('ViewPasswordWalkthrough')))
-    .toBeVisible()
-    .withTimeout(15000);
-  await expect(element(by.id('ViewPasswordGotIt'))).toExist();
-  await element(by.id('ViewPasswordGotIt')).tap();
-  await expect(element(by.id('BrightIdLogo'))).toExist();
-  await element(by.id('BrightIdLogo')).tap();
+const confirmCreation = async () => {
+  // should be on "gratulation" screen
+  await expect(element(by.id('confirmCreateBtn'))).toExist();
+  await element(by.id('confirmCreateBtn')).tap();
 };
 
 const createBrightID = async (
@@ -98,12 +73,9 @@ const createBrightID = async (
   await createKeypair();
   await addName(name);
   await addPhoto();
-  if (withPassword) {
-    await setPassword();
-  } else {
-    await skipPassword();
-  }
-  // await skipWalkthrough();
+  await setPassword();
+  await submitData();
+  await confirmCreation();
   // should end up at home screen
   await expectHomescreen();
 

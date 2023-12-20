@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18next from 'i18next';
 import CheckBox from '@react-native-community/checkbox';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   BLACK,
@@ -54,7 +55,6 @@ import {
 } from '../ImportFlow/thunks/channelThunks';
 import { recover_steps, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 import { userSelector } from '@/reducer/userSlice';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import BrightIDLogo from '@/components/Icons/BrightIDLogo';
 import Copy from '@/components/Icons/Copy';
 
@@ -332,15 +332,14 @@ const RecoveryCodeScreen = ({ route }) => {
 
   return (
     <>
-        <StatusBar
-            barStyle="dark-content"
-            backgroundColor={WHITE}
-            animated={true}
-        />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={WHITE}
+        animated={true}
+      />
       <View style={styles.container}>
-        
         <View style={styles.LogoContainer}>
-            <BrightIDLogo />
+          <BrightIDLogo />
         </View>
 
         <Text style={styles.recoveryCodeInfoText}>
@@ -391,16 +390,19 @@ const RecoveryCodeScreen = ({ route }) => {
             </Svg>
 
             <TouchableOpacity style={styles.copyContainer} onPress={copyQr}>
-              <Copy/>
-              <Text style={styles.copyText}> {t('common.button.copyLink')}</Text>
+              <Copy />
+              <Text style={styles.copyText}>
+                {' '}
+                {t('common.button.copyLink')}
+              </Text>
             </TouchableOpacity>
-            {/* {__DEV__ && (
+            {__DEV__ && (
               <View>
                 <Text style={{ fontSize: 6 }} testID="qrcode">
                   {qrUrl?.href}
                 </Text>
               </View>
-            )} */}
+            )}
           </View>
         ) : (
           <View style={styles.qrsvgContainer}>
@@ -423,7 +425,6 @@ const RecoveryCodeScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-
   LogoContainer: {
     // marginTop: 58,
     // marginBottom: 58,

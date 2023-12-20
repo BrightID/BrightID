@@ -26,14 +26,11 @@ import LinearLeftToRightArrow from '@/components/Icons/LinearArrowLeftToRight';
 
 /* ======================================== */
 
-
-
 export const SuccessScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const password = useSelector((state) => state.user.password);
-
 
   const continueOnPress = () => {
     // this  will cause navigation to HomeScreen
@@ -57,7 +54,7 @@ export const SuccessScreen = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-      <StatusBar
+        <StatusBar
           barStyle="dark-content"
           backgroundColor={GRAY1}
           animated={true}
@@ -71,7 +68,7 @@ export const SuccessScreen = () => {
           style={styles.logo}
         />
 
-        <View >
+        <View>
           <View style={styles.imageContainer}>
             <View style={styles.phoneContainer}>
               <Image
@@ -88,25 +85,21 @@ export const SuccessScreen = () => {
 
         <View>
           {/* todo the texts should be modified in locales and here */}
-          <Text style={styles.congratText}>
-            {'Congratulations!'}
-          </Text>
+          <Text style={styles.congratText}>Congratulations!</Text>
           <Text style={styles.registerText}>
-            {'Your BrightID has been created.It\'s time to make connections'}
+            Your BrightID has been created.It's time to make connections
           </Text>
         </View>
 
         {/* todo add continue to locales and be used from there in the button */}
         <TouchableOpacity
-            style={styles.continueBtn}
-            onPress={continueOnPress}
-            accessibilityLabel={t('onboarding.button.create')}
-            testID="createBrightID"
-          >
-          <Text style={styles.continueBtnText}>
-            {"Continue"}
-          </Text>
-          <LinearLeftToRightArrow color={WHITE}/>
+          style={styles.continueBtn}
+          onPress={continueOnPress}
+          accessibilityLabel={t('onboarding.button.create')}
+          testID="confirmCreateBtn"
+        >
+          <Text style={styles.continueBtnText}>Continue</Text>
+          <LinearLeftToRightArrow color={WHITE} />
         </TouchableOpacity>
       </SafeAreaView>
     </>
@@ -117,11 +110,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE,
-    alignItems: 'center',  
+    alignItems: 'center',
     flexDirection: 'column',
     zIndex: 2,
     overflow: 'hidden',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },
   logo: {
     maxWidth: '40%',
@@ -144,7 +137,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 180,
   },
-  congratText:{
+  congratText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[18],
     textAlign: 'center',
@@ -160,7 +153,7 @@ const styles = StyleSheet.create({
     lineHeight: DEVICE_LARGE ? 26 : 24,
     // marginBottom: DEVICE_LARGE ? 50 : 45,
     // marginBottom: 100,
-    color: '#424242'
+    color: '#424242',
   },
   continueBtn: {
     alignItems: 'center',
@@ -175,7 +168,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 4,
     // marginBottom: 87,
-    flexDirection: 'row'
+    flexDirection: 'row',
     // marginTop: 78
   },
   continueBtnText: {
