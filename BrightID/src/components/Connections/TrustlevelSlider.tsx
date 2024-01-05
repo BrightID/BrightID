@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useTranslation } from 'react-i18next';
 import { connection_levels } from '@/utils/constants';
-import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
-import { ORANGE, BLACK } from '@/theme/colors';
+import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import { BLACK, ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
-  connectionLevelColors,
-  connectionLevelStrings,
+  getConnectionLevelColor,
+  getConnectionLevelString,
 } from '@/utils/connectionLevelStrings';
 
 type TrustlevelSliderProps = {
@@ -83,10 +83,10 @@ const TrustlevelSlider = ({
           testID="ConnectionLevelSliderText"
           style={[
             styles.labelText,
-            { color: connectionLevelColors[currentLevel] },
+            { color: getConnectionLevelColor(currentLevel) },
           ]}
         >
-          {connectionLevelStrings[currentLevel]}
+          {getConnectionLevelString(currentLevel)}
         </Text>
       </View>
       {verbose && (
@@ -103,12 +103,12 @@ const TrustlevelSlider = ({
         minimumValue={minValue}
         maximumValue={maxValue}
         step={1}
-        minimumTrackTintColor={
-          connectionLevelColors[connection_levels.RECOVERY]
-        }
-        maximumTrackTintColor={
-          connectionLevelColors[connection_levels.REPORTED]
-        }
+        minimumTrackTintColor={getConnectionLevelColor(
+          connection_levels.RECOVERY,
+        )}
+        maximumTrackTintColor={getConnectionLevelColor(
+          connection_levels.REPORTED,
+        )}
         thumbTintColor={ORANGE}
         onValueChange={valueChangeHandler}
       />

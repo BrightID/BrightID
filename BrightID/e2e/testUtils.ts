@@ -2,7 +2,7 @@ import './i18n_for_tests';
 import i18next from 'i18next';
 import { by, element, expect } from 'detox';
 import { connection_levels } from '@/utils/constants';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { getConnectionLevelString } from '@/utils/connectionLevelStrings';
 import { b64ToUint8Array } from '@/utils/encoding';
 
 const testUserName = 'Vincent Vega';
@@ -311,7 +311,9 @@ const interConnect = async (
 
   // open connection test ActionSheet
   const actionSheetTitle = 'Connection Test options';
-  const actionTitle = `Connect with all other fake connections - ${connectionLevelStrings[connectionLevel]}`;
+  const actionTitle = `Connect with all other fake connections - ${getConnectionLevelString(
+    connectionLevel,
+  )}`;
 
   await element(by.id('connectionTestBtn')).tap();
   // ActionSheet does not support testID, so match based on text.
