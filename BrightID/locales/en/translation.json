@@ -61,8 +61,8 @@
       "appInfoFailure": "Failed to fetch latest appInfo: {{message}}. Please try again later.",
       "appNotSponsoring": "You are not yet sponsored and {{app}} is not providing sponsorships. Please find another app to sponsor you.",
       "appSponsorTimeout": "Timeout waiting for sponsoring. {{lastResult}}",
-      "sponsorOpFailed": "Spend sponsor operation failed",
-      "sponsorOpTimeout": "Spend sponsor operation timed out"
+      "sponsorOpFailed": "sponsor operation failed",
+      "sponsorOpTimeout": "sponsor operation timed out"
     }
   },
   "apps": {

@@ -57,88 +57,88 @@ export const requestLinking =
     linkingAppInfo,
     skipUserConfirmation,
   }: requestLinkingParams): AppThunk<Promise<void>> =>
-  async (dispatch: AppDispatch, getState) => {
-    const appLinkingStep = selectApplinkingStep(getState());
-    if (appLinkingStep !== app_linking_steps.IDLE) {
-      console.log(
-        `Can't request linking when not in IDLE state. Current state: ${appLinkingStep}`,
-      );
-      return;
-    }
-    const linkingError = selectLinkingAppError(getState());
-    if (linkingError) {
-      console.log(
-        `Can't request linking when there is still an active error. Current error: ${linkingError}`,
-      );
-      return;
-    }
+    async (dispatch: AppDispatch, getState) => {
+      const appLinkingStep = selectApplinkingStep(getState());
+      if (appLinkingStep !== app_linking_steps.IDLE) {
+        console.log(
+          `Can't request linking when not in IDLE state. Current state: ${appLinkingStep}`,
+        );
+        return;
+      }
+      const linkingError = selectLinkingAppError(getState());
+      if (linkingError) {
+        console.log(
+          `Can't request linking when there is still an active error. Current error: ${linkingError}`,
+        );
+        return;
+      }
 
-    // store app linking details
-    dispatch(setLinkingAppInfo(linkingAppInfo));
-    const { appId, v } = linkingAppInfo;
+      // store app linking details
+      dispatch(setLinkingAppInfo(linkingAppInfo));
+      const { appId, v } = linkingAppInfo;
 
-    const api = getGlobalNodeApi();
-    dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
-    try {
-      // make sure to have latest appInfo available
-      const apps = await api.getApps();
-      dispatch(setApps(apps));
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : `${e}`;
-      dispatch(
-        setLinkingAppError(
-          t(
-            'alert.text.appInfoFailure',
-            `Failed to fetch latest appInfo: {{message}}. Please try again later.`,
-            { message: msg },
+      const api = getGlobalNodeApi();
+      dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
+      try {
+        // make sure to have latest appInfo available
+        const apps = await api.getApps();
+        dispatch(setApps(apps));
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : `${e}`;
+        dispatch(
+          setLinkingAppError(
+            t(
+              'alert.text.appInfoFailure',
+              `Failed to fetch latest appInfo: {{message}}. Please try again later.`,
+              { message: msg },
+            ),
           ),
-        ),
-      );
-      return;
-    }
+        );
+        return;
+      }
 
-    // First check if provided data is valid
-    const appInfo = selectAppInfoByAppId(getState(), appId);
-    if (!appInfo) {
-      // The app that should be linked was not found!
-      dispatch(
-        setLinkingAppError(
-          t('apps.alert.text.invalidContext', {
-            context: `${appId}`,
+      // First check if provided data is valid
+      const appInfo = selectAppInfoByAppId(getState(), appId);
+      if (!appInfo) {
+        // The app that should be linked was not found!
+        dispatch(
+          setLinkingAppError(
+            t('apps.alert.text.invalidContext', {
+              context: `${appId}`,
+            }),
+          ),
+        );
+        return;
+      }
+
+      // check app details
+      if (v === 6 && !appInfo.usingBlindSig) {
+        // v6 apps HAVE to use blind sigs!
+        dispatch(
+          setLinkingAppError(
+            t('apps.alert.text.invalidApp', {
+              app: `${appId}`,
+            }),
+          ),
+        );
+        return;
+      }
+
+      if (skipUserConfirmation) {
+        dispatch(
+          setAppLinkingStep({
+            step: app_linking_steps.USER_CONFIRMED,
           }),
-        ),
-      );
-      return;
-    }
-
-    // check app details
-    if (v === 6 && !appInfo.usingBlindSig) {
-      // v6 apps HAVE to use blind sigs!
-      dispatch(
-        setLinkingAppError(
-          t('apps.alert.text.invalidApp', {
-            app: `${appId}`,
+        );
+        await dispatch(preLinkCheck());
+      } else {
+        dispatch(
+          setAppLinkingStep({
+            step: app_linking_steps.WAITING_USER_CONFIRMATION,
           }),
-        ),
-      );
-      return;
-    }
-
-    if (skipUserConfirmation) {
-      dispatch(
-        setAppLinkingStep({
-          step: app_linking_steps.USER_CONFIRMED,
-        }),
-      );
-      await dispatch(preLinkCheck());
-    } else {
-      dispatch(
-        setAppLinkingStep({
-          step: app_linking_steps.WAITING_USER_CONFIRMATION,
-        }),
-      );
-    }
-  };
+        );
+      }
+    };
 
 export const preLinkCheck =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
@@ -417,24 +417,24 @@ export const requestSponsoring =
     dispatch(
       setAppLinkingStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
     );
-    const sp = await getSponsorship(appUserId, api);
-    if (!sp || !sp.spendRequested) {
-      // console.log(`Sending spend sponsorship op...`);
-      const op = await api.spendSponsorship(appId, appUserId);
-      // console.log(`Sponsor op hash: ${op.hash}`);
-      dispatch(setSponsorOperationHash(op.hash));
-      dispatch(addOperation(op));
-      dispatch(
-        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
-      );
-      dispatch(waitForSponsorOp());
-    } else {
-      // sponsoring was already requested, go to next step (waiting for sponsoring by app)
-      dispatch(
-        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
-      );
-      dispatch(waitForAppSponsoring());
-    }
+    // const sp = await getSponsorship(appUserId, api);
+    // if (!sp || !sp.spendRequested) {
+    // console.log(`Sending spend sponsorship op...`);
+    const op = await api.sponsorship(appId);
+    // console.log(`Sponsor op hash: ${op.hash}`);
+    dispatch(setSponsorOperationHash(op.hash));
+    dispatch(addOperation(op));
+    dispatch(
+      setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
+    );
+    dispatch(waitForSponsorOp());
+    // } else {
+    //   // sponsoring was already requested, go to next step (waiting for sponsoring by app)
+    //   dispatch(
+    //     setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+    //   );
+    //   dispatch(waitForAppSponsoring());
+    // }
   };
 
 export const waitForSponsorOp =
@@ -460,16 +460,21 @@ export const waitForSponsorOp =
       switch (op.state) {
         case operation_states.APPLIED:
           clearInterval(intervalId);
+          // dispatch(
+          //   setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+          // );
+          // dispatch(waitForAppSponsoring());
           dispatch(
-            setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+            setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
           );
-          dispatch(waitForAppSponsoring());
+          dispatch(setIsSponsoredv6(true));
+          dispatch(linkAppOrContext());
           break;
         case operation_states.FAILED:
           clearInterval(intervalId);
           dispatch(
             setLinkingAppError(
-              t('alert.text.sponsorOpFailed', 'Spend sponsor operation failed'),
+              t('alert.text.sponsorOpFailed', 'sponsor operation failed'),
             ),
           );
           break;
@@ -479,7 +484,7 @@ export const waitForSponsorOp =
             setLinkingAppError(
               t(
                 'alert.text.sponsorOpTimeout',
-                'Spend sponsor operation timed out',
+                'sponsor operation timed out',
               ),
             ),
           );
@@ -500,74 +505,76 @@ export const waitForSponsorOp =
     // console.log(`Started pollSponsorOp ${intervalId}`);
   };
 
-export const waitForAppSponsoring =
-  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_APP) {
-      console.log(
-        `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${applinkingStep}`,
-      );
-      return;
-    }
 
-    const startTime = Date.now();
-    const { appUserId } = selectLinkingAppInfo(getState());
-    const api = getGlobalNodeApi();
+//! TODO: This function is not used anywhere. It is replaced by waitForSponsorOp (this function would be removed in the future)
+// export const waitForAppSponsoring =
+//   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
+//     const applinkingStep = selectApplinkingStep(getState());
+//     if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_APP) {
+//       console.log(
+//         `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${applinkingStep}`,
+//       );
+//       return;
+//     }
 
-    // Op to request sponsoring is confirmed. Now wait for app to actually sponsor me.
-    const intervalId = setInterval(async () => {
-      const timeElapsed = Date.now() - startTime;
-      let sponsorshipInfo: SponsorshipInfo | undefined;
-      let errorResponse;
-      try {
-        sponsorshipInfo = await getSponsorship(appUserId, api);
-      } catch (error) {
-        console.log(`Error getting sponsorship info:`);
-        console.log(`${error}`);
-        errorResponse = error;
-      }
-      if (sponsorshipInfo) {
-        // console.log(`Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`);
-        if (
-          sponsorshipInfo.appHasAuthorized &&
-          sponsorshipInfo.spendRequested
-        ) {
-          // console.log(`Sponsorship complete!`);
-          clearInterval(intervalId);
-          dispatch(
-            setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
-          );
-          dispatch(setIsSponsoredv6(true));
-          dispatch(linkAppOrContext());
-        }
-      }
-      if (timeElapsed > SPONSOR_WAIT_TIME) {
-        console.log(`Timeout waiting for sponsoring!`);
-        clearInterval(intervalId);
-        let lastResult;
-        if (sponsorshipInfo) {
-          lastResult = `Last poll result: "appHasAuthorized": "${sponsorshipInfo.appHasAuthorized}", "spendRequested": "${sponsorshipInfo.spendRequested}"`;
-        } else if (errorResponse) {
-          lastResult = `Error: "${errorResponse?.message || errorResponse}"`;
-        } else {
-          // no sponsorshipInfo but also no error
-          lastResult = `Error: Node has not registered the sponsor request`;
-        }
-        dispatch(
-          setLinkingAppError(
-            t(
-              'alert.text.appSponsorTimeout',
-              'Timeout waiting for sponsoring. {{lastResult}}',
-              {
-                lastResult,
-              },
-            ),
-          ),
-        );
-      }
-    }, SPONSORING_POLL_INTERVAL);
-    // console.log(`Started pollSponsorship ${intervalId}`);
-  };
+//     const startTime = Date.now();
+//     const { appUserId } = selectLinkingAppInfo(getState());
+//     const api = getGlobalNodeApi();
+
+//     // Op to request sponsoring is confirmed. Now wait for app to actually sponsor me.
+//     const intervalId = setInterval(async () => {
+//       const timeElapsed = Date.now() - startTime;
+//       let sponsorshipInfo: SponsorshipInfo | undefined;
+//       let errorResponse;
+//       try {
+//         sponsorshipInfo = await getSponsorship(appUserId, api);
+//       } catch (error) {
+//         console.log(`Error getting sponsorship info:`);
+//         console.log(`${error}`);
+//         errorResponse = error;
+//       }
+//       if (sponsorshipInfo) {
+//         // console.log(`Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`);
+//         if (
+//           sponsorshipInfo.appHasAuthorized &&
+//           sponsorshipInfo.spendRequested
+//         ) {
+//           // console.log(`Sponsorship complete!`);
+//           clearInterval(intervalId);
+//           dispatch(
+//             setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
+//           );
+//           dispatch(setIsSponsoredv6(true));
+//           dispatch(linkAppOrContext());
+//         }
+//       }
+//       if (timeElapsed > SPONSOR_WAIT_TIME) {
+//         console.log(`Timeout waiting for sponsoring!`);
+//         clearInterval(intervalId);
+//         let lastResult;
+//         if (sponsorshipInfo) {
+//           lastResult = `Last poll result: "appHasAuthorized": "${sponsorshipInfo.appHasAuthorized}", "spendRequested": "${sponsorshipInfo.spendRequested}"`;
+//         } else if (errorResponse) {
+//           lastResult = `Error: "${errorResponse?.message || errorResponse}"`;
+//         } else {
+//           // no sponsorshipInfo but also no error
+//           lastResult = `Error: Node has not registered the sponsor request`;
+//         }
+//         dispatch(
+//           setLinkingAppError(
+//             t(
+//               'alert.text.appSponsorTimeout',
+//               'Timeout waiting for sponsoring. {{lastResult}}',
+//               {
+//                 lastResult,
+//               },
+//             ),
+//           ),
+//         );
+//       }
+//     }, SPONSORING_POLL_INTERVAL);
+//     // console.log(`Started pollSponsorship ${intervalId}`);
+//   };
 
 export const linkAppOrContext =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
@@ -637,35 +644,35 @@ export const handleLinkContextOpUpdate =
     state: OperationStateType;
     result: any;
   }): AppThunk<Promise<void>> =>
-  async (dispatch: AppDispatch, getState) => {
-    // make sure this is only called with the correct operation
-    if (op.name !== 'Link ContextId') {
-      return;
-    }
-
-    dispatch(
-      updateLinkedContext({
-        context: op.context,
-        contextId: op.contextId,
-        state,
-      }),
-    );
-
-    // Update local state only if UI is in app linking workflow and waiting for the operation.
-    // The operation update might come in anytime when the app is not in the linking workflow
-    const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
-      if (state === operation_states.APPLIED) {
-        dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
-      } else {
-        const text = t('apps.alert.text.linkFailure', {
-          context: `${op.context}`,
-          result: `${result.message}`,
-        });
-        dispatch(setLinkingAppError(text));
+    async (dispatch: AppDispatch, getState) => {
+      // make sure this is only called with the correct operation
+      if (op.name !== 'Link ContextId') {
+        return;
       }
-    }
-  };
+
+      dispatch(
+        updateLinkedContext({
+          context: op.context,
+          contextId: op.contextId,
+          state,
+        }),
+      );
+
+      // Update local state only if UI is in app linking workflow and waiting for the operation.
+      // The operation update might come in anytime when the app is not in the linking workflow
+      const applinkingStep = selectApplinkingStep(getState());
+      if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
+        if (state === operation_states.APPLIED) {
+          dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
+        } else {
+          const text = t('apps.alert.text.linkFailure', {
+            context: `${op.context}`,
+            result: `${result.message}`,
+          });
+          dispatch(setLinkingAppError(text));
+        }
+      }
+    };
 
 export const linkAppId =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
