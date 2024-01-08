@@ -505,10 +505,10 @@ export class NodeApi {
     NodeApi.throwOnError(res);
   }
 
-  async sponsorship(appId: string) {
-    const name = 'Sponsorship';
+  async sponsor(appId: string) {
+    const name = 'Sponsor';
     const timestamp = Date.now();
-    const op: SponsorshipOp = {
+    const op: SponsorOp = {
       name,
       app: appId,
       timestamp,
