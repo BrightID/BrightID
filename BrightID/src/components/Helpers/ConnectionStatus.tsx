@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import {
-  connectionLevelColors,
-  connectionLevelStrings,
+  getConnectionLevelColor,
+  getConnectionLevelString,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, RED } from '@/theme/colors';
@@ -87,10 +87,10 @@ export const ConnectionStatus = ({
           testID={`connection_level-${index}`}
           style={[
             styles.connectionLevel,
-            { color: connectionLevelColors[level] },
+            { color: getConnectionLevelColor(level) },
           ]}
         >
-          {connectionLevelStrings[level]}
+          {getConnectionLevelString(level)}
         </Text>
         {ConnectionDate}
         {InfoText}

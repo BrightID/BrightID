@@ -3,15 +3,15 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
 import {
-  uInt8ArrayToB64,
   b64ToUrlSafeB64,
+  uInt8ArrayToB64,
   urlSafeRandomKey,
 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { selectChannelById } from '@/components/PendingConnections/channelSlice';
 import {
-  selectConnectionById,
   selectAllConnections,
+  selectConnectionById,
 } from '@/reducer/connectionsSlice';
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
@@ -19,7 +19,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { addOperation } from '@/reducer/operationsSlice';
 import { NodeApi } from '@/api/brightId';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { getConnectionLevelString } from '@/utils/connectionLevelStrings';
 
 /** SELECTORS */
 
@@ -107,7 +107,9 @@ export const connectWithOtherFakeConnections =
     const otherFakeUsers = selectOtherFakeConnections(getState(), id);
 
     console.log(
-      `Connecting ${id} with ${otherFakeUsers.length} fake connections as ${connectionLevelStrings[level]}`,
+      `Connecting ${id} with ${
+        otherFakeUsers.length
+      } fake connections as ${getConnectionLevelString(level)}`,
     );
     for (const otherUser of otherFakeUsers) {
       const ops = await connectFakeUsers(
