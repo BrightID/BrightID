@@ -4,11 +4,11 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import {
-  connectionLevelColors,
-  connectionLevelStrings,
+  getConnectionLevelColor,
+  getConnectionLevelString,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLUE, BLACK } from '@/theme/colors';
+import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
 
@@ -38,10 +38,10 @@ function TrustLevelView({ level, connectionId }: Props) {
           testID="ConnectionLevelText"
           style={[
             styles.trustLevelText,
-            { color: connectionLevelColors[level] },
+            { color: getConnectionLevelColor(level) },
           ]}
         >
-          {connectionLevelStrings[level]}
+          {getConnectionLevelString(level)}
         </Text>
       </View>
       {level !== connection_levels.REPORTED && (

@@ -6,8 +6,8 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
-  connectionLevelColors,
-  connectionLevelStrings,
+  getConnectionLevelColor,
+  getConnectionLevelString,
 } from '@/utils/connectionLevelStrings';
 import { RatingButton } from './RatingButton';
 
@@ -28,20 +28,20 @@ export const RatingView = ({
       </Text>
       <View style={styles.buttonsContainer}>
         <RatingButton
-          color={connectionLevelColors[connection_levels.SUSPICIOUS]}
-          label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
+          color={getConnectionLevelColor(connection_levels.SUSPICIOUS)}
+          label={getConnectionLevelString(connection_levels.SUSPICIOUS)}
           handleClick={() => abuseHandler()}
           testID={`${connection_levels.SUSPICIOUS}Btn`}
         />
         <RatingButton
-          color={connectionLevelColors[connection_levels.JUST_MET]}
-          label={connectionLevelStrings[connection_levels.JUST_MET]}
+          color={getConnectionLevelColor(connection_levels.JUST_MET)}
+          label={getConnectionLevelString(connection_levels.JUST_MET)}
           handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
           testID={`${connection_levels.JUST_MET}Btn`}
         />
         <RatingButton
-          color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
-          label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
+          color={getConnectionLevelColor(connection_levels.ALREADY_KNOWN)}
+          label={getConnectionLevelString(connection_levels.ALREADY_KNOWN)}
           handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
           testID={`${connection_levels.ALREADY_KNOWN}Btn`}
         />

@@ -1,0 +1,126 @@
+{
+  "achievements": {
+    "auraVerification": {
+      "description": "Naučte se více o Aura",
+      "title": "Aura ověření"
+    },
+    "bituVerification": {
+      "description": "Více informací",
+      "title": "Bitu ověření"
+    },
+    "getSponsored": {
+      "description": "Buďte sponzorován za připojení aplikace která nabízí sponzorování",
+      "title": "Být sponzorován"
+    },
+    "joinMeet": {
+      "description": "Připojte se na BrightID setkání",
+      "title": "BrightID setkání"
+    },
+    "linkApp": {
+      "description": "Připojte svůj BrightID s aplikací",
+      "title": "Připojit s aplikací"
+    },
+    "makeFirstConnection": {
+      "description": "Připojit jiný BrightID účet",
+      "title": "První připojení"
+    },
+    "makeThreeConnection": {
+      "description": "Připojit se s třemi BrightID uživateli",
+      "title": "Tři připojení"
+    },
+    "notification": {
+      "message": "Dokončil jsi úkol \"{{title}}\".",
+      "title": "Úspěch dokončen!"
+    },
+    "progress": {
+      "title": "Dokončení:"
+    },
+    "setupBackup": {
+      "description": "Nastavte si heslo pro povolení zašifrování zálohy vašech dat",
+      "title": "Nastavit si záložní heslo"
+    },
+    "setupRecoveryConnections": {
+      "description": "Nastavte si svoje obnovovací připojení pro sociální obnovení",
+      "title": "Nastavení sociální obnovení"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Přidat info o zařízení"
+    },
+    "info": "Povolení nového zařízení na váš BrightID účet",
+    "steps": {
+      "adding": "Přidávání podepisovacího klíče...",
+      "complete": "Podepisovací klíč přidán",
+      "downloading": "Stahování nové data o zařízení...",
+      "error": "Přidávání podepisovacího klíče se nezdařilo"
+    }
+  },
+  "alert": {
+    "text": {
+      "appInfoFailure": "Nelze získat nejnovější appInfo: {{message}}. Zkuste to prosím znovu.",
+      "appNotSponsoring": "Nejste sponzorován a {{app}} nepodporuje sponzorování. Prosím najděte jinou aplikace která vás bude sponzorovat.",
+      "appSponsorTimeout": "Odezva pro sponzorování vypršela. {{lastResult}}",
+      "sponsorOpFailed": "Spend sponzor operace se nezdařila",
+      "sponsorOpTimeout": "Časový limit pro spend sponsor operaci vypršel"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Ano"
+      },
+      "nodeError": "BrightID API pro uzel není dostupný. Zkuste to prosím znovu.",
+      "text": {
+        "blindSigAlreadyLinked": "Už jste se připojil s {{app}} s ID {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Pokusil jste se připojit s {{app}} s {{appUserId}}. Už jste se dávno připojil s {{app}} s jinou ID {{previousAppUserIds}}. Toto může vést k problémům s používáním aplikace.",
+        "callbackError": "Aplikace {{context}} nahlásila problém: {{error}}",
+        "checkWebsite": "Pro zjištění více info o {{name}}, navštivte jejich stránky!",
+        "invalidApp": "{{app}} není platná aplikace!",
+        "invalidContext": "{{context}} není platný kontext!",
+        "linkApp": "Chcete svůj účet propojit v {{context}} do vašeho BrightID?",
+        "linkFailure": "Nezdařilo se propojit se váš účet v {{context}} do vašeho BrightID\n{{result}}",
+        "linkSigFailed": "Chyba s ověřením připojováním {{verification}} do aplikace {{appId}}. Chybová zpráva: {{msg}}",
+        "linkSuccess": "Úspěšné připojení s vaším účtem v {{context}} s vaším BrightID",
+        "missingBlindSig": "Pro aplikaci {{appId}} nebyl nalezen žádný slepý příznak. Chybí ověření: {{missingVerifications}}. Ověření jsou již propojena: {{linkedVerifications}}",
+        "missingVerification": "Chybí vám ověření: {{verifications}}.",
+        "notPrimary": "V současné době používáte sekundární zařízení. Propojení aplikace \"{{app}}\" vyžaduje interakci s vaším primárním zařízením. Synchronizujte se s primárním zařízením nebo proveďte propojení s primárním zařízením."
+      },
+      "title": {
+        "callbackError": "Chyba při aplikační callbacku",
+        "linkApp": "Chcete připojit tuto aplikaci?",
+        "linkingFailed": "Spojení s aplikací se nezdařilo"
+      }
+    },
+    "linking": {
+      "active": "Připojení s",
+      "linkWaitingV5": "Čekání na potvrzení operace propojení",
+      "notPossible": "Nelze propojit s {{app}}",
+      "notSponsored": "Nejste sponzorován.",
+      "precheckApp": "Kontrola předchozí žádosti o sponzorování",
+      "prelinkCheck": "Kontrola předpokladů pro propojení",
+      "refreshingApps": "Ověeřování detaily o aplikaci",
+      "sponsorWaitingApp": "Čekání na sponzorování {{app}}",
+      "sponsorWaitingOp": "Žádání sponzorování od aplikace",
+      "sponsored": "Jste sponzorován.",
+      "success": "Úspěšně propojeno!",
+      "waitingV6": "Čeká se na dokončení propojování"
+    },
+    "text": {
+      "noApps": "Žádné aplikace",
+      "notSponsored": "Nejste sponzorován.\nProsím najděte aplikaci která vás bude sponzorovat."
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "Verze klienta je zastaralá - prosím aktualizujte kliena a zkuste to znovu"
+      }
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "Přidat fotografii"
+    }
+  }
+}
