@@ -11,7 +11,7 @@ import {
   reconnectFakeConnection,
 } from '../actions/fakeContact';
 import { connection_levels } from '@/utils/constants';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { getConnectionLevelString } from '@/utils/connectionLevelStrings';
 
 /*
 Return a button that opens actionsheet with test methods
@@ -20,15 +20,15 @@ const btnOptions = [
   'Accept all group invites',
   'Reconnect with changed profile',
   'Reconnect with identical profile',
-  `Connect with all other fake connections - ${
-    connectionLevelStrings[connection_levels.JUST_MET]
-  }`,
-  `Connect with all other fake connections - ${
-    connectionLevelStrings[connection_levels.ALREADY_KNOWN]
-  }`,
-  `Connect with all other fake connections - ${
-    connectionLevelStrings[connection_levels.RECOVERY]
-  }`,
+  `Connect with all other fake connections - ${getConnectionLevelString(
+    connection_levels.JUST_MET,
+  )}`,
+  `Connect with all other fake connections - ${getConnectionLevelString(
+    connection_levels.ALREADY_KNOWN,
+  )}`,
+  `Connect with all other fake connections - ${getConnectionLevelString(
+    connection_levels.RECOVERY,
+  )}`,
   'cancel',
 ];
 

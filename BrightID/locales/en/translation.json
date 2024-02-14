@@ -613,6 +613,7 @@
   "pendingConnections": {
     "label": {
       "alreadyKnown": "Already known",
+      "unknownLevel": "Unknown Level",
       "connections": "Connections",
       "created": "Joined BrightID {{date}}",
       "groups": "Groups",
