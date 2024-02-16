@@ -587,9 +587,9 @@
       "recover": "Social Recovery"
     },
     "text": {
-      "congratulations": "Congratulations!\nYour BrightID has been created.It’s time to \nmake connections.",
+      "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
       "congratulations1": "Congratulations!",
-      "congratulations2": "Your BrightID has been created.\nIt’s time to make connections.",
+      "congratulations2": "Your BrightID has been created.It’s time to \nmake connections.",
       "register": "Register to create your very own\ndigital identity"
     }
   },
