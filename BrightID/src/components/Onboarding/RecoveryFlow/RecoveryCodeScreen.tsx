@@ -13,7 +13,6 @@ import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18next from 'i18next';
@@ -22,12 +21,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   BLACK,
-  DARKER_GREY,
   DARK_PRIMARY,
   GRAY8,
   GRAY9,
   GREY,
-  LIGHT_BLACK,
   ORANGE,
   SUCCESS,
   WHITE,
@@ -425,10 +422,7 @@ const RecoveryCodeScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  LogoContainer: {
-    // marginTop: 58,
-    // marginBottom: 58,
-  },
+  LogoContainer: {},
   container: {
     flex: 1,
     backgroundColor: WHITE,
@@ -462,14 +456,12 @@ const styles = StyleSheet.create({
     color: GRAY9,
     width: '80%',
     lineHeight: 24,
-    // marginTop: DEVICE_LARGE ? 30 : 26,
   },
   additionalInfo: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
     textAlign: 'center',
     color: GRAY8,
-    // width: '80%',
     lineHeight: 24,
     marginBottom: DEVICE_LARGE ? 50 : 45,
   },

@@ -8,12 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch } from '@/store/hooks';
-import {
-  WHITE,
-  BLUE,
-  SUCCESS,
-  GRAY1,
-} from '@/theme/colors';
+import { WHITE, BLUE, SUCCESS, GRAY1 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
@@ -30,10 +25,10 @@ export const Eula = () => {
   return (
     <>
       <StatusBar
-          barStyle="dark-content"
-          backgroundColor={GRAY1}
-          animated={true}
-        />
+        barStyle="dark-content"
+        backgroundColor={GRAY1}
+        animated={true}
+      />
       <View testID="EulaScreen" style={styles.container}>
         <View>
           <ScrollView
@@ -64,25 +59,21 @@ export const Eula = () => {
             </Text>
           </ScrollView>
 
-          
           <View style={styles.confirmationButton}>
             <TouchableOpacity
-                testID="acceptEulaBtn"
-                style={styles.acceptButton}
-                onPress={handleAccept}
-              >
-                <Text style={styles.acceptButtonText}>{'Agree'}</Text>
-                <LinearLeftToRightArrow  />
-              </TouchableOpacity>
+              testID="acceptEulaBtn"
+              style={styles.acceptButton}
+              onPress={handleAccept}
+            >
+              <Text style={styles.acceptButtonText}>{'Agree'}</Text>
+              <LinearLeftToRightArrow />
+            </TouchableOpacity>
           </View>
         </View>
-
       </View>
     </>
   );
 };
-
-const CONFIRMATION_HEIGHT = DEVICE_LARGE ? 60 : 55;
 
 const styles = StyleSheet.create({
   container: {
@@ -97,7 +88,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingHorizontal: DEVICE_LARGE ? 20 : 18,
     paddingTop: 30,
-    // paddingBottom: CONFIRMATION_HEIGHT,
   },
   header: {
     fontFamily: 'Poppins-Bold',
@@ -131,7 +121,6 @@ const styles = StyleSheet.create({
   },
   acceptButton: {
     height: 52,
-    // height: DEVICE_LARGE ? 32 : 29,
     backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
@@ -139,7 +128,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: SUCCESS,
     width: '100%',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   acceptButtonText: {
     fontFamily: 'Poppins-Medium',
@@ -147,7 +136,6 @@ const styles = StyleSheet.create({
     color: SUCCESS,
     marginRight: 12,
   },
-
 });
 
 export default Eula;

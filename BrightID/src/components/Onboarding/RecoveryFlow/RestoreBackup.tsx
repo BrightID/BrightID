@@ -10,7 +10,15 @@ import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
-import { BLACK, DARKER_GREY, GRAY9, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import {
+  BLACK,
+  DARKER_GREY,
+  GRAY9,
+  GREEN,
+  ORANGE,
+  RED,
+  WHITE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
@@ -186,8 +194,6 @@ export const RestoreBackup = ({
 
 const styles = StyleSheet.create({
   container: {
-    // justifyContent: 'center',
-    // width: '100%',
     alignItems: 'center',
   },
   headerTextContainer: {
@@ -215,7 +221,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoTextContainer: {
-    // flex: 1,
     marginLeft: 10,
   },
   infoText: {

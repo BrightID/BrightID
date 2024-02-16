@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AccountSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import { fontSize } from '@/theme/fonts';
-import { BLACK, DARKER_GREY, GRAY9, GREEN, ORANGE, RED } from '@/theme/colors';
+import { GRAY9, GREEN, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
 
-/* Component to track account recovery */
 type RecoverAccountParams = {
   currentStep: AccountSteps;
   errorMessage: string;
@@ -22,9 +21,8 @@ export const RecoverAccount = ({
   recoveredGroups,
 }: RecoverAccountParams) => {
   const [stateDescription, setStateDescription] = useState('');
-  const [iconData, setIconData] = useState<{ color: string; name: string }>(
-    undefined,
-  );
+  const [iconData, setIconData] =
+    useState<{ color: string; name: string }>(undefined);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -81,7 +79,7 @@ export const RecoverAccount = ({
         </Text>
       </View>
       <View style={styles.statusContainer}>
-        <View style={{marginTop: 20, marginBottom: 20}}>
+        <View style={{ marginTop: 20, marginBottom: 20 }}>
           {iconData ? (
             <IonIcons
               style={{ alignSelf: 'center' }}
@@ -119,8 +117,6 @@ export const RecoverAccount = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    // width: '100%',
-    // height: 252
   },
   headerTextContainer: {
     justifyContent: 'center',
@@ -138,7 +134,6 @@ const styles = StyleSheet.create({
     color: GRAY9,
     fontSize: fontSize[12],
     lineHeight: 24,
-    // maxWidth: '90%',
   },
   statusContainer: {
     flexDirection: 'column',
@@ -153,12 +148,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: GRAY9,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   infoSubText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[10],
     color: GRAY9,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });

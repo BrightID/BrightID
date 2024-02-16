@@ -10,10 +10,10 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, ORANGE, PRIMARY, BLACK, SUCCESS, GRAY1 } from '@/theme/colors';
+import { WHITE, PRIMARY, BLACK, SUCCESS, GRAY1 } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
@@ -85,9 +85,11 @@ export const SuccessScreen = () => {
 
         <View>
           {/* todo the texts should be modified in locales and here */}
-          <Text style={styles.congratText}>Congratulations!</Text>
+          <Text style={styles.congratText}>
+            {t('onboarding.text.congratulations1')}
+          </Text>
           <Text style={styles.registerText}>
-            Your BrightID has been created.It's time to make connections
+            {t('onboarding.text.congratulations2')}
           </Text>
         </View>
 
@@ -143,23 +145,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: DEVICE_LARGE ? 26 : 24,
     color: SUCCESS,
-    // fontWeight: '600'
-    // marginBottom: DEVICE_LARGE ? 50 : 45,
   },
   registerText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[16],
     textAlign: 'center',
     lineHeight: DEVICE_LARGE ? 26 : 24,
-    // marginBottom: DEVICE_LARGE ? 50 : 45,
-    // marginBottom: 100,
     color: '#424242',
   },
   continueBtn: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '89%',
-    // height: DEVICE_LARGE ? 50 : 45,
     height: '6.5%',
     backgroundColor: PRIMARY,
     borderRadius: 16,
@@ -167,9 +164,7 @@ const styles = StyleSheet.create({
     shadowColor: BLACK,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 4,
-    // marginBottom: 87,
     flexDirection: 'row',
-    // marginTop: 78
   },
   continueBtnText: {
     fontFamily: 'Poppins-Bold',

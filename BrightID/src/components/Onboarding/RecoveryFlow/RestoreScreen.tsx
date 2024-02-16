@@ -5,13 +5,11 @@ import {
   KeyboardAvoidingView,
   Alert,
   StatusBar,
-  Text
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { BLACK, GRAY1, GRAY2, GRAY9, ORANGE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GRAY1, GRAY2, WHITE } from '@/theme/colors';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
@@ -221,12 +219,12 @@ const RestoreScreen = () => {
   };
 
   return (
-    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: WHITE}}>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: WHITE }}>
       <StatusBar
-          barStyle="dark-content"
-          backgroundColor={GRAY1}
-          animated={true}
-        />
+        barStyle="dark-content"
+        backgroundColor={GRAY1}
+        animated={true}
+      />
       <KeyboardAvoidingView style={styles.container} behavior="position">
         <View style={styles.recoverAccountContainer}>
           <RecoverAccount
@@ -262,27 +260,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     zIndex: 10,
     overflow: 'hidden',
-    // borderTopLeftRadius: 58,
-    // marginTop: -58,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 20
+    paddingTop: 20,
   },
   divider: {
-    // marginTop: DEVICE_LARGE ? 40 : 20,
-    // marginBottom: DEVICE_LARGE ? 30 : 20,
     marginTop: 32,
     marginBottom: 32,
     borderBottomWidth: 1,
     borderColor: GRAY2,
-    // height: 1,
-    // width: 360,
-    // backgroundColor: GRAY9
   },
-  recoverAccountContainer: {
-    // marginTop: DEVICE_LARGE ? 25 : 20,
-    // minHeight: '25%',
-  },
+  recoverAccountContainer: {},
   restoreBackupContainer: {
     height: '50%',
   },

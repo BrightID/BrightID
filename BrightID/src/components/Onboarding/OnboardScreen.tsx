@@ -8,13 +8,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Modal
+  Modal,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, BLACK, GREEN, PRIMARY, GRAY10, GRAY1, GRAY9 } from '@/theme/colors';
+import {
+  WHITE,
+  BLACK,
+  GREEN,
+  PRIMARY,
+  GRAY10,
+  GRAY1,
+  GRAY9,
+} from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { qrCodeURL_types } from '@/utils/constants';
@@ -25,6 +33,7 @@ import {
 import { createKeypair } from './SignUpFlow/thunks';
 import Close from '../Icons/Close';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { version as app_version } from '../../../package.json';
 
 /* Description */
 
@@ -98,7 +107,7 @@ export const Onboard = () => {
 
   const handleModalRequestClose = () => {
     setModalVisible(!modalVisible);
-  }
+  };
 
   return (
     <>
@@ -109,12 +118,21 @@ export const Onboard = () => {
           animated={true}
         />
 
-        <Modal animationType='fade' visible={modalVisible} transparent={true} onRequestClose={() => handleModalRequestClose()}>
-          <TouchableOpacity style={styles.closingModal} onPress={() => {setModalVisible(false)}} />
+        <Modal
+          animationType="fade"
+          visible={modalVisible}
+          transparent={true}
+          onRequestClose={() => handleModalRequestClose()}
+        >
+          <TouchableOpacity
+            style={styles.closingModal}
+            onPress={() => {
+              setModalVisible(false);
+            }}
+          />
 
           <View style={styles.modalCenteredView}>
-            <View style={styles.modalContainer}> 
-
+            <View style={styles.modalContainer}>
               <View style={styles.modalHeaderContainer}>
                 <Text style={styles.modalHeaderText}>
                   Account Recovery Option
@@ -129,14 +147,19 @@ export const Onboard = () => {
               </Text>
 
               <View style={styles.modalBtnContainer}>
-                <TouchableOpacity style={styles.modalLeftBtn} onPress={restartRecoveryHandler}>
+                <TouchableOpacity
+                  style={styles.modalLeftBtn}
+                  onPress={restartRecoveryHandler}
+                >
                   <Text style={styles.modalLeftBtnText}>Restart</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.modalRightBtn} onPress={continueRecoveryHandler}>
+                <TouchableOpacity
+                  style={styles.modalRightBtn}
+                  onPress={continueRecoveryHandler}
+                >
                   <Text style={styles.modalRightBtnText}>Continue</Text>
                 </TouchableOpacity>
               </View>
-
             </View>
           </View>
         </Modal>
@@ -198,11 +221,11 @@ export const Onboard = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <View style={styles.versionInfoContainer}>
+        <View style={styles.versionInfoContainer}>
           <Text style={styles.versionInfo}>
             {baseUrl ? baseUrl.split('://')[1] : 'unknown'} - v{app_version}
           </Text>
-        </View> */}
+        </View>
       </SafeAreaView>
     </>
   );
@@ -216,13 +239,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     fontWeight: '600',
     textAlign: 'center',
-    color: GRAY9
+    color: GRAY9,
   },
   modalHeaderContainer: {
     flexDirection: 'row',
     // alignContent: 'center'
     // alignItems: 'center'
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   modalText: {
     textAlign: 'center',
@@ -241,14 +264,14 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 16,
     justifyContent: 'center',
-    backgroundColor: PRIMARY
+    backgroundColor: PRIMARY,
   },
   modalRightBtnText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     fontWeight: '600',
     textAlign: 'center',
-    color: WHITE
+    color: WHITE,
   },
   modalLeftBtn: {
     width: 136,
@@ -263,7 +286,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     fontWeight: '600',
     textAlign: 'center',
-    color: PRIMARY
+    color: PRIMARY,
   },
 
   closingModal: {
@@ -287,7 +310,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     backgroundColor: GRAY1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   container: {
     flex: 1,
@@ -308,7 +331,7 @@ const styles = StyleSheet.create({
     maxHeight: 90,
   },
   center: {
-    marginTop: 80
+    marginTop: 80,
   },
   phone: {
     width: DEVICE_LARGE ? 140 : 130,

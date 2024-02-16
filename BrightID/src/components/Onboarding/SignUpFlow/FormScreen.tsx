@@ -5,13 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ScrollView,
   View,
-  Pressable,
   SafeAreaView,
   Image,
   TextInput,
-  KeyboardAvoidingView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -21,11 +18,9 @@ import {
   WHITE,
   BLACK,
   BLUE,
-  GREEN,
   PRIMARY,
   GRAY7,
   GRAY6,
-  GRAY10,
   GRAY4,
   ERROR,
   GRAY8,
@@ -33,7 +28,6 @@ import {
   GRAY1,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import Avatar from '../../Icons/Avatar';
 import AvatarRedesigned from '@/components/Icons/AvatarRedesigned';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Eye from '@/components/Icons/Eye';
@@ -168,7 +162,7 @@ export const FormScreen = () => {
   };
 
   const passwordOnChange = (text: string) => {
-    if (text.length < PASSWORD_LENGTH) {
+    if (text.length != 0 && text.length < PASSWORD_LENGTH) {
       setPasswordErrors([`Password must be ${PASSWORD_LENGTH} characters`]);
     } else {
       setPasswordErrors(['']);
@@ -180,8 +174,7 @@ export const FormScreen = () => {
     passwordErrors[0] ||
     nameErrors[0] ||
     displayName.length < 2 ||
-    !finalBase64 ||
-    !password;
+    !finalBase64;
 
   return (
     <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: WHITE }}>
@@ -334,7 +327,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
     backgroundColor: '#FFF',
     zIndex: 20,
-    // alignSelf: 'flex-start'
   },
 
   inputsUpperTextContainer: {
@@ -351,7 +343,6 @@ const styles = StyleSheet.create({
     color: GRAY8,
     fontSize: fontSize[12],
     textAlign: 'center',
-    // width: 'auto'
   },
   container: {
     flex: 1,
@@ -384,9 +375,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize[18],
     fontWeight: '600',
   },
-  descContainer: {
-    // marginTop: DEVICE_LARGE ? 100 : 85,
-  },
   AvatarContainer: {
     width: '100%',
     alignItems: 'center',
@@ -412,14 +400,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     color: GRAY7,
     textAlign: 'center',
-    // marginTop: DEVICE_LARGE ? 36 : 30,
     marginTop: '15%',
   },
   inputContainer: {
     flexDirection: 'column',
     width: '100%',
-    // alignItems: 'center',
-    // marginBottom: 24,
   },
   focusedTextInput: {
     fontFamily: 'Poppins-Regular',
@@ -467,7 +452,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: GRAY8,
     textAlign: 'center',
-    // marginTop: DEVICE_LARGE ? 36 : 30,
   },
 });
 
