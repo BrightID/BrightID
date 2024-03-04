@@ -823,7 +823,8 @@
       "confirmPassword": "confirm your password",
       "name": "Your name",
       "password": "password",
-      "newName": "name"
+      "newName": "Name",
+      "newPassword": "Password"
     },
     "text": {
       "createPassword": "Create your BrightID password",

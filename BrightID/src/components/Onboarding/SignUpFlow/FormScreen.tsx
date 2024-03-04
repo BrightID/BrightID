@@ -39,6 +39,8 @@ import { retrieveImage } from '@/utils/filesystem';
 import { savePhoto } from './thunks';
 import PencilCircle from '@/components/Icons/PencilCircle';
 import { setPassword as setUserPassword, setName } from '@/actions';
+import NewInfo from '@/components/Icons/NewInfo';
+import Info from '@/components/Icons/Info';
 
 const PASSWORD_LENGTH = 8;
 
@@ -106,20 +108,30 @@ export const FormScreen = () => {
         options: [
           t('common.photoActionSheet.takePhoto'),
           t('common.photoActionSheet.choosePhoto'),
-          t('common.actionSheet.cancel'),
+          // t('common.actionSheet.cancel'),
         ],
-        cancelButtonIndex: 2,
+        cancelButtonIndex: 3,
         title: t('common.photoActionSheet.title'),
         showSeparators: true,
+        containerStyle: {
+          borderTopLeftRadius: 32,
+          borderTopRightRadius: 32,
+          paddingBottom: 20,
+        },
         textStyle: {
-          color: BLUE,
-          textAlign: 'center',
+          color: GRAY9,
+          textAlign: 'left',
           width: '100%',
-          fontSize: fontSize[18],
+          fontSize: fontSize[14],
+          fontFamily: 'Poppins-Medium',
+          paddingLeft: 12,
         },
         titleTextStyle: {
           textAlign: 'center',
-          fontSize: fontSize[20],
+          color: GRAY9,
+          fontFamily: 'Poppins-Bold',
+          fontSize: fontSize[16],
+
           width: '100%',
         },
       },
@@ -230,7 +242,10 @@ export const FormScreen = () => {
               value={displayName}
               placeholder={t('signup.placeholder.newName')}
               placeholderTextColor={nameFocus ? GRAY4 : GRAY6}
-              style={nameFocus ? styles.focusedTextInput : styles.textInput}
+              style={[
+                nameFocus ? styles.focusedTextInput : styles.textInput,
+                nameErrors[0] ? { borderColor: ERROR } : {},
+              ]}
               autoCapitalize="words"
               autoCorrect={false}
               textContentType="name"
@@ -251,7 +266,7 @@ export const FormScreen = () => {
             {passwordFocus ? (
               <View style={styles.inputsUpperTextContainer}>
                 <Text style={styles.inputsUpperText}>
-                  {t('signup.placeholder.password')}
+                  {t('signup.placeholder.newPassword')}
                 </Text>
               </View>
             ) : null}
@@ -260,13 +275,16 @@ export const FormScreen = () => {
               autoComplete="password"
               autoCorrect={false}
               secureTextEntry={secureTextEntry}
-              style={passwordFocus ? styles.focusedTextInput : styles.textInput}
+              style={[
+                passwordFocus ? styles.focusedTextInput : styles.textInput,
+                passwordErrors[0] ? { borderColor: ERROR } : {},
+              ]}
               textContentType="password" // passwordrules="minlength: 16; required: lower; required: upper; required: digit; required: [-];"
               underlineColorAndroid="transparent"
               testID="password"
               onChangeText={passwordOnChange}
               value={password}
-              placeholder={t('signup.placeholder.password')}
+              placeholder={t('signup.placeholder.newPassword')}
               placeholderTextColor={nameFocus ? GRAY4 : GRAY6}
               blurOnSubmit={true}
               ref={passwordInput}
@@ -277,9 +295,9 @@ export const FormScreen = () => {
             <View style={styles.inputIconContainer}>
               <TouchableOpacity onPress={handleEyeClick}>
                 {secureTextEntry ? (
-                  <EyeOff color={passwordFocus ? GRAY9 : GRAY6} />
+                  <EyeOff color={GRAY9} />
                 ) : (
-                  <Eye color={passwordFocus ? GRAY9 : GRAY6} />
+                  <Eye color={GRAY9} />
                 )}
               </TouchableOpacity>
             </View>
@@ -291,9 +309,13 @@ export const FormScreen = () => {
 
           <View style={styles.verticalSpace} />
 
-          <Text style={styles.passwordInfoStyle}>
-            {t('signup.text.passwordInfo')}
-          </Text>
+          {/* <Info /> */}
+          <View style={{ flexDirection: 'row' }}>
+            <NewInfo />
+            <Text style={styles.passwordInfoStyle}>
+              {t('signup.text.passwordInfo')}
+            </Text>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -371,8 +393,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   submitBtnText: {
+    fontFamily: 'Poppins-Bold',
     color: WHITE,
-    fontSize: fontSize[18],
+    fontSize: fontSize[16],
     fontWeight: '600',
   },
   AvatarContainer: {
@@ -384,7 +407,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     textAlign: 'center',
-    lineHeight: DEVICE_LARGE ? 26 : 24,
+    lineHeight: 26,
   },
   photo: {
     width: 150,
@@ -397,7 +420,7 @@ const styles = StyleSheet.create({
   },
   privacyText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[16],
+    fontSize: fontSize[14],
     color: GRAY7,
     textAlign: 'center',
     marginTop: '15%',
@@ -410,7 +433,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
     // todo What will be the text color here?
-    color: BLACK,
+    color: GRAY9,
     borderWidth: 1,
     borderRadius: 16,
     borderColor: GRAY8,
@@ -423,8 +446,7 @@ const styles = StyleSheet.create({
   textInput: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
-    // todo What will be the text color here?
-    color: BLACK,
+    color: GRAY9,
     borderWidth: 1,
     borderRadius: 16,
     borderColor: GRAY4,
@@ -448,8 +470,9 @@ const styles = StyleSheet.create({
     minHeight: 140,
   },
   passwordInfoStyle: {
+    marginLeft: 1,
     fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[14],
+    fontSize: fontSize[12],
     color: GRAY8,
     textAlign: 'center',
   },

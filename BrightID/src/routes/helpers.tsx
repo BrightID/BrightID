@@ -10,7 +10,7 @@ import BackArrow from '@/components/Icons/BackArrow';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Bold',
-  fontSize: fontSize[20],
+  fontSize: fontSize[16],
   // color: WHITE,
   color: GRAY9,
 };

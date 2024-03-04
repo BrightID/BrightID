@@ -141,16 +141,17 @@ const styles = StyleSheet.create({
   },
   congratText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[18],
+    fontSize: fontSize[16],
     textAlign: 'center',
-    lineHeight: DEVICE_LARGE ? 26 : 24,
+    lineHeight: 26,
     color: SUCCESS,
+    marginBottom: 4,
   },
   registerText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[16],
+    fontSize: fontSize[14],
     textAlign: 'center',
-    lineHeight: DEVICE_LARGE ? 26 : 24,
+    lineHeight: 26,
     color: '#424242',
   },
   continueBtn: {
@@ -160,10 +161,6 @@ const styles = StyleSheet.create({
     height: '6.5%',
     backgroundColor: PRIMARY,
     borderRadius: 16,
-    elevation: 1,
-    shadowColor: BLACK,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 4,
     flexDirection: 'row',
   },
   continueBtnText: {

@@ -197,6 +197,7 @@ export const Onboard = () => {
               {t('onboarding.button.create')}
             </Text>
           </TouchableOpacity>
+          <View style={{ height: 5 }} />
           <View style={styles.recoverImportContainer}>
             <TouchableOpacity
               style={styles.recoverBtn}
@@ -235,7 +236,6 @@ const styles = StyleSheet.create({
   modalHeaderText: {
     marginRight: 30,
     fontFamily: 'Poppins-Medium',
-    // fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
     fontWeight: '600',
     textAlign: 'center',
@@ -243,8 +243,6 @@ const styles = StyleSheet.create({
   },
   modalHeaderContainer: {
     flexDirection: 'row',
-    // alignContent: 'center'
-    // alignItems: 'center'
     justifyContent: 'flex-end',
   },
   modalText: {
@@ -292,7 +290,6 @@ const styles = StyleSheet.create({
   closingModal: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
-    // justifyContent:'center',
   },
   modalCenteredView: {
     flex: 1,
@@ -324,7 +321,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '18%',
-    // borderWidth: 1,
   },
   logo: {
     maxWidth: '40%',
@@ -339,7 +335,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[16],
+    fontSize: fontSize[14],
     textAlign: 'center',
     fontWeight: '500',
     lineHeight: DEVICE_LARGE ? 26 : 24,
@@ -347,7 +343,6 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     width: '89%',
-    // height: 72,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -357,14 +352,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    // height: DEVICE_LARGE ? 50 : 45,
     height: 52,
     backgroundColor: PRIMARY,
     borderRadius: 16,
-    elevation: 1,
-    shadowColor: BLACK,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 4,
   },
   createBtnText: {
     fontFamily: 'Poppins-Bold',
@@ -378,7 +368,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    // height: DEVICE_LARGE ? 50 : 45,
     height: 52,
     backgroundColor: WHITE,
     borderWidth: 1,
@@ -387,8 +376,8 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 14 : 12,
   },
   recoverBtnText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[14],
     color: PRIMARY,
   },
   recoverImportContainer: {

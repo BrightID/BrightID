@@ -66,7 +66,7 @@ export const Eula = () => {
               onPress={handleAccept}
             >
               <Text style={styles.acceptButtonText}>{'Agree'}</Text>
-              <LinearLeftToRightArrow />
+              <LinearLeftToRightArrow color={SUCCESS} />
             </TouchableOpacity>
           </View>
         </View>

@@ -354,7 +354,9 @@ const RecoveryCodeScreen = ({ route }) => {
             {action === 'import' && (
               <View style={styles.changePrimaryDeviceSwitchContainer}>
                 <CheckBox
+                  
                   tintColors={{ false: GREY, true: ORANGE }}
+                  // style={{borderRadius: }}
                   onValueChange={(value) => {
                     setChangePrimaryDevice(value);
                   }}
@@ -444,6 +446,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     textAlign: 'center',
     color: GRAY9,
+    marginLeft: 8,
   },
   qrsvgContainer: {
     alignItems: 'center',
