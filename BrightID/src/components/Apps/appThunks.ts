@@ -6,7 +6,7 @@ import {
   getSponsorship,
   waitForBlindSigsUpdate,
 } from '@/components/Apps/model';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { getGlobalNodeApi } from '@/context/NodeApiContext';
 import {
   addLinkedContext,
   selectAllSigs,

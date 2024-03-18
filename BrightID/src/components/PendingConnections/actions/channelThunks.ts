@@ -31,7 +31,7 @@ import {
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { getGlobalNodeApi } from '@/context/NodeApiContext';
 
 export const createChannel =
   (channelType: ChannelType): AppThunk<Promise<void>> =>
@@ -259,16 +259,16 @@ export const fetchChannelProfiles =
     }
 
     /*
-  Polling logic:
-  type STAR:
-   - Channel creator: Load all profiles
-   - Other participant: Only load creator profile
-  type GROUP:
-   - everybody load all profiles
-  type SINGLE:
-   - Channel creator: Load participant profile
-   - Other participant: Load creator profile
- */
+        Polling logic:
+        type STAR:
+         - Channel creator: Load all profiles
+         - Other participant: Only load creator profile
+        type GROUP:
+         - everybody load all profiles
+        type SINGLE:
+         - Channel creator: Load participant profile
+         - Other participant: Load creator profile
+       */
     let stopPolling = false;
     switch (channel.type) {
       case channel_types.STAR:

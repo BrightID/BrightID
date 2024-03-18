@@ -16,7 +16,7 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { WHITE, ORANGE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   allGroupsSelector,
   filteredGroupsSelector,
@@ -45,7 +45,7 @@ export const GroupsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const allGroups = useSelector(allGroupsSelector);
   const filteredGroups = useSelector(filteredGroupsSelector);
   const { id } = useSelector((state) => state.user);

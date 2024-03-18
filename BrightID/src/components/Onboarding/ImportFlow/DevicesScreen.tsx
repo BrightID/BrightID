@@ -28,7 +28,7 @@ import {
   RED,
 } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   removeDevice,
   selectIsPrimaryDevice,
@@ -67,7 +67,7 @@ export const DevicesScreen = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const { publicKey: signingKey } = useSelector(selectKeypair);
   const devices = useSelector(selectActiveDevices).sort((a, _b) =>
     a.signingKey === signingKey ? -1 : 1,

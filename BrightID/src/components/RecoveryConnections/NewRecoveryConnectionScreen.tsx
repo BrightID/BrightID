@@ -35,7 +35,7 @@ import {
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
-import { NodeApiContext } from '../NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 // Import Components Local
 import RecoveryConnectionCard from './RecoverConnectionsCard';
 import AnimatedTopSearchBar from './TopSearchBar';
@@ -85,7 +85,7 @@ export const NewRecoveryConnectionList = (props) => {
   const { navigation } = props;
 
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const dispatch = useDispatch();
   const { id: myId } = useSelector((state) => state.user);
   const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);

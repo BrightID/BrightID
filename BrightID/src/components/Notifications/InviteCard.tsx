@@ -30,7 +30,7 @@ import {
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 import BrightidError from '@/api/brightidError';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 
 const InviteCard = (props) => {
   const { invite } = props;
@@ -41,7 +41,7 @@ const InviteCard = (props) => {
   );
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state) => state.user);
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const groupName = useSelector((state) =>
     selectGroupName(state, invite.groupObj),
   );

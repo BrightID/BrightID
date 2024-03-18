@@ -22,7 +22,7 @@ import {
 } from '@/actions';
 import ChannelAPI from '@/api/channelService';
 import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { operation_states } from '@/utils/constants';
 import { AddSigningKey } from '@/components/Onboarding/ImportFlow/AddSigningKey';
 import { UploadData } from '@/components/Onboarding/ImportFlow/UploadData';
@@ -57,7 +57,7 @@ const AddDeviceScreen = ({ route }) => {
   const aesKey = useSelector((state) => state.recoveryData.aesKey);
   const [deviceName, setDeviceName] = useState('');
   const [signingKey, setSigningKey] = useState('');
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const [addSigningKeyOpHash, setSigningKeyOpHash] = useState<string>('');
   const [addSigningKeyError, setAddSigningKeyError] = useState('');
   const addSigningKeyOp = useSelector((state) =>

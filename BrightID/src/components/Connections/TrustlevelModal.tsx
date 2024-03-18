@@ -25,7 +25,7 @@ import {
   setFirstRecoveryTime,
 } from '@/actions';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 
 import TrustlevelSlider from './TrustlevelSlider';
 
@@ -47,7 +47,7 @@ const TrustlevelModal = ({ route }: TrustlevelModalProps) => {
     connection ? connection.level : connection_levels.JUST_MET,
   );
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
 
   const goBack = () => {
     navigation.goBack();
