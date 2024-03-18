@@ -88,7 +88,7 @@
     "react-native-gesture-handler": "2.9.0",
     "react-native-http-bridge": "https://github.com/BrightID/react-native-http-bridge",
     "react-native-image-crop-picker": "0.37.3",
-    "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-keyboard-aware-scroll-view": "0.9.5",
     "react-native-keychain": "8.0.0",
     "react-native-localize": "2.2.4",
     "react-native-logs": "^5.0.1",
