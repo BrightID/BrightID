@@ -15,13 +15,7 @@ import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store/hooks';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import {
-  DARK_GREY,
-  LIGHT_BLACK,
-  LIGHT_ORANGE,
-  ORANGE,
-  WHITE,
-} from '@/theme/colors';
+import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Camera from '@/components/Icons/Camera';
@@ -69,7 +63,7 @@ if (__DEV__) {
           dispatch(addFakeConnection());
         }}
       >
-        <Material name="ghost" size={32} color={LIGHT_ORANGE} />
+        <Material name="ghost" size={32} color={WHITE} />
       </TouchableOpacity>
     );
   };

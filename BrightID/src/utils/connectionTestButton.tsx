@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch } from '@/store/hooks';
-import { BLUE, LIGHT_ORANGE } from '@/theme/colors';
+import { BLUE, WHITE } from '@/theme/colors';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   connectWithOtherFakeConnections,
@@ -116,7 +116,7 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
       style={{ marginRight: 11 }}
       onPress={handleButton}
     >
-      <Material name="ghost" size={30} color={LIGHT_ORANGE} />
+      <Material name="ghost" size={30} color={WHITE} />
     </TouchableOpacity>
   );
 };
