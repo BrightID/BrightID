@@ -6,13 +6,13 @@ import FormScreen from '@/components/Onboarding/SignUpFlow/FormScreen';
 
 import Restore from './Restore';
 import Import from './Import';
-import { headerOptions } from './helpers';
+import { onboardHeaderOptions } from './helpers';
 import { Stack } from './Navigator';
 
 const Onboarding = () => {
   const { t } = useTranslation();
   return (
-    <Stack.Group screenOptions={headerOptions}>
+    <Stack.Group screenOptions={onboardHeaderOptions}>
       <Stack.Screen
         name="Onboard"
         component={OnboardScreen}
