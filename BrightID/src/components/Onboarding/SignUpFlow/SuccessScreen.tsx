@@ -6,25 +6,25 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, ORANGE } from '@/theme/colors';
+import { WHITE, PRIMARY, BLACK, SUCCESS, GRAY1 } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
 import DetoxEnabled from '@/utils/Detox';
 import { saveId } from './thunks';
 import Congratulations from '../../Icons/Congratulations';
+import LinearLeftToRightArrow from '@/components/Icons/LinearArrowLeftToRight';
 
 /* Onboarding Success Screen */
 
 /* ======================================== */
-
-const TIMEOUT = 1500;
 
 export const SuccessScreen = () => {
   const { t } = useTranslation();
@@ -32,70 +32,43 @@ export const SuccessScreen = () => {
   const navigation = useNavigation();
   const password = useSelector((state) => state.user.password);
 
-  // this is used instead of a timeout
-  const [currentTime, setCurrentTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-
-  /**
-   * update the time until
-   */
-  useFocusEffect(
-    useCallback(() => {
-      const intervalID = setInterval(() => {
-        setCurrentTime(Date.now());
-      }, 300);
-      return () => {
-        clearInterval(intervalID);
-      };
-    }, []),
-  );
-
-  useEffect(() => {
-    if (endTime && currentTime && currentTime >= endTime) {
-      // this  will cause navigation to HomeScreen
-      dispatch(saveId());
-      if (password) {
-        console.log(`Starting initial backup`);
-        dispatch(backupAppData()).then(() => {
-          dispatch(setBackupCompleted(true));
+  const continueOnPress = () => {
+    // this  will cause navigation to HomeScreen
+    dispatch(saveId());
+    if (password) {
+      console.log(`Starting initial backup`);
+      dispatch(backupAppData()).then(() => {
+        dispatch(setBackupCompleted(true));
+      });
+    }
+    return () => {
+      // navigate to view password walkthrough
+      if (!DetoxEnabled) {
+        InteractionManager.runAfterInteractions(() => {
+          navigation.navigate('ViewPasswordWalkthrough' as never);
         });
       }
-      return () => {
-        // navigate to view password walkthrough
-        if (!DetoxEnabled) {
-          InteractionManager.runAfterInteractions(() => {
-            navigation.navigate('ViewPasswordWalkthrough');
-          });
-        }
-      };
-    }
-  }, [currentTime, endTime, dispatch, navigation, password]);
+    };
+  };
 
-  useFocusEffect(
-    useCallback(() => {
-      // wait 1.5 seconds before navigating to home page
-      setEndTime(Date.now() + TIMEOUT);
-    }, []),
-  );
   return (
     <>
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle="dark-content"
-          backgroundColor={WHITE}
+          backgroundColor={GRAY1}
           animated={true}
         />
 
-        <View style={styles.header}>
-          <Image
-            source={require('@/static/brightid-final.png')}
-            accessible={true}
-            accessibilityLabel="Home Header Logo"
-            resizeMode="contain"
-            style={styles.logo}
-          />
-        </View>
-        <View style={styles.center}>
+        <Image
+          source={require('@/static/brightid-final.png')}
+          accessible={true}
+          accessibilityLabel="Home Header Logo"
+          resizeMode="contain"
+          style={styles.logo}
+        />
+
+        <View>
           <View style={styles.imageContainer}>
             <View style={styles.phoneContainer}>
               <Image
@@ -109,11 +82,28 @@ export const SuccessScreen = () => {
             <Congratulations width={190} height={230} />
           </View>
         </View>
-        <Text style={styles.registerText}>
-          {t('onboarding.text.congratulations')}
-        </Text>
+
+        <View>
+          {/* todo the texts should be modified in locales and here */}
+          <Text style={styles.congratText}>
+            {t('onboarding.text.congratulations1')}
+          </Text>
+          <Text style={styles.registerText}>
+            {t('onboarding.text.congratulations2')}
+          </Text>
+        </View>
+
+        {/* todo add continue to locales and be used from there in the button */}
+        <TouchableOpacity
+          style={styles.continueBtn}
+          onPress={continueOnPress}
+          accessibilityLabel={t('onboarding.button.create')}
+          testID="confirmCreateBtn"
+        >
+          <Text style={styles.continueBtnText}>Continue</Text>
+          <LinearLeftToRightArrow color={WHITE} />
+        </TouchableOpacity>
       </SafeAreaView>
-      <View style={styles.orangeBottom} />
     </>
   );
 };
@@ -124,33 +114,15 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
-    borderBottomLeftRadius: 58,
-    borderBottomRightRadius: 58,
-    marginBottom: DEVICE_LARGE ? 35 : 20,
     zIndex: 2,
     overflow: 'hidden',
-  },
-  orangeBottom: {
-    backgroundColor: ORANGE,
-    width: '100%',
-    height: 100,
-    zIndex: 1,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  header: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: '15%',
+    justifyContent: 'space-evenly',
   },
   logo: {
     maxWidth: '40%',
     maxHeight: 90,
   },
   center: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -167,12 +139,35 @@ const styles = StyleSheet.create({
     width: 140,
     height: 180,
   },
-  registerText: {
-    fontFamily: 'Poppins-Medium',
+  congratText: {
+    fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     textAlign: 'center',
-    lineHeight: DEVICE_LARGE ? 26 : 24,
-    marginBottom: DEVICE_LARGE ? 50 : 45,
+    lineHeight: 26,
+    color: SUCCESS,
+    marginBottom: 4,
+  },
+  registerText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[14],
+    textAlign: 'center',
+    lineHeight: 26,
+    color: '#424242',
+  },
+  continueBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '89%',
+    height: '6.5%',
+    backgroundColor: PRIMARY,
+    borderRadius: 16,
+    flexDirection: 'row',
+  },
+  continueBtnText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    color: WHITE,
+    marginRight: 12,
   },
 });
 

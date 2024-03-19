@@ -9,8 +9,7 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { BLACK, ORANGE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GRAY1, GRAY2, WHITE } from '@/theme/colors';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
@@ -27,6 +26,7 @@ import {
 } from './thunks/channelThunks';
 import { selectOperationByHash } from '@/reducer/operationsSlice';
 import { operation_states } from '@/utils/constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
@@ -219,13 +219,12 @@ const RestoreScreen = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: WHITE }}>
       <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
+        barStyle="dark-content"
+        backgroundColor={GRAY1}
         animated={true}
       />
-      <View style={styles.orangeTop} />
       <KeyboardAvoidingView style={styles.container} behavior="position">
         <View style={styles.recoverAccountContainer}>
           <RecoverAccount
@@ -248,38 +247,30 @@ const RestoreScreen = () => {
           />
         </View>
       </KeyboardAvoidingView>
-    </>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 65,
-    width: '100%',
-    zIndex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    borderTopLeftRadius: 58,
-    marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
   },
   divider: {
-    marginTop: DEVICE_LARGE ? 40 : 20,
-    marginBottom: DEVICE_LARGE ? 30 : 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: BLACK,
+    marginTop: 32,
+    marginBottom: 32,
+    borderBottomWidth: 1,
+    borderColor: GRAY2,
   },
-  recoverAccountContainer: {
-    marginTop: DEVICE_LARGE ? 25 : 20,
-    minHeight: '25%',
-  },
+  recoverAccountContainer: {},
   restoreBackupContainer: {
     height: '50%',
   },
