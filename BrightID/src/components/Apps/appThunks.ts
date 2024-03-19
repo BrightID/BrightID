@@ -2,9 +2,7 @@ import { Alert } from 'react-native';
 import { create } from 'apisauce';
 import { t } from 'i18next';
 import _ from 'lodash';
-import {
-  waitForBlindSigsUpdate,
-} from '@/components/Apps/model';
+import { waitForBlindSigsUpdate } from '@/components/Apps/model';
 import { getGlobalNodeApi } from '@/components/NodeApiGate';
 import {
   addLinkedContext,
@@ -55,88 +53,88 @@ export const requestLinking =
     linkingAppInfo,
     skipUserConfirmation,
   }: requestLinkingParams): AppThunk<Promise<void>> =>
-    async (dispatch: AppDispatch, getState) => {
-      const appLinkingStep = selectApplinkingStep(getState());
-      if (appLinkingStep !== app_linking_steps.IDLE) {
-        console.log(
-          `Can't request linking when not in IDLE state. Current state: ${appLinkingStep}`,
-        );
-        return;
-      }
-      const linkingError = selectLinkingAppError(getState());
-      if (linkingError) {
-        console.log(
-          `Can't request linking when there is still an active error. Current error: ${linkingError}`,
-        );
-        return;
-      }
+  async (dispatch: AppDispatch, getState) => {
+    const appLinkingStep = selectApplinkingStep(getState());
+    if (appLinkingStep !== app_linking_steps.IDLE) {
+      console.log(
+        `Can't request linking when not in IDLE state. Current state: ${appLinkingStep}`,
+      );
+      return;
+    }
+    const linkingError = selectLinkingAppError(getState());
+    if (linkingError) {
+      console.log(
+        `Can't request linking when there is still an active error. Current error: ${linkingError}`,
+      );
+      return;
+    }
 
-      // store app linking details
-      dispatch(setLinkingAppInfo(linkingAppInfo));
-      const { appId, v } = linkingAppInfo;
+    // store app linking details
+    dispatch(setLinkingAppInfo(linkingAppInfo));
+    const { appId, v } = linkingAppInfo;
 
-      const api = getGlobalNodeApi();
-      dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
-      try {
-        // make sure to have latest appInfo available
-        const apps = await api.getApps();
-        dispatch(setApps(apps));
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : `${e}`;
-        dispatch(
-          setLinkingAppError(
-            t(
-              'alert.text.appInfoFailure',
-              `Failed to fetch latest appInfo: {{message}}. Please try again later.`,
-              { message: msg },
-            ),
+    const api = getGlobalNodeApi();
+    dispatch(setAppLinkingStep({ step: app_linking_steps.REFRESHING_APPS }));
+    try {
+      // make sure to have latest appInfo available
+      const apps = await api.getApps();
+      dispatch(setApps(apps));
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : `${e}`;
+      dispatch(
+        setLinkingAppError(
+          t(
+            'alert.text.appInfoFailure',
+            `Failed to fetch latest appInfo: {{message}}. Please try again later.`,
+            { message: msg },
           ),
-        );
-        return;
-      }
+        ),
+      );
+      return;
+    }
 
-      // First check if provided data is valid
-      const appInfo = selectAppInfoByAppId(getState(), appId);
-      if (!appInfo) {
-        // The app that should be linked was not found!
-        dispatch(
-          setLinkingAppError(
-            t('apps.alert.text.invalidContext', {
-              context: `${appId}`,
-            }),
-          ),
-        );
-        return;
-      }
-
-      // check app details
-      if (v === 6 && !appInfo.usingBlindSig) {
-        // v6 apps HAVE to use blind sigs!
-        dispatch(
-          setLinkingAppError(
-            t('apps.alert.text.invalidApp', {
-              app: `${appId}`,
-            }),
-          ),
-        );
-        return;
-      }
-
-      if (skipUserConfirmation) {
-        dispatch(
-          setAppLinkingStep({
-            step: app_linking_steps.USER_CONFIRMED,
+    // First check if provided data is valid
+    const appInfo = selectAppInfoByAppId(getState(), appId);
+    if (!appInfo) {
+      // The app that should be linked was not found!
+      dispatch(
+        setLinkingAppError(
+          t('apps.alert.text.invalidContext', {
+            context: `${appId}`,
           }),
-        );
-        await dispatch(preLinkCheck());
-      } else {
-        dispatch(
-          setAppLinkingStep({
-            step: app_linking_steps.WAITING_USER_CONFIRMATION,
+        ),
+      );
+      return;
+    }
+
+    // check app details
+    if (v === 6 && !appInfo.usingBlindSig) {
+      // v6 apps HAVE to use blind sigs!
+      dispatch(
+        setLinkingAppError(
+          t('apps.alert.text.invalidApp', {
+            app: `${appId}`,
           }),
-        );
-      }
-    };
+        ),
+      );
+      return;
+    }
+
+    if (skipUserConfirmation) {
+      dispatch(
+        setAppLinkingStep({
+          step: app_linking_steps.USER_CONFIRMED,
+        }),
+      );
+      await dispatch(preLinkCheck());
+    } else {
+      dispatch(
+        setAppLinkingStep({
+          step: app_linking_steps.WAITING_USER_CONFIRMATION,
+        }),
+      );
+    }
+  };
 
 export const preLinkCheck =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
@@ -415,16 +413,13 @@ export const requestSponsoring =
     dispatch(
       setAppLinkingStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
     );
-    
+
     const op = await api.sponsor(appId);
     // console.log(`Sponsor op hash: ${op.hash}`);
     dispatch(setSponsorOperationHash(op.hash));
     dispatch(addOperation(op));
-    dispatch(
-      setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
-    );
+    dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }));
     dispatch(waitForSponsorOp());
-    
   };
 
 export const waitForSponsorOp =
@@ -468,10 +463,7 @@ export const waitForSponsorOp =
           clearInterval(intervalId);
           dispatch(
             setLinkingAppError(
-              t(
-                'alert.text.sponsorOpTimeout',
-                'sponsor operation timed out',
-              ),
+              t('alert.text.sponsorOpTimeout', 'sponsor operation timed out'),
             ),
           );
           break;
@@ -490,9 +482,6 @@ export const waitForSponsorOp =
     }, SPONSORING_POLL_INTERVAL);
     // console.log(`Started pollSponsorOp ${intervalId}`);
   };
-
-
-
 
 export const linkAppOrContext =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
@@ -562,35 +551,35 @@ export const handleLinkContextOpUpdate =
     state: OperationStateType;
     result: any;
   }): AppThunk<Promise<void>> =>
-    async (dispatch: AppDispatch, getState) => {
-      // make sure this is only called with the correct operation
-      if (op.name !== 'Link ContextId') {
-        return;
-      }
+  async (dispatch: AppDispatch, getState) => {
+    // make sure this is only called with the correct operation
+    if (op.name !== 'Link ContextId') {
+      return;
+    }
 
-      dispatch(
-        updateLinkedContext({
-          context: op.context,
-          contextId: op.contextId,
-          state,
-        }),
-      );
+    dispatch(
+      updateLinkedContext({
+        context: op.context,
+        contextId: op.contextId,
+        state,
+      }),
+    );
 
-      // Update local state only if UI is in app linking workflow and waiting for the operation.
-      // The operation update might come in anytime when the app is not in the linking workflow
-      const applinkingStep = selectApplinkingStep(getState());
-      if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
-        if (state === operation_states.APPLIED) {
-          dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
-        } else {
-          const text = t('apps.alert.text.linkFailure', {
-            context: `${op.context}`,
-            result: `${result.message}`,
-          });
-          dispatch(setLinkingAppError(text));
-        }
+    // Update local state only if UI is in app linking workflow and waiting for the operation.
+    // The operation update might come in anytime when the app is not in the linking workflow
+    const applinkingStep = selectApplinkingStep(getState());
+    if (applinkingStep === app_linking_steps.LINK_WAITING_V5) {
+      if (state === operation_states.APPLIED) {
+        dispatch(setAppLinkingStep({ step: app_linking_steps.LINK_SUCCESS }));
+      } else {
+        const text = t('apps.alert.text.linkFailure', {
+          context: `${op.context}`,
+          result: `${result.message}`,
+        });
+        dispatch(setLinkingAppError(text));
       }
-    };
+    }
+  };
 
 export const linkAppId =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
