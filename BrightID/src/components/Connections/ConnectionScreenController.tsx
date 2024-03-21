@@ -19,7 +19,7 @@ import {
   selectAllConnections,
   setConnectionVerifications,
 } from '@/reducer/connectionsSlice';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import ConnectionScreen from './ConnectionScreen';
 import stringSimilarity from '@/utils/stringSimilarity';
 import {
@@ -39,7 +39,7 @@ function ConnectionScreenController() {
   const route = useRoute<ConnectionRoute>();
   const dispatch = useDispatch();
   const { connectionId } = route.params;
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const connection = useSelector((state) =>
     selectConnectionById(state, connectionId),
   );

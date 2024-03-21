@@ -9,7 +9,7 @@ import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { updateConnections, userSelector } from '@/actions';
 import ConnectionCard from './ConnectionCard';
 import { MAX_DISPLAY_CONNECTIONS } from '@/utils/constants';
@@ -38,7 +38,7 @@ const renderItem = ({ item, index }: { item: Connection; index: number }) => {
 export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const route: { params?: { group: Group } } = useRoute() as {
     params?: { group: Group };
   };

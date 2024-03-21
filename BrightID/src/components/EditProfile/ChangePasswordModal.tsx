@@ -12,7 +12,7 @@ import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import {
@@ -55,7 +55,7 @@ type props = StackScreenProps<ModalStackParamList, 'ChangePassword'>;
 
 const ChangePasswordModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

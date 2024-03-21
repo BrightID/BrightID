@@ -20,7 +20,7 @@ import {
   DEVICE_IOS,
   DEVICE_ANDROID,
 } from '@/utils/deviceConstants';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { ORANGE, WHITE, BLUE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
@@ -70,7 +70,7 @@ export const RecoveryConnectionsScreen = (props) => {
   >(undefined);
   const myConnections = useSelector(selectAllConnections);
   const pendingOpsCount = useSelector(selectPendingOperations).length;
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
 
   useFocusEffect(
     useCallback(() => {

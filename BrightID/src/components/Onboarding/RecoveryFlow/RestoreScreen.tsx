@@ -8,12 +8,13 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { GRAY1, GRAY2, WHITE } from '@/theme/colors';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   finishRecovery,
   recoverData,
@@ -26,7 +27,6 @@ import {
 } from './thunks/channelThunks';
 import { selectOperationByHash } from '@/reducer/operationsSlice';
 import { operation_states } from '@/utils/constants';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
@@ -52,7 +52,7 @@ export enum BackupSteps {
 const RestoreScreen = () => {
   const { t } = useTranslation();
   const [pass, setPass] = useState('');
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const recoveredConnections = useSelector(
     (state) => state.recoveryData.recoveredConnections,
   );

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   linkedContextTotal,
   selectAllApps,
@@ -37,7 +37,7 @@ const AppsScreenController = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const route = useRoute<AppsRoute>();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const apps = useSelector(selectAllApps);
   const linkedContext = useSelector(selectAllLinkedContexts);
   const linkedContextsCount = useSelector(linkedContextTotal);

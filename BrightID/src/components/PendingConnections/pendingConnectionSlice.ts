@@ -16,7 +16,7 @@ import { decryptData } from '@/utils/cryptoHelper';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { getGlobalNodeApi } from '@/context/NodeApiContext';
 
 const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>({
   selectId: (pendingConnection) => pendingConnection.profileId,
