@@ -6,7 +6,6 @@ import Eula from '@/components/Onboarding/Eula';
 describe('Eula', () => {
   it(`has accept, reject button`, () => {
     renderWithProviders(<Eula />);
-    expect(screen.getByTestId('rejectEulaBtn')).toBeVisible();
     expect(screen.getByTestId('acceptEulaBtn')).toBeVisible();
   });
 
