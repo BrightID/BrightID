@@ -513,7 +513,7 @@ export class NodeApi {
       app: appId,
       timestamp,
       v,
-      id: this.id
+      id: this.id,
     };
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
