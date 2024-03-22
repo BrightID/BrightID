@@ -1,5 +1,3 @@
-import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
-import { NodeApi } from '@/api/brightId';
 import { selectSigsUpdating } from '@/reducer/appsSlice';
 import { UPDATE_BLIND_SIG_WAIT_TIME } from '@/utils/constants';
 
@@ -18,22 +16,6 @@ export const getSignedTimestamp = (app: AppInfo, sigs: SigInfo[]) => {
     }
   }
   return null;
-};
-
-export const getSponsorship = async (
-  appUserId: string,
-  api: NodeApi,
-): Promise<SponsorshipInfo | undefined> => {
-  try {
-    return await api.getSponsorship(appUserId);
-  } catch (e) {
-    if (e instanceof BrightidError && e.errorNum === APP_ID_NOT_FOUND) {
-      // node has not yet registered the sponsor request -> Ignore
-      console.log(`sponsor request for ${appUserId} not yet existing`);
-    } else {
-      throw e;
-    }
-  }
 };
 
 // Create promise that polls on sigsUpdating state and resolves once it is false.
