@@ -1,5 +1,5 @@
 import { by, element, expect } from 'detox';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { getConnectionLevelString } from '@/utils/connectionLevelStrings';
 import {
   createBrightID,
   createFakeConnection,
@@ -60,14 +60,14 @@ describe('Reconnect existing connection', () => {
     xit('should reconnect with different connection level', async () => {
       // check initial value
       await expect(element(by.id('ConnectionLevelSliderText'))).toHaveText(
-        connectionLevelStrings[connection_levels.JUST_MET],
+        getConnectionLevelString(connection_levels.JUST_MET),
       );
       // set new value by swiping right
       // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact "swipe" method
       // This will swipe all the way to the right, so the new expected level is RECOVERY
       await element(by.id('ReconnectSliderView')).swipe('right', 'fast');
       await expect(element(by.id('ConnectionLevelSliderText'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        getConnectionLevelString(connection_levels.RECOVERY),
       );
       await element(by.id('updateBtn')).tap();
       // should move to connections screen
@@ -78,7 +78,7 @@ describe('Reconnect existing connection', () => {
         .withTimeout(operationTimeout);
       // new connection level should be set
       await expect(element(by.id('connection_level-0'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        getConnectionLevelString(connection_levels.RECOVERY),
       );
     });
 

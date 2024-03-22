@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { BLACK, ORANGE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GRAY1, GRAY2, WHITE } from '@/theme/colors';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   finishRecovery,
   recoverData,
@@ -52,7 +52,7 @@ export enum BackupSteps {
 const RestoreScreen = () => {
   const { t } = useTranslation();
   const [pass, setPass] = useState('');
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const recoveredConnections = useSelector(
     (state) => state.recoveryData.recoveredConnections,
   );
@@ -219,13 +219,12 @@ const RestoreScreen = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: WHITE }}>
       <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
+        barStyle="dark-content"
+        backgroundColor={GRAY1}
         animated={true}
       />
-      <View style={styles.orangeTop} />
       <KeyboardAvoidingView style={styles.container} behavior="position">
         <View style={styles.recoverAccountContainer}>
           <RecoverAccount
@@ -248,38 +247,30 @@ const RestoreScreen = () => {
           />
         </View>
       </KeyboardAvoidingView>
-    </>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 65,
-    width: '100%',
-    zIndex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    borderTopLeftRadius: 58,
-    marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
   },
   divider: {
-    marginTop: DEVICE_LARGE ? 40 : 20,
-    marginBottom: DEVICE_LARGE ? 30 : 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: BLACK,
+    marginTop: 32,
+    marginBottom: 32,
+    borderBottomWidth: 1,
+    borderColor: GRAY2,
   },
-  recoverAccountContainer: {
-    marginTop: DEVICE_LARGE ? 25 : 20,
-    minHeight: '25%',
-  },
+  recoverAccountContainer: {},
   restoreBackupContainer: {
     height: '50%',
   },

@@ -5,7 +5,7 @@ import { render, RenderOptions } from '@testing-library/react-native';
 import { I18nextProvider } from 'react-i18next';
 import { setupStore } from '@/store';
 import i18n from '../i18nForTests';
-import { getGlobalNodeApi, NodeApiContext } from '@/components/NodeApiGate';
+import { getGlobalNodeApi, NodeApiContext } from '@/context/NodeApiContext';
 import { NodeApi } from '@/api/brightId';
 
 // This type interface extends the default options for render from RTL, as well
@@ -37,5 +37,6 @@ export function renderWithProviders(
       </Provider>
     );
   }
+
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }

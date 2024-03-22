@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Alert,
   StatusBar,
   StyleSheet,
   Text,
@@ -9,20 +8,15 @@ import {
   View,
 } from 'react-native';
 import { useDispatch } from '@/store/hooks';
-import { ORANGE, DARKER_GREY, GREEN, WHITE, BLUE } from '@/theme/colors';
+import { WHITE, BLUE, SUCCESS, GRAY1 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
 import L from './License.json';
+import LinearLeftToRightArrow from '../Icons/LinearArrowLeftToRight';
 
 export const Eula = () => {
   const dispatch = useDispatch();
-  const handleReject = () => {
-    Alert.alert(
-      'Oh No!',
-      'You cannot use this app without first accepting the terms and conditions.',
-    );
-  };
 
   const handleAccept = () => {
     dispatch(setEula(true));
@@ -32,60 +26,54 @@ export const Eula = () => {
     <>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor={WHITE}
+        backgroundColor={GRAY1}
         animated={true}
       />
       <View testID="EulaScreen" style={styles.container}>
-        <View style={styles.confirmationButtons}>
-          <TouchableOpacity
-            testID="rejectEulaBtn"
-            style={styles.rejectButton}
-            onPress={handleReject}
+        <View>
+          <ScrollView
+            contentContainerStyle={styles.scrollViewContent}
+            showsVerticalScrollIndicator={true}
           >
-            <Text style={styles.rejectButtonText}>Reject</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="acceptEulaBtn"
-            style={styles.acceptButton}
-            onPress={handleAccept}
-          >
-            <Text style={styles.acceptButtonText}>Accept</Text>
-          </TouchableOpacity>
+            <Text style={styles.header}>{L.title}</Text>
+            <Text style={styles.paragraph}>{L.intro}</Text>
+            <Text style={styles.header}>{L['header.parties']}</Text>
+            <Text style={styles.paragraph}>{L['text.parties']}</Text>
+            <Text style={styles.header}>{L['header.privacy']}</Text>
+            <Text style={styles.paragraph}>{L['text.privacy']}</Text>
+            <Text style={styles.link}>{L['link.privacy']}</Text>
+            <Text style={styles.header}>{L['header.content']}</Text>
+            <Text style={styles.paragraph}>{L['text.content']}</Text>
+            <Text style={styles.header}>{L['header.conduct']}</Text>
+            <Text style={styles.paragraph}>{L['text.conduct']}</Text>
+            <Text style={styles.header}>{L['header.license']}</Text>
+            <Text style={styles.paragraph}>{L['text.license']}</Text>
+            <Text style={styles.header}>BrightID Contact</Text>
+            <Text style={styles.paragraph}>
+              This is the website for BrightID{' '}
+              <Text style={styles.link}>https://www.brightid.org</Text>
+            </Text>
+            <Text style={styles.paragraph}>
+              We can be reached via e-mail at{' '}
+              <Text style={styles.link}>support@brightid.org</Text>
+            </Text>
+          </ScrollView>
+
+          <View style={styles.confirmationButton}>
+            <TouchableOpacity
+              testID="acceptEulaBtn"
+              style={styles.acceptButton}
+              onPress={handleAccept}
+            >
+              <Text style={styles.acceptButtonText}>{'Agree'}</Text>
+              <LinearLeftToRightArrow color={SUCCESS} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContent}
-          showsVerticalScrollIndicator={true}
-        >
-          <Text style={styles.header}>{L.title}</Text>
-          <Text style={styles.paragraph}>{L.intro}</Text>
-          <Text style={styles.header}>{L['header.parties']}</Text>
-          <Text style={styles.paragraph}>{L['text.parties']}</Text>
-          <Text style={styles.header}>{L['header.privacy']}</Text>
-          <Text style={styles.paragraph}>{L['text.privacy']}</Text>
-          <Text style={styles.link}>{L['link.privacy']}</Text>
-          <Text style={styles.header}>{L['header.content']}</Text>
-          <Text style={styles.paragraph}>{L['text.content']}</Text>
-          <Text style={styles.header}>{L['header.conduct']}</Text>
-          <Text style={styles.paragraph}>{L['text.conduct']}</Text>
-          <Text style={styles.header}>{L['header.license']}</Text>
-          <Text style={styles.paragraph}>{L['text.license']}</Text>
-          <Text style={styles.header}>BrightID Contact</Text>
-          <Text style={styles.paragraph}>
-            This is the website for BrightID{' '}
-            <Text style={styles.link}>https://www.brightid.org</Text>
-          </Text>
-          <Text style={styles.paragraph}>
-            We can be reached via e-mail at{' '}
-            <Text style={styles.link}>support@brightid.org</Text>
-          </Text>
-        </ScrollView>
       </View>
-      <View style={styles.orangeBottom} />
     </>
   );
 };
-
-const CONFIRMATION_HEIGHT = DEVICE_LARGE ? 60 : 55;
 
 const styles = StyleSheet.create({
   container: {
@@ -94,26 +82,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    borderBottomLeftRadius: 58,
-    borderBottomRightRadius: 58,
-    marginBottom: DEVICE_LARGE ? 35 : 27,
     zIndex: 2,
     overflow: 'hidden',
-  },
-  orangeBottom: {
-    backgroundColor: ORANGE,
-    width: '100%',
-    height: 100,
-    zIndex: 1,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
   scrollViewContent: {
     paddingHorizontal: DEVICE_LARGE ? 20 : 18,
     paddingTop: 30,
-    paddingBottom: CONFIRMATION_HEIGHT,
   },
   header: {
     fontFamily: 'Poppins-Bold',
@@ -130,47 +104,37 @@ const styles = StyleSheet.create({
     color: BLUE,
     marginBottom: fontSize[12],
   },
-  confirmationButtons: {
-    position: 'absolute',
+  confirmationButton: {
+    position: 'relative',
     zIndex: 10,
     left: 0,
     right: 0,
     bottom: 0,
-    height: CONFIRMATION_HEIGHT,
     width: WIDTH,
-    backgroundColor: WHITE,
+    backgroundColor: 'WHITE',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    height: 108,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   acceptButton: {
-    width: '33%',
-    height: DEVICE_LARGE ? 32 : 29,
-    backgroundColor: GREEN,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    marginLeft: DEVICE_LARGE ? 22 : 18,
-  },
-  acceptButtonText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[12],
-  },
-  rejectButton: {
-    width: '33%',
-    height: DEVICE_LARGE ? 32 : 29,
-
+    height: 52,
     backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: DARKER_GREY,
+    borderColor: SUCCESS,
+    width: '100%',
+    flexDirection: 'row',
   },
-  rejectButtonText: {
+  acceptButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[12],
-    color: DARKER_GREY,
+    fontSize: fontSize[16],
+    color: SUCCESS,
+    marginRight: 12,
   },
 });
 

@@ -11,7 +11,7 @@ import {
   navigateHome,
   operationTimeout,
 } from './testUtils';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
+import { getConnectionLevelString } from '@/utils/connectionLevelStrings';
 import { connection_levels } from '@/utils/constants';
 
 describe('Connection details', () => {
@@ -128,7 +128,7 @@ describe('Connection details', () => {
     });
     test('should show correct connection level', async () => {
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+        getConnectionLevelString(connection_levels.ALREADY_KNOWN),
       );
     });
     test('should show correct mutual connections count', async () => {
@@ -209,14 +209,14 @@ describe('Connection details', () => {
       await expect(element(by.id('ConnectionLevelSliderPopup'))).toBeVisible();
       // check initial value
       await expect(sliderText).toHaveText(
-        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+        getConnectionLevelString(connection_levels.ALREADY_KNOWN),
       );
       // set new value by swiping right
       // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact "swipe" method
       // This will swipe all the way to the right, so the new expected level is RECOVERY
       await slider.swipe('right', 'fast');
       await expect(sliderText).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        getConnectionLevelString(connection_levels.RECOVERY),
       );
 
       // click save button
@@ -227,13 +227,13 @@ describe('Connection details', () => {
       ).not.toBeVisible();
       // verify new value is displayed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        getConnectionLevelString(connection_levels.RECOVERY),
       );
       // wait until operation is confirmed in the backend
       await new Promise((r) => setTimeout(r, operationTimeout));
       // verify new value is still displayed after operation confirmed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        getConnectionLevelString(connection_levels.RECOVERY),
       );
     });
 

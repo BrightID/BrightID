@@ -16,7 +16,7 @@ import { GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 import { resetRecoveryData } from './recoveryDataSlice';
 

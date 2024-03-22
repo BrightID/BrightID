@@ -39,7 +39,7 @@ import {
   selectBaseUrl,
   selectIsPrimaryDevice,
 } from '@/reducer/settingsSlice';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
   selectCompletedTaskIds,
@@ -85,7 +85,7 @@ export const HomeScreen = (props) => {
   const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const { id } = useSelector((state) => state.user);
   const { secretKey, publicKey } = useSelector((state) => state.keypair);
 

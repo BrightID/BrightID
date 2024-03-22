@@ -38,7 +38,7 @@ import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { encryptAesKey } from '@/utils/invites';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 
 /**
  * Connection Card in the Connections Screen
@@ -57,7 +57,7 @@ const ConnectionCard = (props: Props) => {
   const route: { params?: { group: Group } } = useRoute() as {
     params?: { group: Group };
   };
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const dispatch = useDispatch();
   const {
     status,

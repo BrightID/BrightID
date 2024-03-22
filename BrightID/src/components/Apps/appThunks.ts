@@ -3,7 +3,7 @@ import { create } from 'apisauce';
 import { t } from 'i18next';
 import _ from 'lodash';
 import { waitForBlindSigsUpdate } from '@/components/Apps/model';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { getGlobalNodeApi } from '@/context/NodeApiContext';
 import {
   addLinkedContext,
   selectAllSigs,

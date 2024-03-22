@@ -25,7 +25,7 @@ import { selectAllUnconfirmedConnections } from '@/components/PendingConnections
 import EmptyList from '@/components/Helpers/EmptyList';
 import { photoDirectory } from '@/utils/filesystem';
 import { updateNotifications } from '@/actions/index';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
@@ -43,7 +43,7 @@ const inviteSelector = createSelector(
 
 const useRefresh: () => [boolean, () => void] = () => {
   const dispatch = useDispatch();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
@@ -226,7 +226,7 @@ export const NotificationsScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute<NotificationsRoute>();
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
 
   const pendingConnections = useSelector(
     (state) => selectAllUnconfirmedConnections(state)?.length,

@@ -118,8 +118,10 @@ const mockApi = new NodeApi({
   id: undefined,
   secretKey: undefined,
 });
-jest.mock('@/components/NodeApiGate', () => {
-  const originalModule = jest.requireActual('@/components/NodeApiGate');
+jest.mock('BrightID/src/context/NodeApiContext', () => {
+  const originalModule = jest.requireActual(
+    'BrightID/src/context/NodeApiContext',
+  );
   return {
     ...originalModule,
     getGlobalNodeApi: () => mockApi,
