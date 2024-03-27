@@ -15,7 +15,7 @@ type NodeOps =
   | RemoveMembershipOp
   | RemoveSigningKeyOp
   | SocialRecoveryOp
-  | SpendSponsorshipOp;
+  | SponsorOp;
 
 type SubmittedOp = NodeOps & {
   hash: string;
@@ -113,10 +113,11 @@ type SocialRecoveryOp = BaseOp & {
   sig2?: string;
 };
 
-type SpendSponsorshipOp = BaseOp & {
-  name: 'Spend Sponsorship';
+type SponsorOp = BaseOp & {
+  name: 'Sponsor';
   app: string;
-  appUserId: string;
+  id: string,
+  sig?: string
 };
 
 type AddSigningKeyOp = BaseOp & {

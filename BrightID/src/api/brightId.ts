@@ -505,17 +505,20 @@ export class NodeApi {
     NodeApi.throwOnError(res);
   }
 
-  async spendSponsorship(appId: string, appUserId: string) {
-    const name = 'Spend Sponsorship';
+  async sponsor(appId: string) {
+    const name = 'Sponsor';
     const timestamp = Date.now();
-    const op: SpendSponsorshipOp = {
+    const op: SponsorOp = {
       name,
       app: appId,
-      appUserId,
       timestamp,
       v,
+      id: this.id,
     };
     const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
+    );
     return this.submitOp(op, message);
   }
 
