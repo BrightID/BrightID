@@ -92,12 +92,6 @@ describe('AppLinkingScreen', () => {
     name: 'notSponsoringV5App',
     sponsoring: false,
   };
-  const sponsoringV6App = {
-    ...sponsoringV5App,
-    id: 'sponsoringV6App',
-    name: 'sponsoringV6App',
-    usingBlindsig: true,
-  };
   const keypair: Keypair = {
     publicKey: undefined,
     secretKey: undefined,
