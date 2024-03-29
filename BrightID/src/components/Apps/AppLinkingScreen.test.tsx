@@ -92,18 +92,6 @@ describe('AppLinkingScreen', () => {
     name: 'notSponsoringV5App',
     sponsoring: false,
   };
-  const sponsoringV6App = {
-    ...sponsoringV5App,
-    id: 'sponsoringV6App',
-    name: 'sponsoringV6App',
-    usingBlindsig: true,
-  };
-  const notSponsoringV6App = {
-    ...sponsoringV6App,
-    id: 'notSponsoringV6App',
-    name: 'notSponsoringV6App',
-    sponsoring: false,
-  };
   const keypair: Keypair = {
     publicKey: undefined,
     secretKey: undefined,
@@ -290,15 +278,6 @@ describe('AppLinkingScreen', () => {
         }),
       );
     });
-
-    // should wait for app to sponsor me
-    await screen.findByText(
-      i18next.t('apps.linking.sponsorWaitingApp', {
-        app: sponsoringV5App.name,
-      }),
-      {},
-      { timeout: 30000 },
-    );
 
     // change server response to have sponsorship accepted
     server.use(

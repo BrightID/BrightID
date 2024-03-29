@@ -116,7 +116,7 @@ const mockApi = new NodeApi({
   // we will intercept any request using msw so the url does not matter
   url: 'https://not.valid',
   id: undefined,
-  secretKey: undefined,
+  secretKey: new Uint8Array(64),
 });
 jest.mock('BrightID/src/context/NodeApiContext', () => {
   const originalModule = jest.requireActual(
