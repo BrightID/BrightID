@@ -136,23 +136,10 @@ const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
         'Checking preconditions for linking',
       );
       break;
-    case app_linking_steps.SPONSOR_PRECHECK_APP:
-      stateDescription = t(
-        'apps.linking.precheckApp',
-        'Checking for prior sponsoring request',
-      );
-      break;
     case app_linking_steps.SPONSOR_WAITING_OP:
       stateDescription = t(
         'apps.linking.sponsorWaitingOp',
         'Requesting sponsorship from app',
-      );
-      break;
-    case app_linking_steps.SPONSOR_WAITING_APP:
-      stateDescription = t(
-        'apps.linking.sponsorWaitingApp',
-        'Waiting for {{app}} to sponsor you',
-        { app: appName },
       );
       break;
     case app_linking_steps.LINK_WAITING_V5:
