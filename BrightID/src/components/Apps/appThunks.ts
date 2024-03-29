@@ -409,11 +409,6 @@ export const requestSponsoring =
       return;
     }
 
-    // Check if sponsoring was already requested
-    dispatch(
-      setAppLinkingStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
-    );
-
     const op = await api.sponsor(appId);
     // console.log(`Sponsor op hash: ${op.hash}`);
     dispatch(setSponsorOperationHash(op.hash));

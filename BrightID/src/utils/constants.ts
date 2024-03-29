@@ -155,7 +155,6 @@ export enum app_linking_steps {
   PRELINK_CHECK,
   PRELINK_CHECK_PASSED,
   // Sponsoring
-  SPONSOR_PRECHECK_APP, // Check if sponsoring was already requested before
   SPONSOR_WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
   SPONSOR_SUCCESS, // got sponsored
   // Linking
