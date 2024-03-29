@@ -13,8 +13,8 @@ import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from '@/store/hooks';
-import { ApiGateState } from '@/components/NodeApiGate';
-import { BLACK, LIGHT_BLACK, ORANGE, RED, WHITE } from '@/theme/colors';
+import { ApiGateState, useNodeApiContext } from '@/context/NodeApiContext';
+import { BLACK, ORANGE, RED, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
@@ -30,15 +30,8 @@ const calculateSecondsLeft = (startTimestamp: number) => {
   return Math.ceil(remaining / 1000);
 };
 
-export const NodeApiGateScreen = ({
-  gateState,
-  startTimestamp,
-  retryHandler,
-}: {
-  gateState: ApiGateState;
-  startTimestamp: number;
-  retryHandler: () => any;
-}) => {
+export const NodeApiGateScreen = () => {
+  const { gateState, startTimestamp, retryHandler } = useNodeApiContext();
   const { t } = useTranslation();
   const [stateDescription, setStateDescription] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -119,7 +112,6 @@ export const NodeApiGateScreen = ({
       </TouchableOpacity>
     );
   }
-
   return (
     <>
       <SafeAreaView style={styles.container}>

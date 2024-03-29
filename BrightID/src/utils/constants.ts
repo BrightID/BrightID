@@ -23,8 +23,7 @@ const day = 24 * hour;
 // Operation & API constants
 // Max. time to wait for operation result
 export const OPERATION_TRACE_TIME = 2 * minute;
-// Max. time to wait for app to respond to sponsoring request
-export const SPONSOR_WAIT_TIME = 4 * minute;
+
 // Max. time to wait for app to finish updating blind signatures
 export const UPDATE_BLIND_SIG_WAIT_TIME = 2 * minute;
 // How long to keep "done" operations (success, failed or expired) in local redux store
@@ -80,7 +79,7 @@ export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
 export const NODE_CHOOSER_TIMEOUT_MS = 20 * second; // Fail if no valid node found within timeout
-export const requiredSemVer = '^6.17.2'; // client requires this node version
+export const requiredSemVer = '^6.18.0'; // client requires this node version
 
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';
@@ -156,9 +155,7 @@ export enum app_linking_steps {
   PRELINK_CHECK,
   PRELINK_CHECK_PASSED,
   // Sponsoring
-  SPONSOR_PRECHECK_APP, // Check if sponsoring was already requested before
   SPONSOR_WAITING_OP, // Op to request sponsoring submitted to node and waiting for op to confirm
-  SPONSOR_WAITING_APP, // waiting for app to actually execute sponsoring
   SPONSOR_SUCCESS, // got sponsored
   // Linking
   LINK_WAITING_V5, // Waiting for link operation to confirm (v5 app)

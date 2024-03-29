@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import i18next from 'i18next';
 import { useSelector } from '@/store/hooks';
-import NodeApiGate from '@/components/NodeApiGate';
+import { NodeApiContextProvider } from '@/context/NodeApiContext';
 import { selectLanguageTag } from '@/reducer/settingsSlice';
 import MissingKeysScreen from '@/routes/MissingKeysScreen';
 import { verifyKeypair } from '@/utils/cryptoHelper';
@@ -20,6 +20,7 @@ import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
 import { Stack } from './Navigator';
+import NodeApiGate from '@/components/NodeApiGate';
 
 const MainTabs = (id: string) => {
   return (
@@ -79,15 +80,17 @@ const App = () => {
   const topStack = !eula ? Eula(eula) : !id ? Onboarding() : MainTabs(id);
 
   return (
-    <NodeApiGate>
-      {keyError ? (
-        <MissingKeysScreen keyError={keyError} />
-      ) : (
-        <Stack.Navigator detachInactiveScreens={false}>
-          {topStack}
-        </Stack.Navigator>
-      )}
-    </NodeApiGate>
+    <NodeApiContextProvider>
+      <NodeApiGate>
+        {keyError ? (
+          <MissingKeysScreen keyError={keyError} />
+        ) : (
+          <Stack.Navigator detachInactiveScreens={false}>
+            {topStack}
+          </Stack.Navigator>
+        )}
+      </NodeApiGate>
+    </NodeApiContextProvider>
   );
 };
 export default App;

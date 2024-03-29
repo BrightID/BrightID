@@ -10,7 +10,15 @@ import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import {
+  BLACK,
+  DARKER_GREY,
+  GRAY9,
+  GREEN,
+  ORANGE,
+  RED,
+  WHITE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
@@ -102,8 +110,8 @@ export const RestoreBackup = ({
     <View style={styles.container}>
       <View style={styles.headerTextContainer}>
         <Text style={styles.headerText}>
-          {t('restore.header.text', {
-            defaultValue: 'Part 2: Restore backup (optional)',
+          {t('restore.header.newText', {
+            defaultValue: 'Restore backup (optional)',
           })}
         </Text>
         <Text style={styles.headerInfoText}>
@@ -186,9 +194,7 @@ export const RestoreBackup = ({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
   },
   headerTextContainer: {
     justifyContent: 'center',
@@ -196,8 +202,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[20],
-    color: BLACK,
+    fontSize: fontSize[14],
+    color: GRAY9,
+    lineHeight: 24,
   },
   headerInfoText: {
     fontFamily: 'Poppins-Regular',
@@ -208,13 +215,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   statusContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: 10,
     marginLeft: 20,
     alignItems: 'center',
   },
   infoTextContainer: {
-    flex: 1,
     marginLeft: 10,
   },
   infoText: {

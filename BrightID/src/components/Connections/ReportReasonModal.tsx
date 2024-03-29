@@ -15,7 +15,7 @@ import {
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { setReportReason } from '@/reducer/connectionsSlice';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { setConnectionLevel } from '@/actions';
 import { reportConnection } from './models/reportConnection';
 
@@ -76,7 +76,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     source,
   } = route.params;
   const { t } = useTranslation();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const dispatch = useDispatch();
   const [reason, setReason] = useState<ReportReason>(undefined);
 

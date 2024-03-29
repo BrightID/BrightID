@@ -14,7 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { createNewGroup } from '../actions';
 import { NewGroupCard } from './NewGroupCard';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -38,7 +38,7 @@ const creationStateStrings = {
 };
 
 export const NewGroupScreen = () => {
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute() as {

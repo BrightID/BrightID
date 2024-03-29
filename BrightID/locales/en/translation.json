@@ -60,9 +60,8 @@
     "text": {
       "appInfoFailure": "Failed to fetch latest appInfo: {{message}}. Please try again later.",
       "appNotSponsoring": "You are not yet sponsored and {{app}} is not providing sponsorships. Please find another app to sponsor you.",
-      "appSponsorTimeout": "Timeout waiting for sponsoring. {{lastResult}}",
-      "sponsorOpFailed": "Spend sponsor operation failed",
-      "sponsorOpTimeout": "Spend sponsor operation timed out"
+      "sponsorOpFailed": "Sponsor operation failed",
+      "sponsorOpTimeout": "Sponsor operation timed out"
     }
   },
   "apps": {
@@ -157,7 +156,8 @@
       "cancel": "Cancel",
       "copy": "Copy",
       "retry": "Retry",
-      "save": "Save"
+      "save": "Save",
+      "copyLink": "Copy Link"
     },
     "camera": {
       "cancel": "Cancel",
@@ -587,6 +587,8 @@
     },
     "text": {
       "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
+      "congratulations1": "Congratulations!",
+      "congratulations2": "Your BrightID has been created.It’s time to \nmake connections.",
       "register": "Register to create your very own\ndigital identity"
     }
   },
@@ -819,7 +821,9 @@
     "placeholder": {
       "confirmPassword": "confirm your password",
       "name": "Your name",
-      "password": "password"
+      "password": "password",
+      "newName": "Name",
+      "newPassword": "Password"
     },
     "text": {
       "createPassword": "Create your BrightID password",
@@ -827,7 +831,8 @@
       "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID.",
       "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
       "pleaseAddPhoto": "Please add a photo",
-      "whatsYouName": "What do your friends know you by?"
+      "whatsYouName": "What do your friends know you by?",
+      "nameAndPhotoNotShared": "Your name and photo will never be shared with apps or stored on servers."
     }
   },
   "sync": {

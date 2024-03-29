@@ -76,7 +76,6 @@
     "text": {
       "appInfoFailure": "No se ha podido obtener la última información de la aplicación: {{message}}. Inténtalo de nuevo más tarde.",
       "appNotSponsoring": "Aún no estás patrocinado y {{app}} no ofrece patrocinios. Busca otra aplicación que te patrocine.",
-      "appSponsorTimeout": "Tiempo de espera para el patrocinio. {{lastResult}}",
       "sponsorOpFailed": "Error en la operación del patrocinio de los gastos",
       "sponsorOpTimeout": "Operación del patrocinador de gastos finalizada"
     }

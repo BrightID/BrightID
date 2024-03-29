@@ -3,7 +3,7 @@ import { InteractionManager, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { WHITE } from '@/theme/colors';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import {
   pendingConnection_states,
@@ -21,7 +21,7 @@ type PreviewConnectionProps = {
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, moveToNext } = props;
   const dispatch = useDispatch();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const pendingConnection = useSelector((state) =>
     selectPendingConnectionById(state, pendingConnectionId),
   ) as PendingConnection;

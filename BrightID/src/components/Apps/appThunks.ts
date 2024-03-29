@@ -2,11 +2,8 @@ import { Alert } from 'react-native';
 import { create } from 'apisauce';
 import { t } from 'i18next';
 import _ from 'lodash';
-import {
-  getSponsorship,
-  waitForBlindSigsUpdate,
-} from '@/components/Apps/model';
-import { getGlobalNodeApi } from '@/components/NodeApiGate';
+import { waitForBlindSigsUpdate } from '@/components/Apps/model';
+import { getGlobalNodeApi } from '@/context/NodeApiContext';
 import {
   addLinkedContext,
   selectAllSigs,
@@ -28,7 +25,6 @@ import {
 import {
   BrightIdNetwork,
   operation_states,
-  SPONSOR_WAIT_TIME,
   SPONSORING_POLL_INTERVAL,
   app_linking_steps,
   OPERATION_TRACE_TIME,
@@ -382,7 +378,7 @@ export const requestSponsoring =
       return;
     }
 
-    const { appUserId, appId } = selectLinkingAppInfo(getState());
+    const { appId } = selectLinkingAppInfo(getState());
     // check if app provides sponsoring
     const appInfo = selectAppInfoByAppId(getState(), appId);
     if (!appInfo.sponsoring) {
@@ -413,28 +409,12 @@ export const requestSponsoring =
       return;
     }
 
-    // Check if sponsoring was already requested
-    dispatch(
-      setAppLinkingStep({ step: app_linking_steps.SPONSOR_PRECHECK_APP }),
-    );
-    const sp = await getSponsorship(appUserId, api);
-    if (!sp || !sp.spendRequested) {
-      // console.log(`Sending spend sponsorship op...`);
-      const op = await api.spendSponsorship(appId, appUserId);
-      // console.log(`Sponsor op hash: ${op.hash}`);
-      dispatch(setSponsorOperationHash(op.hash));
-      dispatch(addOperation(op));
-      dispatch(
-        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }),
-      );
-      dispatch(waitForSponsorOp());
-    } else {
-      // sponsoring was already requested, go to next step (waiting for sponsoring by app)
-      dispatch(
-        setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
-      );
-      dispatch(waitForAppSponsoring());
-    }
+    const op = await api.sponsor(appId);
+    // console.log(`Sponsor op hash: ${op.hash}`);
+    dispatch(setSponsorOperationHash(op.hash));
+    dispatch(addOperation(op));
+    dispatch(setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_OP }));
+    dispatch(waitForSponsorOp());
   };
 
 export const waitForSponsorOp =
@@ -461,15 +441,16 @@ export const waitForSponsorOp =
         case operation_states.APPLIED:
           clearInterval(intervalId);
           dispatch(
-            setAppLinkingStep({ step: app_linking_steps.SPONSOR_WAITING_APP }),
+            setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
           );
-          dispatch(waitForAppSponsoring());
+          dispatch(setIsSponsoredv6(true));
+          dispatch(linkAppOrContext());
           break;
         case operation_states.FAILED:
           clearInterval(intervalId);
           dispatch(
             setLinkingAppError(
-              t('alert.text.sponsorOpFailed', 'Spend sponsor operation failed'),
+              t('alert.text.sponsorOpFailed', 'sponsor operation failed'),
             ),
           );
           break;
@@ -477,10 +458,7 @@ export const waitForSponsorOp =
           clearInterval(intervalId);
           dispatch(
             setLinkingAppError(
-              t(
-                'alert.text.sponsorOpTimeout',
-                'Spend sponsor operation timed out',
-              ),
+              t('alert.text.sponsorOpTimeout', 'sponsor operation timed out'),
             ),
           );
           break;
@@ -498,75 +476,6 @@ export const waitForSponsorOp =
       }
     }, SPONSORING_POLL_INTERVAL);
     // console.log(`Started pollSponsorOp ${intervalId}`);
-  };
-
-export const waitForAppSponsoring =
-  (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    const applinkingStep = selectApplinkingStep(getState());
-    if (applinkingStep !== app_linking_steps.SPONSOR_WAITING_APP) {
-      console.log(
-        `Can't wait for app sponsoring when not in WAITING_APP state. Current state: ${applinkingStep}`,
-      );
-      return;
-    }
-
-    const startTime = Date.now();
-    const { appUserId } = selectLinkingAppInfo(getState());
-    const api = getGlobalNodeApi();
-
-    // Op to request sponsoring is confirmed. Now wait for app to actually sponsor me.
-    const intervalId = setInterval(async () => {
-      const timeElapsed = Date.now() - startTime;
-      let sponsorshipInfo: SponsorshipInfo | undefined;
-      let errorResponse;
-      try {
-        sponsorshipInfo = await getSponsorship(appUserId, api);
-      } catch (error) {
-        console.log(`Error getting sponsorship info:`);
-        console.log(`${error}`);
-        errorResponse = error;
-      }
-      if (sponsorshipInfo) {
-        // console.log(`Got sponsorship info - Authorized: ${sponsorshipInfo.appHasAuthorized}, spendRequested: ${sponsorshipInfo.spendRequested}`);
-        if (
-          sponsorshipInfo.appHasAuthorized &&
-          sponsorshipInfo.spendRequested
-        ) {
-          // console.log(`Sponsorship complete!`);
-          clearInterval(intervalId);
-          dispatch(
-            setAppLinkingStep({ step: app_linking_steps.SPONSOR_SUCCESS }),
-          );
-          dispatch(setIsSponsoredv6(true));
-          dispatch(linkAppOrContext());
-        }
-      }
-      if (timeElapsed > SPONSOR_WAIT_TIME) {
-        console.log(`Timeout waiting for sponsoring!`);
-        clearInterval(intervalId);
-        let lastResult;
-        if (sponsorshipInfo) {
-          lastResult = `Last poll result: "appHasAuthorized": "${sponsorshipInfo.appHasAuthorized}", "spendRequested": "${sponsorshipInfo.spendRequested}"`;
-        } else if (errorResponse) {
-          lastResult = `Error: "${errorResponse?.message || errorResponse}"`;
-        } else {
-          // no sponsorshipInfo but also no error
-          lastResult = `Error: Node has not registered the sponsor request`;
-        }
-        dispatch(
-          setLinkingAppError(
-            t(
-              'alert.text.appSponsorTimeout',
-              'Timeout waiting for sponsoring. {{lastResult}}',
-              {
-                lastResult,
-              },
-            ),
-          ),
-        );
-      }
-    }, SPONSORING_POLL_INTERVAL);
-    // console.log(`Started pollSponsorship ${intervalId}`);
   };
 
 export const linkAppOrContext =

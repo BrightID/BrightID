@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Alert,
   StatusBar,
@@ -9,47 +9,33 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import Svg, { Path } from 'react-native-svg';
-import qrcode from 'qrcode';
-import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18next from 'i18next';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch, useSelector } from '@/store/hooks';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useDispatch } from '@/store/hooks';
 import {
   BLACK,
-  DARKER_GREY,
+  DARK_PRIMARY,
+  GRAY8,
+  GRAY9,
   GREY,
-  LIGHT_BLACK,
   ORANGE,
+  SUCCESS,
   WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { RecoveryErrorType } from './RecoveryError';
-import { setupRecovery } from './thunks/recoveryThunks';
-import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
-import {
-  createRecoveryChannel,
-  pollRecoveryChannel,
-} from './thunks/channelThunks';
-import {
-  resetRecoveryData,
-  selectRecoveryStep,
-  setRecoverStep,
-  uploadCompletedByOtherSide,
-} from './recoveryDataSlice';
-import {
-  clearImportChannel,
-  createSyncChannel,
-  pollImportChannel,
-  setupSync,
-} from '../ImportFlow/thunks/channelThunks';
+import { resetRecoveryData, setRecoverStep } from './recoveryDataSlice';
+import { clearImportChannel } from '../ImportFlow/thunks/channelThunks';
 import { recover_steps, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
-import { userSelector } from '@/reducer/userSlice';
+import BrightIDLogo from '@/components/Icons/BrightIDLogo';
+import Copy from '@/components/Icons/Copy';
+import { useGenerateRecoveryQrAndPoll } from './useGenerateRecoveryQrAndPoll';
 
 /**
  * Recovery Code screen of BrightID
@@ -58,119 +44,22 @@ import { userSelector } from '@/reducer/userSlice';
  */
 
 const RecoveryCodeScreen = ({ route }) => {
-  const { action, urlType } = route.params;
-  const [qrUrl, setQrUrl] = useState<URL>();
-  const [qrsvg, setQrsvg] = useState('');
-  const [alreadyNotified, setAlreadyNotified] = useState(false);
-  const recoveryData = useSelector((state) => state.recoveryData);
-  const { id } = useSelector(userSelector);
-  const isScanned = useSelector(
-    (state) =>
-      uploadCompletedByOtherSide(state) ||
-      state.recoveryData.recoveredConnections ||
-      state.recoveryData.recoveredGroups ||
-      state.recoveryData.recoveredBlindSigs,
-  );
   const { t } = useTranslation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const step = useSelector(selectRecoveryStep);
+  const { action, urlType } = route.params;
 
-  const sigCount = recoveryData.sigs
-    ? Object.values(recoveryData.sigs).length
-    : 0;
-
-  // start polling recovery channel to get sig and mutual info
-  useEffect(() => {
-    if (
-      action === 'recovery' &&
-      recoveryData.recoverStep === recover_steps.POLLING_SIGS &&
-      !recoveryData.channel.pollTimerId
-    ) {
-      dispatch(pollRecoveryChannel());
-    }
-  }, [
-    action,
-    dispatch,
-    recoveryData.channel.pollTimerId,
-    recoveryData.recoverStep,
-  ]);
-
-  // create recovery data and start polling channel
-  useEffect(() => {
-    const runRecoveryEffect = async () => {
-      // create publicKey, secretKey, aesKey for user
-      await dispatch(setupRecovery());
-      // create channel and upload new publicKey to get signed by the scanner
-      await dispatch(createRecoveryChannel());
-      dispatch(setRecoverStep(recover_steps.POLLING_SIGS));
-    };
-    const runImportEffect = async () => {
-      // create publicKey, secretKey, aesKey for user
-      await dispatch(setupRecovery());
-      // create channel and upload new publicKey to be added as a new signing key by the scanner
-      await dispatch(createRecoveryChannel());
-      // start polling channel to get connections/groups/blindsigs info
-      dispatch(pollImportChannel());
-    };
-    const runSyncEffect = async () => {
-      // create a new aesKey
-      await dispatch(setupSync());
-      // create channel and upload lastSyncTime to the channel if it is not primary device
-      // or poll lastSyncTime from other side if it is and then upload connections/groups/blindsigs
-      // added after lastSyncTime to the channel
-      await dispatch(createSyncChannel());
-      // start polling channel to get new connections/groups/blindsigs info
-      dispatch(pollImportChannel());
-    };
-
-    if (step === recover_steps.NOT_STARTED) {
-      if (action === 'recovery') {
-        if (!id) {
-          console.log(`initializing recovery process`);
-          runRecoveryEffect();
-        } else {
-          console.log(`Not starting recovery process, user has id!`);
-        }
-      } else if (action === 'import') {
-        console.log(`initializing import process`);
-        runImportEffect();
-      } else if (action === 'sync') {
-        console.log(`initializing sync process`);
-        runSyncEffect();
-      }
-    }
-  }, [action, dispatch, id, step]);
-
-  const [changePrimaryDevice, setChangePrimaryDevice] = useState(true);
-  // set QRCode and SVG
-  useEffect(() => {
-    if (recoveryData.channel.url && recoveryData.aesKey) {
-      const newQrUrl = buildRecoveryChannelQrUrl({
-        aesKey: recoveryData.aesKey,
-        url: recoveryData.channel.url,
-        t: urlType,
-        changePrimaryDevice,
-      });
-      console.log(`new qrCode url: ${newQrUrl.href}`);
-      setQrUrl(newQrUrl);
-
-      const parseQrString = (err, qrsvg) => {
-        if (err) return console.log(err);
-        setQrsvg(qrsvg);
-      };
-
-      qrcode.toString(newQrUrl.href, (err, qr) => {
-        if (err) return console.log(err);
-        parseString(qr, parseQrString);
-      });
-    }
-  }, [
+  const {
+    isScanned,
+    qrUrl,
+    qrsvg,
+    sigCount,
     changePrimaryDevice,
-    recoveryData.aesKey,
-    recoveryData.channel.url,
-    urlType,
-  ]);
+    setChangePrimaryDevice,
+    recoveryData,
+    alreadyNotified,
+    setAlreadyNotified,
+  } = useGenerateRecoveryQrAndPoll({ action, urlType });
 
   // track errors
   useEffect(() => {
@@ -236,6 +125,7 @@ const RecoveryCodeScreen = ({ route }) => {
       sigCount,
       isScanned,
       t,
+      setAlreadyNotified,
       dispatch,
       navigation,
       changePrimaryDevice,
@@ -326,12 +216,15 @@ const RecoveryCodeScreen = ({ route }) => {
   return (
     <>
       <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
+        barStyle="dark-content"
+        backgroundColor={WHITE}
         animated={true}
       />
-      <View style={styles.orangeTop} />
       <View style={styles.container}>
+        <View style={styles.LogoContainer}>
+          <BrightIDLogo />
+        </View>
+
         <Text style={styles.recoveryCodeInfoText}>
           {action === 'recovery' && t('recovery.text.askScanning')}
           {action === 'import' && t('import.text.askScanning')}
@@ -346,6 +239,14 @@ const RecoveryCodeScreen = ({ route }) => {
             </Text>
             {action === 'import' && (
               <View style={styles.changePrimaryDeviceSwitchContainer}>
+                <CheckBox
+                  tintColors={{ false: GREY, true: ORANGE }}
+                  // style={{borderRadius: }}
+                  onValueChange={(value) => {
+                    setChangePrimaryDevice(value);
+                  }}
+                  value={changePrimaryDevice}
+                />
                 <Text
                   style={styles.changePrimaryDeviceSwitchLabel}
                   onPress={() => {
@@ -354,13 +255,6 @@ const RecoveryCodeScreen = ({ route }) => {
                 >
                   set as primary device
                 </Text>
-                <CheckBox
-                  tintColors={{ false: GREY, true: ORANGE }}
-                  onValueChange={(value) => {
-                    setChangePrimaryDevice(value);
-                  }}
-                  value={changePrimaryDevice}
-                />
               </View>
             )}
             <Svg
@@ -380,13 +274,11 @@ const RecoveryCodeScreen = ({ route }) => {
             </Svg>
 
             <TouchableOpacity style={styles.copyContainer} onPress={copyQr}>
-              <Material
-                size={24}
-                name="content-copy"
-                color={LIGHT_BLACK}
-                style={{ width: 24, height: 24 }}
-              />
-              <Text style={styles.copyText}> {t('common.button.copy')}</Text>
+              <Copy />
+              <Text style={styles.copyText}>
+                {' '}
+                {t('common.button.copyLink')}
+              </Text>
             </TouchableOpacity>
             {__DEV__ && (
               <View>
@@ -417,22 +309,15 @@ const RecoveryCodeScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 65,
-    width: '100%',
-    zIndex: 1,
-  },
+  LogoContainer: {},
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     backgroundColor: WHITE,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-evenly',
     flexDirection: 'column',
-    borderTopLeftRadius: 58,
-    marginTop: -58,
+    paddingLeft: 20,
+    paddingRight: 20,
     zIndex: 10,
     overflow: 'hidden',
   },
@@ -443,36 +328,36 @@ const styles = StyleSheet.create({
   },
   changePrimaryDeviceSwitchLabel: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[14],
+    fontSize: fontSize[16],
     textAlign: 'center',
-    color: DARKER_GREY,
+    color: GRAY9,
+    marginLeft: 8,
   },
   qrsvgContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   recoveryCodeInfoText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
+    fontSize: fontSize[17],
     textAlign: 'center',
-    color: BLACK,
+    color: GRAY9,
     width: '80%',
-    marginTop: DEVICE_LARGE ? 30 : 26,
+    lineHeight: 24,
   },
   additionalInfo: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[14],
     textAlign: 'center',
-    color: DARKER_GREY,
-    width: '80%',
+    color: GRAY8,
+    lineHeight: 24,
     marginBottom: DEVICE_LARGE ? 50 : 45,
   },
   signatures: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     textAlign: 'center',
-    color: BLACK,
+    color: SUCCESS,
   },
   copyContainer: {
     flexDirection: 'row',
@@ -480,10 +365,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 25,
     minWidth: 100,
+    marginTop: 20,
   },
   copyText: {
-    color: BLACK,
-    fontFamily: 'Poppins-Medium',
+    color: DARK_PRIMARY,
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    marginLeft: 12,
   },
 });
 

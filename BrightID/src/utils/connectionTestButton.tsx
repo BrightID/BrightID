@@ -4,7 +4,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch } from '@/store/hooks';
 import { BLUE, WHITE } from '@/theme/colors';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   connectWithOtherFakeConnections,
   joinAllGroups,
@@ -35,7 +35,7 @@ const btnOptions = [
 const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
 
   const performAction = (index: number) => {
     switch (index) {

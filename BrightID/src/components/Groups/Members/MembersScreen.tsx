@@ -37,7 +37,7 @@ import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { addOperation } from '@/reducer/operationsSlice';
-import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNodeApiContext } from '@/context/NodeApiContext';
 import { MemberCard } from '@/components/Groups/Members/MemberCard';
 
 export const MembersScreen = () => {
@@ -47,7 +47,7 @@ export const MembersScreen = () => {
   };
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
-  const api = useContext(NodeApiContext);
+  const { api } = useNodeApiContext();
   const connections = useSelector(selectAllConnections);
   const user = useSelector(userSelector);
   const { group, admins, members } = useSelector((state) =>
