@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { original } from 'immer';
+import { RESET_STORE } from '@brightid/redux/actions';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { recover_steps, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
-import { RESET_STORE } from '@/actions';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export const initialState: RecoveryData = {

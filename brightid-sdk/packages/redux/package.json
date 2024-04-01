@@ -1,0 +1,68 @@
+{
+  "name": "@brightid/redux",
+  "version": "0.0.2",
+  "description": "A Redux lib for building BrightID clients and super apps",
+  "repository": "https://github.com/BrightID/BrightID/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "pnpm run clean && pnpm run build:esm+types",
+    "build:esm+types": "tsc --project tsconfig.build.json --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo actions reducers",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist/**",
+    "!dist/**/*.tsbuildinfo",
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "/reducers",
+    "/actions"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "default": "./dist/esm/exports/index.js"
+    },
+    "./reducers": {
+      "types": "./dist/types/exports/reducers.d.ts",
+      "default": "./dist/esm/exports/reducers.js"
+    },
+    "./actions": {
+      "types": "./dist/types/exports/actions.d.ts",
+      "default": "./dist/esm/exports/actions.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "reducers": [
+        "./dist/types/exports/reducers.d.ts"
+      ],
+      "actions": [
+        "./dist/types/exports/actions.d.ts"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "1",
+    "typescript": ">=5.0.4"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "1.5.0",
+    "immer": "^8.0.4"
+  }
+}

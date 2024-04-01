@@ -1,12 +1,12 @@
 import nacl from 'tweetnacl';
+import { setKeypair } from '@brightid/redux/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
-  setUserData,
+  addOperation,
   setConnections,
   setGroups,
-  setKeypair,
-  addOperation,
+  setUserData,
   upsertSig,
 } from '@/actions';
 import BrightidError, { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';

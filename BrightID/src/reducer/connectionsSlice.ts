@@ -1,14 +1,14 @@
 import {
+  createEntityAdapter,
   createSelector,
   createSlice,
-  createEntityAdapter,
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { difference } from 'ramda';
+import { RESET_STORE } from '@brightid/redux/actions';
 import { connection_levels } from '@/utils/constants';
-import { RESET_STORE } from '@/actions/resetStore';
 
 /* ******** INITIAL STATE ************** */
 
