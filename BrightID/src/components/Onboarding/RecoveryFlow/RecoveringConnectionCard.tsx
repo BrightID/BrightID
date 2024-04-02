@@ -33,7 +33,7 @@ const RecoveringConnectionCard = (props) => {
     setUploadingData,
   } = props;
 
-  const nodeApi = useContext(NodeApiContext);
+  const { api: nodeApi } = useNodeApiContext();
   const [imgErr, setImgErr] = useState(false);
   const aesKey = useSelector((state) => state.recoveryData.aesKey);
   const channel = useSelector((state) => state.recoveryData.channel);
