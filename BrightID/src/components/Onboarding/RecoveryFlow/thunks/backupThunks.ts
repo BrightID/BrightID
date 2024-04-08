@@ -10,7 +10,7 @@ const hashId = (id: string, password: string) => {
 };
 
 export const encryptAndBackup =
-  (key: string, data: string): AppThunk =>
+  (key: string, data: string): AppThunk<Promise<void>> =>
   async (_: AppDispatch, getState) => {
     const {
       user: { id, password },

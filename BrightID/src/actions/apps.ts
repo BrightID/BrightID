@@ -4,21 +4,21 @@ import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { InteractionManager } from 'react-native';
 import {
-  setApps,
-  upsertSig,
   removeSig,
-  updateSig,
-  setSigsUpdating,
   selectAllSigs,
   selectExpireableBlindSigApps,
   selectSigsUpdating,
+  setApps,
+  setSigsUpdating,
+  updateSig,
+  upsertSig,
 } from '@/reducer/appsSlice';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
-import backupApi from '@/api/backupService';
 import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork } from '@/utils/constants';
+import { encryptAndBackup } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -122,8 +122,7 @@ export const updateBlindSig =
 
         const backupData = stringify({ ...sigInfo, sig: blindSig });
         const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
-        const hashedId = hash(id + password);
-        await encryptAndBackup(backupKey, backupData, hashedId, password);
+        await dispatch(encryptAndBackup(backupKey, backupData));
 
         dispatch(
           updateSig({
@@ -173,20 +172,6 @@ export const updateBlindSigs =
       });
     });
   };
-
-const encryptAndBackup = async (
-  key: string,
-  data: string,
-  hashedId,
-  password: string,
-) => {
-  try {
-    const encrypted = CryptoJS.AES.encrypt(data, password).toString();
-    await backupApi.putRecovery(hashedId, key, encrypted);
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.warn(err);
-  }
-};
 
 export const fetchApps =
   (api): AppThunk<Promise<void>> =>
