@@ -7,6 +7,7 @@ import { RESET_STORE } from '@/actions';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export const initialState: RecoveryData = {
+  lastUploadedBackupDataHashes: {},
   recoverStep: recover_steps.NOT_STARTED,
   publicKey: '',
   secretKey: new Uint8Array(),
@@ -46,6 +47,7 @@ const recoveryData = createSlice({
       }>,
     ) {
       const { publicKey, secretKey, aesKey } = action.payload;
+      state.lastUploadedBackupDataHashes = {};
       state.publicKey = uInt8ArrayToB64(publicKey ?? new Uint8Array());
       state.secretKey = secretKey;
       state.aesKey = aesKey;
@@ -63,6 +65,18 @@ const recoveryData = createSlice({
       state.sigs = {};
       state.uploadCompletedBy = {};
       state.recoverStep = recover_steps.NOT_STARTED;
+    },
+    updateLastUploadedBackupDataHash(
+      state,
+      action: PayloadAction<{
+        hashedId: string;
+        encryptedDataHash: string;
+      }>,
+    ) {
+      state.lastUploadedBackupDataHashes = {
+        ...state.lastUploadedBackupDataHashes,
+        [action.payload.hashedId]: action.payload.encryptedDataHash,
+      };
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
@@ -167,6 +181,7 @@ export const selectRecoveryStep = (state) => state.recoveryData.recoverStep;
 // Export channel actions
 export const {
   init,
+  updateLastUploadedBackupDataHash,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
   increaseRecoveredBlindSigs,
