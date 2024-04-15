@@ -150,7 +150,7 @@ export const updateBlindSig =
 
 export const updateBlindSigs =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch, getState) => {
-    return new Promise(() => {
+    return new Promise((resolve, _reject) => {
       InteractionManager.runAfterInteractions(async () => {
         const sigsUpdating = selectSigsUpdating(getState());
         if (!sigsUpdating) {
@@ -168,6 +168,10 @@ export const updateBlindSigs =
           }
           dispatch(setSigsUpdating(false));
           console.log('getting blind sigs finished');
+          resolve();
+        } else {
+          // TODO: handle this better
+          resolve();
         }
       });
     });

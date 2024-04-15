@@ -93,7 +93,7 @@ export const HomeScreen = (props) => {
 
   const [userInfoLoaded, setUserInfoLoaded] = useState(false);
   const [appsLoaded, setAppsLoaded] = useState(false);
-  const [additionalOperationDone, setAdditionalOperationDone] = useState(false);
+  const [blindSigsUploadDone, setBlindSigsUploadDone] = useState(false);
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
@@ -114,19 +114,23 @@ export const HomeScreen = (props) => {
   );
 
   useEffect(() => {
-    if (api) {
-      dispatch(fetchApps(api)).then(() => {
+    async function runUpdateBlindSigsEffect() {
+      if (api) {
+        await dispatch(fetchApps(api));
         setAppsLoaded(true);
         if (isPrimaryDevice) {
           console.log(`updating blind sigs...`);
-          dispatch(updateBlindSigs()).then(() =>
-            setAdditionalOperationDone(true),
-          );
-        } else {
-          setAdditionalOperationDone(true);
+          try {
+            await dispatch(updateBlindSigs());
+          } catch (e) {
+            console.log(e);
+          }
         }
-      });
+        setBlindSigsUploadDone(true);
+      }
     }
+
+    runUpdateBlindSigsEffect();
   }, [api, dispatch, isPrimaryDevice]);
 
   useEffect(() => {
@@ -157,10 +161,10 @@ export const HomeScreen = (props) => {
   }, [dispatch, headerHeight]);
 
   useEffect(() => {
-    if (userInfoLoaded && appsLoaded && additionalOperationDone) {
+    if (userInfoLoaded && appsLoaded && blindSigsUploadDone) {
       dispatch(backupAppData());
     }
-  }, [userInfoLoaded, appsLoaded, additionalOperationDone, dispatch]);
+  }, [userInfoLoaded, appsLoaded, blindSigsUploadDone, dispatch]);
 
   const { showActionSheetWithOptions } = useActionSheet();
 
