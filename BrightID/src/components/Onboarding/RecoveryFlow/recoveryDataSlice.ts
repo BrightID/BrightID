@@ -3,7 +3,7 @@ import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { recover_steps, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
-import { RESET_STORE } from '@/actions';
+import { RESET_STORE, UPDATE_LAST_UPLOADED_BACKUP_DATA_HASH } from '@/actions';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export const initialState: RecoveryData = {
@@ -65,18 +65,6 @@ const recoveryData = createSlice({
       state.sigs = {};
       state.uploadCompletedBy = {};
       state.recoverStep = recover_steps.NOT_STARTED;
-    },
-    updateLastUploadedBackupDataHash(
-      state,
-      action: PayloadAction<{
-        hashedId: string;
-        encryptedDataHash: string;
-      }>,
-    ) {
-      state.lastUploadedBackupDataHashes = {
-        ...state.lastUploadedBackupDataHashes,
-        [action.payload.hashedId]: action.payload.encryptedDataHash,
-      };
     },
     setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
@@ -164,6 +152,21 @@ const recoveryData = createSlice({
     [RESET_STORE]: () => {
       return initialState;
     },
+    [UPDATE_LAST_UPLOADED_BACKUP_DATA_HASH]: (
+      state,
+      action: PayloadAction<{
+        hashedId: string;
+        encryptedDataHash: string;
+      }>,
+    ) => {
+      return {
+        ...state,
+        lastUploadedBackupDataHashes: {
+          ...state.lastUploadedBackupDataHashes,
+          [action.payload.hashedId]: action.payload.encryptedDataHash,
+        },
+      };
+    },
   },
 });
 
@@ -181,7 +184,6 @@ export const selectRecoveryStep = (state) => state.recoveryData.recoverStep;
 // Export channel actions
 export const {
   init,
-  updateLastUploadedBackupDataHash,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
   increaseRecoveredBlindSigs,

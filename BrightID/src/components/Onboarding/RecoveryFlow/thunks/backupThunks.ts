@@ -3,7 +3,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { updateLastUploadedBackupDataHash } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import { updateLastUploadedBackupDataHash } from '@/actions';
 
 const hashId = (id: string, password: string) => {
   return hash(id + password);
