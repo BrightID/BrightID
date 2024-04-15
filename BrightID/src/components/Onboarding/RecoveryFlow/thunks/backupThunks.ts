@@ -3,6 +3,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { selectAllSigs, upsertSig } from '@/reducer/appsSlice';
 import { updateLastUploadedBackupDataHash } from '@/actions';
 
 const hashId = (id: string, password: string) => {
@@ -97,6 +98,32 @@ export const backupUser =
     }
   };
 
+export const backupBlindSigs =
+  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+    try {
+      const {
+        user: { id, password },
+      } = getState();
+
+      const allSigs = selectAllSigs(getState());
+      for (const sig of allSigs) {
+        for (const verification of sig.verifications) {
+          const vel = sig.verificationExpirationLength;
+          const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+          const key = hash(`${sig.id} ${verification} ${roundedTimestamp}`);
+          try {
+            const decrypted = await fetchBackupData(key, id, password);
+            await dispatch(upsertSig(JSON.parse(decrypted)));
+          } catch (err) {
+            console.log(`blind sig not found for ${key}`, err.message);
+          }
+        }
+      }
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
+
 export const backupAppData =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
     try {
@@ -104,6 +131,7 @@ export const backupAppData =
       await dispatch(backupUser(false));
       // backup connection photos
       await dispatch(backupPhotos(false));
+      await dispatch(backupBlindSigs());
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
