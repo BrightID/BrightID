@@ -3,40 +3,51 @@ import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { updateLastUploadedBackupDataHash } from '@/actions';
 
 const hashId = (id: string, password: string) => {
-  const h = hash(id + password);
-  return h;
+  return hash(id + password);
 };
 
 export const encryptAndBackup =
-  (key: string, data: string): AppThunk =>
-  async (_: AppDispatch, getState) => {
+  (key: string, data: string, override = true): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch, getState) => {
     const {
       user: { id, password },
+      recoveryData: { lastUploadedBackupDataHashes },
     } = getState();
     const hashedId = hashId(id, password);
-    try {
-      const encrypted = CryptoJS.AES.encrypt(data, password).toString();
-      await backupApi.putRecovery(hashedId, key, encrypted);
-    } catch (err) {
-      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    const encrypted = CryptoJS.AES.encrypt(data, password).toString();
+    const encryptedDataHash = hash(encrypted);
+    if (
+      override ||
+      lastUploadedBackupDataHashes[hashedId] !== encryptedDataHash
+    ) {
+      try {
+        await backupApi.putRecovery(hashedId, key, encrypted);
+        dispatch(
+          updateLastUploadedBackupDataHash({ hashedId, encryptedDataHash }),
+        );
+      } catch (err) {
+        err instanceof Error ? console.warn(err.message) : console.warn(err);
+      }
     }
   };
 
 export const backupPhoto =
-  (id: string, filename: string): AppThunk =>
+  (id: string, filename: string, override = true): AppThunk<Promise<void>> =>
   async (dispatch: AppDispatch) => {
     try {
       const data = await retrieveImage(filename);
-      dispatch(encryptAndBackup(id, data));
+      await dispatch(encryptAndBackup(id, data, override));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
   };
 
 const backupPhotos =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+  (override = true): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         groups: { groups },
@@ -45,22 +56,23 @@ const backupPhotos =
       const connections = selectAllConnections(getState());
       for (const item of connections) {
         if (item.photo?.filename) {
-          await dispatch(backupPhoto(item.id, item.photo.filename));
+          await dispatch(backupPhoto(item.id, item.photo.filename, override));
         }
       }
       for (const item of groups) {
         if (item.photo?.filename) {
-          await dispatch(backupPhoto(item.id, item.photo.filename));
+          await dispatch(backupPhoto(item.id, item.photo.filename, override));
         }
       }
-      await dispatch(backupPhoto(id, photo.filename));
+      await dispatch(backupPhoto(id, photo.filename, override));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
   };
 
 export const backupUser =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+  (override = true): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
     try {
       const {
         user: { id, name, photo },
@@ -79,7 +91,7 @@ export const backupUser =
         connections,
         groups,
       });
-      dispatch(encryptAndBackup('data', dataStr));
+      dispatch(encryptAndBackup('data', dataStr, override));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
@@ -89,9 +101,9 @@ export const backupAppData =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
     try {
       // backup user
-      await dispatch(backupUser());
+      await dispatch(backupUser(false));
       // backup connection photos
-      await dispatch(backupPhotos());
+      await dispatch(backupPhotos(false));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
