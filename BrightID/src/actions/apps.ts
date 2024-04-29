@@ -13,12 +13,12 @@ import {
   updateSig,
   upsertSig,
 } from '@/reducer/appsSlice';
-import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
 import { CACHED_PARAMS_NOT_FOUND } from '@/api/brightidError';
 import { BrightIdNetwork } from '@/utils/constants';
-import { encryptAndBackup } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupSigInfo } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -120,9 +120,7 @@ export const updateBlindSig =
           continue;
         }
 
-        const backupData = stringify({ ...sigInfo, sig: blindSig });
-        const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
-        await dispatch(encryptAndBackup(backupKey, backupData));
+        await dispatch(backupSigInfo({ ...sigInfo, sig: blindSig }));
 
         dispatch(
           updateSig({
