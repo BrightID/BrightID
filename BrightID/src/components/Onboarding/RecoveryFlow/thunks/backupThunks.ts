@@ -1,8 +1,10 @@
 import CryptoJS from 'crypto-js';
+import stringify from 'fast-json-stable-stringify';
 import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { selectAllSigs } from '@/reducer/appsSlice';
 import { updateLastUploadedBackupDataHash } from '@/actions';
 
 const hashId = (id: string, password: string) => {
@@ -97,6 +99,33 @@ export const backupUser =
     }
   };
 
+export const backupSigInfo =
+  (sigInfo: SigInfo, override = true): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const backupData = stringify(sigInfo);
+      const backupKey = hash(
+        `${sigInfo.app} ${sigInfo.verification} ${sigInfo.roundedTimestamp}`,
+      );
+      await dispatch(encryptAndBackup(backupKey, backupData, override));
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
+
+export const backupBlindSigs =
+  (override = true): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
+    try {
+      const allSigs = selectAllSigs(getState());
+      for (const sig of allSigs) {
+        await dispatch(backupSigInfo(sig, override));
+      }
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
+
 export const backupAppData =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
     try {
@@ -104,6 +133,8 @@ export const backupAppData =
       await dispatch(backupUser(false));
       // backup connection photos
       await dispatch(backupPhotos(false));
+      // backup blind signatures
+      await dispatch(backupBlindSigs(false));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
