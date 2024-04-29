@@ -1,9 +1,10 @@
 import CryptoJS from 'crypto-js';
+import stringify from 'fast-json-stable-stringify';
 import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { selectAllSigs, upsertSig } from '@/reducer/appsSlice';
+import { selectAllSigs } from '@/reducer/appsSlice';
 import { updateLastUploadedBackupDataHash } from '@/actions';
 
 const hashId = (id: string, password: string) => {
@@ -98,26 +99,27 @@ export const backupUser =
     }
   };
 
-export const backupBlindSigs =
-  (): AppThunk => async (dispatch: AppDispatch, getState) => {
+export const backupSigInfo =
+  (sigInfo: SigInfo, override = true): AppThunk<Promise<void>> =>
+  async (dispatch: AppDispatch) => {
     try {
-      const {
-        user: { id, password },
-      } = getState();
+      const backupData = stringify(sigInfo);
+      const backupKey = hash(
+        `${sigInfo.app} ${sigInfo.verification} ${sigInfo.roundedTimestamp}`,
+      );
+      await dispatch(encryptAndBackup(backupKey, backupData, override));
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
+    }
+  };
 
+export const backupBlindSigs =
+  (override = true): AppThunk =>
+  async (dispatch: AppDispatch, getState) => {
+    try {
       const allSigs = selectAllSigs(getState());
       for (const sig of allSigs) {
-        for (const verification of sig.verifications) {
-          const vel = sig.verificationExpirationLength;
-          const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
-          const key = hash(`${sig.id} ${verification} ${roundedTimestamp}`);
-          try {
-            const decrypted = await fetchBackupData(key, id, password);
-            await dispatch(upsertSig(JSON.parse(decrypted)));
-          } catch (err) {
-            console.log(`blind sig not found for ${key}`, err.message);
-          }
-        }
+        await dispatch(backupSigInfo(sig, override));
       }
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
@@ -131,7 +133,8 @@ export const backupAppData =
       await dispatch(backupUser(false));
       // backup connection photos
       await dispatch(backupPhotos(false));
-      await dispatch(backupBlindSigs());
+      // backup blind signatures
+      await dispatch(backupBlindSigs(false));
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
