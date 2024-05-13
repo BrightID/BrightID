@@ -2,13 +2,13 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useState,
   useRef,
+  useState,
 } from 'react';
 import {
   BackHandler,
-  StyleSheet,
   StatusBar,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -21,13 +21,13 @@ import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
-import { WHITE, GREY, DARK_GREY, BLACK, ORANGE } from '@/theme/colors';
+import { DEVICE_ANDROID, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK, DARK_GREY, GREY, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { setActiveNotification } from '@/actions';
 import { PreviewConnectionController } from './PreviewConnectionController';
 import BackArrow from '../Icons/BackArrow';
-import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { syncAndBackupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -127,7 +127,7 @@ export const PendingConnectionsScreen = () => {
     if (pendingConnections.length === 0) {
       // Trigger backup of connections when when all pending connections are handled
       if (backupCompleted) {
-        dispatch(backupUser());
+        dispatch(syncAndBackupUser());
       }
       setLoading(true);
       timeout = setTimeout(() => {
