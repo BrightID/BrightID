@@ -10,7 +10,7 @@ import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { addOperation } from '@/reducer/operationsSlice';
 import {
   backupPhoto,
-  backupUser,
+  syncAndBackupUser,
 } from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 import { NodeApi } from '@/api/brightId';
 import { group_states } from '@/utils/constants';
@@ -90,7 +90,7 @@ export const createNewGroup =
       }
 
       if (backupCompleted) {
-        await dispatch(backupUser());
+        await dispatch(syncAndBackupUser());
         if (filename) {
           await dispatch(backupPhoto(groupId, filename));
         }
