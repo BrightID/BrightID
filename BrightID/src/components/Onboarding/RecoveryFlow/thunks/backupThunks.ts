@@ -1,12 +1,9 @@
 import CryptoJS from 'crypto-js';
 import stringify from 'fast-json-stable-stringify';
-import { retrieveImage, saveImage } from '@/utils/filesystem';
+import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
-import {
-  selectAllConnections,
-  setConnections,
-} from '@/reducer/connectionsSlice';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import { updateLastUploadedBackupDataHash } from '@/actions';
 
@@ -75,62 +72,15 @@ const backupPhotos =
     }
   };
 
-export const syncAndBackupUser =
+export const backupUser =
   (override = true): AppThunk =>
   async (dispatch: AppDispatch, getState) => {
     try {
       const {
-        user: { id, name, photo, password },
+        user: { id, name, photo },
         groups: { groups },
       } = getState();
-
-      const decryptedBackupData = await dispatch(
-        fetchBackupData('data', id, password),
-      );
-      const connectionsFromBackupService: Connection[] =
-        JSON.parse(decryptedBackupData).connections;
-
       const connections = selectAllConnections(getState());
-
-      const finalConnections = [...connections];
-
-      let connectionUpdatedFromBackupService = false;
-
-      for (const connectionFromBackupService of connectionsFromBackupService) {
-        const existingConnectionIndex = finalConnections.findIndex(
-          (connection) => connection.id === connectionFromBackupService.id,
-        );
-        if (existingConnectionIndex === -1) {
-          finalConnections.push(connectionFromBackupService);
-        } else {
-          if (
-            connectionFromBackupService.connectionDate >
-            finalConnections[existingConnectionIndex].connectionDate
-          ) {
-            const conn: Connection = { ...connectionFromBackupService };
-            const decrypted = await dispatch(
-              fetchBackupData(conn.id, id, password),
-            );
-            const filename = await saveImage({
-              imageName: conn.id,
-              base64Image: decrypted,
-            });
-            conn.photo = { filename };
-            finalConnections[existingConnectionIndex] = conn;
-            connectionUpdatedFromBackupService = true;
-          }
-        }
-      }
-
-      if (connectionUpdatedFromBackupService) {
-        dispatch(
-          setConnections(
-            finalConnections.sort(
-              (a, b) => b.connectionDate - a.connectionDate,
-            ),
-          ),
-        );
-      }
 
       const userData = {
         id,
@@ -140,7 +90,7 @@ export const syncAndBackupUser =
 
       const dataStr = JSON.stringify({
         userData,
-        connections: finalConnections,
+        connections,
         groups,
       });
       dispatch(encryptAndBackup('data', dataStr, override));
@@ -180,7 +130,7 @@ export const backupAppData =
   (): AppThunk<Promise<void>> => async (dispatch: AppDispatch) => {
     try {
       // backup user
-      await dispatch(syncAndBackupUser(false));
+      await dispatch(backupUser(false));
       // backup connection photos
       await dispatch(backupPhotos(false));
       // backup blind signatures

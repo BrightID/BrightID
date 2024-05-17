@@ -30,7 +30,7 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
-import { syncAndBackupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { encryptAesKey } from '@/utils/invites';
 import { useNodeApiContext } from '@/context/NodeApiContext';
 
@@ -157,7 +157,7 @@ const ConnectionCard = (props: Props) => {
               if (index === 0) {
                 dispatch(deleteConnection(id));
                 if (backupCompleted) {
-                  await dispatch(syncAndBackupUser());
+                  await dispatch(backupUser());
                 }
               }
             },

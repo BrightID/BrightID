@@ -24,7 +24,7 @@ import {
 import { GroupPhoto } from '@/components/Groups/GroupPhoto';
 import {
   backupPhoto,
-  syncAndBackupUser,
+  backupUser,
 } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
@@ -87,7 +87,7 @@ const InviteCard = (props) => {
         }),
       );
       if (backupCompleted) {
-        await dispatch(syncAndBackupUser());
+        await dispatch(backupUser());
         if (invite.groupObj.photo && invite.groupObj.photo.filename) {
           await dispatch(
             backupPhoto(invite.groupObj.id, invite.groupObj.photo.filename),
