@@ -1,31 +1,30 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
-  GREEN,
   DARKER_GREY,
+  GREEN,
   LIGHT_GREY,
   WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
   acceptInvite,
-  rejectInvite,
-  joinGroup,
-  selectConnectionById,
   addOperation,
+  joinGroup,
+  rejectInvite,
+  selectConnectionById,
   selectGroupName,
 } from '@/actions';
 import { GroupPhoto } from '@/components/Groups/GroupPhoto';
 import {
-  backupUser,
   backupPhoto,
+  backupUser,
 } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';

@@ -1,10 +1,7 @@
 import { selectChannelById } from '@/components/PendingConnections/channelSlice';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
-import {
-  backupPhoto,
-  backupUser,
-} from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupPhoto } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import {
   confirmPendingConnection,
   pendingConnection_states,
@@ -12,8 +9,8 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
-  leaveChannel,
   encryptAndUploadProfileToChannel,
+  leaveChannel,
 } from '@/components/PendingConnections/actions/channelThunks';
 import { NodeApi } from '@/api/brightId';
 import { channel_types, connection_levels } from '@/utils/constants';

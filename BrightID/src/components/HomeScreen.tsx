@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -48,12 +48,12 @@ import {
 
 import { version as app_version } from '../../package.json';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
-import { updateSocialMediaVariations } from '@/components/EditProfile/socialMediaThunks';
 import {
   DEEP_LINK_PREFIX,
   discordUrl,
   UNIVERSAL_LINK_PREFIX,
 } from '@/utils/constants';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Home screen of BrightID
@@ -91,6 +91,9 @@ export const HomeScreen = (props) => {
 
   const { t } = useTranslation();
 
+  const [userInfoLoaded, setUserInfoLoaded] = useState(false);
+  const [appsLoaded, setAppsLoaded] = useState(false);
+  const [blindSigsUploadDone, setBlindSigsUploadDone] = useState(false);
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
@@ -99,6 +102,7 @@ export const HomeScreen = (props) => {
         .then(() => {
           console.log(`fetchUserInfo done`);
           setLoading(false);
+          setUserInfoLoaded(true); // Set state on completion
         })
         .catch((e) => {
           console.log(
@@ -110,15 +114,23 @@ export const HomeScreen = (props) => {
   );
 
   useEffect(() => {
-    if (api) {
-      dispatch(fetchApps(api)).then(() => {
+    async function runUpdateBlindSigsEffect() {
+      if (api) {
+        await dispatch(fetchApps(api));
+        setAppsLoaded(true);
         if (isPrimaryDevice) {
           console.log(`updating blind sigs...`);
-          dispatch(updateBlindSigs());
+          try {
+            await dispatch(updateBlindSigs());
+          } catch (e) {
+            console.log(e);
+          }
         }
-      });
-      dispatch(updateSocialMediaVariations());
+        setBlindSigsUploadDone(true);
+      }
     }
+
+    runUpdateBlindSigsEffect();
   }, [api, dispatch, isPrimaryDevice]);
 
   useEffect(() => {
@@ -147,6 +159,12 @@ export const HomeScreen = (props) => {
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
   }, [dispatch, headerHeight]);
+
+  useEffect(() => {
+    if (userInfoLoaded && appsLoaded && blindSigsUploadDone) {
+      dispatch(backupAppData());
+    }
+  }, [userInfoLoaded, appsLoaded, blindSigsUploadDone, dispatch]);
 
   const { showActionSheetWithOptions } = useActionSheet();
 

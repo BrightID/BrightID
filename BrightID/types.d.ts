@@ -1,26 +1,26 @@
 import {
-  ThunkAction,
   AnyAction,
   EntityState as _EntityState,
+  ThunkAction,
 } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import { CountryCode } from 'react-native-country-picker-modal';
 import { BigInteger } from 'jsbn';
 import ChannelAPI from '@/api/channelService';
 import {
+  app_linking_steps,
   channel_states,
   channel_types,
   connection_levels,
-  report_reasons,
-  app_linking_steps,
   group_states,
+  report_reasons,
 } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import {
-  SocialMediaType,
   SocialMediaShareActionType,
   SocialMediaShareType,
   SocialMediaShareTypeDisplay,
+  SocialMediaType,
   SocialMediaVariationIds,
 } from '@/components/EditProfile/socialMediaVariations';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
@@ -183,6 +183,7 @@ declare global {
   };
 
   type RecoveryData = {
+    lastUploadedBackupDataHashes: { [key: string]: string };
     publicKey: string;
     secretKey: Uint8Array;
     id: string;

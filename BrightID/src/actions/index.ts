@@ -16,6 +16,7 @@ export {
 
 export { RESET_STORE, resetStore } from './resetStore';
 
+export * from './recovery';
 export * from '../reducer/appsSlice';
 export * from '../reducer/connectionsSlice';
 export * from '../reducer/groupsSlice';

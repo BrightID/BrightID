@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -25,14 +19,14 @@ import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { connection_levels, CONNECTION_STALE_AGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
-import { staleConnection, deleteConnection, addOperation } from '@/actions';
+import { addOperation, deleteConnection, staleConnection } from '@/actions';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
-  WHITE,
-  LIGHT_ORANGE,
-  LIGHT_BLACK,
   DARK_ORANGE,
+  LIGHT_BLACK,
+  LIGHT_ORANGE,
   RED,
+  WHITE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
