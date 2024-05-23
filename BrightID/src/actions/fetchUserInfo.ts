@@ -3,21 +3,25 @@ import _ from 'lodash';
 import { NodeApi } from '@/api/brightId';
 import { selectAllLinkedContexts } from '@/reducer/appsSlice';
 import {
-  setVerifications,
-  updateMemberships,
-  updateConnections,
-  setIsSponsored,
-  updateNotifications,
+  selectAllConnections,
   setActiveDevices,
+  setConnections,
+  setIsSponsored,
   setIsSponsoredv6,
+  setVerifications,
+  updateConnections,
+  updateMemberships,
+  updateNotifications,
 } from './index';
+import { saveImage } from '@/utils/filesystem';
+import { fetchBackupData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
   return InteractionManager.runAfterInteractions({
     name: 'fetchUserInfo',
     gen: async () => {
       const {
-        user: { id, isSponsored, isSponsoredv6 },
+        user: { id, isSponsored, isSponsoredv6, password },
       } = getState();
 
       if (!id) {
@@ -31,13 +35,74 @@ const fetchUserInfo = (api: NodeApi) => (dispatch: AppDispatch, getState) => {
         verifications = await api.getVerifications(id);
         const memberships = await api.getMemberships(id);
         dispatch(updateMemberships(memberships));
-        const connections = await api.getConnections(id, 'outbound');
+
+        let connectionUpdatedFromBackupService = false;
+        let connectionsFromBackupData: Connection[] | null = null;
+        const currentConnections = selectAllConnections(getState());
+        const connectionsFromApi = await api.getConnections(id, 'outbound');
+        const connectionsUpdated = [...currentConnections];
+        for (const connectionFromApi of connectionsFromApi) {
+          const existingConnectionIndex = connectionsUpdated.findIndex(
+            (connection) => connection.id === connectionFromApi.id,
+          );
+          if (existingConnectionIndex === -1) {
+            if (!connectionsFromBackupData) {
+              connectionsFromBackupData = JSON.parse(
+                await dispatch(fetchBackupData('data', id, password)),
+              ).connections;
+            }
+            const connectionFromBackupData = connectionsFromBackupData.find(
+              (c) => c.id === connectionFromApi.id,
+            );
+            if (connectionFromBackupData) {
+              connectionsUpdated.push(connectionFromApi);
+              connectionUpdatedFromBackupService = true;
+            }
+          } else {
+            if (
+              connectionFromApi.timestamp >
+              connectionsUpdated[existingConnectionIndex].timestamp
+            ) {
+              if (!connectionsFromBackupData) {
+                connectionsFromBackupData = JSON.parse(
+                  await dispatch(fetchBackupData('data', id, password)),
+                ).connections;
+              }
+              const connectionFromBackupData = connectionsFromBackupData.find(
+                (c) => c.id === connectionFromApi.id,
+              );
+              if (connectionFromBackupData) {
+                const conn: Connection = { ...connectionFromBackupData };
+                const decrypted = await dispatch(
+                  fetchBackupData(conn.id, id, password),
+                );
+                const filename = await saveImage({
+                  imageName: conn.id,
+                  base64Image: decrypted,
+                });
+                conn.photo = { filename };
+                connectionsUpdated[existingConnectionIndex] = conn;
+                connectionUpdatedFromBackupService = true;
+              }
+            }
+          }
+        }
+        if (connectionUpdatedFromBackupService) {
+          dispatch(
+            setConnections(
+              connectionsUpdated.sort(
+                (a, b) => b.connectionDate - a.connectionDate,
+              ),
+            ),
+          );
+        }
+
         const incomingConns = await api.getConnections(id, 'inbound');
         const incomingConnsById = _.keyBy(incomingConns, 'id');
-        for (const conn of connections) {
+        for (const conn of connectionsFromApi) {
           conn.incomingLevel = incomingConnsById[conn.id]?.level;
         }
-        dispatch(updateConnections(connections));
+        dispatch(updateConnections(connectionsFromApi));
         const { sponsored, signingKeys } = await api.getProfile(id);
         dispatch(setIsSponsored(sponsored));
         dispatch(setActiveDevices(signingKeys));

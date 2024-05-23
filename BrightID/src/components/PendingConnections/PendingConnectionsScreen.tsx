@@ -27,7 +27,7 @@ import { fontSize } from '@/theme/fonts';
 import { setActiveNotification } from '@/actions';
 import { PreviewConnectionController } from './PreviewConnectionController';
 import BackArrow from '../Icons/BackArrow';
-import { syncAndBackupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -127,7 +127,7 @@ export const PendingConnectionsScreen = () => {
     if (pendingConnections.length === 0) {
       // Trigger backup of connections when when all pending connections are handled
       if (backupCompleted) {
-        dispatch(syncAndBackupUser());
+        dispatch(backupUser());
       }
       setLoading(true);
       timeout = setTimeout(() => {
