@@ -6,7 +6,7 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { Draft } from 'immer';
-import { RESET_STORE } from '@/actions';
+import { RESET_STORE } from '@brightid/redux/actions';
 import { channel_states, channel_types } from '@/utils/constants';
 /*
 

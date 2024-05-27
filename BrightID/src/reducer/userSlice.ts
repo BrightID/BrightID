@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RESET_STORE } from '@/actions/resetStore';
+import { RESET_STORE } from '@brightid/redux/actions';
 
 const initialState: UserState = {
   isSponsored: false, // server-side sponsored flag, used by v5 apps

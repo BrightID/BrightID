@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RESET_STORE } from '@/actions/resetStore';
+import { RESET_STORE } from '@brightid/redux/actions';
 import {
   group_states,
   INVITE_ACCEPTED,
