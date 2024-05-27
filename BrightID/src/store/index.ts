@@ -16,7 +16,7 @@ import { ChannelsTransform, RecoveryDataTransform } from '@/store/transforms';
 
 // update this in async migrate if changed to prevent require cycle
 
-const version = 11;
+const version = 12;
 
 const fsPersistConfig = {
   storage: FsStorage,

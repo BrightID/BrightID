@@ -4,9 +4,11 @@ import { RESET_STORE } from '@brightid/redux/actions';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { recover_steps, RECOVERY_CHANNEL_TTL } from '@/utils/constants';
+import { UPDATE_LAST_UPLOADED_BACKUP_DATA_HASH } from '@/actions';
 import { pollRecoveryChannel } from '@/components/Onboarding/RecoveryFlow/thunks/channelThunks';
 
 export const initialState: RecoveryData = {
+  lastUploadedBackupDataHashes: {},
   recoverStep: recover_steps.NOT_STARTED,
   publicKey: '',
   secretKey: new Uint8Array(),
@@ -46,6 +48,7 @@ const recoveryData = createSlice({
       }>,
     ) {
       const { publicKey, secretKey, aesKey } = action.payload;
+      state.lastUploadedBackupDataHashes = {};
       state.publicKey = uInt8ArrayToB64(publicKey ?? new Uint8Array());
       state.secretKey = secretKey;
       state.aesKey = aesKey;
@@ -149,6 +152,21 @@ const recoveryData = createSlice({
   extraReducers: {
     [RESET_STORE]: () => {
       return initialState;
+    },
+    [UPDATE_LAST_UPLOADED_BACKUP_DATA_HASH]: (
+      state,
+      action: PayloadAction<{
+        hashedId: string;
+        encryptedDataHash: string;
+      }>,
+    ) => {
+      return {
+        ...state,
+        lastUploadedBackupDataHashes: {
+          ...state.lastUploadedBackupDataHashes,
+          [action.payload.hashedId]: action.payload.encryptedDataHash,
+        },
+      };
     },
   },
 });

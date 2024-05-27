@@ -1,10 +1,10 @@
 import {
-  setInternetCredentials,
   getGenericPassword,
   setGenericPassword,
+  setInternetCredentials,
 } from 'react-native-keychain';
 import { compose } from 'ramda';
-import { objToUint8, uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
+import { b64ToUint8Array, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { asyncCreateMigrate } from './asyncCreateMigrate';
@@ -14,6 +14,12 @@ const keyToString = compose(uInt8ArrayToB64, objToUint8);
 /** Async migration creators require every version to return a promiseß */
 
 const rootMigrations = {
+  12: async (state) => {
+    if (!state.recoveryData.lastUploadedBackupDataHashes) {
+      state.recoveryData.lastUploadedBackupDataHashes = {};
+    }
+    return state;
+  },
   9: async (state) => {
     // extract secretKey if not present
     if (!state.user.secretKey || typeof state.user.secretKey !== 'string') {

@@ -94,32 +94,40 @@ export const socialRecovery =
     }
   };
 
-export const restoreUserData = async (id: string, pass: string) => {
-  const decrypted = await fetchBackupData('data', id, pass);
-  const { userData, connections, groups = [] } = JSON.parse(decrypted);
-  if (!userData || !connections) {
-    // TODO Better error handling
-    throw new Error('bad password');
-  }
+// TODO: add userData type
+export const restoreUserData =
+  (
+    id: string,
+    pass: string,
+  ): AppThunk<
+    Promise<{ userData: any; connections: Connection[]; groups: JoinedGroup[] }>
+  > =>
+  async (dispatch: AppDispatch) => {
+    const decrypted = await dispatch(fetchBackupData('data', id, pass));
+    const { userData, connections, groups = [] } = JSON.parse(decrypted);
+    if (!userData || !connections) {
+      // TODO Better error handling
+      throw new Error('bad password');
+    }
 
-  let userPhoto;
-  try {
-    userPhoto = await fetchBackupData(id, id, pass);
-  } catch (e) {
-    console.log(`Failed to recover user photo`);
-    // ignore this error and try to continue recovery process
-  }
+    let userPhoto;
+    try {
+      userPhoto = await dispatch(fetchBackupData(id, id, pass));
+    } catch (e) {
+      console.log(`Failed to recover user photo`);
+      // ignore this error and try to continue recovery process
+    }
 
-  if (userPhoto) {
-    const filename = await saveImage({
-      imageName: id,
-      base64Image: userPhoto,
-    });
-    userData.photo = { filename };
-  }
+    if (userPhoto) {
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: userPhoto,
+      });
+      userData.photo = { filename };
+    }
 
-  return { userData, connections, groups };
-};
+    return { userData, connections, groups };
+  };
 
 export const setRecoveryKeys =
   (): AppThunk => (dispatch: AppDispatch, getState) => {
@@ -139,7 +147,7 @@ export const recoverData =
     const { id } = getState().recoveryData;
     console.log(`Starting recoverData for ${id}`);
     // throws if data is bad
-    const restoredData = await restoreUserData(id, pass);
+    const restoredData = await dispatch(restoreUserData(id, pass));
     console.log(`Got recovery data for ${id}`);
     const { userData } = restoredData;
     const { connections } = restoredData;
@@ -157,7 +165,7 @@ export const recoverData =
     for (const conn of connections) {
       try {
         setCurrentItem(currentItem++);
-        const decrypted = await fetchBackupData(conn.id, id, pass);
+        const decrypted = await dispatch(fetchBackupData(conn.id, id, pass));
         const filename = await saveImage({
           imageName: conn.id,
           base64Image: decrypted,
@@ -180,7 +188,7 @@ export const recoverData =
       setCurrentItem(currentItem++);
       if (group?.photo?.filename) {
         try {
-          const decrypted = await fetchBackupData(group.id, id, pass);
+          const decrypted = await dispatch(fetchBackupData(group.id, id, pass));
           await saveImage({
             imageName: group.id,
             base64Image: decrypted,
@@ -205,7 +213,7 @@ export const recoverData =
         const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
         const key = hash(`${app.id} ${verification} ${roundedTimestamp}`);
         try {
-          const decrypted = await fetchBackupData(key, id, pass);
+          const decrypted = await dispatch(fetchBackupData(key, id, pass));
           await dispatch(upsertSig(JSON.parse(decrypted)));
         } catch (err) {
           console.log(`blind sig not found for ${key}`, err.message);
