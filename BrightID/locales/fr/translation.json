@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "auraVerification": {
+      "description": "En savoir plus sur Aura",
+      "title": "Vérification d'Aura"
+    },
     "bituVerification": {
       "description": "Plus de détails",
       "title": "Vérification Bitu"
