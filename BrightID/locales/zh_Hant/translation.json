@@ -445,9 +445,9 @@
       "miscellaneous": "各種各樣的"
     },
     "text": {
-      "noGroupInvites": "您沒有群組邀請..",
+      "noGroupInvites": "您沒有群組邀請…",
       "noMiscellaneous": "這沒東西看…",
-      "noPendingConnections": "您沒有等待的連接.."
+      "noPendingConnections": "您沒有等待的連接…"
     }
   },
   "onboarding": {
