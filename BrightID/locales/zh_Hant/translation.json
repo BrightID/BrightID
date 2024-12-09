@@ -299,6 +299,14 @@
       "title": "許可協議"
     }
   },
+  "findFriends": {
+    "button": {
+      "invite": "邀請"
+    },
+    "text": {
+      "invitationNotAvailable": "抱歉，此應用目前無法發送邀請。"
+    }
+  },
   "graphExplorer": {
     "alert": {
       "text": {
@@ -437,9 +445,9 @@
       "miscellaneous": "各種各樣的"
     },
     "text": {
-      "noGroupInvites": "您沒有群組邀請..",
+      "noGroupInvites": "您沒有群組邀請…",
       "noMiscellaneous": "這沒東西看…",
-      "noPendingConnections": "您沒有等待的連接.."
+      "noPendingConnections": "您沒有等待的連接…"
     }
   },
   "onboarding": {
@@ -500,8 +508,8 @@
       },
       "text": {
         "discardChanges": "您有未保存的更改。您確定要丟棄它們並離開屏幕嗎？",
-        "passwordMatch": "當前密碼不匹配。",
-        "invalidPhoneNumber": "輸入有效的電話號碼"
+        "invalidPhoneNumber": "輸入有效的電話號碼",
+        "passwordMatch": "當前密碼不匹配。"
       },
       "title": {
         "discardChanges": "放棄更改？",
@@ -518,8 +526,8 @@
       "newPassword": "新密碼",
       "newPasswordAgain": "重複密碼",
       "password": "密碼",
-      "socialMediaLink": "社交媒體鏈接",
-      "phoneNumber": "電話號碼"
+      "phoneNumber": "電話號碼",
+      "socialMediaLink": "社交媒體鏈接"
     },
     "placeholder": {
       "name": "輸入姓名",
@@ -537,8 +545,8 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "在 BrightID 上與 {{name}} 建立群組連接：{{link}}",
-      "connectSingle": "在 BrightID 上與 {{name}} 聯繫：{{link}}",
+      "connectGroup": "在 BrightID 上與 {{name}} 建立群組連接：{{link}}。連結有效至{{expirationTimestamp}}。",
+      "connectSingle": "在 BrightID 上與 {{name}} 聯繫：{{link}}。連結有效至{{expirationTimestamp}}。",
       "text": {
         "codeGroup": "此二維碼專為多人同時連接而設計。",
         "codeSingle": "此二維碼可用於在到期前與單個用戶聯繫。",
@@ -689,14 +697,6 @@
       "gotIt": "知道了！",
       "setPassword": "您可以隨時設置您的\nBrightID 密碼在這裡",
       "viewPassword": "你總能看到你的\nBrightID 密碼在這裡"
-    }
-  },
-  "findFriends" : {
-    "button": {
-      "invite": "邀請"
-    },
-    "text": {
-      "invitationNotAvailable": "抱歉，此應用目前無法發送邀請。"
     }
   }
 }

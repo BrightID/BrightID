@@ -76,8 +76,8 @@
     "text": {
       "appInfoFailure": "No se ha podido obtener la última información de la aplicación: {{message}}. Inténtalo de nuevo más tarde.",
       "appNotSponsoring": "Aún no estás patrocinado y {{app}} no ofrece patrocinios. Busca otra aplicación que te patrocine.",
-      "sponsorOpFailed": "Error en la operación del patrocinio de los gastos",
-      "sponsorOpTimeout": "Operación del patrocinador de gastos finalizada"
+      "sponsorOpFailed": "La operación del patrocinio falló",
+      "sponsorOpTimeout": "Se agotó el tiempo de espera de la operación del patrocinador"
     }
   },
   "apps": {
@@ -216,6 +216,7 @@
     "button": {
       "cancel": "Cancelar",
       "copy": "Copiar",
+      "copyLink": "Copiar el enlace",
       "retry": "Reintentar",
       "save": "Guardar"
     },
@@ -666,6 +667,8 @@
     },
     "text": {
       "congratulations": "¡Felicitaciones!\nSu BrightID ha sido creado.\nEs hora de hacer conexiones.",
+      "congratulations1": "¡Felicidades!",
+      "congratulations2": "Tu BrightID ha sido creado. Es hora de \nhacer conexiones.",
       "intro": "<text>BrightID utiliza la gente que conoces</text><text>para hacer cumplir la regla de una-cuenta-por-persona</text><text>para aplicaciones como</text><text>votacion e Ingreso Básico Universal.</text>",
       "privacy": "<text>Demuestra que eres una persona única</text><text>protegiendo tu privacidad.</text>",
       "register": "Regístrese para crear su propia\nidentidad digital"
@@ -701,7 +704,8 @@
       "rating": "¿Qué tan bien conoces esta conexión?",
       "recovery": "Recuperación",
       "reported": "Reportado",
-      "suspicious": "Sospechoso"
+      "suspicious": "Sospechoso",
+      "unknownLevel": "Nivel desconocido"
     },
     "text": {
       "errorGeneric": "Error al conectarse. Intente volver a conectarse.",
@@ -934,12 +938,15 @@
     "placeholder": {
       "confirmPassword": "confirmar su contraseña",
       "name": "Nombre",
+      "newName": "Nombre",
+      "newPassword": "Contraseña",
       "password": "contraseña"
     },
     "text": {
       "createPassword": "Crea tu contraseña de BrightID",
       "creatingAccount": "Creando BrightID…",
       "infoNotShared": "Tu nombre y foto nunca serán compartidas con otras aplicaciones ni almacenadas en servidores",
+      "nameAndPhotoNotShared": "Tu nombre y tu foto nunca se compartirán con aplicaciones ni se almacenarán en los servidores.",
       "nameNotShared": "Su nombre nunca será compartido con aplicaciones o\nalmacenado en nuestra blockchain.",
       "passwordInfo": "Esta contraseña encriptará los nombres y las fotos de sus conexiones en caso de que necesite recuperarlos. No permite que alguien se apodere de su BrightID.",
       "photoNotShared": "Tu foto nunca será compartida con aplicaciones o\nalmacenada en nuestra blockchain.",
