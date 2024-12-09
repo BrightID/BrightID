@@ -3,17 +3,13 @@ import { RESET_STORE } from '@/actions/resetStore';
 
 const ProdCandidates = [
   'http://node.brightid.org',
-  'http://brightid.idealmoney.io',
-  'http://brightid2.idealmoney.io',
+  'https://brightid.idealmoney.xyz',
+  'http://brightid.siftal.top/',
   'https://brightid.59836e71dd6e5898.dyndns.dappnode.io',
   'http://bright.daosquare.io',
   'https://brightid.clr.fund',
   'https://aura-node.brightid.org',
   'https://aura-test.brightid.org',
-  // Following nodes exist, but currently fail the NodeChooser tests
-  //  'http://brightid.onehive.org',
-  //  'http://node.topupgifter.com',
-  //  'http://node.lumos.services',
 ];
 const TestCandidates = ['http://test.brightid.org'];
 
