@@ -16,7 +16,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
 import { SvgXml } from 'react-native-svg';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
@@ -106,7 +106,8 @@ const CustomItem = ({
 };
 
 const CustomDrawerContent = (props) => {
-  const { state, navigation } = props;
+  const { state } = props;
+  const navigation = useNavigation();
   // selectors
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
@@ -137,7 +138,7 @@ const CustomDrawerContent = (props) => {
       </View>
       <CustomItem
         testId="drawerHomeBtn"
-        focused={false}
+        focused={state.routeNames[state.index] === 'HomeScreen'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -157,7 +158,7 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         testId="drawerEditProfileBtn"
-        focused={state.routeNames[state.index] === 'Edit Profile'}
+        focused={state.routeNames[state.index] === 'EditProfile'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -172,12 +173,12 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Edit Profile');
+          navigation.navigate('EditProfile');
         }}
       />
       <CustomItem
         testId="drawerRecoveryConnectionsBtn"
-        focused={state.routeNames[state.index] === 'Recovery Connections'}
+        focused={state.routeNames[state.index] === 'RecoveryConnections'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -192,7 +193,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Recovery Connections');
+          navigation.navigate('RecoveryConnections');
         }}
       />
       <CustomItem
@@ -218,7 +219,7 @@ const CustomDrawerContent = (props) => {
 
       <CustomItem
         testId="drawerExplorerCodeBtn"
-        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        focused={state.routeNames[state.index] === 'CopyExplorerCode'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -233,7 +234,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Copy Explorer Code');
+          navigation.navigate('CopyExplorerCode');
         }}
       />
       <CustomItem
@@ -256,7 +257,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
-        focused={false}
+        focused={state.routeNames[state.index] === 'FindFriendsScreen'}
         testId="findFriendsBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
