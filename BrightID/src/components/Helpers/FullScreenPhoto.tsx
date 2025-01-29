@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
 import { Animated, StyleSheet, PanResponder } from 'react-native';
-import { photoDirectory } from '@/utils/filesystem';
 import { BlurView } from '@react-native-community/blur';
-import { BLACK } from '@/theme/colors';
 import { StackScreenProps } from '@react-navigation/stack';
+import { photoDirectory } from '@/utils/filesystem';
+import { BLACK } from '@/theme/colors';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
-type props = StackScreenProps<ModalStackParamList, 'FullScreenPhoto'>;
+type props = StackScreenProps<RootStackParamList, 'FullScreenPhoto'>;
 
 const FullScreenPhoto = ({ route, navigation }: props) => {
   const photo = route.params?.photo;

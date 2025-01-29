@@ -7,7 +7,6 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { photoDirectory } from '@/utils/filesystem';

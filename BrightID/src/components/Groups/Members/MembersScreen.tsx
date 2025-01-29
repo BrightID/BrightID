@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useContext,
-} from 'react';
+import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
   StyleSheet,
   View,
@@ -19,8 +13,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import Clipboard from '@react-native-community/clipboard';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   leaveGroup,
@@ -39,12 +33,10 @@ import { fontSize } from '@/theme/fonts';
 import { addOperation } from '@/reducer/operationsSlice';
 import { useNodeApiContext } from '@/context/NodeApiContext';
 import { MemberCard } from '@/components/Groups/Members/MemberCard';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
-export const MembersScreen = () => {
-  const navigation = useNavigation();
-  const route: { params?: { group: Group } } = useRoute() as {
-    params?: { group: Group };
-  };
+type Props = NativeStackScreenProps<RootStackParamList, 'Members'>;
+export const MembersScreen = ({ route, navigation }: Props) => {
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
   const { api } = useNodeApiContext();

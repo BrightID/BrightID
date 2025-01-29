@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, EMaskUnits, G, Path, Mask } from 'react-native-svg';
+import Svg, { Circle, G, Path, Mask, EMaskUnits } from 'react-native-svg';
 import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 type Props = {

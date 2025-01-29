@@ -12,10 +12,10 @@ import Svg, { Path } from 'react-native-svg';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import i18next from 'i18next';
 import CheckBox from '@react-native-community/checkbox';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useDispatch } from '@/store/hooks';
 import {
   BLACK,
@@ -36,16 +36,19 @@ import { recover_steps, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 import BrightIDLogo from '@/components/Icons/BrightIDLogo';
 import Copy from '@/components/Icons/Copy';
 import { useGenerateRecoveryQrAndPoll } from './useGenerateRecoveryQrAndPoll';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /**
  * Recovery Code screen of BrightID
  *
  * displays a qrcode
  */
-
-const RecoveryCodeScreen = ({ route }) => {
+type RecoveryCodeScreenProps = DrawerScreenProps<
+  RootStackParamList,
+  'SyncCode'
+>;
+const RecoveryCodeScreen = ({ route, navigation }: RecoveryCodeScreenProps) => {
   const { t } = useTranslation();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const dispatch = useDispatch();
   const { action, urlType } = route.params;
 

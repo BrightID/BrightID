@@ -1,8 +1,10 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SocialMediaType } from '@/components/EditProfile/socialMediaVariations';
+import { qrCodeURL_types } from '@/utils/constants';
 
 type ModalStackParamList = {
   FullScreenPhoto: {
-    photo?: Photo;
+    photo?: Photo | string;
     base64?: boolean;
   };
   ChangePassword: undefined;
@@ -18,7 +20,7 @@ type ModalStackParamList = {
   ReportReason: {
     connectionId: string;
     connectionName: string;
-    reportReason: ReportReason;
+    reportReason?: ReportReason;
     successCallback?: (ReportReason) => void;
     reporting?: boolean;
     source: any; // ReportSource;
@@ -26,56 +28,49 @@ type ModalStackParamList = {
   SortConnections: undefined;
   ViewPasswordWalkthrough: undefined;
   RecoveryCooldownInfo: {
-    connectionId: string;
-    cooldownPeriod: number;
+    connectionId?: string;
+    cooldownPeriod?: number;
     successCallback?: () => void;
   };
   NodeModal: undefined;
 };
 
+// 1st level - Just render "Home" (not HomeScreen!)
+// "Home" renders only one actual screen which contains the "HomeDrawer".
 type HomeParamList = {
   Home: undefined;
 };
 
-type PendingConnectionsParamList = {
-  MyCode: undefined;
-  ScanCode: undefined;
-  PendingConnections: undefined;
-  GroupConnection: undefined;
+type ImportParamList = {
+  ImportCode: undefined;
+  Import: {
+    changePrimaryDevice: boolean;
+  };
 };
-type ConnectionsParamList = {
-  Connections: undefined;
-  Connection: undefined;
+type RestoreParamList = {
+  RecoveryCode: {
+    urlType: qrCodeURL_types;
+    action: string;
+  };
+  Restore: undefined;
 };
-type RecoveryConnectionsParamList = {
-  RecoveryConnectionsList: undefined;
-};
-type GroupsParamList = {
-  Groups: undefined;
-  NewGroup: undefined;
-  GroupInfo: undefined;
-  Members: undefined;
-  InviteList: undefined;
-};
-type NotificationsParamList = {
-  Notifications: undefined;
-};
-type DevicesParamList = {
-  AddDevice: undefined;
-  Devices: undefined;
-  SyncCode: undefined;
-};
-type AppsParamList = {
-  Apps: undefined;
-};
-type RecoveringConnectionParamList = {
-  RecoveringConnection: undefined;
-};
-type HomeDrawerParamList = {
+type OnboardingParamList = {
+  Onboard: undefined;
+  SignupName: undefined;
+  SignUpPhoto: undefined;
+  OnboardSuccess: undefined;
+} & ImportParamList &
+  RestoreParamList;
+
+// 2nd level - HomeDrawer below "Home"
+// HomeDrawer renders a DrawerNavigator with the following screens
+export type HomeDrawerParamList = {
   HomeScreen: undefined;
   Achievements: undefined;
   FindFriendsScreen: undefined;
-  BituVerification: undefined;
+  BituVerification: {
+    url: string;
+  };
   EditProfile: undefined;
   RecoveryConnections: undefined;
   CopyExplorerCode: undefined;
@@ -84,6 +79,65 @@ type HomeDrawerParamList = {
   SampleIconPage: undefined;
 };
 
+type PendingConnectionsParamList = {
+  MyCode: undefined;
+  ScanCode: undefined;
+  PendingConnections: undefined;
+  GroupConnection: {
+    channel: Channel;
+  };
+};
+type ConnectionsParamList = {
+  Connections: undefined;
+  Connection: {
+    connectionId: string;
+  };
+};
+type RecoveryConnectionsParamList = {
+  RecoveryConnectionsList: undefined;
+};
+type GroupsParamList = {
+  Groups: undefined;
+  NewGroup: { photo: string; name: string; isPrimary: boolean };
+  GroupInfo: undefined;
+  Members: { group: Group };
+  InviteList: { group: Group };
+};
+type NotificationsParamList = {
+  Notifications: undefined;
+};
+type DevicesParamList = {
+  AddDevice: {
+    name: string;
+    changePrimaryDevice: boolean;
+    isSuper: boolean;
+  };
+  Devices: {
+    syncing: boolean;
+    asScanner: boolean;
+  };
+  SyncCode: {
+    urlType: qrCodeURL_types;
+    action: string;
+  };
+};
+
+export type AppsRouteParams = {
+  baseUrl?: string;
+  appId: string;
+  appUserId: string;
+};
+type AppsParamList = {
+  Apps: AppsRouteParams;
+};
+
+type RecoveringConnectionParamList = {
+  RecoveringConnection: undefined;
+};
+
+type EulaParamList = {
+  LicenseAgreement: undefined;
+};
 type MainTabsParamList = HomeParamList &
   PendingConnectionsParamList &
   ConnectionsParamList &
@@ -93,6 +147,21 @@ type MainTabsParamList = HomeParamList &
   DevicesParamList &
   AppsParamList &
   ModalStackParamList &
-  RecoveringConnectionParamList;
+  RecoveringConnectionParamList &
+  OnboardingParamList &
+  EulaParamList;
 
 export type RootStackParamList = MainTabsParamList & HomeDrawerParamList;
+
+export type RootStackScreenProps<T extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, T>;
+
+export type RouteName = keyof RootStackParamList;
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface RootParamList extends RootStackParamList {}
+  }
+}

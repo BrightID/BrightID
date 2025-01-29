@@ -16,6 +16,7 @@ import { fontSize } from '@/theme/fonts';
 import { types } from '@/utils/sorting';
 import { setFilters, setConnectionsSort } from '@/actions';
 import Chevron from '../Icons/Chevron';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /** CONSTANTS */
 
@@ -41,7 +42,7 @@ const byTrust = [types.byTrustLevelDescending, types.byTrustLevelAscending];
 
 /** COMPONENT */
 
-type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
+type props = StackScreenProps<RootStackParamList, 'SortConnections'>;
 
 const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();

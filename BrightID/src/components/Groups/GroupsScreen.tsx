@@ -9,8 +9,8 @@ import {
   StatusBar,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useDispatch, useSelector } from '@/store/hooks';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { WHITE, ORANGE, BLACK } from '@/theme/colors';
@@ -25,6 +25,7 @@ import {
 } from '@/actions';
 import { GroupCard } from './GroupCard';
 import { NoGroups } from './NoGroups';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /**
  * Group screen of BrightID
@@ -40,9 +41,10 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-export const GroupsScreen = () => {
+type Props = DrawerScreenProps<RootStackParamList, 'Groups'>;
+
+export const GroupsScreen = ({ navigation }: Props) => {
   const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { api } = useNodeApiContext();
@@ -50,7 +52,7 @@ export const GroupsScreen = () => {
   const filteredGroups = useSelector(filteredGroupsSelector);
   const { id } = useSelector((state) => state.user);
 
-  const renderGroup = ({ item, index }) => {
+  const renderGroup = ({ item, index }: { item: Group; index: number }) => {
     return (
       <TouchableOpacity
         testID={`groupItem-${index}`}

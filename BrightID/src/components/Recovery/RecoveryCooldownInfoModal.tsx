@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { Trans, useTranslation } from 'react-i18next';
+import moment from 'moment';
+import { StackScreenProps } from '@react-navigation/stack';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Info from '@/components/Icons/Info';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
 import { RECOVERY_COOLDOWN_DURATION } from '@/utils/constants';
-import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
-type props = StackScreenProps<ModalStackParamList, 'RecoveryCooldownInfo'>;
+type props = StackScreenProps<RootStackParamList, 'RecoveryCooldownInfo'>;
 
 const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
   const { successCallback } = route.params || {};
@@ -29,7 +29,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
     }
   };
 
-  let messageTextCooldown = (
+  const messageTextCooldown = (
     <Text style={styles.messageText}>
       <Trans
         i18nKey="recoveryCooldownModal.text.cooldownGeneric"
@@ -65,9 +65,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
             </Text>
           </View>
         </View>
-        <View style={styles.message}>
-          {messageTextCooldown}
-        </View>
+        <View style={styles.message}>{messageTextCooldown}</View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             testID="OkayBtn"

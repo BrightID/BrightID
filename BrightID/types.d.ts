@@ -116,10 +116,6 @@ declare global {
     version: number;
   };
 
-  type Photo = {
-    filename: string;
-  };
-
   type ConnectionLevel = ValueOf<typeof connection_levels>;
 
   type NotificationsState = {
@@ -281,6 +277,12 @@ declare global {
 
   type UserTasks = { [taskId: string]: UserTasksEntry };
 
+  type PickStringLiteral<A, B extends A> = B;
+  type UserTaskNavigationTarget = PickStringLiteral<
+    RouteName,
+    'BituVerification'
+  >;
+
   type UserTasksEntry = {
     id: string;
     sortValue: number;
@@ -288,7 +290,7 @@ declare global {
     description: string;
     url: string;
     checkFn: (state: RootState) => boolean;
-    navigationTarget?: string;
+    navigationTarget?: UserTaskNavigationTarget;
   };
 
   type CombinedTask = TasksStateEntry & UserTasksEntry;

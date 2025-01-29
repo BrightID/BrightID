@@ -1,7 +1,7 @@
-type Params = {
+type _Params = {
   baseUrl?: string;
   appId: string;
   appUserId: string;
 };
 
-type AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;
+type _AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;

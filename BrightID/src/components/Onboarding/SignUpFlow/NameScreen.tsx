@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setName } from '@/actions';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /* Description */
 

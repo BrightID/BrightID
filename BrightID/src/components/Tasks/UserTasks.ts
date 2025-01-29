@@ -1,8 +1,5 @@
 import i18next from 'i18next';
-import {
-  connectionTotal,
-  recoveryConnectionsSelector,
-} from '@/reducer/connectionsSlice';
+import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
 import { linkedContextTotal, selectAllLinkedSigs } from '@/reducer/appsSlice';
 
