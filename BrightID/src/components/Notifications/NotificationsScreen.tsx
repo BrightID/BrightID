@@ -156,7 +156,7 @@ const MiscList = ({ route }: { route: Route }) => {
       title: t('notifications.item.title.backupBrightId'),
       msg: t('notifications.item.msg.backupBrightId'),
       imageSource,
-      navigationTarget: 'Edit Profile',
+      navigationTarget: 'EditProfile',
       testID: 'BackupNotification',
     });
   }

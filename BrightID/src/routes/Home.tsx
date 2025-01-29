@@ -121,8 +121,6 @@ const homeScreenOptions: StackNavigationOptions = {
 /** SCREENS */
 
 const Home = () => {
-  /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */
-  // const { t } = useTranslation();
   return (
     <>
       <Stack.Screen

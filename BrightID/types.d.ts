@@ -338,39 +338,6 @@ declare global {
 
   type ReportReason = keyof typeof report_reasons;
 
-  type ModalStackParamList = {
-    FullScreenPhoto: {
-      photo?: Photo;
-      base64?: boolean;
-    };
-    ChangePassword: undefined;
-    SelectSocialMedia: {
-      type: SocialMediaType;
-      order: number;
-      page: number;
-      prevId: SocialMediaId;
-    };
-    SetTrustlevel: {
-      connectionId: string;
-    };
-    ReportReason: {
-      connectionId: string;
-      connectionName: string;
-      reportReason: ReportReason;
-      successCallback?: (ReportReason) => void;
-      reporting?: boolean;
-      source: ReportSource;
-    };
-    SortConnections: undefined;
-    ViewPasswordWalkthrough: undefined;
-    RecoveryCooldownInfo: {
-      connectionId: string;
-      cooldownPeriod: number;
-      successCallback?: () => void;
-    };
-    NodeModal: undefined;
-  };
-
   type WISchnorrChallenge = {
     e: string;
     t: {

@@ -24,7 +24,7 @@ const Devices = () => {
   return (
     <>
       <Stack.Screen
-        name="Add Device"
+        name="AddDevice"
         component={AddDeviceScreen}
         options={topOptions}
       />
