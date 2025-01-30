@@ -11,10 +11,15 @@ type props = StackScreenProps<RootStackParamList, 'FullScreenPhoto'>;
 const FullScreenPhoto = ({ route, navigation }: props) => {
   const photo = route.params?.photo;
   const base64 = route.params?.base64;
-  const uri = base64 ? photo : `file://${photoDirectory()}/${photo?.filename}`;
+
+  // TODO photo is currently either a plain string or an object with a filename property. This needs to
+  // be cleaned up
+  const uri = base64
+    ? photo
+    : `file://${photoDirectory()}/${(photo as Photo).filename}`;
 
   const imageSource =
-    photo?.filename || base64
+    (photo as Photo).filename || base64
       ? {
           uri,
         }
