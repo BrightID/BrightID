@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, EMaskUnits, G, Path, Mask } from 'react-native-svg';
+import Svg, { Circle, G, Mask, Path } from 'react-native-svg';
 import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 type Props = {
@@ -11,8 +11,6 @@ type Props = {
   secondary?: string;
 };
 
-const maskUnits = 'userSpaceOnUse' as EMaskUnits.USER_SPACE_ON_USE;
-
 const Avatar = ({
   color = GREY,
   background = LIGHT_GREY,
@@ -23,7 +21,14 @@ const Avatar = ({
 }: Props) => (
   <Svg width={width} height={height} viewBox="0 0 43 44" fill="none">
     <Circle cx="21.4943" cy="21.4943" r="21.4943" fill={background} />
-    <Mask id="mask0" maskUnits={maskUnits} x="0" y="0" width="43" height="43">
+    <Mask
+      id="mask0"
+      maskUnits="userSpaceOnUse"
+      x="0"
+      y="0"
+      width="43"
+      height="43"
+    >
       <Circle cx="21.4943" cy="21.4943" r="21.4943" fill={background} />
     </Mask>
     <G mask="url(#mask0)">
