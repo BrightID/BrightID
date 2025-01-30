@@ -13,8 +13,8 @@ import {
 describe('backup', () => {
   describe('notification', () => {
     beforeAll(async () => {
-      // create identity (by default without setting backup password)
-      await createBrightID();
+      // create identity without setting backup password
+      await createBrightID(undefined, false);
       // create a fake connection to make sure user is recorded on backend. Otherwise getUserInfo()
       // will raise 404 error on the backend and notifications will never be triggered.
       await createFakeConnection();

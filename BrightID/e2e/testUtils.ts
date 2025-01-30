@@ -47,8 +47,7 @@ const addPhoto = async () => {
     .withTimeout(15000);
 };
 
-const setPassword = async () => {
-  const password = '12345678';
+const setPassword = async (password) => {
   await element(by.id('password')).tap();
   await element(by.id('password')).replaceText(password);
   await element(by.id('password')).tapReturnKey();
@@ -67,13 +66,13 @@ const confirmCreation = async () => {
 
 const createBrightID = async (
   name = testUserName,
-  withPassword = false,
+  withPassword = true,
 ): Promise<{ brightId: string; secretKey: Uint8Array; publicKey: string }> => {
   await acceptEula();
   await createKeypair();
-  await addName(name);
   await addPhoto();
-  await setPassword();
+  await addName(name);
+  await setPassword(`${withPassword ? '12345678' : ''}`);
   await submitData();
   await confirmCreation();
   // should end up at home screen
