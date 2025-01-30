@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,10 +7,11 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import { useFocusEffect, useRoute, RouteProp } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
 import { createSelector } from '@reduxjs/toolkit';
+import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   INVITE_ACTIVE,
@@ -29,6 +30,7 @@ import { useNodeApiContext } from '@/context/NodeApiContext';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 let thecount = 0;
 
@@ -142,7 +144,7 @@ const MiscList = ({ route }: { route: Route }) => {
       title: t('notifications.item.title.socialRecovery'),
       msg: t('notifications.item.msg.socialRecovery'),
       imageSource,
-      navigationTarget: 'Recovery Connections',
+      navigationTarget: 'RecoveryConnections',
       testID: 'SocialRecoveryNotifcation',
     });
   }
@@ -213,18 +215,17 @@ const renderTabBar = (props) => (
   />
 );
 
-type NotificationsRoute = RouteProp<
+/* type NotificationsRoute = RouteProp<
   {
     Notifications: {
       type?: typeof CONNECTIONS_TYPE | typeof GROUPS_TYPE | typeof MISC_TYPE;
     };
   },
   'Notifications'
->;
-
-export const NotificationsScreen = () => {
+>; */
+type Props = StackScreenProps<RootStackParamList, 'Notifications'>;
+export const NotificationsScreen = ({ route }: Props) => {
   const dispatch = useDispatch();
-  const route = useRoute<NotificationsRoute>();
   const { t } = useTranslation();
   const { api } = useNodeApiContext();
 

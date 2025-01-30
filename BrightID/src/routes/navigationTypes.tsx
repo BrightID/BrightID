@@ -1,5 +1,10 @@
 import { SocialMediaType } from '@/components/EditProfile/socialMediaVariations';
-import { qrCodeURL_types } from '@/utils/constants';
+import {
+  CONNECTIONS_TYPE,
+  GROUPS_TYPE,
+  MISC_TYPE,
+  qrCodeURL_types,
+} from '@/utils/constants';
 
 type ModalStackParamList = {
   FullScreenPhoto: {
@@ -106,7 +111,9 @@ type GroupsParamList = {
   InviteList: { group: Group };
 };
 type NotificationsParamList = {
-  Notifications: undefined;
+  Notifications: {
+    type?: typeof CONNECTIONS_TYPE | typeof GROUPS_TYPE | typeof MISC_TYPE;
+  };
 };
 type DevicesParamList = {
   AddDevice: {
