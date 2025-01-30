@@ -5,7 +5,11 @@ import { render, RenderOptions } from '@testing-library/react-native';
 import { I18nextProvider } from 'react-i18next';
 import { setupStore } from '@/store';
 import i18n from '../i18nForTests';
-import { getGlobalNodeApi, NodeApiContext } from '@/context/NodeApiContext';
+import {
+  ApiGateState,
+  getGlobalNodeApi,
+  NodeApiContext,
+} from '@/context/NodeApiContext';
 import { NodeApi } from '@/api/brightId';
 
 // This type interface extends the default options for render from RTL, as well
@@ -30,7 +34,15 @@ export function renderWithProviders(
     return (
       <Provider store={store}>
         <I18nextProvider i18n={i18n}>
-          <NodeApiContext.Provider value={api}>
+          <NodeApiContext.Provider
+            value={{
+              api,
+              url: 'http://127.0.0.1',
+              gateState: ApiGateState.INITIAL,
+              retryHandler: jest.fn(),
+              startTimestamp: 0,
+            }}
+          >
             {children}
           </NodeApiContext.Provider>
         </I18nextProvider>
