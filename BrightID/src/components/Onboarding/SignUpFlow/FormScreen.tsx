@@ -61,10 +61,10 @@ export const FormScreen = () => {
 
   const photoFilename = useSelector((state) => state.user.photo.filename);
 
-  const handleFocus = (setFocus: Function) => {
+  const handleFocus = (setFocus: (boolean) => void) => {
     setFocus(true);
   };
-  const handleBlur = (setBlur: Function) => {
+  const handleBlur = (setBlur: (boolean) => void) => {
     setBlur(false);
   };
   const handleEyeClick = () => {
@@ -171,7 +171,7 @@ export const FormScreen = () => {
   };
 
   const passwordOnChange = (text: string) => {
-    if (text.length != 0 && text.length < PASSWORD_LENGTH) {
+    if (text.length !== 0 && text.length < PASSWORD_LENGTH) {
       setPasswordErrors([`Password must be ${PASSWORD_LENGTH} characters`]);
     } else {
       setPasswordErrors(['']);
