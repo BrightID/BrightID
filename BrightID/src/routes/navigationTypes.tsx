@@ -41,7 +41,10 @@ type HomeParamList = {
 };
 
 type ImportParamList = {
-  ImportCode: undefined;
+  ImportCode: {
+    urlType: qrCodeURL_types;
+    action: string;
+  };
   Import: {
     changePrimaryDevice: boolean;
   };

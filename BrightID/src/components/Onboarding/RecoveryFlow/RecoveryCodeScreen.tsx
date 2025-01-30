@@ -45,7 +45,7 @@ import { RootStackParamList } from '@/routes/navigationTypes';
  */
 type RecoveryCodeScreenProps = DrawerScreenProps<
   RootStackParamList,
-  'SyncCode'
+  'ImportCode'
 >;
 const RecoveryCodeScreen = ({ route, navigation }: RecoveryCodeScreenProps) => {
   const { t } = useTranslation();

@@ -14,15 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
-import {
-  WHITE,
-  BLACK,
-  GREEN,
-  PRIMARY,
-  GRAY10,
-  GRAY1,
-  GRAY9,
-} from '@/theme/colors';
+import { WHITE, BLACK, PRIMARY, GRAY1, GRAY9 } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { qrCodeURL_types } from '@/utils/constants';
@@ -32,7 +24,6 @@ import {
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 import { createKeypair } from './SignUpFlow/thunks';
 import Close from '../Icons/Close';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { version as app_version } from '../../../package.json';
 
 /* Description */
@@ -49,7 +40,7 @@ import { version as app_version } from '../../../package.json';
 /* ======================================== */
 export const Onboard = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   const { t } = useTranslation();
   const baseUrl = useSelector(selectBaseUrl);
   const channel = useSelector(selectRecoveryChannel);
@@ -59,7 +50,7 @@ export const Onboard = () => {
     dispatch(resetRecoveryData());
     dispatch(createKeypair())
       .then(() => {
-        navigation.navigate('SignupName' as never);
+        navigation.navigate('SignupName');
       })
       .catch((err) => {
         Alert.alert(err.message);
