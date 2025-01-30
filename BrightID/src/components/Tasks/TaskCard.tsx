@@ -19,7 +19,7 @@ type TaskCardProps = {
   description: string;
   fulfilled: boolean;
   url: string | null | undefined;
-  navigationTarget: string | null | undefined;
+  navigationTarget?: UserTaskNavigationTarget;
   onClick: () => any | null | undefined;
 };
 

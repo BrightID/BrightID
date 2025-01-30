@@ -69,3 +69,6 @@ BrightID/flow-typed/npm/
 BrightID/android/app/google-services.json-prod
 BrightID/android/staging.properties
 BrightID/android/app/google-services.json-staging
+/brightid-sdk/packages/redux/dist/
+/brightid-sdk/packages/redux/actions/package.json
+/brightid-sdk/packages/redux/reducers/package.json

@@ -9,16 +9,12 @@ import {
   StatusBar,
   View,
 } from 'react-native';
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line } from 'react-native-svg';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
@@ -27,6 +23,7 @@ import {
   selectAllUnconfirmedConnections,
   selectPendingConnectionById,
 } from '@/components/PendingConnections/pendingConnectionSlice';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /** HELPERS */
 
@@ -59,15 +56,10 @@ const selectGroupConnections = createSelector(
 );
 
 /** MAIN */
-type GroupScreenRoute = RouteProp<
-  { GroupScreen: { channel: Channel } },
-  'GroupScreen'
->;
 
-export const GroupConnectionScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute<GroupScreenRoute>();
+type Props = DrawerScreenProps<RootStackParamList, 'GroupConnection'>;
 
+export const GroupConnectionScreen = ({ route, navigation }: Props) => {
   const circleArcOneOpacity = useRef(new Animated.Value(0)).current;
   const circleArcTwoOpacity = useRef(new Animated.Value(0)).current;
 

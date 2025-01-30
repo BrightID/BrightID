@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
   Image,
   InteractionManager,
@@ -13,8 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, PRIMARY, BLACK, SUCCESS, GRAY1 } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, PRIMARY, SUCCESS, GRAY1 } from '@/theme/colors';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
 import DetoxEnabled from '@/utils/Detox';
@@ -45,7 +44,7 @@ export const SuccessScreen = () => {
       // navigate to view password walkthrough
       if (!DetoxEnabled) {
         InteractionManager.runAfterInteractions(() => {
-          navigation.navigate('ViewPasswordWalkthrough' as never);
+          navigation.navigate('ViewPasswordWalkthrough');
         });
       }
     };

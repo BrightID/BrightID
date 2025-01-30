@@ -19,6 +19,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
@@ -40,6 +41,7 @@ import {
   setRecoveryAesKey,
   setRecoveryChannel,
 } from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -63,12 +65,11 @@ const NotAuthorizedView = () => (
     </Text>
   </View>
 );
-
-export const ScanCodeScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'ScanCode'>;
+export const ScanCodeScreen = ({ navigation }: Props) => {
   const route: { params?: { qrcode: string } } = useRoute() as {
     params?: { qrcode: string };
   };
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
@@ -185,7 +186,7 @@ export const ScanCodeScreen = () => {
                 urlType === qrCodeURL_types.IMPORT ||
                 urlType === qrCodeURL_types.ADD_SUPER_APP
               ) {
-                navigation.navigate('Add Device', {
+                navigation.navigate('AddDevice', {
                   changePrimaryDevice,
                   name,
                   isSuper: urlType === qrCodeURL_types.ADD_SUPER_APP,

@@ -147,7 +147,7 @@ type ConnectionInfo = {
   id: string;
   level: ConnectionLevel;
   timestamp: number;
-  reportReason?: string;
+  reportReason?: ReportReason;
 };
 
 type MembershipInfo = {

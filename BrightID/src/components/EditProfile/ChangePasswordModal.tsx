@@ -34,6 +34,7 @@ import {
 } from '@/actions';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { useDispatch, useSelector } from '@/store/hooks';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();
@@ -51,7 +52,7 @@ const UploadAnimation = () => {
   );
 };
 
-type props = StackScreenProps<ModalStackParamList, 'ChangePassword'>;
+type props = StackScreenProps<RootStackParamList, 'ChangePassword'>;
 
 const ChangePasswordModal = ({ navigation }: props) => {
   const dispatch = useDispatch();

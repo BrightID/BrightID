@@ -17,7 +17,6 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   WHITE,
   BLACK,
-  BLUE,
   PRIMARY,
   GRAY7,
   GRAY6,
@@ -29,7 +28,6 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import AvatarRedesigned from '@/components/Icons/AvatarRedesigned';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Eye from '@/components/Icons/Eye';
 import EyeOff from '@/components/Icons/EyeOff';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -40,7 +38,6 @@ import { savePhoto } from './thunks';
 import PencilCircle from '@/components/Icons/PencilCircle';
 import { setPassword as setUserPassword, setName } from '@/actions';
 import NewInfo from '@/components/Icons/NewInfo';
-import Info from '@/components/Icons/Info';
 
 const PASSWORD_LENGTH = 8;
 
@@ -64,10 +61,10 @@ export const FormScreen = () => {
 
   const photoFilename = useSelector((state) => state.user.photo.filename);
 
-  const handleFocus = (setFocus: Function) => {
+  const handleFocus = (setFocus: (boolean) => void) => {
     setFocus(true);
   };
-  const handleBlur = (setBlur: Function) => {
+  const handleBlur = (setBlur: (boolean) => void) => {
     setBlur(false);
   };
   const handleEyeClick = () => {
@@ -151,7 +148,7 @@ export const FormScreen = () => {
         .then(() => {
           dispatch(setName(displayName));
           dispatch(setUserPassword(password));
-          navigation.navigate('OnboardSuccess' as never);
+          navigation.navigate('OnboardSuccess');
         })
         .catch((err) => {
           Alert.alert(err.message);
@@ -174,7 +171,7 @@ export const FormScreen = () => {
   };
 
   const passwordOnChange = (text: string) => {
-    if (text.length != 0 && text.length < PASSWORD_LENGTH) {
+    if (text.length !== 0 && text.length < PASSWORD_LENGTH) {
       setPasswordErrors([`Password must be ${PASSWORD_LENGTH} characters`]);
     } else {
       setPasswordErrors(['']);
