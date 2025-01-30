@@ -10,14 +10,12 @@ import {
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerScreenProps,
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
 import { SvgXml } from 'react-native-svg';
-import { CompositeScreenProps, useNavigation } from '@react-navigation/native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   setEditProfileMenuLayout,
@@ -47,10 +45,7 @@ import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
 import AppSettings from '@/components/Icons/AppSettings';
-import {
-  HomeDrawerParamList,
-  RootStackParamList,
-} from '@/routes/navigationTypes';
+import { HomeDrawerParamList } from '@/routes/navigationTypes';
 
 const CustomItem = ({
   onPress,

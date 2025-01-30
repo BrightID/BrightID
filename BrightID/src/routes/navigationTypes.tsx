@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SocialMediaType } from '@/components/EditProfile/socialMediaVariations';
 import { qrCodeURL_types } from '@/utils/constants';
 
@@ -152,11 +151,6 @@ type MainTabsParamList = HomeParamList &
   EulaParamList;
 
 export type RootStackParamList = MainTabsParamList & HomeDrawerParamList;
-
-export type RootStackScreenProps<T extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, T>;
-
-export type RouteName = keyof RootStackParamList;
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
