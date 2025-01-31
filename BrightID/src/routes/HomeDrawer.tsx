@@ -15,6 +15,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
 import { SvgXml } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   setEditProfileMenuLayout,
@@ -44,6 +45,7 @@ import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 import FindFriendsIcon from '@/static/findfriends_drawer.svg';
 import { SettingsScreen } from '@/components/SideMenu/SettingsScreen';
 import AppSettings from '@/components/Icons/AppSettings';
+import { HomeDrawerParamList } from '@/routes/navigationTypes';
 
 const CustomItem = ({
   onPress,
@@ -99,7 +101,8 @@ const CustomItem = ({
 };
 
 const CustomDrawerContent = (props) => {
-  const { state, navigation } = props;
+  const { state } = props;
+  const navigation = useNavigation();
   // selectors
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
@@ -130,7 +133,7 @@ const CustomDrawerContent = (props) => {
       </View>
       <CustomItem
         testId="drawerHomeBtn"
-        focused={false}
+        focused={state.routeNames[state.index] === 'HomeScreen'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -150,7 +153,7 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         testId="drawerEditProfileBtn"
-        focused={state.routeNames[state.index] === 'Edit Profile'}
+        focused={state.routeNames[state.index] === 'EditProfile'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -165,12 +168,12 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Edit Profile');
+          navigation.navigate('EditProfile');
         }}
       />
       <CustomItem
         testId="drawerRecoveryConnectionsBtn"
-        focused={state.routeNames[state.index] === 'Recovery Connections'}
+        focused={state.routeNames[state.index] === 'RecoveryConnections'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -185,7 +188,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Recovery Connections');
+          navigation.navigate('RecoveryConnections');
         }}
       />
       <CustomItem
@@ -211,7 +214,7 @@ const CustomDrawerContent = (props) => {
 
       <CustomItem
         testId="drawerExplorerCodeBtn"
-        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        focused={state.routeNames[state.index] === 'CopyExplorerCode'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -226,7 +229,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Copy Explorer Code');
+          navigation.navigate('CopyExplorerCode');
         }}
       />
       <CustomItem
@@ -249,7 +252,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
-        focused={false}
+        focused={state.routeNames[state.index] === 'FindFriendsScreen'}
         testId="findFriendsBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -389,7 +392,7 @@ const CustomDrawerContent = (props) => {
   );
 };
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 export const HomeDrawer = () => {
   let headerHeight = useHeaderHeight();
@@ -422,15 +425,12 @@ export const HomeDrawer = () => {
         name="BituVerification"
         component={BituVerificationScreen}
       />
-      <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
+      <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
       <Drawer.Screen
-        name="Recovery Connections"
+        name="RecoveryConnections"
         component={RecoveryConnectionsScreen}
       />
-      <Drawer.Screen
-        name="Copy Explorer Code"
-        component={GraphExplorerScreen}
-      />
+      <Drawer.Screen name="CopyExplorerCode" component={GraphExplorerScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
       {__DEV__ && (

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen } from '@testing-library/react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { renderWithProviders } from '@/utils/test-utils';
 import AppsScreenController from '@/components/Apps/AppsScreenController';
 import { addLinkedContext, setApps } from '@/reducer/appsSlice';

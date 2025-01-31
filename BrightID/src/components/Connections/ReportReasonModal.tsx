@@ -18,6 +18,7 @@ import { setReportReason } from '@/reducer/connectionsSlice';
 import { useNodeApiContext } from '@/context/NodeApiContext';
 import { setConnectionLevel } from '@/actions';
 import { reportConnection } from './models/reportConnection';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 const reasons = {
   [report_sources.RECONNECT]: [
@@ -64,7 +65,7 @@ const reasons = {
   ],
 };
 
-type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
+type props = StackScreenProps<RootStackParamList, 'ReportReason'>;
 
 const ReportReasonModal = ({ route, navigation }: props) => {
   const {

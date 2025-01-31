@@ -1,7 +1,8 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useNodeApiContext } from '@/context/NodeApiContext';
 import {
   linkedContextTotal,
@@ -21,9 +22,10 @@ import { useDispatch, useSelector } from '@/store/hooks';
 import { requestLinking } from '@/components/Apps/appThunks';
 import { app_linking_steps } from '@/utils/constants';
 import AppLinkingScreen from '@/components/Apps/AppLinkingScreen';
+import { AppsRouteParams, RootStackParamList } from '@/routes/navigationTypes';
 
 // get app linking details from route params
-const parseRouteParams = (params: Params) => {
+const parseRouteParams = (params: AppsRouteParams) => {
   const { appId, appUserId, baseUrl } = params;
   return {
     baseUrl,
@@ -36,7 +38,8 @@ const parseRouteParams = (params: Params) => {
 const AppsScreenController = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const route = useRoute<AppsRoute>();
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<RootStackParamList, 'Apps'>>();
   const { api } = useNodeApiContext();
   const apps = useSelector(selectAllApps);
   const linkedContext = useSelector(selectAllLinkedContexts);
@@ -45,7 +48,6 @@ const AppsScreenController = () => {
   const appLinkingStep = useSelector(selectApplinkingStep);
   const isSponsored = useSelector(selectIsSponsored);
   const userVerifications = useSelector(selectUserVerifications);
-  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [totalApps, setTotalApps] = useState(0);
   const [totalVerifiedApps, setTotalVerifiedApps] = useState(0);

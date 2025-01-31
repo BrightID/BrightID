@@ -16,7 +16,7 @@ type NotificationCardProps = {
   title: string;
   msg: string;
   imageSource: any;
-  navigationTarget: string;
+  navigationTarget: UserTaskNavigationTarget;
   testID: string;
 };
 

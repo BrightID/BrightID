@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { chooseImage } from '@/utils/images';
 import {
   ORANGE,
@@ -25,12 +25,14 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export const GroupInfoScreen = () => {
+type Props = DrawerScreenProps<RootStackParamList, 'GroupInfo'>;
+
+export const GroupInfoScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const [finalBase64, setFinalBase64] = useState({ uri: '' });
   const [name, setName] = useState('');
 

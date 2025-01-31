@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -26,11 +26,11 @@ import {
 } from '@/actions';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { useNodeApiContext } from '@/context/NodeApiContext';
-
 import TrustlevelSlider from './TrustlevelSlider';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 type TrustlevelModalProps = StackScreenProps<
-  ModalStackParamList,
+  RootStackParamList,
   'SetTrustlevel'
 >;
 

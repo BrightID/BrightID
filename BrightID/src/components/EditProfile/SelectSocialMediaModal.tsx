@@ -36,6 +36,7 @@ import {
 import { isPhoneNumberValid, parsePhoneNumber } from '@/utils/phoneUtils';
 import { saveAndSyncSocialMedia } from '@/components/EditProfile/socialMediaThunks';
 import { DEFAULT_SHARE_WITH_CONNECTIONS_VALUE } from '@/utils/constants';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 /** Helper functions */
 
@@ -59,7 +60,7 @@ const textContentTypes: { [id: string]: TextInputProps['textContentType'] } = {
 };
 
 /** Main Component */
-type props = StackScreenProps<ModalStackParamList, 'SelectSocialMedia'>;
+type props = StackScreenProps<RootStackParamList, 'SelectSocialMedia'>;
 
 const SelectMediaModal = ({ route }: props) => {
   const dispatch = useDispatch();
@@ -165,7 +166,7 @@ const SelectMediaModal = ({ route }: props) => {
           : DEFAULT_SHARE_WITH_CONNECTIONS_VALUE,
     };
     dispatch(saveAndSyncSocialMedia(socialMedia));
-    navigation.navigate('Edit Profile');
+    navigation.navigate('EditProfile');
   };
 
   return (
@@ -259,7 +260,7 @@ const SelectMediaModal = ({ route }: props) => {
               // if initial page is 1, users only want to edit text
               page === 1 && initialPage !== 1
                 ? setPage(0)
-                : navigation.navigate('Edit Profile');
+                : navigation.navigate('EditProfile');
             }}
           >
             <Text style={styles.cancelButtonText}>

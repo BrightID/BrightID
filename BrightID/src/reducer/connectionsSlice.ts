@@ -89,7 +89,7 @@ const connectionsSlice = createSlice({
     },
     reportAndHideConnection(
       state,
-      action: PayloadAction<{ id: string; reason: string }>,
+      action: PayloadAction<{ id: string; reason: ReportReason }>,
     ) {
       const { id, reason } = action.payload;
       const update: Update<Connection> = {
@@ -130,7 +130,7 @@ const connectionsSlice = createSlice({
     },
     setReportReason(
       state,
-      action: PayloadAction<{ id: string; reason: string | null }>,
+      action: PayloadAction<{ id: string; reason: ReportReason | null }>,
     ) {
       const { id, reason } = action.payload;
       const update: Update<Connection> = {

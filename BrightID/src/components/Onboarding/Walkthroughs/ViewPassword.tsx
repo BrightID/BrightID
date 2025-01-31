@@ -10,11 +10,12 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
 import FullScreenHighlightBox from '@/components/Helpers/FullScreenHighlightBox';
 import Arrow from '../../Icons/Arrow';
+import { RootStackParamList } from '@/routes/navigationTypes';
 
 // border radius for edit profile box
 const BR = 20;
 
-type props = StackScreenProps<ModalStackParamList, 'ViewPasswordWalkthrough'>;
+type props = StackScreenProps<RootStackParamList, 'ViewPasswordWalkthrough'>;
 
 const ViewPassword = ({ navigation }: props) => {
   useFocusEffect(
