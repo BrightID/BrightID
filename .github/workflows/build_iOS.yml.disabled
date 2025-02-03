@@ -44,7 +44,7 @@ jobs:
           echo "TODO: Insert iOS Debug build instructions here :-)"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: brightId-debug.ipa
           path: /home/runner/work/BrightID/BrightID/BrightID/ios/path/to/brightID-debug.ipa
@@ -91,7 +91,7 @@ jobs:
           echo "TODO: Insert iOS Release build instructions here :-)"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: brightId-release.ipa
           path: /home/runner/work/BrightID/BrightID/BrightID/ios/path/to/brightID-release.ipa
