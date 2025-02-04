@@ -5,6 +5,7 @@ import {
   getDefaultMiddleware,
   PreloadedState,
 } from '@reduxjs/toolkit';
+import { keypair } from '@brightid/redux/reducers';
 import reducers from '@/reducer';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
@@ -120,7 +121,7 @@ export const rootReducer = combineReducers({
   ) as typeof reducers.apps,
   connections: persistReducer(connectionsPersistConfig, reducers.connections),
   groups: persistReducer(groupsPersistConfig, reducers.groups),
-  keypair: persistReducer(keypairPersistConfig, reducers.keypair),
+  keypair: persistReducer(keypairPersistConfig, keypair),
   notifications: persistReducer(
     notificationsPersistConfig,
     reducers.notifications,
