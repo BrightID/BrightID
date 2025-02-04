@@ -30,6 +30,12 @@ echo "done"
 echo "clearing gradle caches"
 rm -rf "$HOME"/.gradle/caches
 
+# clear watchman watches
+watchman watch-del-all
+
+# clear Metro cache
+rm -rf /tmp/metro-*
+
 # clear all intermediate/untracked files in android folder
 echo "running \"git clean -f -d\" in android folder"
 cd android || exit
@@ -43,7 +49,7 @@ rm -rf node_modules
 echo "done"
 
 # install node modules
-yarn
+yarn install
 
 # run gradle clean
 cd android || exit

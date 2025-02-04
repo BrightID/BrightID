@@ -300,12 +300,11 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
 
-    // Work around https://github.com/BrightID/BrightID/issues/1089
-    // Also see https://github.com/facebook/react-native/issues/32735 - This should
-    // be removed when upgrading react-native version
-    implementation('com.facebook.soloader:soloader:0.10.3') {
+    // Force newer soloader version as up to 0.10.3 causes crashes on 64bit devices
+    // This should be removed when upgrading react-native version
+    implementation('com.facebook.soloader:soloader:0.10.4') {
        version {
-           strictly '0.10.3'
+           strictly '0.10.4'
        }
    }
 }
