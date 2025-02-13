@@ -22,7 +22,6 @@
 		8F545B80273A5F9C00DEACF5 /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B77273A5F9C00DEACF5 /* Poppins-ExtraLight.otf */; };
 		8F545B81273A5F9C00DEACF5 /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B78273A5F9C00DEACF5 /* Poppins-Bold.otf */; };
 		8F545B82273A5F9C00DEACF5 /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B79273A5F9C00DEACF5 /* Poppins-Regular.otf */; };
-		8FCF45A32755F6BB005EFD42 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */; };
 		CF5873462BCBEA13D1FFAB80 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54BC6F52096C81D831D3894E /* libPods-BrightID-BrightIDTests.a */; };
 /* End PBXBuildFile section */
 
@@ -62,7 +61,6 @@
 		8F545B77273A5F9C00DEACF5 /* Poppins-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-ExtraLight.otf"; path = "../assets/fonts/Poppins-ExtraLight.otf"; sourceTree = "<group>"; };
 		8F545B78273A5F9C00DEACF5 /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
 		8F545B79273A5F9C00DEACF5 /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
-		8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		965C74C674C7B2FD1601863A /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
 		D2B6E3F4A3D3D560C111E4FF /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		DEAA0FEAD0E02363D6B5DD5C /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */,
 				8F545B75273A5F9C00DEACF5 /* ApexNew-Book.otf */,
 				8F545B74273A5F9B00DEACF5 /* ApexNew-Light.otf */,
 				8F545B71273A5F9B00DEACF5 /* ApexNew-Medium.otf */,
@@ -281,7 +278,6 @@
 				8F545B7C273A5F9C00DEACF5 /* Poppins-Medium.otf in Resources */,
 				8F545B7D273A5F9C00DEACF5 /* ApexNew-Light.otf in Resources */,
 				8F545B7E273A5F9C00DEACF5 /* ApexNew-Book.otf in Resources */,
-				8FCF45A32755F6BB005EFD42 /* AppCenter-Config.plist in Resources */,
 				8F545B7F273A5F9C00DEACF5 /* EurostileRegular.ttf in Resources */,
 				8F545B80273A5F9C00DEACF5 /* Poppins-ExtraLight.otf in Resources */,
 				8F545B81273A5F9C00DEACF5 /* Poppins-Bold.otf in Resources */,
@@ -602,7 +598,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODEPUSH_KEY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -670,7 +665,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODEPUSH_KEY = "TexIXu5MO3ouWAjZRH2nZ754rQuDX2-SU_Dmg";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -731,7 +725,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODEPUSH_KEY = RHAO3mGY0FeUPn3CJGn0bzw_F6Sdoy4zwHbku;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
