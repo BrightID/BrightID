@@ -89,8 +89,6 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
-
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -169,8 +167,6 @@ android {
         multiDexEnabled true
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        // TODO test if is this still needed?
-        resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
     }
     signingConfigs {
         debug {
@@ -216,21 +212,18 @@ android {
             // Detox-specific additions to pro-guard
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
             signingConfig signingConfigs.release
-            resValue "string", "CodePushDeploymentKey", "G8q6_0EW9AkaXAy3hO7Ye_LAhDfisOHpFPvRF"
         }
         staging {
             applicationIdSuffix ".staging"
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.staging
-            resValue "string", "CodePushDeploymentKey", "oCnsVbQLVhCjd_xE1BAsPYMRApddDWiwqiuhl"
             matchingFallbacks = ['release']
         }
         debug {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             versionNameSuffix '-DEBUG'
-            resValue "string", "CodePushDeploymentKey", '""'
         }
     }
 
