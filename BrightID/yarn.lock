@@ -1859,13 +1859,6 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
-"@react-native-community/push-notification-ios@1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.10.1.tgz#d52a6d69ac1112df0f79e1d17978077629b76784"
-  integrity sha512-k6bZWUKLif4GjenyTD3aQLwA2VT3bNmt22INO/34lexnpmqkPDZF7nreqbckTHG0Zso9wDTe4N/AZJUC/d8iRg==
-  dependencies:
-    invariant "^2.2.4"
-
 "@react-native-community/slider@4.4.2":
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.4.2.tgz#1fea0eb3ae31841fe87bd6c4fc67569066e9cf4b"
@@ -9377,11 +9370,6 @@ react-native-phone-number-input@2.1.0:
   dependencies:
     google-libphonenumber "^3.2.10"
     react-native-country-picker-modal "^2.0.0"
-
-react-native-push-notification@8.1.1:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz#a41d20c70ea5a7709417e96261b225461f8dc73a"
-  integrity sha512-XpBtG/w+a6WXTxu6l1dNYyTiHnbgnvjoc3KxPTxYkaIABRmvuJZkFxqruyGvfCw7ELAlZEAJO+dthdTabCe1XA==
 
 react-native-randombytes@3.6.1:
   version "3.6.1"
