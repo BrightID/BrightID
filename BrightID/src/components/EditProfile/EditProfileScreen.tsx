@@ -255,7 +255,7 @@ const SocialMediaLink = (props: {
         width:
           typeof profileDisplayWidth === 'number'
             ? profileDisplayWidth - 10
-            : profileDisplayWidth,
+            : Number(profileDisplayWidth), // maybe this should be 0
       }
     : { flexGrow: 1 };
 

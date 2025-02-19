@@ -147,8 +147,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1
       react-native-error-boundary:
-        specifier: 1.2.8
-        version: 1.2.8(@types/react-native@0.70.19)(react-native@0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+        specifier: 1.2.7
+        version: 1.2.7(@types/react-native@0.70.19)(react-native@0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react-native-gesture-handler:
         specifier: 2.23.1
         version: 2.23.1(react-native@0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
@@ -252,6 +252,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.26.9
         version: 7.26.9
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@react-native-community/cli':
         specifier: 15.0.1
         version: 15.0.1(typescript@5.0.4)
@@ -5191,8 +5194,8 @@ packages:
   react-native-dropdownalert@4.5.1:
     resolution: {integrity: sha512-x69zHkC5soblG1xTBlSdYiUco+vmUiik6NH+DktzUM+xRhhTAy6BrKWSzkzSZ5WqcpZ4UcRqI0b4+rHPNQtG3Q==}
 
-  react-native-error-boundary@1.2.8:
-    resolution: {integrity: sha512-eLVKsuAe6RFBWTA5dmsb5/6dNCq2sj5/ULI0ic3rNM6EecTAiFo4VxL9aiqsamBTBNTweRuWxfdrjcU4kzgbTQ==}
+  react-native-error-boundary@1.2.7:
+    resolution: {integrity: sha512-DCnrGp8EcjTBKd+pm3Zr03uV+NFRlhooJdTqDv7BdEUAKssSg3RQL/Cz1fZIaZUwEK9YbRlUn1/jJzWlq46dLw==}
     peerDependencies:
       '@types/react-native': '>=0.57.7'
       react: '>=16.6.0'
@@ -12715,7 +12718,7 @@ snapshots:
     dependencies:
       prop-types: 15.5.10
 
-  react-native-error-boundary@1.2.8(@types/react-native@0.70.19)(react-native@0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
+  react-native-error-boundary@1.2.7(@types/react-native@0.70.19)(react-native@0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.77.1(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.3.18)(react@18.3.1)
