@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
-    "ios": "react-native run-ios  --simulator 'iPhone 16'",
-    "ios:se": "react-native run-ios  --simulator 'iPhone SE (3rd generation)'",
+    "ios": "react-native run-ios",
     "start": "react-native start",
     "start:detox": "RN_SRC_EXT=e2e.js,e2e.ts react-native start",
     "build:detox:android": "detox build -c android.emu.debug",
