@@ -1,1 +1,1 @@
-export { RNCamera } from 'react-native-camera';
+export { RNCamera } from 'react-native-vision-camera';

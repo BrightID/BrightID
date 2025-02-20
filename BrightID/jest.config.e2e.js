@@ -8,7 +8,7 @@ module.exports = {
   reporters: ['detox/runners/jest/streamlineReporter'],
   verbose: true,
   transformIgnorePatterns: [
-    'node_modules/(?!(@react-native|react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-platform-touchable|react-native-vector-icons|react-native-spinkit|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)',
+    'node_modules/(?!(@react-native|react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-platform-touchable|react-native-vector-icons|react-native-spinkit|react-native-image-picker|react-native-svg|react-native-vision-camera|react-native-image-crop-picker|react-native-keychain)/)',
   ],
   setupFiles: ['./jestSetupFile.ts'],
 };

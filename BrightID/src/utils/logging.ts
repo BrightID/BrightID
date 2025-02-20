@@ -5,7 +5,7 @@ import {
   transportFunctionType,
 } from 'react-native-logs';
 import { InteractionManager } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import { LOGFILE_KEEP_DURATION } from '@/utils/constants';
 
 // const rnFetchBlobTransport: transportFunctionType

@@ -1,5 +1,5 @@
 import nacl from 'tweetnacl';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import { Alert } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
 import {

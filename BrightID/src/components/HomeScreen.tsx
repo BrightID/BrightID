@@ -454,7 +454,7 @@ export const HomeScreen = (props) => {
         <View style={styles.infoContainer}>
           <TouchableOpacity
             style={styles.nodeLinkContainer}
-            onPress={() => navigation.navigate('NodeModal')}
+            // onPress={() => navigation.navigate('NodeModal')}
           >
             <Text style={styles.nodeLink}>
               {baseUrl ? baseUrl.split('://')[1] : 'disconnected'} - v{' '}

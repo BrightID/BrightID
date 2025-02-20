@@ -18,7 +18,7 @@ import BarcodeMask from 'react-native-barcode-mask';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18next from 'i18next';
-import { BarCodeReadEvent } from 'react-native-camera';
+// import { BarCodeReadEvent } from 'react-native-vision-camera';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -54,7 +54,7 @@ function validQrString(qrString: string) {
 /**
  * Scan code screen of BrightID
  * ==================================================================
- * displays a react-native-camera view
+ * displays a react-native-vision-camera view
  * after scanning qrcode - the rtc id is set
  *
  */
@@ -228,7 +228,8 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
     }
   }, [dispatch, navigation, qrData]);
 
-  const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
+  // Barcode read event
+  const handleBarCodeRead = ({ data }) => {
     console.log(`Scanned QRCode: ${data}`);
     setQrData(data);
   };
