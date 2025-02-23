@@ -10,9 +10,14 @@ const options: Options = {
   includeBase64: true,
   includeExif: true,
   cropperToolbarTitle: 'Select Photo',
-  smartAlbums: ['RecentlyAdded', 'UserLibrary', 'PhotoStream', 'SelfPortraits'],
+  smartAlbums: [
+    'RecentlyAdded',
+    'UserLibrary',
+    'PhotoStream',
+    'SelfPortraits',
+    'Generic',
+  ],
   useFrontCamera: true,
-  compressImageQuality: 0.8,
   mediaType: 'photo',
 };
 

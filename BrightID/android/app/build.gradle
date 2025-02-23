@@ -104,6 +104,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 50
         versionName "5.0.0"
+        testBuildType System.getProperty('testBuildType', 'debug')
+        estInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        vectorDrawables.useSupportLibrary = true
         // multiDexEnabled true
     }
     signingConfigs {
@@ -143,6 +146,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
     }
 
@@ -170,4 +174,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    androidTestImplementation('com.wix:detox:+')
+    // implementation 'androidx.appcompat:appcompat:1.1.0'
 }

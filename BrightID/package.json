@@ -7,7 +7,7 @@
     "android-debug": "react-native run-android --appIdSuffix debug",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "start:detox": "RN_SRC_EXT=e2e.js,e2e.ts react-native start",
+    "start:detox": "react-native start --sourceExts e2e.js,e2e.ts,e2e.tsx,js,jsx,json,ts,tsx",
     "build:detox:android": "detox build --configuration android.emu.debug",
     "build:detox:ios": "detox build --configuration ios.sim.debug",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'  --assets-dest='./ios'",
