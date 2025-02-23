@@ -1,7 +1,6 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import MockAsyncStorage from 'mock-async-storage';
-import { NodeApi } from './src/api/brightId';
-import { hash } from './src/utils/encoding';
+import { NodeApi } from '../src/api/brightId';
+import { hash } from '../src/utils/encoding';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
@@ -62,7 +61,7 @@ jest.mock('react-native-keychain', () => {
 });
 
 /* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+
 jest.mock('react-native-modpow', () => {});
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
