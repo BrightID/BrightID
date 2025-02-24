@@ -53,6 +53,8 @@
        		</dict>
 		</dict>
 	</dict>
+	<key>RCTAsyncStorageExcludeFromBackup</key>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera for taking a profile picture and scanning QR codes when making a connection</string>
 	<key>NSContactsUsageDescription</key>
