@@ -29,7 +29,7 @@
     "prepare:production": "ln -sf ./google-services.json-prod android/app/google-services.json"
   },
   "dependencies": {
-    "@expo/react-native-action-sheet": "4.1.0",
+    "@expo/react-native-action-sheet": "https://github.com/expo/react-native-action-sheet",
     "@react-native-async-storage/async-storage": "2.1.1",
     "@react-native-clipboard/clipboard": "1.16.1",
     "@react-native-community/blur": "4.4.1",
