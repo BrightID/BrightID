@@ -13,7 +13,8 @@ import { NotificationBanner } from './components/Helpers/NotificationBanner';
 import MainApp from '@/routes';
 import ErrorFallback from '@/components/ErrorFallback';
 import { bootstrap } from '@/bootstrap';
-import { notificationSubscription } from '@/NotificationService';
+// TOTO ADD NOTIFCATIONS LATER
+// import { notificationSubscription } from '@/NotificationService';
 import { setupStore } from '@/store';
 import { DEEP_LINK_PREFIX, UNIVERSAL_LINK_PREFIX } from '@/utils/constants';
 
@@ -40,10 +41,10 @@ export const App = () => {
             },
           },
         },
-        NodeModal: {
-          path: 'local-server',
-          exact: true,
-        },
+        // NodeModal: {
+        //   path: 'local-server',
+        //   exact: true,
+        // },
         ScanCode: {
           path: 'connection-code/:qrcode',
           exact: true,
@@ -77,8 +78,9 @@ export const App = () => {
   const onBeforeLift = async () => {
     console.log('BOOTSTRAPING APP');
     await bootstrap(store.dispatch);
-    console.log('SUBSCRIBING TO NOTIFICATIONS');
-    notificationSubscription(store.dispatch, store.getState);
+    // TODO ADD NOTIFICATIONS LATER
+    // console.log('SUBSCRIBING TO NOTIFICATIONS');
+    // notificationSubscription(store.dispatch, store.getState);
     console.log('DONE BOOTSTRAP');
   };
 

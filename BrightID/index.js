@@ -9,9 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import codePush from 'react-native-code-push';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
-import codePushOptions from './codepush.config';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
 import 'react-native-url-polyfill/auto';
@@ -66,4 +64,4 @@ FlatList.defaultProps.windowSize = DEVICE_ANDROID ? 5 : 10;
 
 FlatList.defaultProps.removeClippedSubviews = DEVICE_ANDROID;
 
-AppRegistry.registerComponent(appName, () => codePush(codePushOptions)(App));
+AppRegistry.registerComponent(appName, () => App);

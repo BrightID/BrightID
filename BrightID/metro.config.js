@@ -1,29 +1,11 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const defaultSourceExts = require('metro-config/src/defaults/defaults')
-  .sourceExts;
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 /**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
  *
- * @format
+ * @type {import('@react-native/metro-config').MetroConfig}
  */
+const config = {};
 
-module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-  resolver: {
-    // enable mocking for detox E2E tests (https://github.com/wix/Detox/blob/master/docs/Guide.Mocking.md)
-    sourceExts: process.env.RN_SRC_EXT
-      ? process.env.RN_SRC_EXT.split(',').concat(defaultSourceExts)
-      : defaultSourceExts,
-    // Comment out for test release
-    // sourceExts: ['e2e.js'].concat(defaultSourceExts),
-  },
-};
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);

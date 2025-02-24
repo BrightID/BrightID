@@ -117,8 +117,11 @@ export const PendingConnectionsScreen = () => {
         return true;
       }
     };
-    BackHandler.addEventListener('hardwareBackPress', goBack);
-    return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      goBack,
+    );
+    return () => subscription.remove();
   }, [viewPagerRef, activeIndex]);
 
   // leave page if zero pending connections
