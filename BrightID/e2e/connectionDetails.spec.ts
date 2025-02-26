@@ -18,6 +18,7 @@ describe('Connection details', () => {
   const groupName = 'Test Group';
 
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
 

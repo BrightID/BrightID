@@ -52,6 +52,8 @@ describe('Add Device', () => {
     no = android ? 'NO' : 'No';
     yes = android ? 'YES' : 'Yes';
 
+    await device.launchApp();
+
     // prepare nodeAPI instance
     apiInstance = new NodeApi({
       url: apiUrl,

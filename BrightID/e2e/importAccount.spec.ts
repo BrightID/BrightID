@@ -85,6 +85,10 @@ describe('Import BrightID', () => {
   ];
 
   describe(`Prepare BrightID to be imported`, () => {
+    beforeAll(async () => {
+      await device.launchApp();
+    });
+
     afterAll(async () => {
       // clear all data in app
       await clearData();

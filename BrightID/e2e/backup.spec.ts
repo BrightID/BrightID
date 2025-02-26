@@ -13,6 +13,7 @@ import {
 describe('backup', () => {
   describe('notification', () => {
     beforeAll(async () => {
+      await device.launchApp();
       // create identity without setting backup password
       await createBrightID(undefined, false);
       // create a fake connection to make sure user is recorded on backend. Otherwise getUserInfo()
