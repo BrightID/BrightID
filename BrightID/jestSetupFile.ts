@@ -1,6 +1,6 @@
 import MockAsyncStorage from 'mock-async-storage';
-import { NodeApi } from '../src/api/brightId';
-import { hash } from '../src/utils/encoding';
+import { NodeApi } from './src/api/brightId';
+import { hash } from './src/utils/encoding';
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
@@ -44,28 +44,28 @@ jest.mock('react-native', () => {
   return RN;
 });
 
-jest.mock('react-native-keychain', () => {
-  const genericPassword = {
-    username: JSON.stringify({ publicKey: '', version: 1 }),
-    password: 'abcd',
-  };
-  return {
-    SECURITY_LEVEL_ANY: 'SECURITY_LEVEL_ANY',
-    SECURITY_LEVEL_SECURE_SOFTWARE: 'SECURITY_LEVEL_SECURE_SOFTWARE',
-    SECURITY_LEVEL_SECURE_HARDWARE: 'SECURITY_LEVEL_SECURE_HARDWARE',
-    setGenericPassword: () => Promise.resolve(true),
-    setInternetCredentials: () => Promise.resolve(true),
-    resetGenericPassword: () => Promise.resolve(true),
-    getGenericPassword: () => Promise.resolve(genericPassword),
-  };
-});
+// jest.mock('react-native-keychain', () => {
+//   const genericPassword = {
+//     username: JSON.stringify({ publicKey: '', version: 1 }),
+//     password: 'abcd',
+//   };
+//   return {
+//     SECURITY_LEVEL_ANY: 'SECURITY_LEVEL_ANY',
+//     SECURITY_LEVEL_SECURE_SOFTWARE: 'SECURITY_LEVEL_SECURE_SOFTWARE',
+//     SECURITY_LEVEL_SECURE_HARDWARE: 'SECURITY_LEVEL_SECURE_HARDWARE',
+//     setGenericPassword: () => Promise.resolve(true),
+//     setInternetCredentials: () => Promise.resolve(true),
+//     resetGenericPassword: () => Promise.resolve(true),
+//     getGenericPassword: () => Promise.resolve(genericPassword),
+//   };
+// });
 
 /* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
 
 jest.mock('react-native-modpow', () => {});
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // useHeaderHeight hook
 jest.mock('@react-navigation/elements', () => ({

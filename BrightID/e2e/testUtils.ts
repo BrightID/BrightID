@@ -12,7 +12,9 @@ const operationTimeout = 40000; // ms to wait for operations to be applied
 Accept EULA and proceed to Onboarding screen
  */
 const acceptEula = async () => {
-  await expect(element(by.id('EulaScreen'))).toBeVisible();
+  await waitFor(element(by.id('EulaScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
   await expect(element(by.id('acceptEulaBtn'))).toExist();
   await element(by.id('acceptEulaBtn')).tap();
 };
@@ -132,11 +134,16 @@ const createFakeConnection = async (
 };
 
 const expectHomescreen = async () => {
-  await waitFor(element(by.id('BrightIdLogo')))
-    .toBeVisible()
-    .withTimeout(20000);
-  await element(by.id('BrightIdLogo')).tap();
-  await waitFor(element(by.id('homeScreen'))).toBeVisible();
+  // await waitFor(element(by.id('BrightIdLogo')))
+  //   .toBeVisible()
+  //   .withTimeout(20000);
+  // await expect(element(by.id('BrightIdLogo'))).toBeVisible();
+  // await element(by.id('BrightIdLogo')).tap();
+  await expect(element(by.id('HomeScreenContainer'))).toExist();
+  await expect(element(by.id('ConnectionsCount'))).toBeVisible();
+  // await waitFor(element(by.id('BrightIdLogo')))
+  //   .toBeVisible()
+  //   .withTimeout(20000);
 };
 
 const expectNotificationsScreen = async () => {

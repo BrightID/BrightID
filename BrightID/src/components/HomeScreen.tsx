@@ -203,40 +203,34 @@ export const HomeScreen = (props) => {
     }
   };
 
-  const DeepPasteLink = () => {
-    if (__DEV__) {
-      return (
-        <TouchableOpacity
-          testID="pasteDeeplink"
-          style={{
-            position: 'absolute',
-            left: 10,
-            bottom: 10,
-          }}
-          onPress={async () => {
-            let url = await Clipboard.getString();
-            if (url.startsWith(`${UNIVERSAL_LINK_PREFIX}connection-code/`)) {
-              url = url.replace(`${UNIVERSAL_LINK_PREFIX}connection-code/`, '');
+  const deepPasteLink = __DEV__ ? (
+    <TouchableOpacity
+      testID="pasteDeeplink"
+      style={{
+        position: 'absolute',
+        left: 10,
+        bottom: 10,
+      }}
+      onPress={async () => {
+        let url = await Clipboard.getString();
+        if (url.startsWith(`${UNIVERSAL_LINK_PREFIX}connection-code/`)) {
+          url = url.replace(`${UNIVERSAL_LINK_PREFIX}connection-code/`, '');
 
-              navigation.navigate('ScanCode', { qrcode: url });
-            } else {
-              url = url.replace(UNIVERSAL_LINK_PREFIX, DEEP_LINK_PREFIX);
-              console.log(`Linking.openURL with ${url}`);
-              Linking.openURL(url);
-            }
-          }}
-        >
-          <Material
-            name="content-paste"
-            size={DEVICE_LARGE ? 28 : 23}
-            color={WHITE}
-          />
-        </TouchableOpacity>
-      );
-    } else {
-      return null;
-    }
-  };
+          navigation.navigate('ScanCode', { qrcode: url });
+        } else {
+          url = url.replace(UNIVERSAL_LINK_PREFIX, DEEP_LINK_PREFIX);
+          console.log(`Linking.openURL with ${url}`);
+          Linking.openURL(url);
+        }
+      }}
+    >
+      <Material
+        name="content-paste"
+        size={DEVICE_LARGE ? 28 : 23}
+        color={WHITE}
+      />
+    </TouchableOpacity>
+  ) : null;
 
   const userBrightId = __DEV__ ? (
     <View>
@@ -253,7 +247,10 @@ export const HomeScreen = (props) => {
   ) : null;
 
   return (
-    <View style={[styles.container, { marginTop: headerHeight }]}>
+    <View
+      style={[styles.container, { marginTop: headerHeight }]}
+      testID="HomeScreenContainer"
+    >
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"
@@ -274,7 +271,7 @@ export const HomeScreen = (props) => {
             accessibilityLabel={t('common.accessibilityLabel.profilePhoto')}
           />
         ) : null}
-        <View style={styles.verifyNameContainer} testID="homeScreen">
+        <View style={styles.verifyNameContainer}>
           <View style={styles.nameContainer}>
             <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
               {name}
@@ -450,7 +447,7 @@ export const HomeScreen = (props) => {
             </View>
           </TouchableOpacity>
         </View>
-        <DeepPasteLink />
+        {deepPasteLink}
         <View style={styles.infoContainer}>
           <TouchableOpacity
             style={styles.nodeLinkContainer}

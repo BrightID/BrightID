@@ -46,11 +46,23 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>test.brightid.org</key>
+			<key>brightid.org</key>
 			<dict> 
-            <key>NSExceptionAllowsInsecureHTTPLoads</key>
-            <true/>
-       		</dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+            	<true/>
+            	<key>NSIncludesSubdomains</key>
+            	<true/>
+			</dict>
+			<key>bright.daosquare.io</key>
+			<dict> 
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>brightid.siftal.top</key>
+			<dict> 
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>RCTAsyncStorageExcludeFromBackup</key>

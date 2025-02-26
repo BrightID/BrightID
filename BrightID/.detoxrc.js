@@ -5,7 +5,6 @@ module.exports = {
       $0: 'jest',
       config: 'e2e/jest.config.js',
     },
-    forwardEnv: true,
     jest: {
       setupTimeout: 120000,
     },
@@ -13,7 +12,6 @@ module.exports = {
   behavior: {
     init: {
       reinstallApp: true,
-      launchApp: false,
     },
   },
   apps: {
