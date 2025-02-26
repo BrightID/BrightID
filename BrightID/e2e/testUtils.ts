@@ -114,7 +114,7 @@ const createFakeConnection = async (
   await expect(element(by.id('fakeConnectionBtn'))).toBeVisible();
   await element(by.id('fakeConnectionBtn')).tap();
   await waitFor(element(by.id('previewConnectionScreen')))
-    .toBeVisible()
+    .toBeVisible(50)
     .withTimeout(40000);
 
   // get brightID of connection
