@@ -12,7 +12,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
-import 'react-native-url-polyfill/auto';
 import { currentLogName, LOG } from './src/utils/logging';
 
 // detox e2e tests fail when yellowboxes come up
@@ -27,6 +26,16 @@ if (__DEV__) {
       _console.warn(message);
     }
   };
+}
+
+async function enableMocking() {
+  if (!__DEV__) {
+    return;
+  }
+
+  await import('./msw.polyfills');
+  // const { server } = await import('./src/mocks/server');
+  // server.listen();
 }
 
 // route all console.log() to logger
@@ -64,4 +73,6 @@ FlatList.defaultProps.windowSize = DEVICE_ANDROID ? 5 : 10;
 
 FlatList.defaultProps.removeClippedSubviews = DEVICE_ANDROID;
 
-AppRegistry.registerComponent(appName, () => App);
+enableMocking().then(() => {
+  AppRegistry.registerComponent(appName, () => App);
+});
