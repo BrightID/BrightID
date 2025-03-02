@@ -21,7 +21,7 @@ jobs:
           # cache: 'yarn'
 
       - name: Clear Yarn cache
-        run: rm yarn.lock
+        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
 
       - name: install dependencies
         run: yarn install
