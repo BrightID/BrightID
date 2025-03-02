@@ -20,8 +20,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: ''
-          # cache: 'yarn'
+          cache: 'yarn'
+
+      - name: Clear Yarn cache
+        run: rm -rf node_modules && rm yarn.lock
 
       - name: Install Dependencies
         run: yarn install

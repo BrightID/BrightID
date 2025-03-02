@@ -19,8 +19,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: ''
-          # cache: 'yarn'
+          cache: 'yarn'
+
+      - name: Clear Yarn cache
+        run: rm -rf node_modules && rm yarn.lock
 
       - name: Install dependencies
         run: yarn install
@@ -55,8 +57,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: ''
-          # cache: 'yarn'
+          cache: 'yarn'
+
+      - name: Clear Yarn cache
+        run: rm -rf node_modules && rm yarn.lock
 
       - name: Install dependencies
         run: yarn install
