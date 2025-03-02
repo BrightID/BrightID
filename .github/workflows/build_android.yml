@@ -19,13 +19,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          # cache: 'yarn'
 
-      # - name: Clear Yarn cache
-      #   run: rm -rf node_modules && rm yarn.lock
+      - name: Clear Yarn cache
+        run: yarn cache clean
 
       - name: Install dependencies
-        run: yarn install --force
+        run: yarn install
 
       - name: debug build
         run: |
@@ -57,13 +57,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          # cache: 'yarn'
 
-      # - name: Clear Yarn cache
-      #   run: rm -rf node_modules && rm yarn.lock
+      - name: Clear Yarn cache
+        run: yarn cache clean
 
       - name: Install dependencies
-        run: yarn install --force
+        run: yarn install
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh
