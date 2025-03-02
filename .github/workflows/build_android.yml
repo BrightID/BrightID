@@ -26,7 +26,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn set version 1.22.22 && yarn cache clean && yarn install --frozen-lockfile
 
       - name: debug build
         run: |
@@ -65,7 +65,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn set version 1.22.22 && yarn cache clean && yarn install --frozen-lockfile
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh

@@ -23,7 +23,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn set version 1.22.22 && yarn cache clean && yarn install --frozen-lockfile
 
       - name: Deploy to Codepush - Android
         uses: TripleSpeeder/codepush-action@master
