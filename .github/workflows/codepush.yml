@@ -22,11 +22,11 @@ jobs:
           node-version: 20
           cache: 'yarn'
 
-      - name: Clear Yarn cache
-        run: rm -rf node_modules && rm yarn.lock
+      # - name: Clear Yarn cache
+      #   run: rm -rf node_modules && rm yarn.lock
 
       - name: Install Dependencies
-        run: yarn install
+        run: yarn install --force
 
       - name: Deploy to Codepush - Android
         uses: TripleSpeeder/codepush-action@master
