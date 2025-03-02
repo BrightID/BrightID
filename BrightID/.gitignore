@@ -89,3 +89,4 @@ keystore.properties
 android/app/google-services.json-prod
 android/app/google-services.json
 /coverage/
+kotlin-compiler*

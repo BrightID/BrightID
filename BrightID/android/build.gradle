@@ -10,16 +10,21 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url("$rootDir/../node_modules/detox/Detox-android")
-        }
-        maven { url 'https://maven.google.com' }
-        maven { url "https://www.jitpack.io" }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    }
+    allprojects {
+        repositories {
+            google()
+            maven {
+                url("$rootDir/../node_modules/detox/Detox-android")
+            }
+            maven { url 'https://maven.google.com' }
+            maven { url 'https://www.jitpack.io' }
+        }
     }
 }
 
