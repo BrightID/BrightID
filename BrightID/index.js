@@ -28,16 +28,6 @@ if (__DEV__) {
   };
 }
 
-async function enableMocking() {
-  if (!__DEV__) {
-    return;
-  }
-
-  await import('./msw.polyfills');
-  // const { server } = await import('./src/mocks/server');
-  // server.listen();
-}
-
 // route all console.log() to logger
 LOG.patchConsole();
 LOG.info(`Start logging to ${currentLogName}.`);
@@ -73,6 +63,4 @@ FlatList.defaultProps.windowSize = DEVICE_ANDROID ? 5 : 10;
 
 FlatList.defaultProps.removeClippedSubviews = DEVICE_ANDROID;
 
-enableMocking().then(() => {
-  AppRegistry.registerComponent(appName, () => App);
-});
+AppRegistry.registerComponent(appName, () => App);
