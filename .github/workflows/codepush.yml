@@ -20,10 +20,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
-          # cache: 'yarn'
+          cache: 'yarn'
 
       - name: Install Dependencies
-        run: yarn install
+        run: rm -rf /home/runner/.cache/yarn && yarn install --frozen-lockfile
 
       - name: Deploy to Codepush - Android
         uses: TripleSpeeder/codepush-action@master

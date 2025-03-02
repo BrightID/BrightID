@@ -23,10 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'yarn'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install
+        run: rm -rf /home/runner/.cache/yarn && yarn install --frozen-lockfile
 
       - name: debug build
         run: |
@@ -62,10 +62,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'yarn'
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install
+        run: rm -rf /home/runner/.cache/yarn && yarn install --frozen-lockfile
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh
