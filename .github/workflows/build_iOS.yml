@@ -22,10 +22,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          # cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn cache clean --all && yarn install
+        run: yarn install
 
       - name: Install pod dependencies
         run: |
