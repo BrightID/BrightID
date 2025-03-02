@@ -12,21 +12,18 @@ jobs:
         shell: bash
         working-directory: BrightID
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          node-version: 20
+          cache: ''
+          # cache: 'yarn'
 
       - name: Install dependencies
-        run: rm -rf /home/runner/.cache/yarn && yarn install --frozen-lockfile
+        run: yarn install
 
       - name: debug build
         run: |
@@ -51,21 +48,18 @@ jobs:
         shell: bash
         working-directory: BrightID
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          node-version: 20
+          cache: ''
+          # cache: 'yarn'
 
       - name: Install dependencies
-        run: rm -rf /home/runner/.cache/yarn && yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh
