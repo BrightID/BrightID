@@ -139,6 +139,7 @@ const expectHomescreen = async () => {
   //   .withTimeout(20000);
   // await expect(element(by.id('BrightIdLogo'))).toBeVisible();
   // await element(by.id('BrightIdLogo')).tap();
+  await device.setURLBlacklist(['test.brightid.org/brightid/v6/apps']);
   await expect(element(by.id('HomeScreenContainer'))).toExist();
   await expect(element(by.id('ConnectionsCount'))).toBeVisible();
   // await waitFor(element(by.id('BrightIdLogo')))

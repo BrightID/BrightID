@@ -1,3 +1,6 @@
+import 'fast-text-encoding';
+import 'react-native-url-polyfill/auto';
+// importing these above might be issue, we need to find correct msw polyfill
 import * as React from 'react';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { http, HttpResponse } from 'msw';

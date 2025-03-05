@@ -3,8 +3,6 @@ import { NodeApi } from './src/api/brightId';
 import { hash } from './src/utils/encoding';
 import mockClipboard from '@react-native-clipboard/clipboard/jest/clipboard-mock.js';
 // for msw
-import 'fast-text-encoding';
-import 'react-native-url-polyfill/auto';
 
 jest.mock('@react-native-clipboard/clipboard', () => mockClipboard);
 
