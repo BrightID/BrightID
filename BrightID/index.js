@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import './src/i18n';
+import 'fast-text-encoding';
+import 'react-native-url-polyfill/auto';
 // import { enableScreens } from 'react-native-screens';
 // import { enableFreeze } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
