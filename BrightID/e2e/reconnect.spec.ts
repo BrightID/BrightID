@@ -12,6 +12,7 @@ import { connection_levels, report_reasons } from '@/utils/constants';
 
 describe('Reconnect existing connection', () => {
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
   });

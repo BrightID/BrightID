@@ -23,6 +23,7 @@ describe('Groups', () => {
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
+    await device.launchApp();
     // create identity
     await createBrightID();
 

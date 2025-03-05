@@ -72,3 +72,4 @@ BrightID/android/app/google-services.json-staging
 /brightid-sdk/packages/redux/dist/
 /brightid-sdk/packages/redux/actions/package.json
 /brightid-sdk/packages/redux/reducers/package.json
+BrightID/ios/.xcode.env.local

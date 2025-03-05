@@ -20,6 +20,7 @@ describe('Group Management', () => {
   const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
+    await device.launchApp();
     // const platform = await device.getPlatform();
     // hasBackButton = platform === 'android';
     // create identity

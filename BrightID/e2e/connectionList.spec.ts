@@ -9,6 +9,7 @@ import {
 
 describe('Connection details', () => {
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
 

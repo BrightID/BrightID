@@ -42,12 +42,12 @@ export const updateBlindSig =
       );
       if (sigInfo && sigInfo.sig) {
         console.log(`sig exists for ${app.name} (${verification})`);
-        // eslint-disable-next-line no-continue
+
         continue;
       }
       if (!isVerified(verificationsByName, verification)) {
         console.log(`user is not verified for ${app.name} (${verification})`);
-        // eslint-disable-next-line no-continue
+
         continue;
       }
 
@@ -55,7 +55,7 @@ export const updateBlindSig =
         const network = __DEV__ ? BrightIdNetwork.TEST : BrightIdNetwork.NODE;
         // TODO: Don't fallback to node.brightid.org. 'app.nodeUrl' should be mandatory.
         // noinspection HttpUrlsUsage
-        const url = app.nodeUrl || `http://${network}.brightid.org`;
+        const url = app.nodeUrl || `https://${network}.brightid.org`;
         const api = new NodeApi({ url, id, secretKey });
         const info = stringify({
           app: app.id,
@@ -66,7 +66,7 @@ export const updateBlindSig =
         const { wISchnorrPublic } = await api.getState();
         if (!wISchnorrPublic) {
           console.log('wISchnorrPublic is not set');
-          // eslint-disable-next-line no-continue
+
           continue;
         }
         const client = new WISchnorrClient(wISchnorrPublic);
@@ -116,7 +116,7 @@ export const updateBlindSig =
         console.log('final sig', blindSig);
         if (!client.VerifyWISchnorrBlindSignature(blindSig, info, uid)) {
           console.log(`wrong signature for ${app.name} (${verification})!`);
-          // eslint-disable-next-line no-continue
+
           continue;
         }
 
@@ -153,9 +153,8 @@ export const updateBlindSigs =
         const sigsUpdating = selectSigsUpdating(getState());
         if (!sigsUpdating) {
           dispatch(setSigsUpdating(true));
-          const expireableBlindSigApps = selectExpireableBlindSigApps(
-            getState(),
-          );
+          const expireableBlindSigApps =
+            selectExpireableBlindSigApps(getState());
           console.log('getting blind sigs started');
           for (const app of expireableBlindSigApps) {
             try {

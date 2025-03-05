@@ -4,6 +4,7 @@ import { testContacts } from '@/utils/ContactsProvider.e2e';
 
 describe('Find friends', () => {
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
 

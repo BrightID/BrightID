@@ -66,6 +66,10 @@ const apps = [
 ];
 
 describe('Without account', () => {
+  beforeAll(async () => {
+    await device.launchApp();
+  });
+
   it('should ignore deep link when running in background', async () => {
     // sends app to background and simulate being pulled to foreground again by clicking on deeplink
     await device.sendToHome();

@@ -13,7 +13,6 @@ import {
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
-import codePush from 'react-native-code-push';
 import { SvgXml } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -309,39 +308,6 @@ const CustomDrawerContent = (props) => {
         )}
         onPress={() => {
           navigation.navigate('Settings');
-        }}
-      />
-      <CustomItem
-        testId="drawerUpdateBtn"
-        focused={false}
-        inactiveTintColor={BLACK}
-        inactiveBackgroundColor={WHITE}
-        activeTintColor={WHITE}
-        activeBackgroundColor={ORANGE}
-        label={t('drawer.label.checkForUpdates')}
-        icon={({ focused }) => (
-          <Faq
-            width={DEVICE_LARGE ? 28 : 24}
-            height={DEVICE_LARGE ? 28 : 24}
-            color={focused ? GREY : BLACK}
-            highlight={focused ? WHITE : ORANGE}
-          />
-        )}
-        onPress={() => {
-          codePush.sync(
-            {
-              updateDialog: {},
-              installMode: codePush.InstallMode.IMMEDIATE,
-            },
-            (status) => {
-              if (status === codePush.SyncStatus.UP_TO_DATE) {
-                Alert.alert(
-                  t('drawer.alert.title.upToDate'),
-                  t('drawer.alert.text.upToDate'),
-                );
-              }
-            },
-          );
         }}
       />
       <CustomItem
