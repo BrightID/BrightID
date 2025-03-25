@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import ErrorFallback from '@/components/ErrorFallback';
 
-jest.mock('@react-native-community/clipboard');
+jest.mock('@react-native-clipboard/clipboard');
 
 describe('ErrorFallback', () => {
   const error = new Error(`The error`);

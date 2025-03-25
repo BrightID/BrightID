@@ -5,7 +5,7 @@
  from picsum.
  */
 
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 
 const getPicsumImagePromise = () => {
   return new Promise((resolve, reject) => {

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import {
@@ -25,7 +25,7 @@ interface LogFileScreenProps {
   handleClose: () => void;
 }
 export const LogFileScreen = ({ handleClose }: LogFileScreenProps) => {
-  const [logfileItems, setLogfileItems] = useState<Array<Element>>([]);
+  const [logfileItems, setLogfileItems] = useState<React.ReactNode[]>([]);
   const [logFile, setLogFile] = useState<null | string>(null);
   const [log, setLog] = useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);

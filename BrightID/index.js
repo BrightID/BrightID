@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import './src/i18n';
+import 'fast-text-encoding';
+import 'react-native-url-polyfill/auto';
 // import { enableScreens } from 'react-native-screens';
 // import { enableFreeze } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
@@ -12,7 +14,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
-import 'react-native-url-polyfill/auto';
 import { currentLogName, LOG } from './src/utils/logging';
 
 // detox e2e tests fail when yellowboxes come up

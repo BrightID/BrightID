@@ -180,7 +180,7 @@ export const FormScreen = () => {
   };
 
   const submitDisabled =
-    passwordErrors[0] ||
+    !!passwordErrors[0] ||
     nameErrors[0] ||
     displayName.length < 2 ||
     !finalBase64;

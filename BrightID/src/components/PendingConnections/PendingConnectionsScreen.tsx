@@ -17,7 +17,7 @@ import { isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import ViewPager from '@react-native-community/viewpager';
+import PagerView from 'react-native-pager-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
@@ -41,7 +41,7 @@ export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const viewPagerRef = useRef<ViewPager>(null);
+  const viewPagerRef = useRef<PagerView>(null);
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
   const { backupCompleted } = useSelector((state) => state.user);
 
@@ -117,8 +117,11 @@ export const PendingConnectionsScreen = () => {
         return true;
       }
     };
-    BackHandler.addEventListener('hardwareBackPress', goBack);
-    return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      goBack,
+    );
+    return () => subscription.remove();
   }, [viewPagerRef, activeIndex]);
 
   // leave page if zero pending connections
@@ -159,7 +162,7 @@ export const PendingConnectionsScreen = () => {
 
       return (
         <View
-          style={{ flex: 1, width: '100%' }}
+          style={{ width: '100%', height: '100%' }}
           collapsable={false}
           key={index}
         >
@@ -175,7 +178,7 @@ export const PendingConnectionsScreen = () => {
     const Views = pendingConnectionsToDisplay.map(renderView);
 
     return (
-      <ViewPager
+      <PagerView
         ref={viewPagerRef}
         style={{ flex: 1, width: '100%' }}
         initialPage={0}
@@ -183,11 +186,10 @@ export const PendingConnectionsScreen = () => {
           setActiveIndex(e.nativeEvent.position);
         }}
         orientation="horizontal"
-        transitionStyle="scroll"
-        showPageIndicator={false}
+        pageMargin={0}
       >
         {Views}
-      </ViewPager>
+      </PagerView>
     );
   }, [pendingConnectionsToDisplay]);
 

@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   unittest:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -12,21 +11,20 @@ jobs:
         shell: bash
         working-directory: BrightID
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          node-version: 20
+          # cache: 'yarn'
+
+      - name: Clear Yarn cache
+        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
 
       - name: install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: execute tests
         run: yarn test

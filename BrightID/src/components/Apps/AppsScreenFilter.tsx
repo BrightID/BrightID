@@ -16,8 +16,8 @@ type Props = {
   filter: number;
   setSearchTerm: (searchTerm: string) => void;
   setFilter: (filter: number) => void;
-  fadeBackgroundSearch: Animated.AnimatedInterpolation;
-  translateYSearch: Animated.AnimatedInterpolation;
+  fadeBackgroundSearch: Animated.AnimatedInterpolation<number>;
+  translateYSearch: Animated.AnimatedInterpolation<number>;
 };
 
 const AppsScreenFilter = ({
