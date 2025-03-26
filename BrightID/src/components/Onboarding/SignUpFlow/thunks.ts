@@ -1,5 +1,6 @@
 import nacl from 'tweetnacl';
-import { setKeypair, setPhoto, setUserId } from '@/actions';
+import { setKeypair } from '@brightid/redux/actions';
+import { setPhoto, setUserId } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 
