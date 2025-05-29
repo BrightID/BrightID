@@ -155,9 +155,9 @@
     "button": {
       "cancel": "Cancel",
       "copy": "Copy",
+      "copyLink": "Copy Link",
       "retry": "Retry",
-      "save": "Save",
-      "copyLink": "Copy Link"
+      "save": "Save"
     },
     "camera": {
       "cancel": "Cancel",
@@ -311,10 +311,10 @@
   },
   "devices": {
     "alert": {
+      "addSuperApp": "Are you sure that you want to add {{name}} as a super app? Do this only if you highly trust {{name}} because they can control your BrightID.",
       "bothPrimary": "Both devices configured as primary devices. You can only have a single primary device. Configure one of the devices as secondary to be able to sync them.",
       "confirmAdd": "Are you sure that you want to export your BrightID into another device?",
       "confirmAddPrimary": "Are you sure that you want to export your BrightID into another device and set that as your primary device?",
-      "addSuperApp": "Are you sure that you want to add {{name}} as a super app? Do this only if you highly trust {{name}} because they can control your BrightID.",
       "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
       "confirmSync": "Share and sync your BrightID data with this device?",
       "noPrimary": "Your devices can only be synced by the primary device."
@@ -614,7 +614,6 @@
   "pendingConnections": {
     "label": {
       "alreadyKnown": "Already known",
-      "unknownLevel": "Unknown Level",
       "connections": "Connections",
       "created": "Joined BrightID {{date}}",
       "groups": "Groups",
@@ -623,7 +622,8 @@
       "rating": "How well do you know this connection?",
       "recovery": "Recovery",
       "reported": "Reported",
-      "suspicious": "Suspicious"
+      "suspicious": "Suspicious",
+      "unknownLevel": "Unknown Level"
     },
     "text": {
       "errorGeneric": "Error while connecting. Please try to reconnect.",
@@ -821,18 +821,18 @@
     "placeholder": {
       "confirmPassword": "confirm your password",
       "name": "Your name",
-      "password": "password",
       "newName": "Name",
-      "newPassword": "Password"
+      "newPassword": "Password",
+      "password": "password"
     },
     "text": {
       "createPassword": "Create your BrightID password",
+      "nameAndPhotoNotShared": "Your name and photo will never be shared with apps or stored on servers.",
       "nameNotShared": "Your name will never be shared with apps or\nstored on our blockchain.",
       "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID.",
       "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
       "pleaseAddPhoto": "Please add a photo",
-      "whatsYouName": "What do your friends know you by?",
-      "nameAndPhotoNotShared": "Your name and photo will never be shared with apps or stored on servers."
+      "whatsYouName": "What do your friends know you by?"
     }
   },
   "sync": {
