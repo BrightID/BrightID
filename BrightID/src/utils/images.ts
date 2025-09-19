@@ -14,6 +14,11 @@ const options: Options = {
   useFrontCamera: true,
   compressImageQuality: 0.8,
   mediaType: 'photo',
+  cropperToolbarColor: '#1C2526', // Dark background for toolbar
+  cropperToolbarWidgetColor: '#FFFFFF', // White icons/text
+  cropperStatusBarColor: '#1C2526', // Dark status bar
+  cropperActiveWidgetColor: '#FFFFFF', // White for active elements
+  // cropperToolbarTextColor: '#FFFFFF', // White toolbar text
 };
 
 export const takePhoto = () =>
