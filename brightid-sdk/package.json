@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm run --r --filter \"./packages/**\" build && bun .scripts/generateProxyPackages.ts",
+    "clean": "pnpm run --r --parallel clean && rm -rf packages/**/*.json.tmp",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "devDependencies": {
+    "bun": "1.0.1",
+    "bun-types": "^1.0.3",
+    "glob": "^10.3.10",
+    "typescript": "5.4.2"
+  },
+  "packageManager": "pnpm@8.10.5"
+}

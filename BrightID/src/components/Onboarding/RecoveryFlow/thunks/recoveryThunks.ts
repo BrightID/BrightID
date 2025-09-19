@@ -1,11 +1,11 @@
 import nacl from 'tweetnacl';
+import { setKeypair } from '@brightid/redux/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { hash, urlSafeRandomKey } from '@/utils/encoding';
 import {
   addOperation,
   setConnections,
   setGroups,
-  setKeypair,
   setUserData,
   upsertSig,
 } from '@/actions';

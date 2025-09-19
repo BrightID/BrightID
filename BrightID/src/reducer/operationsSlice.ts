@@ -1,9 +1,9 @@
 import {
-  createSlice,
   createEntityAdapter,
   createSelector,
+  createSlice,
 } from '@reduxjs/toolkit';
-import { RESET_STORE } from '@/actions/resetStore';
+import { RESET_STORE } from '@brightid/redux/actions';
 import {
   LOCAL_OPERATION_KEEP_THRESHOLD,
   operation_states,
