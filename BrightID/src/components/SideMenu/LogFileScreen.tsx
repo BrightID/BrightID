@@ -6,10 +6,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  RefreshControl,
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { Picker } from '@react-native-picker/picker';
 import {
   compareLogs,
@@ -107,7 +106,7 @@ export const LogFileScreen = ({ handleClose }: LogFileScreenProps) => {
             onPress={onRefresh}
             disabled={loading}
           >
-            <Material
+            <MaterialDesignIcons
               size={24}
               name="refresh"
               color={LIGHT_BLACK}
@@ -122,7 +121,7 @@ export const LogFileScreen = ({ handleClose }: LogFileScreenProps) => {
             onPress={handleCopyPress}
             disabled={loading}
           >
-            <Material
+            <MaterialDesignIcons
               size={24}
               name="content-copy"
               color={LIGHT_BLACK}
@@ -137,7 +136,7 @@ export const LogFileScreen = ({ handleClose }: LogFileScreenProps) => {
             onPress={handleClose}
             disabled={loading}
           >
-            <Material
+            <MaterialDesignIcons
               size={24}
               name="close-circle"
               color={RED}

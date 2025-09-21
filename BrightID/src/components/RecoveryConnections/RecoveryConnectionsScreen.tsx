@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useFocusEffect } from '@react-navigation/native';
 import { selectPendingOperations } from '@/reducer/operationsSlice';
@@ -40,7 +40,7 @@ const EmptyList = () => {
         paddingHorizontal: '10%',
       }}
     >
-      <MaterialCommunityIcons
+      <MaterialDesignIcons
         size={DEVICE_LARGE ? 48 : 38}
         name="alert-outline"
         color={GREY}

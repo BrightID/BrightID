@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -50,7 +50,11 @@ function TrustLevelView({ level, connectionId }: Props) {
           testID="EditConnectionLevelBtn"
           onPress={setLevel}
         >
-          <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color={BLUE} />
+          <MaterialDesignIcons
+            name="pencil"
+            size={DEVICE_LARGE ? 22 : 20}
+            color={BLUE}
+          />
         </TouchableOpacity>
       )}
     </View>

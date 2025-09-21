@@ -5,12 +5,6 @@ import 'react-native-url-polyfill/auto';
 // import { enableScreens } from 'react-native-screens';
 // import { enableFreeze } from 'react-native-screens';
 import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
@@ -42,12 +36,6 @@ LOG.info(`Start logging to ${currentLogName}.`);
 // enableFreeze(true);
 
 // Bootstrap fonts
-Ionicons.loadFont().catch((err) => console.log(err));
-SimpleLineIcons.loadFont().catch((err) => console.log(err));
-MaterialCommunityIcons.loadFont().catch((err) => console.log(err));
-Octicons.loadFont().catch((err) => console.log(err));
-AntDesign.loadFont().catch((err) => console.log(err));
-MaterialIcons.loadFont().catch((err) => console.log(err));
 
 // Fix Font Scaling
 

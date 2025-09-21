@@ -5,7 +5,7 @@ import { fontSize } from '@/theme/fonts';
 import { GRAY9, GREEN, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useTranslation } from 'react-i18next';
 
 type RecoverAccountParams = {
@@ -21,8 +21,9 @@ export const RecoverAccount = ({
   recoveredGroups,
 }: RecoverAccountParams) => {
   const [stateDescription, setStateDescription] = useState('');
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -81,9 +82,10 @@ export const RecoverAccount = ({
       <View style={styles.statusContainer}>
         <View style={{ marginTop: 20, marginBottom: 20 }}>
           {iconData ? (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 44}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />

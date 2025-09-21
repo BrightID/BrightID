@@ -16,7 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useDispatch, useSelector } from '@/store/hooks';
 import {
   fetchApps,
@@ -224,7 +224,7 @@ export const HomeScreen = (props) => {
         }
       }}
     >
-      <Material
+      <MaterialDesignIcons
         name="content-paste"
         size={DEVICE_LARGE ? 28 : 23}
         color={WHITE}
@@ -401,7 +401,7 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
-            <Material
+            <MaterialDesignIcons
               name="qrcode"
               color={BLACK}
               size={DEVICE_LARGE ? 25 : 20}

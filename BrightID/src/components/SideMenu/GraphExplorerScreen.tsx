@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDrawerStatus } from '@react-navigation/drawer';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useSelector } from 'react-redux';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { BLUE, BLACK, WHITE } from '@/theme/colors';
@@ -54,7 +54,7 @@ export const GraphExplorerScreen = function () {
             </Text>
           </View>
           <View style={styles.copyButton}>
-            <Material
+            <MaterialDesignIcons
               name="content-copy"
               size={DEVICE_LARGE ? 28 : 24}
               color={BLACK}
@@ -66,7 +66,7 @@ export const GraphExplorerScreen = function () {
         </TouchableOpacity>
       ) : (
         <View style={styles.noExplorerCode}>
-          <Material
+          <MaterialDesignIcons
             name="boom-gate-alert-outline"
             size={30}
             color={BLACK}

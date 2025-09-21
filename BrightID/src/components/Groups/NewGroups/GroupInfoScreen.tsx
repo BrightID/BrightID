@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { chooseImage } from '@/utils/images';
@@ -91,7 +91,7 @@ export const GroupInfoScreen = ({ navigation }: Props) => {
                 accessible={true}
                 accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
               >
-                <SimpleLineIcons size={26} name="camera" color={DARK_GREY} />
+                <Ionicons size={26} name="camera-outline" color={DARK_GREY} />
               </TouchableOpacity>
             )}
           </View>

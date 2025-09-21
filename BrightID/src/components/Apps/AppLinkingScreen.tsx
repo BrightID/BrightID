@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
@@ -92,9 +92,10 @@ const EarlyErrorView = ({ error }: EarlyErrorViewProps) => {
       <View style={styles.statusContainer}>
         <View>
           {iconData && (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 44}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />
@@ -180,9 +181,10 @@ const AppLinkingView = ({ step, appName, text }: AppLinkingViewProps) => {
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 44}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />

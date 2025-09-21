@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import {
   BLACK,
@@ -43,8 +43,9 @@ export const RestoreBackup = ({
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(true);
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -124,9 +125,10 @@ export const RestoreBackup = ({
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 44}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />

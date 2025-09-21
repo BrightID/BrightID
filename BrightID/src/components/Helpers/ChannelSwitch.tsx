@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Easing,
 } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { DARK_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
@@ -79,7 +79,7 @@ const ChannelSwitch = ({ value, onValueChange, onLongPress, testID }) => {
             },
           ]}
         >
-          <Material
+          <MaterialDesignIcons
             name="account-multiple"
             size={DEVICE_LARGE ? 22 : 18}
             color={WHITE}
@@ -93,7 +93,7 @@ const ChannelSwitch = ({ value, onValueChange, onLongPress, testID }) => {
             },
           ]}
         >
-          <Material
+          <MaterialDesignIcons
             name="account"
             size={DEVICE_LARGE ? 22 : 18}
             color={WHITE}

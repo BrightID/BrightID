@@ -6,7 +6,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { WHITE, BLUE, GREY, RED, LIGHT_GREY } from '@/theme/colors';
@@ -174,7 +174,7 @@ export const MemberCard = ({
             style={styles.moreIcon}
             onPress={handleActionSheet}
           >
-            <Material
+            <MaterialDesignIcons
               name="dots-vertical"
               size={ICON_SIZE}
               color={LIGHT_GREY}

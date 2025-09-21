@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
@@ -27,7 +27,7 @@ const ErrorFallback = ({ error, resetError }: ErrorFallbackProps) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.topContent}>
         <Text style={styles.title}>Oops!</Text>
-        <Text style={styles.subtitle}>There's an error</Text>
+        <Text style={styles.subtitle}>There&apos;s an error</Text>
         <Text style={styles.error}>{error.toString()}</Text>
         <TouchableOpacity style={styles.button} onPress={resetError}>
           <Text style={styles.buttonText}>Try again</Text>
@@ -39,7 +39,7 @@ const ErrorFallback = ({ error, resetError }: ErrorFallbackProps) => {
           style={styles.copyStackButton}
           onPress={copyStacktrace}
         >
-          <Material
+          <MaterialDesignIcons
             size={24}
             name="content-copy"
             color={LIGHT_BLACK}

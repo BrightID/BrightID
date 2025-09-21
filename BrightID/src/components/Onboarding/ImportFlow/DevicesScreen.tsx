@@ -9,7 +9,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -211,7 +211,7 @@ export const DevicesScreen = ({ route }) => {
             testID={`RemoveDeviceBtn-${index}`}
             onPress={() => remove(device)}
           >
-            <Material
+            <MaterialDesignIcons
               name="delete"
               size={DEVICE_LARGE ? 22 : 20}
               color={BLUE}
@@ -259,7 +259,7 @@ export const DevicesScreen = ({ route }) => {
               onPress={sync}
             >
               <View style={styles.syncBtnContainer}>
-                <Material
+                <MaterialDesignIcons
                   name="sync"
                   size={DEVICE_LARGE ? 22 : 20}
                   color={WHITE}

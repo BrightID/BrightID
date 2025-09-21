@@ -16,7 +16,7 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import BarcodeMask from 'react-native-barcode-mask';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import i18next from 'i18next';
 import {
   useCameraPermission,
@@ -342,7 +342,7 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
                   navigation.navigate('MyCode');
                 }}
               >
-                <Material
+                <MaterialDesignIcons
                   name="qrcode"
                   size={DEVICE_LARGE ? 22 : 20}
                   color={WHITE}
@@ -367,7 +367,7 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
                   navigation.navigate('PendingConnections');
                 }}
               >
-                <Material
+                <MaterialDesignIcons
                   name="account-multiple-plus-outline"
                   size={DEVICE_LARGE ? 32 : 26}
                   color={ORANGE}

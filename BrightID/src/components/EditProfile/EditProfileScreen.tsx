@@ -22,7 +22,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDrawerStatus } from '@react-navigation/drawer';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_IOS, DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
@@ -388,7 +388,11 @@ const SocialMediaLink = (props: {
           style={styles.closeButton}
           onPress={() => removeSocialMedia(id)}
         >
-          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
+          <MaterialDesignIcons
+            name="close"
+            size={DEVICE_LARGE ? 18 : 16}
+            color="#000"
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.shareSocialMediaToggleContainer}>
@@ -466,7 +470,7 @@ const SocialMediaLinks = (props: { type: SocialMediaType }) => {
             }}
             style={styles.addSocialMediaBtn}
           >
-            <Material
+            <MaterialDesignIcons
               name="plus-thick"
               size={DEVICE_LARGE ? 18 : 16}
               color={DARK_BLUE}

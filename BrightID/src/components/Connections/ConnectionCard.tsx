@@ -13,7 +13,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -164,7 +164,7 @@ const ConnectionCard = (props: Props) => {
           );
         }}
       >
-        <Material
+        <MaterialDesignIcons
           color={LIGHT_BLACK}
           name="close"
           size={DEVICE_LARGE ? 22 : 18}

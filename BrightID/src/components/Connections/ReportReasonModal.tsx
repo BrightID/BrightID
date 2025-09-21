@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import i18next from 'i18next';
 import { BlurView } from '@react-native-community/blur';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useTranslation } from 'react-i18next';
 import { StackScreenProps } from '@react-navigation/stack';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -180,7 +180,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
           </Text>
         </View>
         <View style={styles.message}>
-          <Material name="information" size={26} color={BLUE} />
+          <MaterialDesignIcons name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
             {reporting
               ? reportConnectionDetailsText
