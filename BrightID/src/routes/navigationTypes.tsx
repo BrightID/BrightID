@@ -36,7 +36,7 @@ type ModalStackParamList = {
     cooldownPeriod?: number;
     successCallback?: () => void;
   };
-  // NodeModal: undefined;
+  NodeModal: undefined;
 };
 
 // 1st level - Just render "Home" (not HomeScreen!)

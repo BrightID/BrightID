@@ -12,7 +12,7 @@ import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
-// import NodeModal from '@/components/Helpers/NodeModal';
+import NodeModal from '@/components/Helpers/NodeModal';
 import { Stack } from './Navigator';
 
 export const modalOptions: StackNavigationOptions = {
@@ -68,11 +68,11 @@ const Modals = () => {
         options={modalOptions}
         component={RecoveryCooldownInfoModal}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="NodeModal"
         options={modalOptions}
         component={NodeModal}
-      /> */}
+      />
     </>
   );
 };
