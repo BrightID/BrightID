@@ -3,7 +3,7 @@ import { Axios } from 'axios';
 const getImagePromise = () => {
   return new Promise((resolve, reject) => {
     Axios({
-      url: 'https://loremflickr.com/180/180',
+      url: 'https://picsum.photos/180/180',
       method: 'GET',
       responseType: 'stream',
     })
