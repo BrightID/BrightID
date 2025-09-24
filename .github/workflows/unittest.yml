@@ -14,17 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 23
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: 23
-          # cache: 'yarn'
-
-      - name: Clear Yarn cache
-        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
+          node-version: 20
+          cache: 'yarn'
 
       - name: install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --network-concurrency=1
 
       - name: execute tests
         run: yarn test
