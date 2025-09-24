@@ -61,7 +61,7 @@
     "js-sha256": "0.9.0",
     "jsbn": "1.1.0",
     "libphonenumber-js": "1.12.4",
-    "lodash": "4.17.20",
+    "lodash": "^4.17.21",
     "moment": "2.30.1",
     "promise.any": "2.0.6",
     "prop-types": "15.8.1",
@@ -199,8 +199,5 @@
       ]
     }
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "resolutions": {
-    "lodash": "4.17.20"
-  }
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
