@@ -21,8 +21,8 @@ jobs:
           node-version: '20.x'
           cache: 'yarn'
 
-      #- name: Clear Yarn cache
-      #  run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
+      - name: Clear Yarn cache
+        run: yarn cache clean #&& rm yarn.lock $$ rm -rf node_modules
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
