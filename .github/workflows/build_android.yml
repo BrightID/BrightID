@@ -13,19 +13,19 @@ jobs:
         working-directory: BrightID
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          # cache: 'yarn'
+          node-version: '20.x'
+          cache: 'yarn'
 
-      - name: Clear Yarn cache
-        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
+#      - name: Clear Yarn cache
+#        run: yarn cache clean
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --network-concurrency=1
 
       - name: debug build
         run: |
@@ -57,13 +57,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: 'yarn'
+          cache: 'yarn'
 
-      - name: Clear Yarn cache
-        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
+      # - name: Clear Yarn cache
+      #   run: yarn cache clean
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --network-concurrency=1
 
       - name: Decrypt keystore and Google Credential
         run: ./scripts/decrypt.sh
@@ -88,51 +88,47 @@ jobs:
           name: brightId-release.aab
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/release/app-release.aab
 
-  # build_staging_apk:
-  #   if: github.repository_owner == 'BrightID'
+  build_staging_apk:
+    if: github.repository_owner == 'BrightID'
 
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  #   defaults:
-  #     run:
-  #       shell: bash
-  #       working-directory: BrightID
+    defaults:
+      run:
+        shell: bash
+        working-directory: BrightID
 
-  #   strategy:
-  #     matrix:
-  #       node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v3
 
-  #   steps:
-  #     - uses: actions/checkout@v3
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
 
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --network-concurrency=1
 
-  #     - name: Install dependencies
-  #       run: yarn install --frozen-lockfile
+      - name: Decrypt keystore and Google Credential
+        run: ./scripts/staging.sh
+        env:
+          ENCRYPT_PASSWORD: ${{ secrets.ENCRYPT_PASSWORD }}
 
-  #     - name: Decrypt keystore and Google Credential
-  #       run: ./scripts/staging.sh
-  #       env:
-  #         ENCRYPT_PASSWORD: ${{ secrets.ENCRYPT_PASSWORD }}
+      - name: build staging apk
+        run: cd android && ./gradlew assembleStaging && cd ..
 
-  #     - name: build staging apk
-  #       run: cd android && ./gradlew assembleStaging && cd ..
+      - name: build staging aab
+        run: cd android && ./gradlew bundleStaging && cd ..
 
-  #     - name: build staging aab
-  #       run: cd android && ./gradlew bundleStaging && cd ..
+      - name: Upload apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: brightId-staging.apk
+          path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/staging/app-staging.apk
 
-  #     - name: Upload apk
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: brightId-staging.apk
-  #         path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/staging/app-staging.apk
-
-  #     - name: Upload aab
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: brightId-staging.aab
-  #         path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/staging/app-staging.aab
+      - name: Upload aab
+        uses: actions/upload-artifact@v4
+        with:
+          name: brightId-staging.aab
+          path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/bundle/staging/app-staging.aab

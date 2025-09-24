@@ -18,13 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: 'yarn'
-
-      - name: Clear Yarn cache
-        run: yarn cache clean && rm yarn.lock $$ rm -rf node_modules
+          cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --network-concurrency=1
 
       - name: Install pod dependencies
         run: |
