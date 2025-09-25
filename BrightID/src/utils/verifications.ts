@@ -1,10 +1,9 @@
 import { Parser, Value } from 'expr-eval';
-import { Dictionary } from 'ramda';
 import _ from 'lodash';
 import { UserTasks } from '@/components/Tasks/UserTasks';
 
 export const isVerified = (
-  verifications: Value | Dictionary<any>,
+  verifications: Value | Record<string, any>,
   verification: string,
 ) => {
   try {
