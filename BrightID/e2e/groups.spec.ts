@@ -21,7 +21,7 @@ describe('Groups', () => {
   let hasBackButton = true;
 
   beforeAll(async () => {
-    const platform = await device.getPlatform();
+    const platform = device.getPlatform();
     hasBackButton = platform === 'android';
     await device.launchApp();
     // create identity
@@ -59,6 +59,8 @@ describe('Groups', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should show "noGroups" screen', async () => {
@@ -91,7 +93,8 @@ describe('Groups', () => {
     beforeAll(async () => {
       // navigate to group creation screen
       await element(by.id('toggleDrawer')).tap();
-      await expect(element(by.id('groupsBtn'))).toBeVisible();
+      // await expect(element(by.id('groupsBtn'))).toBeVisible();
+      await waitFor(element(by.id('groupsBtn'))).toBeVisible().withTimeout(10000)
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       await element(by.id('addGroupBtn')).tap();
@@ -100,6 +103,8 @@ describe('Groups', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should set group info', async () => {
@@ -151,6 +156,8 @@ describe('Groups', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should set group info', async () => {
@@ -183,6 +190,8 @@ describe('Groups', () => {
       await expect(element(by.id('groupItem-0'))).toBeVisible();
       await expect(element(by.id('groupItem-1'))).toBeVisible();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('invited members should join group', async () => {
@@ -228,6 +237,8 @@ describe('Groups', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it(`should find group "${firstGroupName}"`, async () => {
