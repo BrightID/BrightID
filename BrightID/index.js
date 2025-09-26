@@ -2,16 +2,18 @@ import 'react-native-gesture-handler';
 import './src/i18n';
 import 'fast-text-encoding';
 import 'react-native-url-polyfill/auto';
-// import { enableScreens } from 'react-native-screens';
-// import { enableFreeze } from 'react-native-screens';
-import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
+import { AppRegistry, FlatList, LogBox, Text, TextInput } from 'react-native';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants.ts';
 import App from './src/App.tsx';
 import { name as appName } from './app.json';
 import { currentLogName, LOG } from './src/utils/logging';
+import DetoxEnabled from './src/utils/Detox';
 
-// detox e2e tests fail when yellowboxes come up
-console.disableYellowBox = true;
+// detox e2e tests fail when logboxes come up
+if (DetoxEnabled) {
+  LogBox.ignoreAllLogs();
+}
+
 
 // remove setting a timer warning
 if (__DEV__) {
@@ -27,13 +29,6 @@ if (__DEV__) {
 // route all console.log() to logger
 LOG.patchConsole();
 LOG.info(`Start logging to ${currentLogName}.`);
-
-// enable react-native-screens
-// enableScreens is causing some android devices to crash
-// enable screens might be causing ios swipe navigation to freeze
-// this disables react-native-screen
-// enableScreens(false);
-// enableFreeze(true);
 
 // Bootstrap fonts
 
