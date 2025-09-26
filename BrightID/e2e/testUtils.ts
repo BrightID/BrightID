@@ -157,13 +157,13 @@ const navigateHome = async () => {
   // there might be several "navHomeBtn" instances in the view hierarchy
   try {
     await element(by.id('NavHomeBtn')).atIndex(0).tap();
-  } catch (err) {
+  } catch {
     try {
       await element(by.id('NavHomeBtn')).atIndex(1).tap();
-    } catch (err) {
+    } catch {
       try {
         await element(by.id('NavHomeBtn')).atIndex(2).tap();
-      } catch (err) {
+      } catch {
         try {
           await element(by.id('NavHomeBtn')).atIndex(3).tap();
         } catch (err) {
