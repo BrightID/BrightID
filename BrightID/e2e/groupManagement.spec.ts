@@ -59,6 +59,8 @@ describe('Group Management', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should set group info', async () => {
@@ -92,6 +94,8 @@ describe('Group Management', () => {
       await expect(element(by.id('groupItem-0'))).toBeVisible();
       await expect(element(by.id('groupName'))).toHaveText(GroupName);
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('invited members should join group', async () => {
@@ -140,6 +144,8 @@ describe('Group Management', () => {
       // Currently there is no way to test actual clipboard contents :-/
       await element(by.id('NavBackBtn')).tap();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
   });
 
@@ -174,6 +180,8 @@ describe('Group Management', () => {
       // Now on members screen. Go back to homescreen.
       await element(by.id('NavBackBtn')).tap();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should dismiss regular member from group', async () => {
@@ -209,7 +217,10 @@ describe('Group Management', () => {
       // Now on members screen. Go back to homescreen.
       await element(by.id('NavBackBtn')).tap();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
+
   });
 
   describe('Promote regular member to admin', () => {
@@ -230,9 +241,10 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).toBeVisible();
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
       await element(by.id('NavBackBtn')).tap();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     it('should promote member of group to admin', async () => {
@@ -293,6 +305,8 @@ describe('Group Management', () => {
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
       await element(by.id('NavBackBtn')).tap();
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
   });
 
@@ -341,6 +355,8 @@ describe('Group Management', () => {
       await expectGroupsScreen();
       // go back to home screen
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
       await expectHomescreen();
     });
   });
