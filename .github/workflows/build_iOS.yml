@@ -4,9 +4,7 @@ on: [push, pull_request]
 jobs:
   build_debug_ipa:
     if: github.repository_owner == 'BrightID'
-
     runs-on: macos-latest
-
     defaults:
       run:
         working-directory: BrightID
@@ -23,9 +21,19 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --network-concurrency=1
 
-      - name: Install pod dependencies
+      - name: Clean and reinstall Pods
         run: |
-          cd ios && bundle install && bundle exec pod install && cd ..
+          cd ios
+          bundle install
+          rm -rf Pods Podfile.lock build
+          bundle exec pod install
+          cd ..
+
+      - name: Clean Xcode build folder
+        run: |
+          cd ios
+          xcodebuild clean -workspace BrightID.xcworkspace -scheme BrightID
+          cd ..
 
       - name: debug build
         run: |
