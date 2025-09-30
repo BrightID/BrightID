@@ -1,4 +1,5 @@
 import { Axios } from 'axios';
+import { Buffer } from 'buffer'
 
 const getImagePromise = () => {
   return new Promise((resolve, reject) => {
@@ -33,10 +34,10 @@ const getImagePromise = () => {
 };
 
 export default {
-  openCamera(options) {
+  openCamera(_options) {
     return getImagePromise();
   },
-  openPicker(options) {
+  openPicker(_options) {
     return getImagePromise();
   },
 };

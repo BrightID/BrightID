@@ -15,7 +15,7 @@
 # setup nvm
 export NVM_DIR="$HOME"/.nvm
 source "$NVM_DIR"/nvm.sh
-nvm use 16 || exit
+nvm use 20 || exit
 
 # kill all gradle daemons
 echo "killing gradle daemons..."
@@ -25,16 +25,6 @@ pkill -f '.*GradleDaemon.*'
 rm -rf "$HOME"/.gradle/daemon/*
 cd ..
 echo "done"
-
-# clear gradle caches
-echo "clearing gradle caches"
-rm -rf "$HOME"/.gradle/caches
-
-# clear watchman watches
-watchman watch-del-all
-
-# clear Metro cache
-rm -rf /tmp/metro-*
 
 # clear all intermediate/untracked files in android folder
 echo "running \"git clean -f -d\" in android folder"
@@ -50,6 +40,16 @@ echo "done"
 
 # install node modules
 yarn install
+
+# clear gradle caches
+echo "clearing gradle caches"
+rm -rf "$HOME"/.gradle/caches
+
+# clear watchman watches
+watchman watch-del-all
+
+# clear Metro cache
+rm -rf /tmp/metro-*
 
 # run gradle clean
 cd android || exit

@@ -49,7 +49,7 @@ export const MemberCard = ({
 }: MemberCardProps) => {
   const navigation = useNavigation();
   const [contextActions, setContextActions] = useState<Array<string>>([]);
-  const [flagged, setFlagged] = useState<boolean | number>(false);
+  const [flagged, _] = useState<boolean | number>(false);
   const [imgErr, setImgErr] = useState(false);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -136,7 +136,7 @@ export const MemberCard = ({
 
   const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
-    <View testID={memberTestID}>
+    <View testID={memberTestID} accessible={true}>
       <View style={styles.container} testID={testID}>
         <TouchableOpacity
           onPress={() => {
