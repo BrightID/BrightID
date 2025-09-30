@@ -118,8 +118,8 @@ describe('With account', () => {
         apps[0].context
       }/${getRandomAddres()}`,
     });
-    // Alert should be open
-    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
+    // Alert should be open. Wait 5 seconds as it can take some time to load the app
+    await waitFor(element(by.id('AppLinkingConfirmationView'))).toBeVisible().withTimeout(5000);
     // cancel linking
     await element(by.id('RejectLinking')).tap();
     await expectAppsScreen();
