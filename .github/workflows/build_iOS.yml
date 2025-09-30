@@ -34,9 +34,11 @@ jobs:
           cd ios
           xcodebuild clean -workspace BrightID.xcworkspace -scheme BrightID
           cd ..
-
-      - name: Fix Pods directory permissions
-        run: sudo chmod -R 777 ios/Pods
+          
+      - name: Fix Pods permissions for CI
+        run: |
+          sudo chmod -R 777 ios/Pods
+          sudo chmod -R 777 ios/build
 
       - name: debug build
         run: |
