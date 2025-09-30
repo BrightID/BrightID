@@ -21,6 +21,7 @@ target 'BrightID' do
     :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :hermes_enabled => true
   )
 
   post_install do |installer|
