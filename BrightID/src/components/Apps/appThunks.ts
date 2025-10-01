@@ -608,7 +608,7 @@ export const linkAppId =
         sigErrors.push(
           `Error linking verification ${sig.verification}. Blind sig is missing.`,
         );
-        // eslint-disable-next-line no-continue
+
         continue;
       }
       try {

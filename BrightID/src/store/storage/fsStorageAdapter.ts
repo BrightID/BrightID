@@ -2,7 +2,7 @@
  * @flow
  */
 
-import RNFetchBlob, { Encoding } from 'rn-fetch-blob';
+import RNFetchBlob, { Encoding } from 'react-native-blob-util';
 import { InteractionManager } from 'react-native';
 
 const createStoragePathIfNeeded = (path: string) =>
@@ -14,12 +14,11 @@ const createStoragePathIfNeeded = (path: string) =>
         : RNFetchBlob.fs.mkdir(path),
     );
 
-const onStorageReadyFactory = (storagePath: string) => (
-  func: (...args: Array<any>) => any,
-) => {
-  const storage = createStoragePathIfNeeded(storagePath);
-  return (...args: Array<any>) => storage.then(() => func(...args));
-};
+const onStorageReadyFactory =
+  (storagePath: string) => (func: (...args: Array<any>) => any) => {
+    const storage = createStoragePathIfNeeded(storagePath);
+    return (...args: Array<any>) => storage.then(() => func(...args));
+  };
 
 const defaultStoragePath = () =>
   `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import DropdownAlert from 'react-native-dropdownalert';
+import DropdownAlert, {DropdownAlertData} from 'react-native-dropdownalert';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { navigate, getRoute } from '@/NavigationService';
@@ -42,13 +42,15 @@ export const NotificationBanner = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  // const route = useRoute();
-  const dropDownAlertRef = useRef(null);
   const activeNotification = useSelector(
     (state) => state.notifications.activeNotification,
   );
-
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
+
+  let alertRef = useRef(
+    (_data?: DropdownAlertData) => new Promise<DropdownAlertData>(res => res),
+  );
+  let dismissRef = useRef(() => {});
 
   useEffect(() => {
     if (!activeNotification) {
@@ -57,23 +59,18 @@ export const NotificationBanner = () => {
 
     const route = getRoute();
 
-    dropDownAlertRef.current?.closeAction('cancel');
-
     if (!screenBlackList.includes(route?.name)) {
       if (!DetoxEnabled) {
-        dropDownAlertRef.current?.alertWithType(
-          'custom',
-          activeNotification?.title,
-          activeNotification?.message,
-        );
+        alertRef.current({
+          type: 'custom',
+          title: activeNotification?.title,
+          message: activeNotification?.message,
+        })
       }
     }
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
-    // always close the banner first
-    // dropDownAlertRef.current?.closeAction('automatic');
-
     if (pendingConnections.length) {
       dispatch(
         setActiveNotification({
@@ -97,34 +94,15 @@ export const NotificationBanner = () => {
     if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
     }
-  };
-
-  const _onClose = () => {
-    console.log('onClose, setting null');
     dispatch(setActiveNotification(null));
   };
 
   return (
     <DropdownAlert
-      ref={dropDownAlertRef}
-      closeInterval={NOTIFICATION_TIMEOUT}
-      containerStyle={styles.container}
-      contentContainerStyle={{
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      titleStyle={styles.title}
-      messageStyle={styles.message}
-      updateStatusBar={true}
-      activeStatusBarBackgroundColor={LIGHT_GREEN}
-      activeStatusBarStyle="dark-content"
-      testID="notificationBanner"
-      elevation={10}
-      zIndex={100}
-      onTap={_onTap}
-      onClose={_onClose}
+      alert={func => (alertRef.current = func)}
+      dismiss={func => (dismissRef.current = func)}
+      dismissInterval={NOTIFICATION_TIMEOUT}
+      onDismissPress={_onTap}
       renderImage={() => (
         <View style={styles.icon}>
           <Icon
@@ -133,16 +111,31 @@ export const NotificationBanner = () => {
           />
         </View>
       )}
+      zIndex={100}
+      safeViewStyle={styles.safeView}
+      alertViewStyle={styles.alertView}
+      titleTextStyle={styles.title}
+      messageTextStyle={styles.message}
       panResponderEnabled={false}
-      tapToCloseEnabled={true}
+      updateStatusBar={true}
+      activeStatusBarBackgroundColor={LIGHT_GREEN}
+      activeStatusBarStyle="dark-content"
+      elevation={10}
     />
-  );
+  )
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeView: {
     backgroundColor: LIGHT_GREEN,
     height: HEIGHT * 0.15,
+    width: '100%',
+  },
+  alertView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontFamily: 'Poppins-Medium',

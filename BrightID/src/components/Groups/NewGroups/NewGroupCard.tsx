@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { photoDirectory } from '@/utils/filesystem';
@@ -36,9 +36,9 @@ export const NewGroupCard = ({
         style={styles.moreIcon}
         onPress={handleGroupSelect}
       >
-        <AntDesign
+        <MaterialDesignIcons
           size={30.4}
-          name={selected ? 'checkcircle' : 'checkcircleo'}
+          name={selected ? 'check-circle' : 'check-circle-outline'}
           color={selected ? GREEN : BLACK}
         />
       </TouchableOpacity>

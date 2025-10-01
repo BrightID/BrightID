@@ -1,0 +1,90 @@
+name: Build iOS
+on: [push, pull_request]
+
+jobs:
+  build_debug_ipa:
+    if: github.repository_owner == 'BrightID'
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: BrightID
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --network-concurrency=1
+
+      - name: Clean and reinstall Pods
+        run: |
+          cd ios
+          bundle install
+          rm -rf Pods Podfile.lock build
+          bundle exec pod install
+          cd ..
+
+      - name: Clean Xcode build folder
+        run: |
+          cd ios
+          xcodebuild clean -workspace BrightID.xcworkspace -scheme BrightID
+          cd ..
+          
+      - name: Fix Pods permissions for CI
+        run: |
+          sudo chmod -R 777 ios/Pods
+          sudo chmod -R 777 ios/build
+
+      - name: debug build
+        run: |
+          xcodebuild \
+            -workspace ios/BrightID.xcworkspace \
+            -scheme BrightID \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BrightID.app
+          path: ios/build/Build/Products/Debug-iphonesimulator/BrightID.app
+
+  # build_release_ipa:
+  #   runs-on: macos-latest
+
+  #   defaults:
+  #     run:
+  #       working-directory: BrightID
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Use Node.js 20
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'yarn'
+
+  #     - name: Install dependencies
+  #       run: yarn install
+
+  #     - name: Install pod dependencies
+  #       run: |
+  #         cd ios && bundle install && bundle exec pod install && cd ..
+
+  #     - name: release build
+  #       run: |
+  #         echo "TODO: Insert iOS Release build instructions here :-)"
+
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: brightId-release.ipa
+  #         path: /home/runner/work/BrightID/BrightID/BrightID/ios/path/to/brightID-release.ipa

@@ -12,6 +12,7 @@ import {
 
 describe('social recovery', () => {
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
   });

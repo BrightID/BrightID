@@ -16,9 +16,15 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import BarcodeMask from 'react-native-barcode-mask';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import i18next from 'i18next';
-import { BarCodeReadEvent } from 'react-native-camera';
+import {
+  useCameraPermission,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import DetoxEnabled from '@/utils/Detox';
+// import { BarCodeReadEvent } from 'react-native-vision-camera';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -36,7 +42,7 @@ import {
   qrCodeURL_types,
   UNIVERSAL_LINK_PREFIX,
 } from '@/utils/constants';
-import { RNCamera } from './RNCameraProvider';
+import { VisionCamera } from '../../utils/RNCameraProvider';
 import {
   setRecoveryAesKey,
   setRecoveryChannel,
@@ -54,7 +60,7 @@ function validQrString(qrString: string) {
 /**
  * Scan code screen of BrightID
  * ==================================================================
- * displays a react-native-camera view
+ * displays a react-native-vision-camera view
  * after scanning qrcode - the rtc id is set
  *
  */
@@ -73,8 +79,29 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
+  const [askedPermssion, setAskedPermission] = useState(false);
   const name = useSelector((state) => state.user.name);
   const { t } = useTranslation();
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const device = useCameraDevice('back');
+  const isActive = navigation.isFocused();
+
+  console.log('has camera permission', hasPermission);
+  console.log('device', device);
+
+  useEffect(() => {
+    if (!hasPermission && !askedPermssion) {
+      requestPermission();
+      setAskedPermission(true);
+    }
+  }, [hasPermission, requestPermission, askedPermssion]);
+
+  // androidCameraPermissionOptions={{
+  //   title: t('common.camera.title'),
+  //   message: t('common.camera.message'),
+  //   buttonPositive: t('common.camera.ok'),
+  //   buttonNegative: t('common.camera.cancel'),
+  // }}
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
     if (channel) {
@@ -228,10 +255,15 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
     }
   }, [dispatch, navigation, qrData]);
 
-  const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
-    console.log(`Scanned QRCode: ${data}`);
-    setQrData(data);
-  };
+  // Barcode read event
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr'],
+    onCodeScanned: (codes) => {
+      console.log(`Scanned ${codes.length} codes!`);
+      console.log(codes[0]);
+      setQrData(codes[0].value);
+    },
+  });
 
   return (
     <>
@@ -252,32 +284,33 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
               />
             </View>
             <View style={styles.cameraContainer} testID="CameraContainer">
-              <RNCamera
-                style={styles.cameraPreview}
-                captureAudio={false}
-                onBarCodeRead={handleBarCodeRead}
-                barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-                type={RNCamera.Constants.Type.back}
-                flashMode={RNCamera.Constants.FlashMode.off}
-                androidCameraPermissionOptions={{
-                  title: t('common.camera.title'),
-                  message: t('common.camera.message'),
-                  buttonPositive: t('common.camera.ok'),
-                  buttonNegative: t('common.camera.cancel'),
-                }}
-                notAuthorizedView={<NotAuthorizedView />}
-              >
-                <BarcodeMask
-                  edgeColor={ORANGE}
-                  animatedLineColor={ORANGE}
-                  width={DEVICE_LARGE ? 230 : 190}
-                  height={DEVICE_LARGE ? 230 : 190}
-                  edgeRadius={5}
-                  edgeBorderWidth={DEVICE_LARGE ? 3 : 2}
-                  edgeHeight={DEVICE_LARGE ? 30 : 25}
-                  edgeWidth={DEVICE_LARGE ? 30 : 25}
-                />
-              </RNCamera>
+              {hasPermission && (device || DetoxEnabled) ? (
+                <VisionCamera
+                  style={styles.cameraPreview}
+                  isActive={isActive}
+                  audio={false}
+                  codeScanner={codeScanner}
+                  device={device}
+                  enableLocation={false}
+                  onError={(error) => {
+                    console.log('Camera error:', error);
+                  }}
+                  // enableZoomGesture={true}
+                >
+                  <BarcodeMask
+                    edgeColor={ORANGE}
+                    animatedLineColor={ORANGE}
+                    width={DEVICE_LARGE ? 230 : 190}
+                    height={DEVICE_LARGE ? 230 : 190}
+                    edgeRadius={5}
+                    edgeBorderWidth={DEVICE_LARGE ? 3 : 2}
+                    edgeHeight={DEVICE_LARGE ? 30 : 25}
+                    edgeWidth={DEVICE_LARGE ? 30 : 25}
+                  />
+                </VisionCamera>
+              ) : (
+                <NotAuthorizedView />
+              )}
             </View>
           </>
         ) : (
@@ -309,7 +342,7 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
                   navigation.navigate('MyCode');
                 }}
               >
-                <Material
+                <MaterialDesignIcons
                   name="qrcode"
                   size={DEVICE_LARGE ? 22 : 20}
                   color={WHITE}
@@ -334,7 +367,7 @@ export const ScanCodeScreen = ({ navigation }: Props) => {
                   navigation.navigate('PendingConnections');
                 }}
               >
-                <Material
+                <MaterialDesignIcons
                   name="account-multiple-plus-outline"
                   size={DEVICE_LARGE ? 32 : 26}
                   color={ORANGE}

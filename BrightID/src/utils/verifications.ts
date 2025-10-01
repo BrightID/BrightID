@@ -1,10 +1,9 @@
 import { Parser, Value } from 'expr-eval';
-import { Dictionary } from 'ramda';
 import _ from 'lodash';
 import { UserTasks } from '@/components/Tasks/UserTasks';
 
 export const isVerified = (
-  verifications: Value | Dictionary<any>,
+  verifications: Value | Record<string, any>,
   verification: string,
 ) => {
   try {
@@ -40,25 +39,25 @@ export const isVerifiedForApp = (
 
 export const getVerificationPatches = (verifications: Verification[]) => {
   const patches: Array<{ text: string; task?: UserTasksEntry }> = [];
-  let v = verifications.find((v) => v.name === 'Aura');
+  let v = verifications.find((verification) => verification.name === 'Aura');
   if (v && (v as AuraVerification).score > 0) {
     patches.push({
       text: `Aura ${(v as AuraVerification).level}`,
       task: UserTasks.aura_verification,
     });
   }
-  v = verifications.find((v) => v.name === 'Bitu');
+  v = verifications.find((verification) => verification.name === 'Bitu');
   if (v && (v as BituVerification).score > 0) {
     patches.push({
       text: `Bitu ${(v as BituVerification).score}`,
       task: UserTasks.bitu_verification,
     });
   }
-  v = verifications.find((v) => v.name === 'SeedConnected');
+  v = verifications.find((verification) => verification.name === 'SeedConnected');
   if (v && (v as SeedConnectedVerification).rank > 0) {
     patches.push({ text: 'Meets' });
   }
-  v = verifications.find((v) => v.name === 'Seed');
+  v = verifications.find((verification) => verification.name === 'Seed');
   if (v) {
     patches.push({ text: 'Seed' });
   }

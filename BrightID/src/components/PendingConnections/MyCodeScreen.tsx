@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useDispatch, useSelector } from '@/store/hooks';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
@@ -63,7 +63,7 @@ if (__DEV__) {
           dispatch(addFakeConnection());
         }}
       >
-        <Material name="ghost" size={32} color={WHITE} />
+        <MaterialDesignIcons name="ghost" size={32} color={WHITE} />
       </TouchableOpacity>
     );
   };
@@ -213,7 +213,7 @@ export const MyCodeScreen = () => {
               navigation.navigate('PendingConnections');
             }}
           >
-            <Material
+            <MaterialDesignIcons
               name="account-supervisor-circle"
               size={32}
               color={WHITE}
@@ -331,7 +331,7 @@ export const MyCodeScreen = () => {
               style={styles.starContainer}
               onPress={toggleChannelType}
             >
-              <Material name="star" size={30} color={WHITE} />
+              <MaterialDesignIcons name="star" size={30} color={WHITE} />
             </TouchableOpacity>
           ) : (
             <ChannelSwitch
@@ -355,7 +355,7 @@ export const MyCodeScreen = () => {
               <Text testID="group-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeGroup')}
               </Text>
-              <Material
+              <MaterialDesignIcons
                 name="information-variant"
                 size={18}
                 color={LIGHT_BLACK}
@@ -371,7 +371,7 @@ export const MyCodeScreen = () => {
               <Text testID="single-use-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeSingle')}
               </Text>
-              <Material
+              <MaterialDesignIcons
                 name="information-variant"
                 size={18}
                 color={LIGHT_BLACK}
@@ -387,7 +387,7 @@ export const MyCodeScreen = () => {
               <Text testID="star-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeStar', 'Star code')}
               </Text>
-              <Material
+              <MaterialDesignIcons
                 name="information-variant"
                 size={18}
                 color={LIGHT_BLACK}

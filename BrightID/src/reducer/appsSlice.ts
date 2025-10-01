@@ -5,7 +5,7 @@ import {
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
-import { find, propEq } from 'ramda';
+// import { find, propEq } from 'ramda';
 import { RESET_STORE } from '@/actions/resetStore';
 import { app_linking_steps } from '@/utils/constants';
 
@@ -199,12 +199,29 @@ export const selectSigsUpdating = (state: RootState) => state.apps.sigsUpdating;
 
 // look up app info. Legacy apps send 'context' in the deep link but soulbound
 // apps send 'id', so look in both places
+// export const selectAppInfoByAppId = createSelector(
+//   selectAllApps,
+//   (_: RootState, appId: string) => appId,
+//   (apps, appId) =>
+//     (find(propEq('id', appId))(apps) as AppInfo) ||
+//     (find(propEq('context', appId))(apps) as AppInfo),
+// );
+
 export const selectAppInfoByAppId = createSelector(
   selectAllApps,
   (_: RootState, appId: string) => appId,
-  (apps, appId) =>
-    (find(propEq('id', appId))(apps) as AppInfo) ||
-    (find(propEq('context', appId))(apps) as AppInfo),
+  (apps, appId): AppInfo | null => {
+    // First try to find by id
+    const appById = apps.find((app) => app.id === appId);
+    if (appById) return appById;
+
+    // Then try to find by context
+    const appByContext = apps.find((app) => app.context === appId);
+    if (appByContext) return appByContext;
+
+    // Return null if no match found
+    return null;
+  },
 );
 
 // Export reducer

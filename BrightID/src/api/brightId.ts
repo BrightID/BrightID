@@ -9,6 +9,8 @@ import {
 } from '@/utils/encoding';
 import BrightidError from '@/api/brightidError';
 import { operation_states } from '@/utils/constants';
+import axios from 'axios';
+// import type { AxiosResponse } from 'axios';
 
 const v = 6;
 
@@ -41,6 +43,11 @@ export class NodeApi {
       timeout: 60 * 1000, // one minute timeout for requests
     });
     monitor && this.api.addMonitor((response) => monitor(response));
+    // this.instance = axios.create({
+    //   baseURL: this.apiUrl,
+    //   headers: { 'Cache-Control': 'no-cache' },
+    //   timeout: 60 * 1000,
+    // });
   }
 
   get baseUrl() {
@@ -70,6 +77,16 @@ export class NodeApi {
       throw new BrightidError(response.data as ErrRes);
     } else {
       throw new Error(response.problem);
+    }
+  }
+
+  static throwOnErrorAxios(err: any) {
+    if (err.response.statusText === 'OK') {
+      return true;
+    } else if (err.response.data && err.response.data.errorNum) {
+      throw new BrightidError(err.response.data);
+    } else {
+      throw new Error(err.message);
     }
   }
 
@@ -454,9 +471,14 @@ export class NodeApi {
   }
 
   async getApps() {
-    const res = await this.api.get<AppsRes, ErrRes>(`/apps`);
-    NodeApi.throwOnError(res);
-    return (res.data as AppsRes).data?.apps;
+    // const res = await this.api.get<AppsRes, ErrRes>(`/apps`);
+    try {
+      const res = await axios.get(this.apiUrl + '/apps');
+      // console.log(res.data);
+      return (res.data as AppsRes).data?.apps;
+    } catch (err) {
+      NodeApi.throwOnErrorAxios(err);
+    }
   }
 
   async getState() {

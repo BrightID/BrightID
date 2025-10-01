@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch } from '@/store/hooks';
 import { BLUE, WHITE } from '@/theme/colors';
@@ -116,7 +116,7 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
       style={{ marginRight: 11 }}
       onPress={handleButton}
     >
-      <Material name="ghost" size={30} color={WHITE} />
+      <MaterialDesignIcons name="ghost" size={30} color={WHITE} />
     </TouchableOpacity>
   );
 };

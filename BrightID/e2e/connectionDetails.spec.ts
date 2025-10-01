@@ -18,6 +18,7 @@ describe('Connection details', () => {
   const groupName = 'Test Group';
 
   beforeAll(async () => {
+    await device.launchApp();
     // create identity
     await createBrightID();
 
@@ -92,6 +93,8 @@ describe('Connection details', () => {
 
     // Have first 2 accounts accept group invites
     await navigateHome();
+    // close drawer
+    await element(by.id('toggleDrawer')).tap();
 
     await joinAllGroups(0);
     await joinAllGroups(1);
@@ -110,6 +113,8 @@ describe('Connection details', () => {
     await expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
 
     await navigateHome();
+    // close drawer
+    await element(by.id('toggleDrawer')).tap();
   }, 250000);
 
   describe('Information', () => {
@@ -198,6 +203,8 @@ describe('Connection details', () => {
 
     afterAll(async () => {
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
     });
 
     test('should change connection level', async () => {

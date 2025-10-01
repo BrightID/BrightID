@@ -1,5 +1,5 @@
 import nacl from 'tweetnacl';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import { Alert } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
 import {
@@ -45,7 +45,7 @@ export const addFakeConnection =
       let photo;
       const photoResponse = await RNFetchBlob.fetch(
         'GET',
-        'https://loremflickr.com/180/180',
+        'https://picsum.photos/180/180',
         {},
       );
       if (photoResponse.info().status === 200) {
@@ -181,7 +181,7 @@ export const reconnectFakeConnection =
       // load a new random photo
       const photoResponse = await RNFetchBlob.fetch(
         'GET',
-        'https://loremflickr.com/180/180',
+        'https://picsum.photos/180/180',
         {},
       );
       if (photoResponse.info().status === 200) {

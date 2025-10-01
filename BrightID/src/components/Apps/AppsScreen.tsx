@@ -7,12 +7,13 @@ import {
   Animated,
   Platform,
   Easing,
+  StatusBar,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { WHITE } from '@/theme/colors';
+import { WHITE, APP_HEADER_BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
 import AnimatedLinearGradient from './AnimatedLinearGradient';
@@ -120,7 +121,7 @@ export const AppsScreen = ({
           },
         ]}
         style={{ paddingHorizontal: 20, paddingTop: headerHeight }}
-        colors={['#3E4481', '#999ECD', '#ED7A5D']}
+        colors={[APP_HEADER_BLUE, '#999ECD', '#ED7A5D']}
       >
         {msg ? (
           <Animated.View
@@ -162,6 +163,11 @@ export const AppsScreen = ({
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={APP_HEADER_BLUE}
+        animated={true}
+      />
       <View style={styles.container} testID="appsScreen">
         <AnimatedLinearGradient
           containerStyle={[

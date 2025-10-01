@@ -5,11 +5,11 @@
  from picsum.
  */
 
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 
 const getPicsumImagePromise = () => {
   return new Promise((resolve, reject) => {
-    RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180', {})
+    RNFetchBlob.fetch('GET', 'https://picsum.photos/180/180', {})
       .then((result) => {
         if (result.info().status === 200) {
           let base64data = result.base64();

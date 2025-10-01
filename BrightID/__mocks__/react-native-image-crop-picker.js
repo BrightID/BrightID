@@ -1,9 +1,10 @@
 import { Axios } from 'axios';
+import { Buffer } from 'buffer'
 
 const getImagePromise = () => {
   return new Promise((resolve, reject) => {
     Axios({
-      url: 'https://loremflickr.com/180/180',
+      url: 'https://picsum.photos/180/180',
       method: 'GET',
       responseType: 'stream',
     })
@@ -33,10 +34,10 @@ const getImagePromise = () => {
 };
 
 export default {
-  openCamera(options) {
+  openCamera(_options) {
     return getImagePromise();
   },
-  openPicker(options) {
+  openPicker(_options) {
     return getImagePromise();
   },
 };

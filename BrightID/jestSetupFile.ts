@@ -1,7 +1,11 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import MockAsyncStorage from 'mock-async-storage';
 import { NodeApi } from './src/api/brightId';
 import { hash } from './src/utils/encoding';
+import mockClipboard from '@react-native-clipboard/clipboard/jest/clipboard-mock.js';
+import type { IconProps } from '@react-native-vector-icons/common';
+// for msw
+
+jest.mock('@react-native-clipboard/clipboard', () => mockClipboard);
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
@@ -45,28 +49,67 @@ jest.mock('react-native', () => {
   return RN;
 });
 
-jest.mock('react-native-keychain', () => {
-  const genericPassword = {
-    username: JSON.stringify({ publicKey: '', version: 1 }),
-    password: 'abcd',
-  };
+// jest.mock('react-native-keychain', () => {
+//   const genericPassword = {
+//     username: JSON.stringify({ publicKey: '', version: 1 }),
+//     password: 'abcd',
+//   };
+//   return {
+//     SECURITY_LEVEL_ANY: 'SECURITY_LEVEL_ANY',
+//     SECURITY_LEVEL_SECURE_SOFTWARE: 'SECURITY_LEVEL_SECURE_SOFTWARE',
+//     SECURITY_LEVEL_SECURE_HARDWARE: 'SECURITY_LEVEL_SECURE_HARDWARE',
+//     setGenericPassword: () => Promise.resolve(true),
+//     setInternetCredentials: () => Promise.resolve(true),
+//     resetGenericPassword: () => Promise.resolve(true),
+//     getGenericPassword: () => Promise.resolve(genericPassword),
+//   };
+// });
+
+/* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
+
+jest.mock('react-native-modpow', () => {});
+
+// Mock react-native-vector-icons
+jest.mock('@react-native-vector-icons/ionicons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+
   return {
-    SECURITY_LEVEL_ANY: 'SECURITY_LEVEL_ANY',
-    SECURITY_LEVEL_SECURE_SOFTWARE: 'SECURITY_LEVEL_SECURE_SOFTWARE',
-    SECURITY_LEVEL_SECURE_HARDWARE: 'SECURITY_LEVEL_SECURE_HARDWARE',
-    setGenericPassword: () => Promise.resolve(true),
-    setInternetCredentials: () => Promise.resolve(true),
-    resetGenericPassword: () => Promise.resolve(true),
-    getGenericPassword: () => Promise.resolve(genericPassword),
+    Ionicons: ({ name, size, color, ...props }: IconProps<any>) => {
+      return React.createElement(
+        Text,
+        {
+          ...props,
+          testID: `ionicons-${name}`,
+          style: { fontSize: size, color },
+        },
+        name,
+      );
+    },
   };
 });
 
-/* just here to satisfy the import statement. Needs to be stubbed out further if actually used */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-jest.mock('react-native-modpow', () => {});
+jest.mock('@react-native-vector-icons/material-design-icons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+
+  return {
+    MaterialDesignIcons: ({ name, size, color, ...props }: IconProps<any>) => {
+      return React.createElement(
+        Text,
+        {
+          ...props,
+          testID: `material-design-icons-${name}`,
+          style: { fontSize: size, color },
+        },
+        name,
+      );
+    },
+  };
+});
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // useHeaderHeight hook
 jest.mock('@react-navigation/elements', () => ({

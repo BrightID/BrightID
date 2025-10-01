@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -12,8 +12,9 @@ type Props = {
 
 const EmptyList = ({ title, iconType = 'alert-outline' }: Props) => (
   <View style={styles.emptyContainer} testID="EmptyListView">
-    <MaterialCommunityIcons
+    <MaterialDesignIcons
       size={DEVICE_LARGE ? 48 : 38}
+      // @ts-ignore
       name={iconType}
       color={GREY}
     />
