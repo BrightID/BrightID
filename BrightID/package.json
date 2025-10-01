@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "5.0.0-[preview]",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
