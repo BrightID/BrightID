@@ -2,6 +2,7 @@ import MockAsyncStorage from 'mock-async-storage';
 import { NodeApi } from './src/api/brightId';
 import { hash } from './src/utils/encoding';
 import mockClipboard from '@react-native-clipboard/clipboard/jest/clipboard-mock.js';
+import type { IconProps } from '@react-native-vector-icons/common';
 // for msw
 
 jest.mock('@react-native-clipboard/clipboard', () => mockClipboard);
@@ -74,7 +75,7 @@ jest.mock('@react-native-vector-icons/ionicons', () => {
   const { Text } = require('react-native');
 
   return {
-    Ionicons: ({ name, size, color, ...props }) => {
+    Ionicons: ({ name, size, color, ...props }: IconProps<any>) => {
       return React.createElement(
         Text,
         {
@@ -93,7 +94,7 @@ jest.mock('@react-native-vector-icons/material-design-icons', () => {
   const { Text } = require('react-native');
 
   return {
-    MaterialDesignIcons: ({ name, size, color, ...props }) => {
+    MaterialDesignIcons: ({ name, size, color, ...props }: IconProps<any>) => {
       return React.createElement(
         Text,
         {
