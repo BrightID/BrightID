@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Search from '@/components/Icons/Search';
@@ -106,9 +106,9 @@ const AnimatedTopSearchBar = ({
       />
       {sortable && (
         <TouchableOpacity onPress={handleSort} style={styles.optionsIcon}>
-          <Ionicon
+          <Ionicons
             size={DEVICE_LARGE ? 22 : 20}
-            name="ios-options"
+            name="options-sharp"
             color={LIGHT_BLACK}
           />
         </TouchableOpacity>

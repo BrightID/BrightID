@@ -13,7 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line } from 'react-native-svg';
 import { createSelector } from '@reduxjs/toolkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useSelector } from '@/store/hooks';
 import { ORANGE, WHITE } from '@/theme/colors';
@@ -257,7 +257,7 @@ export const GroupConnectionScreen = ({ route, navigation }: Props) => {
             navigation.navigate('PendingConnections');
           }}
         >
-          <Material
+          <MaterialDesignIcons
             name="account-multiple-plus-outline"
             size={DEVICE_LARGE ? 32 : 26}
             color={ORANGE}

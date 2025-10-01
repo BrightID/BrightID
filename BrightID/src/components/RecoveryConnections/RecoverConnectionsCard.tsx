@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import moment from 'moment';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -137,8 +137,8 @@ const RecoveryConnectionCard = (props: Props) => {
         }}
         onPress={() => onSelect(id)}
       >
-        <IonIcons
-          name={isSelected ? 'checkbox' : 'md-square-outline'}
+        <Ionicons
+          name={isSelected ? 'checkbox' : 'square-outline'}
           color={ORANGE}
           size={DEVICE_LARGE ? 26 : 24}
         />

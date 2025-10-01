@@ -19,19 +19,14 @@ function getRandomAddres() {
 
 const apps = [
   {
-    id: '1hive',
-    name: '1Hive',
-    context: '1hive',
-  },
-  {
     id: 'Gitcoin',
     name: 'Gitcoin',
     context: 'Gitcoin',
   },
   {
-    id: 'idchain',
-    name: 'IDChain Eidi Faucet',
-    context: 'idchain',
+    id: '1hive',
+    name: '1Hive',
+    context: '1hive',
   },
   {
     id: 'RabbitHole',
@@ -39,9 +34,9 @@ const apps = [
     context: 'RabbitHole',
   },
   {
-    id: 'ethereum',
-    name: 'Burn Signal',
-    context: 'ethereum',
+    id: 'idchain',
+    name: 'IDChain Eidi Faucet',
+    context: 'idchain',
   },
   {
     id: 'clr.fund',
@@ -49,9 +44,9 @@ const apps = [
     context: 'clr.fund',
   },
   {
-    id: 'top-up-gifter',
-    name: 'Top-up Gifter',
-    context: 'top-up-gifter',
+    id: 'Discord',
+    name: 'Discord Unique Bot',
+    context: 'Discord',
   },
   {
     id: 'TheEther',
@@ -59,13 +54,17 @@ const apps = [
     context: 'TheEther',
   },
   {
-    id: 'Discord',
-    name: 'Discord Unique Bot',
-    context: 'Discord',
+    id: 'top-up-gifter',
+    name: 'Top-up Gifter',
+    context: 'top-up-gifter',
   },
 ];
 
 describe('Without account', () => {
+  beforeAll(async () => {
+    await device.launchApp();
+  });
+
   it('should ignore deep link when running in background', async () => {
     // sends app to background and simulate being pulled to foreground again by clicking on deeplink
     await device.sendToHome();
@@ -89,13 +88,8 @@ describe('Without account', () => {
 });
 
 describe('With account', () => {
-  let yes, no;
 
   beforeAll(async () => {
-    const platform = await device.getPlatform();
-    const android = platform === 'android';
-    no = android ? 'NO' : 'No';
-    yes = android ? 'YES' : 'Yes';
     await createBrightID();
     await createFakeConnection();
   });
@@ -124,8 +118,8 @@ describe('With account', () => {
         apps[0].context
       }/${getRandomAddres()}`,
     });
-    // Alert should be open
-    await expect(element(by.id('AppLinkingConfirmationView'))).toBeVisible();
+    // Alert should be open. Wait 5 seconds as it can take some time to load the app
+    await waitFor(element(by.id('AppLinkingConfirmationView'))).toBeVisible().withTimeout(5000);
     // cancel linking
     await element(by.id('RejectLinking')).tap();
     await expectAppsScreen();

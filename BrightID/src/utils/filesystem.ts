@@ -1,4 +1,4 @@
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import { parseDataUri, mimeFromUri } from './images';
 
 export const photoDirectory = () => `${RNFetchBlob.fs.dirs.DocumentDir}/photos`;

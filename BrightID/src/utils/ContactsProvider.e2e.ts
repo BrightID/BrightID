@@ -4,7 +4,7 @@
  Instead of accessing contacts on device return predefined contacts.
  */
 
-import { Contact } from 'react-native-contacts';
+import { Contact } from 'react-native-contacts/type';
 
 export const testContacts: Array<Partial<Contact>> = [
   {

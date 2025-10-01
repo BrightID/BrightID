@@ -8,7 +8,6 @@ E2E Test add device:
 - test script: Verify new signingkey is set via NodeAPI
  */
 import { by, element, expect } from 'detox';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect as jestExpect } from '@jest/globals';
 import nacl from 'tweetnacl';
 import ChannelAPI from '../src/api/channelService';
@@ -30,6 +29,7 @@ import { NodeApi } from '@/api/brightId';
 import { DEEP_LINK_PREFIX } from '@/utils/constants';
 
 describe('Add Device', () => {
+  // http://test.brightid
   const profileServerUrl = 'http://test.brightid.org/profile';
   // const profileServerUrl = 'http://127.0.0.1:3000';
   const apiUrl = 'http://test.brightid.org';
@@ -51,6 +51,8 @@ describe('Add Device', () => {
     const android = platform === 'android';
     no = android ? 'NO' : 'No';
     yes = android ? 'YES' : 'Yes';
+
+    await device.launchApp();
 
     // prepare nodeAPI instance
     apiInstance = new NodeApi({

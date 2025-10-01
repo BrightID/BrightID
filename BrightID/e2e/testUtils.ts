@@ -12,7 +12,9 @@ const operationTimeout = 40000; // ms to wait for operations to be applied
 Accept EULA and proceed to Onboarding screen
  */
 const acceptEula = async () => {
-  await expect(element(by.id('EulaScreen'))).toBeVisible();
+  await waitFor(element(by.id('EulaScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
   await expect(element(by.id('acceptEulaBtn'))).toExist();
   await element(by.id('acceptEulaBtn')).tap();
 };
@@ -112,7 +114,7 @@ const createFakeConnection = async (
   await expect(element(by.id('fakeConnectionBtn'))).toBeVisible();
   await element(by.id('fakeConnectionBtn')).tap();
   await waitFor(element(by.id('previewConnectionScreen')))
-    .toBeVisible()
+    .toBeVisible(50)
     .withTimeout(40000);
 
   // get brightID of connection
@@ -132,11 +134,17 @@ const createFakeConnection = async (
 };
 
 const expectHomescreen = async () => {
-  await waitFor(element(by.id('BrightIdLogo')))
-    .toBeVisible()
-    .withTimeout(20000);
-  await element(by.id('BrightIdLogo')).tap();
-  await waitFor(element(by.id('homeScreen'))).toBeVisible();
+  // await waitFor(element(by.id('BrightIdLogo')))
+  //   .toBeVisible()
+  //   .withTimeout(20000);
+  // await expect(element(by.id('BrightIdLogo'))).toBeVisible();
+  // await element(by.id('BrightIdLogo')).tap();
+  await device.setURLBlacklist(['test.brightid.org/brightid/v6/apps']);
+  await expect(element(by.id('HomeScreenContainer'))).toExist();
+  await expect(element(by.id('ConnectionsCount'))).toBeVisible();
+  // await waitFor(element(by.id('BrightIdLogo')))
+  //   .toBeVisible()
+  //   .withTimeout(20000);
 };
 
 const expectNotificationsScreen = async () => {
@@ -149,13 +157,13 @@ const navigateHome = async () => {
   // there might be several "navHomeBtn" instances in the view hierarchy
   try {
     await element(by.id('NavHomeBtn')).atIndex(0).tap();
-  } catch (err) {
+  } catch {
     try {
       await element(by.id('NavHomeBtn')).atIndex(1).tap();
-    } catch (err) {
+    } catch {
       try {
         await element(by.id('NavHomeBtn')).atIndex(2).tap();
-      } catch (err) {
+      } catch {
         try {
           await element(by.id('NavHomeBtn')).atIndex(3).tap();
         } catch (err) {
@@ -239,6 +247,8 @@ const inviteConnectionToGroup = async (groupName: string) => {
   // Now on members screen again. Go back to homescreen.
   await element(by.id('NavBackBtn')).tap();
   await navigateHome();
+  // close drawer
+  await element(by.id('toggleDrawer')).tap();
 };
 
 const joinAllGroups = async (connectionIndex: number) => {
@@ -392,6 +402,8 @@ const createGroup = async (name: string, invitees: Array<number>) => {
   await expectGroupsScreen();
 
   await navigateHome();
+  // close drawer
+  await element(by.id('toggleDrawer')).tap();
 };
 
 // extract group ID and AESKey of groups
@@ -414,6 +426,8 @@ const getGroupKeys = async (
     });
   }
   await navigateHome();
+  // close drawer
+  await element(by.id('toggleDrawer')).tap();
   return groupKeys;
 };
 

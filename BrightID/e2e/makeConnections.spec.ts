@@ -11,6 +11,7 @@ import { connection_levels, report_reasons } from '@/utils/constants';
 
 describe('make Connections', () => {
   beforeAll(async () => {
+    await device.launchApp();
     // create identity and proceed to main screen
     await createBrightID();
   });

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from '@/store/hooks';
 import { ApiGateState, useNodeApiContext } from '@/context/NodeApiContext';
@@ -35,8 +35,9 @@ export const NodeApiGateScreen = () => {
   const { t } = useTranslation();
   const [stateDescription, setStateDescription] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(0);
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const defaultNodeUrls = useSelector(selectDefaultNodeUrls);
   const currentNodeUrls = useSelector(selectAllNodeUrls);
   const dispatch = useDispatch();
@@ -132,9 +133,10 @@ export const NodeApiGateScreen = () => {
         </View>
         <View style={styles.center}>
           {iconData ? (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 84 : 72}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />

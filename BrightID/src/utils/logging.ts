@@ -5,10 +5,11 @@ import {
   transportFunctionType,
 } from 'react-native-logs';
 import { InteractionManager } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import { LOGFILE_KEEP_DURATION } from '@/utils/constants';
 
-const rnFetchBlobTransport: transportFunctionType = async (props) => {
+// const rnFetchBlobTransport: transportFunctionType
+const rnFetchBlobTransport = async (props) => {
   if (!props) return false;
   const path = `${props.options.filePath}/${props.options.fileName}`;
   const output = `${props.msg}\n`;
@@ -26,7 +27,8 @@ const logsDirectory = `${RNFetchBlob.fs.dirs.DocumentDir}/logs`;
 // setup filename as current timestamp
 export const currentLogName = `log-${Date.now()}.txt`;
 
-const config: configLoggerType = {
+// const config: configLoggerType = {
+const config = {
   async: true,
   asyncFunc: InteractionManager.runAfterInteractions,
   // log both to file and console in dev mode, only to file in production
@@ -39,9 +41,11 @@ const config: configLoggerType = {
   },
 };
 
-export const LOG = logger.createLogger<'debug' | 'info' | 'warn' | 'error'>(
-  config,
-);
+// export const LOG = logger.createLogger<'debug' | 'info' | 'warn' | 'error'>(
+//   config,
+// );
+
+export const LOG = logger.createLogger(config);
 
 export const listLogs = async (): Promise<Array<string>> => {
   const exists = await RNFetchBlob.fs.exists(logsDirectory);

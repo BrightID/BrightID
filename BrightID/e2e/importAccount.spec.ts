@@ -1,5 +1,4 @@
 import { by, element, expect } from 'detox';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect as jestExpect } from '@jest/globals';
 import i18next from 'i18next';
 import ChannelAPI from '../src/api/channelService';
@@ -56,15 +55,6 @@ describe('Import BrightID', () => {
   let groupKeys: Array<{ id: string; aesKey: string }> = [];
   const apps: { appId: string; contextInfo: ContextInfo }[] = [
     {
-      appId: 'ethereum',
-      contextInfo: {
-        context: 'ethereum',
-        contextId: '0xB0008ADAFF0DDC5D03652944D28A0F246E5D46A3',
-        dateAdded: 1648459346910,
-        state: 'applied',
-      },
-    },
-    {
       appId: 'Gitcoin',
       contextInfo: {
         context: 'Gitcoin',
@@ -85,6 +75,10 @@ describe('Import BrightID', () => {
   ];
 
   describe(`Prepare BrightID to be imported`, () => {
+    beforeAll(async () => {
+      await device.launchApp();
+    });
+
     afterAll(async () => {
       // clear all data in app
       await clearData();
@@ -286,6 +280,13 @@ describe('Import BrightID', () => {
       });
     });
 
+    it('should detect uploaded data and finish import', async () => {
+      // Once all data is uploaded client should move on to home screen.
+      await waitFor(element(by.id('HomeScreenContainer')))
+        .toBeVisible()
+        .withTimeout(30000);
+    })
+
     it('should import uploaded apps data', async () => {
       // check that all imported linked Context show app as linked
       for (const app of apps) {
@@ -330,6 +331,9 @@ describe('Import BrightID', () => {
 
       // check if correct ID and AESKey are set
       await navigateHome();
+      // close drawer
+      await element(by.id('toggleDrawer')).tap();
+
       const importedGroupKeys = await getGroupKeys(2);
       for (let index = 0; index < groupKeys.length; index++) {
         // arrays are in random order, so first find the correct entry in importedGroups

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { useDispatch, useSelector } from '@/store/hooks';
@@ -113,16 +113,16 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
     const clipboardMsg = __DEV__
       ? universalLink
       : channel.type === channel_types.SINGLE
-      ? t('qrcode.alert.connectSingle', {
-          name: myName,
-          link: `${universalLink} `, // enforce trailing space to fix #1066
-          expirationTimestamp,
-        })
-      : t('qrcode.alert.connectGroup', {
-          name: myName,
-          link: `${universalLink} `, // enforce trailing space to fix #1066
-          expirationTimestamp,
-        });
+        ? t('qrcode.alert.connectSingle', {
+            name: myName,
+            link: `${universalLink} `, // enforce trailing space to fix #1066
+            expirationTimestamp,
+          })
+        : t('qrcode.alert.connectGroup', {
+            name: myName,
+            link: `${universalLink} `, // enforce trailing space to fix #1066
+            expirationTimestamp,
+          });
 
     const alertMsg =
       channel.type === channel_types.SINGLE
@@ -159,7 +159,7 @@ export const QrCode = ({ channel }: { channel: Channel }) => {
         style={styles.copyButton}
         onPress={copyQr}
       >
-        <Material
+        <MaterialDesignIcons
           size={24}
           name="content-copy"
           color={LIGHT_BLACK}

@@ -9,7 +9,7 @@ import {
 import { SvgXml } from 'react-native-svg';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDrawerStatus } from '@react-navigation/drawer';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useTranslation } from 'react-i18next';
 import { DARK_ORANGE, BLUE, WHITE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -22,7 +22,7 @@ const SocialItem = ({ icon, color, url }) => {
       style={styles.socialItem}
       onPress={() => Linking.openURL(url)}
     >
-      <Material name={icon} size={DEVICE_LARGE ? 36 : 32} color={color} />
+      <Ionicons name={icon} size={DEVICE_LARGE ? 36 : 32} color={color} />
     </TouchableOpacity>
   );
 };
@@ -82,23 +82,23 @@ export const ContactUsScreen = function () {
         <Text style={styles.listHeader}>{t('contact.label.socialMedia')}</Text>
         <View style={styles.socialMedia}>
           <SocialItem
-            icon="github"
+            icon="logo-github"
             color={BLACK}
             url="https://github.com/brightid"
           />
           <KeybaseItem />
           <SocialItem
-            icon="discord"
+            icon="logo-discord"
             color="#6E84D3"
             url="https://discord.gg/GkYM5Jy"
           />
           <SocialItem
-            icon="telegram"
+            icon="paper-plane"
             color="#39A0DA"
             url="https://t.me/brightidofficial"
           />
           <SocialItem
-            icon="twitter"
+            icon="logo-twitter"
             color="#52A7E7"
             url="https://twitter.com/BrightIDProject"
           />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
 import { BLACK, DARKER_GREY, GREEN, ORANGE, RED } from '@/theme/colors';
@@ -18,8 +18,9 @@ export const AddSigningKey = ({
   errorMessage,
 }: AddSigningKeyParams) => {
   const [stateDescription, setStateDescription] = useState('');
-  const [iconData, setIconData] =
-    useState<{ color: string; name: string }>(undefined);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -80,9 +81,10 @@ export const AddSigningKey = ({
       <View style={styles.statusContainer}>
         <View>
           {iconData ? (
-            <IonIcons
+            <Ionicons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 44}
+              // @ts-ignore
               name={iconData.name}
               color={iconData.color}
             />

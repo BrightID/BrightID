@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { ORANGE, WHITE } from '@/theme/colors';
 
 type Props = { testID?: string; onPress: () => void };
@@ -75,7 +75,7 @@ export default class FloatActionButton extends Component<Props, State> {
       >
         <TouchableOpacity testID={this.props.testID} onPress={this._onPress}>
           <View style={styles.circleButton}>
-            <Material
+            <MaterialDesignIcons
               name="plus"
               size={36}
               color={WHITE}

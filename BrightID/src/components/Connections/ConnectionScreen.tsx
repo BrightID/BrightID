@@ -18,7 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { SvgXml } from 'react-native-svg';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
