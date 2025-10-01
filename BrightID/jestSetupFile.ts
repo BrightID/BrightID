@@ -68,6 +68,45 @@ jest.mock('react-native', () => {
 
 jest.mock('react-native-modpow', () => {});
 
+// Mock react-native-vector-icons
+jest.mock('@react-native-vector-icons/ionicons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+
+  return {
+    Ionicons: ({ name, size, color, ...props }) => {
+      return React.createElement(
+        Text,
+        {
+          ...props,
+          testID: `ionicons-${name}`,
+          style: { fontSize: size, color },
+        },
+        name,
+      );
+    },
+  };
+});
+
+jest.mock('@react-native-vector-icons/material-design-icons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+
+  return {
+    MaterialDesignIcons: ({ name, size, color, ...props }) => {
+      return React.createElement(
+        Text,
+        {
+          ...props,
+          testID: `material-design-icons-${name}`,
+          style: { fontSize: size, color },
+        },
+        name,
+      );
+    },
+  };
+});
+
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 // jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 

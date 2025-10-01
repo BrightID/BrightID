@@ -7,7 +7,7 @@ module.exports = {
     './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation)',
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@testing-library|react-clone-referenced-element|@react-native-vector-icons|react|react-dom)',
   ],
   testPathIgnorePatterns: ['./e2e/'],
 };
