@@ -169,9 +169,6 @@
   "rnx-kit": {
     "kitType": "app",
     "alignDeps": {
-      "presets": [
-        "./exactVersionsPreset.js"
-      ],
       "requirements": [
         "react-native@0.77"
       ],
