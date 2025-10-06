@@ -33,17 +33,10 @@ git clean -f -d
 cd ..
 echo "done"
 
-# clear node modules
-echo "clearing node_modules folder..."
-rm -rf node_modules
-echo "done"
-
-# install node modules
-yarn install
-
 # clear gradle caches
 echo "clearing gradle caches"
 rm -rf "$HOME"/.gradle/caches
+rm -rf "$HOME"/.gradle/.tmp/
 
 # clear watchman watches
 watchman watch-del-all
@@ -51,10 +44,13 @@ watchman watch-del-all
 # clear Metro cache
 rm -rf /tmp/metro-*
 
-# run gradle clean
-cd android || exit
-./gradlew clean
-cd ..
+# clear node modules
+echo "clearing node_modules folder..."
+rm -rf node_modules
+echo "done"
+
+# re-install node modules
+yarn install
 
 echo "ZAP COMPLETE"
 
