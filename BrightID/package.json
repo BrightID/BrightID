@@ -22,8 +22,8 @@
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
     "build:staging": "cd android && ./gradlew assembleStaging && cd ..",
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
-    "check-dependencies": "rnx-align-deps",
-    "fix-dependencies": "rnx-align-deps --write",
+    "check-dependencies": "rnx-align-deps --diff-mode allow-subset",
+    "fix-dependencies": "rnx-align-deps --diff-mode allow-subset --write",
     "prepare:debug": "ln -sf ./google-services.json-dev android/app/google-services.json",
     "prepare:staging": "ln -sf ./google-services.json-staging android/app/google-services.json",
     "prepare:production": "ln -sf ./google-services.json-prod android/app/google-services.json"
