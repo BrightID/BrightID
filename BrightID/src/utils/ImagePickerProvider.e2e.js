@@ -2,14 +2,18 @@
  Mock implementation of react-native-image-crop-picker.
 
  Instead of opening the camera or library returns a random image
- from picsum.
+
  */
 
 import RNFetchBlob from 'react-native-blob-util';
+import { faker } from '@faker-js/faker';
 
-const getPicsumImagePromise = () => {
+const getTestImagePromise = () => {
   return new Promise((resolve, reject) => {
-    RNFetchBlob.fetch('GET', 'https://picsum.photos/180/180', {})
+    const width = 256;
+    const url = faker.image.personPortrait({size: width});
+
+    RNFetchBlob.fetch('GET', url, {})
       .then((result) => {
         if (result.info().status === 200) {
           let base64data = result.base64();
@@ -35,9 +39,9 @@ const getPicsumImagePromise = () => {
 
 export default {
   openCamera(options) {
-    return getPicsumImagePromise();
+    return getTestImagePromise();
   },
   openPicker(options) {
-    return getPicsumImagePromise();
+    return getTestImagePromise();
   },
 };

@@ -1,10 +1,13 @@
 import { Axios } from 'axios';
 import { Buffer } from 'buffer'
+import { faker } from '@faker-js/faker';
 
 const getImagePromise = () => {
   return new Promise((resolve, reject) => {
+    const width = 256;
+    const url = faker.image.personPortrait({size: width});
     Axios({
-      url: 'https://picsum.photos/180/180',
+      url,
       method: 'GET',
       responseType: 'stream',
     })
@@ -21,8 +24,8 @@ const getImagePromise = () => {
           resolve({
             size,
             data: base64data,
-            width: 180,
-            height: 180,
+            width: width,
+            height: width,
           });
         }
       })
