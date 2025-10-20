@@ -23,5 +23,6 @@ module.exports = {
       },
     ],
     'react-native-reanimated/plugin',
+    'react-native-worklets/plugin',
   ].filter(Boolean), // this will filter any falsy plugins (such as removing transform-remove-console when not in production)
 };

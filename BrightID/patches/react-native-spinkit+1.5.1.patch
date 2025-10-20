@@ -1,0 +1,23 @@
+diff --git a/node_modules/react-native-spinkit/android/build.gradle b/node_modules/react-native-spinkit/android/build.gradle
+index 9f02021..3a6e40a 100644
+--- a/node_modules/react-native-spinkit/android/build.gradle
++++ b/node_modules/react-native-spinkit/android/build.gradle
+@@ -4,7 +4,8 @@ buildscript {
+     }
+     repositories {
+         google()
+-        jcenter()
++        mavenCentral()
++        maven { url 'https://jitpack.io' } // optional safety net
+     }
+ 
+     dependencies {
+@@ -33,7 +34,7 @@ android {
+ repositories {
+     mavenLocal()
+     google()
+-    jcenter()
++    mavenCentral()
+     maven {
+         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+         url "$rootDir/../node_modules/react-native/android"

@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-modpow/android/build.gradle b/node_modules/react-native-modpow/android/build.gradle
+index a5c2d2c..0fa14a2 100644
+--- a/node_modules/react-native-modpow/android/build.gradle
++++ b/node_modules/react-native-modpow/android/build.gradle
+@@ -4,7 +4,8 @@ buildscript {
+ 
+   repositories {
+     google()
+-    jcenter()
++    mavenCentral()
++    maven { url 'https://jitpack.io' } // optional safety net
+   }
+ 
+   dependencies {
+@@ -20,7 +21,7 @@ apply plugin: 'kotlin-android'
+ def getExtOrDefault(name) {
+   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['Modpow_' + name]
+ }
+-
++3
+ def getExtOrIntegerDefault(name) {
+   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['Modpow_' + name]).toInteger()
+ }
+@@ -51,9 +52,9 @@ android {
+ }
+ 
+ repositories {
+-  mavenCentral()
+-  jcenter()
+   google()
++  mavenCentral()
++  maven { url 'https://jitpack.io' } // optional safety net
+ 
+   def found = false
+   def defaultDir = null
