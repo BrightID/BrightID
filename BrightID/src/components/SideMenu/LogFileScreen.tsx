@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { Picker } from '@react-native-picker/picker';
