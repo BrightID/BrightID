@@ -6,10 +6,10 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
   Image,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';

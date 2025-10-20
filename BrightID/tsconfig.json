@@ -1,5 +1,5 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
+  "extends": "@react-native/typescript-config",
   "compilerOptions": {
     "allowJs": true,
     "noEmit": true,
@@ -25,7 +25,16 @@
     "babel.config.js",
     "metro.config.js",
     "jest.config.js",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "**/node_modules",
+    "**/Pods"
   ],
-  "include": ["src", "types.d.ts", "src/reducer/types.d.ts", "e2e"]
+  "include": [
+    "src",
+    "types.d.ts",
+    "src/reducer/types.d.ts",
+    "e2e",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

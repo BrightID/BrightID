@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   Image,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import { Ionicons } from '@react-native-vector-icons/ionicons';

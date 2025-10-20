@@ -372,7 +372,7 @@ export const HomeDrawer = () => {
       screenOptions={{
         headerShown: false,
         drawerType: 'front',
-        sceneContainerStyle: [styles.sceneContainer],
+        sceneStyle: [styles.sceneContainer],
         drawerStyle: [styles.drawer, { marginTop: headerHeight }],
         drawerActiveTintColor: WHITE,
         drawerInactiveTintColor: BLACK,
