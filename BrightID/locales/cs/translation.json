@@ -1,68 +1,68 @@
 {
   "achievements": {
     "auraVerification": {
-      "description": "Naučte se více o Aura",
-      "title": "Aura ověření"
+      "description": "Zjistěte více o Auře",
+      "title": "Ověření Aura"
     },
     "bituVerification": {
-      "description": "Více informací",
-      "title": "Bitu ověření"
+      "description": "Více podrobností",
+      "title": "Ověření Bitu"
     },
     "getSponsored": {
-      "description": "Buďte sponzorován za připojení aplikace která nabízí sponzorování",
-      "title": "Být sponzorován"
+      "description": "Získejte sponzorování propojením s aplikací, která ho nabízí",
+      "title": "Získejte sponzorování"
     },
     "joinMeet": {
-      "description": "Připojte se na BrightID setkání",
-      "title": "BrightID setkání"
+      "description": "Připojte se k setkání BrightID",
+      "title": "Setkání BrightID"
     },
     "linkApp": {
-      "description": "Připojte svůj BrightID s aplikací",
-      "title": "Připojit s aplikací"
+      "description": "Propojte svůj BrightID s aplikací",
+      "title": "Propojte se s aplikací"
     },
     "makeFirstConnection": {
-      "description": "Připojit jiný BrightID účet",
-      "title": "První připojení"
+      "description": "Spojte se s dalším uživatelem BrightID",
+      "title": "První spojení"
     },
     "makeThreeConnection": {
-      "description": "Připojit se s třemi BrightID uživateli",
-      "title": "Tři připojení"
+      "description": "Spojte se se třemi uživateli BrightID",
+      "title": "Tři spojení"
     },
     "notification": {
-      "message": "Dokončil jsi úkol \"{{title}}\".",
-      "title": "Úspěch dokončen!"
+      "message": "Splnili jste úkol „{{title}}“.",
+      "title": "Úspěch odemčen!"
     },
     "progress": {
-      "title": "Dokončení:"
+      "title": "Dokončeno:"
     },
     "setupBackup": {
-      "description": "Nastavte si heslo pro povolení zašifrování zálohy vašech dat",
-      "title": "Nastavit si záložní heslo"
+      "description": "Nastavte heslo pro šifrované zálohování dat",
+      "title": "Nastavit heslo pro zálohu"
     },
     "setupRecoveryConnections": {
-      "description": "Nastavte si svoje obnovovací připojení pro sociální obnovení",
-      "title": "Nastavení sociální obnovení"
+      "description": "Nastavte spojení pro obnovení účtu, abyste mohli účet obnovit pomocí kontaktů",
+      "title": "Nastavit obnovení účtu pomocí kontaktů"
     }
   },
   "addSigningKey": {
     "header": {
-      "text": "Přidat info o zařízení"
+      "text": "Informace o zařízení"
     },
-    "info": "Povolení nového zařízení na váš BrightID účet",
+    "info": "Povolte novému zařízení používat váš BrightID",
     "steps": {
-      "adding": "Přidávání podepisovacího klíče...",
-      "complete": "Podepisovací klíč přidán",
-      "downloading": "Stahování nové data o zařízení...",
-      "error": "Přidávání podepisovacího klíče se nezdařilo"
+      "adding": "Přidávání podpisového klíče...",
+      "complete": "Podpisový klíč přidán",
+      "downloading": "Stahování dat nového zařízení...",
+      "error": "Přidání podpisového klíče se nezdařilo"
     }
   },
   "alert": {
     "text": {
-      "appInfoFailure": "Nelze získat nejnovější appInfo: {{message}}. Zkuste to prosím znovu.",
-      "appNotSponsoring": "Nejste sponzorován a {{app}} nepodporuje sponzorování. Prosím najděte jinou aplikace která vás bude sponzorovat.",
+      "appInfoFailure": "Nepodařilo se získat aktuální informace o aplikaci: {{message}}. Zkuste to prosím později.",
+      "appNotSponsoring": "Zatím nemáte sponzorování a {{app}} jej neposkytuje. Vyhledejte prosím jinou aplikaci, která vás může sponzorovat.",
       "appSponsorTimeout": "Odezva pro sponzorování vypršela. {{lastResult}}",
-      "sponsorOpFailed": "Spend sponzor operace se nezdařila",
-      "sponsorOpTimeout": "Časový limit pro spend sponsor operaci vypršel"
+      "sponsorOpFailed": "Operace sponzorování se nezdařila",
+      "sponsorOpTimeout": "Časový limit operace sponzorování vypršel"
     }
   },
   "apps": {
@@ -70,57 +70,805 @@
       "button": {
         "visitWebsite": "Ano"
       },
-      "nodeError": "BrightID API pro uzel není dostupný. Zkuste to prosím znovu.",
+      "nodeError": "Rozhraní API uzlu BrightID není dostupné. Zkuste to prosím později.",
       "text": {
-        "blindSigAlreadyLinked": "Už jste se připojil s {{app}} s ID {{appUserId}}",
-        "blindSigAlreadyLinkedDifferent": "Pokusil jste se připojit s {{app}} s {{appUserId}}. Už jste se dávno připojil s {{app}} s jinou ID {{previousAppUserIds}}. Toto může vést k problémům s používáním aplikace.",
-        "callbackError": "Aplikace {{context}} nahlásila problém: {{error}}",
-        "checkWebsite": "Pro zjištění více info o {{name}}, navštivte jejich stránky!",
+        "blindSigAlreadyLinked": "Jste již propojeni s {{app}} pod ID {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Pokoušíte se propojit s {{app}} pomocí ID {{appUserId}}. S {{app}} jste již propojeni pod jiným ID {{previousAppUserIds}}. To může při používání aplikace způsobit potíže.",
+        "callbackError": "Aplikace {{context}} nahlásila chybu: {{error}}",
+        "checkWebsite": "Více informací o {{name}} najdete na jeho webu!",
         "invalidApp": "{{app}} není platná aplikace!",
         "invalidContext": "{{context}} není platný kontext!",
-        "linkApp": "Chcete svůj účet propojit v {{context}} do vašeho BrightID?",
-        "linkFailure": "Nezdařilo se propojit se váš účet v {{context}} do vašeho BrightID\n{{result}}",
-        "linkSigFailed": "Chyba s ověřením připojováním {{verification}} do aplikace {{appId}}. Chybová zpráva: {{msg}}",
-        "linkSuccess": "Úspěšné připojení s vaším účtem v {{context}} s vaším BrightID",
-        "missingBlindSig": "Pro aplikaci {{appId}} nebyl nalezen žádný slepý příznak. Chybí ověření: {{missingVerifications}}. Ověření jsou již propojena: {{linkedVerifications}}",
+        "linkApp": "Chcete propojit svůj účet v {{context}} se svým BrightID?",
+        "linkFailure": "Nepodařilo se propojit váš účet v {{context}} s vaším BrightID\n{{result}}",
+        "linkSigFailed": "Při propojení ověření {{verification}} s aplikací {{appId}} došlo k chybě. Chybová zpráva: {{msg}}",
+        "linkSuccess": "Váš účet v {{context}} byl úspěšně propojen s vaším BrightID",
+        "missingBlindSig": "Pro aplikaci {{appId}} nebyl nalezen žádný slepý podpis. Chybějící ověření: {{missingVerifications}}. Již propojená ověření: {{linkedVerifications}}",
         "missingVerification": "Chybí vám ověření: {{verifications}}.",
-        "notPrimary": "V současné době používáte sekundární zařízení. Propojení aplikace \"{{app}}\" vyžaduje interakci s vaším primárním zařízením. Synchronizujte se s primárním zařízením nebo proveďte propojení s primárním zařízením."
+        "notPrimary": "Používáte vedlejší zařízení. Propojení aplikace „{{app}}“ vyžaduje interakci s hlavním zařízením. Synchronizujte zařízení s hlavním zařízením nebo proveďte propojení na hlavním zařízení."
       },
       "title": {
-        "callbackError": "Chyba při aplikační callbacku",
-        "linkApp": "Chcete připojit tuto aplikaci?",
-        "linkingFailed": "Spojení s aplikací se nezdařilo"
+        "callbackError": "Chyba při zpětném volání aplikace",
+        "linkApp": "Propojit aplikaci?",
+        "linkingFailed": "Propojení aplikace se nezdařilo"
       }
     },
     "linking": {
-      "active": "Připojení s",
+      "active": "Propojování s",
       "linkWaitingV5": "Čekání na potvrzení operace propojení",
-      "notPossible": "Nelze propojit s {{app}}",
-      "notSponsored": "Nejste sponzorován.",
+      "notPossible": "Nelze se propojit s {{app}}",
+      "notSponsored": "Nemáte sponzorování.",
       "precheckApp": "Kontrola předchozí žádosti o sponzorování",
-      "prelinkCheck": "Kontrola předpokladů pro propojení",
-      "refreshingApps": "Ověeřování detaily o aplikaci",
-      "sponsorWaitingApp": "Čekání na sponzorování {{app}}",
-      "sponsorWaitingOp": "Žádání sponzorování od aplikace",
-      "sponsored": "Jste sponzorován.",
+      "prelinkCheck": "Kontrola podmínek propojení",
+      "refreshingApps": "Ověřování podrobností aplikace",
+      "sponsorWaitingApp": "Čekání, až vám {{app}} poskytne sponzorování",
+      "sponsorWaitingOp": "Žádost o sponzorování od aplikace",
+      "sponsored": "Máte sponzorování.",
       "success": "Úspěšně propojeno!",
-      "waitingV6": "Čeká se na dokončení propojování"
+      "waitingV6": "Čekání na dokončení propojování"
     },
     "text": {
       "noApps": "Žádné aplikace",
-      "notSponsored": "Nejste sponzorován.\nProsím najděte aplikaci která vás bude sponzorovat."
+      "notSponsored": "Nemáte sponzorování.\nVyhledejte níže aplikaci, která vás může sponzorovat."
     }
   },
   "channel": {
     "alert": {
       "text": {
-        "localOutdated": "Verze klienta je zastaralá - prosím aktualizujte kliena a zkuste to znovu"
+        "localOutdated": "verze vašeho klienta je zastaralá - aktualizujte klienta a zkuste to znovu",
+        "otherOutdated": "verze druhého klienta je zastaralá - autor QR kódu musí aktualizovat klienta a zkusit to znovu"
       }
     }
   },
   "common": {
     "accessibilityLabel": {
-      "addPhoto": "Přidat fotografii"
+      "addPhoto": "přidat fotografii",
+      "editPhoto": "upravit fotografii",
+      "profilePhoto": "profilová fotografie",
+      "userPhoto": "fotografie uživatele"
+    },
+    "actionSheet": {
+      "cancel": "zrušit",
+      "title": "Co chcete udělat?"
+    },
+    "alert": {
+      "cancel": "Zrušit",
+      "dismiss": "Zavřít",
+      "error": "Chyba",
+      "info": "Informace",
+      "no": "Ne",
+      "ok": "OK",
+      "success": "Úspěch",
+      "sure": "Ano",
+      "text": {
+        "commonError": "Omlouváme se, váš požadavek se nepodařilo dokončit. Zkuste to prosím za chvíli znovu.",
+        "failedOp": "Operace {{name}} se nezdařila!\n{{message}}",
+        "invalidSigningKey": "Váš podpisový klíč není platný. Může to být z těchto důvodů:\n- Obnovili jste svůj BrightID na jiném zařízení.\n- Odebrali jste toto zařízení ze seznamu aktivních zařízení.\n- Obnovení účtu se nezdařilo.\n- Uzel, ke kterému jste připojeni, má problém.",
+        "passwordMatch": "Heslo a potvrzení hesla se neshodují.",
+        "passwordShort": "Heslo musí mít alespoň 8 znaků.",
+        "recoverySigned": "Jedno z vašich spojení pro obnovení účtu podepsalo vaši žádost"
+      },
+      "title": {
+        "invalidSigningKey": "Neplatný podpisový klíč",
+        "pleaseConfirm": "Potvrďte prosím"
+      },
+      "yes": "Ano"
+    },
+    "button": {
+      "cancel": "Zrušit",
+      "copy": "Kopírovat",
+      "copyLink": "Kopírovat odkaz",
+      "retry": "Zkusit znovu",
+      "save": "Uložit"
+    },
+    "camera": {
+      "cancel": "Zrušit",
+      "message": "Potřebujeme vaše oprávnění k použití fotoaparátu",
+      "ok": "OK",
+      "title": "Oprávnění k použití fotoaparátu"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Vybrat z knihovny",
+      "takePhoto": "Pořídit fotografii",
+      "title": "Vybrat fotografii"
+    },
+    "placeholder": {
+      "searchConnections": "Hledat spojení"
+    },
+    "tag": {
+      "connectionDate": "Připojeno {{date}}",
+      "reportReason": " jako {{reportReason}}",
+      "reported": "(nahlášeno)",
+      "reportedByUser": "nahlášeno vámi"
+    },
+    "text": {
+      "noConnection": "Nepodařilo se připojit k serveru",
+      "uploadingData": "Nahrávání šifrovaných dat na zálohovací server…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Uložit",
+      "ok": "OK",
+      "report": "Odebrat toto spojení",
+      "reportCancel": "Zrušit",
+      "reportSubmit": "Odeslat",
+      "undoReport": "Vzít hlášení zpět"
+    },
+    "header": {
+      "connectionDetails": "Podrobnosti o spojení"
+    },
+    "label": {
+      "connectionLevel": "Míra známosti",
+      "mutualConnections": "Společná spojení",
+      "mutualGroups": "Společné skupiny",
+      "possibleDuplicates": "Možné duplicity",
+      "recoveryConnections": "Spojení pro obnovení účtu",
+      "socialMedia": "Sociální sítě"
+    },
+    "tags": {
+      "connectedAt": "Připojeno {{date}}",
+      "loading": "Načítání…"
+    },
+    "text": {
+      "copied": "Zkopírováno do schránky!",
+      "level": "Jak dobře znáte uživatele {{name}}?",
+      "levelAlreadyKnown": "Tohoto člověka už znám",
+      "levelJustMet": "Jde o člověka, se kterým jsem se právě setkal(a)",
+      "levelRecovery": "Tomuto člověku důvěřuji, že mi pomůže obnovit BrightID",
+      "levelSuspicious": "Tohoto člověka vůbec neznám",
+      "removeConnection": "Zrušit spojení s {{name}}",
+      "reportConnection": "Nahlásit {{name}}",
+      "reportDuplicate": "Tento uživatel záměrně vytváří více účtů",
+      "reportOther": "Jiný důvod",
+      "reportReplaced": "Uživatel ztratil přístup ke starému účtu a vytvořil nový",
+      "reportSpammer": "Tato osoba mě obtěžovala nevyžádanou žádostí o spojení",
+      "reportSuspicious": "Tento účet dříve patřil jiné osobě",
+      "unReportConnection": "Obnovit spojení",
+      "unReportImpact": "Už jste {{name}} nahlásili jako {{reportReason}}. Chcete toto označení odebrat a obnovit spojení?",
+      "unkownRecoveryConnection": "Neznámé",
+      "whyRemove": "Sdělte nám prosím, proč chcete toto spojení odebrat",
+      "whyReport": "Sdělte nám prosím, proč považujete toto spojení za podezřelé"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Fotografie spojení",
+      "viewConnectionDetails": "Zobrazit podrobnosti spojení",
+      "viewPhoto": "Zobrazit fotografii na celé obrazovce"
+    },
+    "button": {
+      "reconnect": "Znovu se spojit",
+      "reportConnection": "Nahlásit spojení",
+      "updateConnection": "Aktualizovat spojení"
+    },
+    "header": {
+      "connections": "Spojení"
+    },
+    "label": {
+      "currentConnectionLevel": "Míra známosti",
+      "newProfile": "Nový profil",
+      "oldProfile": "Starý profil"
+    },
+    "removeActionSheet": {
+      "info": "Opravdu chcete zrušit spojení s {{name}}? Kdykoli je můžete znovu navázat.",
+      "remove": "Odebrat",
+      "title": "Odebrat spojení"
+    },
+    "tag": {
+      "deleted": "Odstraněno",
+      "failed": "Spojení se nezdařilo.\nZkuste to prosím znovu.",
+      "lastConnected": "Poslední spojení {{date}}",
+      "reported": "Nahlášeno",
+      "reportedAs": "Nahlášeno jako {{flag}}",
+      "waiting": "Čekání"
+    },
+    "text": {
+      "alreadyConnectedWith": "S uživatelem {{name}} již máte spojení",
+      "noConnections": "Žádná spojení"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "E-mail",
+      "meet": "Navázat spojení",
+      "socialMedia": "Sociální sítě",
+      "website": "Web"
+    },
+    "text": {
+      "meet": "Připojte se k setkání BrightID!",
+      "openSource": "open source!",
+      "weAre": "Jsme "
+    },
+    "title": {
+      "contactUs": "Kontaktujte nás"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Zadejte název skupiny",
+        "nameTooShort": "Název skupiny musí mít alespoň 2 znaky"
+      },
+      "title": {
+        "createFailed": "Skupina vytvořena",
+        "formIncomplete": "Formulář skupiny není vyplněn"
+      }
+    },
+    "button": {
+      "createGroup": "Vytvořit skupinu",
+      "next": "Další",
+      "skip": "Přeskočit a provést později"
+    },
+    "label": {
+      "invitees": "POZVANÍ"
+    },
+    "placeholder": {
+      "groupName": "Jak se skupina jmenuje?"
+    },
+    "text": {
+      "invitees": "Pozvat členy skupiny",
+      "noConnections": "Žádná spojení"
+    }
+  },
+  "devices": {
+    "alert": {
+      "addSuperApp": "Opravdu chcete přidat {{name}} jako superaplikaci? Udělejte to pouze, pokud {{name}} velmi důvěřujete, protože může ovládat váš BrightID.",
+      "bothPrimary": "Obě zařízení jsou nastavena jako hlavní. Můžete mít jen jedno hlavní zařízení. Aby je bylo možné synchronizovat, nastavte jedno ze zařízení jako vedlejší.",
+      "confirmAdd": "Opravdu chcete převést svůj BrightID do jiného zařízení?",
+      "confirmAddPrimary": "Opravdu chcete převést svůj BrightID do jiného zařízení a nastavit je jako hlavní?",
+      "confirmRemove": "Opravdu chcete odebrat svůj BrightID ze zařízení „{{name}}“?",
+      "confirmSync": "Chcete s tímto zařízením sdílet a synchronizovat data BrightID?",
+      "noPrimary": "Zařízení lze synchronizovat pouze z hlavního zařízení."
+    },
+    "button": {
+      "submit": "Odeslat"
+    },
+    "placeholder": {
+      "deviceName": "Název zařízení"
+    },
+    "text": {
+      "listDescription": "Váš BrightID je dostupný v následujících zařízeních a sítích:",
+      "notice": "Upozornění:",
+      "primaryDeviceNotice": "Pouze jedno z aktivních zařízení má být nastaveno jako hlavní, jinak můžete při synchronizaci narazit na potíže. Před nastavením aktuálního zařízení jako hlavního se ujistěte, že je synchronizováno s původním hlavním zařízením, a původní zařízení odeberte.",
+      "switchPrimaryLabel": "Použít aktuální zařízení jako hlavní",
+      "syncCompleted": "Zařízení synchronizováno",
+      "waitSyncing": "Synchronizace zařízení, čekejte prosím ...",
+      "whatsDeviceName": "Zvolte název nového zařízení"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "BrightID je aktuální."
+      },
+      "title": {
+        "upToDate": "Kontrola aktualizací"
+      }
+    },
+    "label": {
+      "achievements": "Úspěchy",
+      "checkForUpdates": "Zkontrolovat aktualizace",
+      "contactUs": "Kontaktujte nás",
+      "copyExplorerCode": "Kopírovat kód Průzkumníka",
+      "devices": "Zařízení a sítě",
+      "editProfile": "Upravit profil",
+      "findFriends": "Najít přátele",
+      "groups": "Skupiny",
+      "home": "Domů",
+      "settings": "Nastavení"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Licenční ujednání"
+    }
+  },
+  "findFriends": {
+    "text": {
+      "invitationNotAvailable": "Odeslání pozvánky není pro tuto aplikaci momentálně dostupné.",
+      "noFriends": "Žádní přátelé"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "Zkopírováno do schránky!"
+      }
+    },
+    "button": {
+      "copyCode": "Kopírovat kód"
+    },
+    "text": {
+      "backupRequired": "Pro přístup ke kódu Průzkumníka grafu je nutné nastavit zálohování a obnovení účtu. Zkontrolujte oznámení nebo navažte více spojení, abyste mohli využít zálohování a obnovení účtu.",
+      "explorerWebsiteDescription": "je web určený k procházení celé sociální sítě BrightID. Pomocí výše uvedeného kódu zobrazíte svá spojení v grafu."
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "logo skupin"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "Chcete z {{name}} udělat správce této skupiny?",
+        "dismissMember": "Chcete {{name}} odebrat z této skupiny?",
+        "groupIdCopied": "ID skupiny zkopírováno do schránky",
+        "inviteSuccess": "Pozvali jste uživatele {{name}} do skupiny",
+        "leaveGroup": "Chcete opustit tuto skupinu?"
+      },
+      "title": {
+        "addAdmin": "Přidat správce",
+        "dismissMember": "Odebrat člena",
+        "errorDismissMember": "Chyba při odebírání člena ze skupiny",
+        "errorLeaveGroup": "Chyba při opouštění skupiny",
+        "inviteSuccess": "Pozvánka odeslána",
+        "leaveGroup": "Opustit skupinu"
+      }
+    },
+    "button": {
+      "createGroup": "Vytvořit skupinu",
+      "learnMore": "Zjistit více"
+    },
+    "groupActionSheet": {
+      "cancel": "Zrušit",
+      "copyGroupId": "Kopírovat ID skupiny do schránky",
+      "inviteUser": "Pozvat uživatele",
+      "leaveGroup": "Opustit skupinu"
+    },
+    "header": {
+      "groups": "Skupiny",
+      "inviteList": "Seznam pozvaných",
+      "newGroup": "Nová skupina"
+    },
+    "label": {
+      "knownMembers": "Známí členové:",
+      "unknownMembers": "Neznámí:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Přidat správce",
+      "cancel": "Zrušit",
+      "dismissMember": "Odebrat ze skupiny"
+    },
+    "state": {
+      "creatingGroup": "vytváření skupiny",
+      "uploadingGroupPhoto": "nahrávání fotografie skupiny"
+    },
+    "tag": {
+      "primaryGroup": "Hlavní skupina"
+    },
+    "text": {
+      "noGroups": "<text>Získejte ověření rychleji</text><text>vytvářením a</text><text>připojováním se ke skupinám</text>",
+      "noGroupsMatchSearch": "Žádná skupina neodpovídá vašemu hledání",
+      "noMembers": "Žádní známí členové, některé pozvěte…"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "spojit"
+    },
+    "alert": {
+      "text": {
+        "copied": "Adresa serveru zkopírována do schránky!"
+      }
+    },
+    "button": {
+      "achievements": "Úspěchy",
+      "apps": "Aplikace",
+      "connections": "Spojení",
+      "httpServer": "Sdílení BrightID přes Wi-Fi",
+      "myCode": "Můj kód",
+      "scanCode": "Naskenovat kód"
+    },
+    "chatActionSheet": {
+      "discord": "Discord BrightID",
+      "title": "Chcete si s námi popovídat?"
+    },
+    "label": {
+      "createNewConnection": "Navázat nové spojení"
+    },
+    "link": {
+      "community": "Připojit se ke komunitě"
+    }
+  },
+  "import": {
+    "alert": {
+      "text": "Otevřete tento odkaz v aplikaci BrightID, kterou chcete importovat.",
+      "title": "Importovat odkaz BrightID"
+    },
+    "clipboardmessage": "Převeďte svůj BrightID do jiného zařízení: {{link}}. Tento odkaz platí do {{expirationTimestamp}}.",
+    "header": {
+      "title": "Importovat účet"
+    },
+    "text": {
+      "additionalInfo": "Tento QR kód naskenujte druhým zařízením, abyste do něj importovali svůj BrightID",
+      "askScanning": "Naskenujte tento QR kód druhým zařízením",
+      "waitImporting": "Importování spojení, čekejte prosím ..."
+    }
+  },
+  "missingKeysScreen": {
+    "header": "Poškozený pár klíčů",
+    "options": {
+      "import": {
+        "followWorkflow": "Postupujte podle importu",
+        "header": "Importovat z jiného zařízení",
+        "notes": "Podmínka: BrightID máte nainstalovaný na jiném zařízení",
+        "selectImport": "Při spuštění vyberte možnost „Importovat“"
+      },
+      "reinstall": "Odinstalujte a znovu nainstalujte aplikaci BrightID",
+      "restart": {
+        "header": "Začít od začátku",
+        "notes": "Toto je krajní možnost. Vytvoříte nový BrightID a přijdete o všechna stávající spojení a ověření.",
+        "selectCreate": "Při spuštění vyberte možnost „Vytvořit můj BrightID“"
+      },
+      "socialRecovery": {
+        "followWorkflow": "Postupujte podle obnovení účtu",
+        "header": "Obnovit účet pomocí kontaktů",
+        "notes": "Podmínka: máte nastavené obnovení účtu pomocí kontaktů",
+        "selectRecovery": "Při spuštění vyberte možnost „Obnovit“"
+      }
+    },
+    "recoveryOptions": "Možnosti obnovení účtu",
+    "subHeader": "Podpisové klíče v tomto zařízení se ztratily nebo poškodily. Dokud to nevyřešíte, nemůžete aplikaci BrightID používat."
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Obnovit výchozí seznam uzlů",
+      "text": "Nepoužíváte výchozí seznam uzlů"
+    },
+    "state": {
+      "connecting": "Připojování k uzlu BrightID...",
+      "noConnection": "Nepodařilo se připojit k uzlu BrightID. Zkontrolujte připojení k síti.",
+      "noNode": "Seznam uzlů je prázdný."
+    },
+    "timer": {
+      "text": "Zbývající čas: {{secondsLeft}} s"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Aktuální uzel:"
+    },
+    "switchNodeButtonLabel": "Přepnout na jiný uzel"
+  },
+  "notificationBar": {
+    "text": {
+      "backupPassword": "Nastavte heslo pro šifrované zálohování dat",
+      "pendingConnections_0": "Máte {{count}} nepotvrzené spojení",
+      "pendingConnections_1": "Máte {{count}} nepotvrzená spojení",
+      "pendingConnections_2": "Máte {{count}} nepotvrzených spojení",
+      "socialRecovery": "Zvolte spojení pro obnovení účtu, abyste mohli obnovit svůj BrightID pomocí kontaktů"
+    },
+    "title": {
+      "backupPassword": "Nastavit heslo pro zálohu",
+      "pendingConnection": "Potvrdit spojení",
+      "socialRecovery": "Nastavit obnovení účtu pomocí kontaktů"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "Nepodařilo se připojit ke skupině",
+        "rejectGroupInvite": "Odmítnout připojení k této skupině?",
+        "successGroupInvite": "Připojili jste se ke skupině {{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "Pozvánku se nepodařilo odmítnout",
+        "rejectGroupInvite": "Odmítnout"
+      }
+    },
+    "item": {
+      "msg": {
+        "backupBrightId": "Nastavte heslo pro šifrované zálohování dat",
+        "socialRecovery": "Zvolte spojení pro obnovení účtu, abyste mohli obnovit svůj BrightID pomocí kontaktů"
+      },
+      "text": {
+        "pendingConnections_0": "Máte {{count}} nepotvrzené spojení",
+        "pendingConnections_1": "Máte {{count}} nepotvrzená spojení",
+        "pendingConnections_2": "Máte {{count}} nepotvrzených spojení",
+        "pendingGroupInvite": "{{name}} vás pozval(a) k připojení"
+      },
+      "title": {
+        "backupBrightId": "Nastavit heslo pro zálohu",
+        "socialRecovery": "Nastavit obnovení účtu pomocí kontaktů"
+      }
+    },
+    "tab": {
+      "connections": "spojení",
+      "groups": "skupiny",
+      "miscellaneous": "ostatní"
+    },
+    "text": {
+      "noGroupInvites": "Nemáte žádné pozvánky do skupin…",
+      "noMiscellaneous": "Zde nic není…",
+      "noPendingConnections": "Nemáte žádná čekající spojení…"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "Vytvořit můj BrightID",
+      "import": "Obnovení zařízení",
+      "recover": "Obnovení účtu pomocí kontaktů"
+    },
+    "text": {
+      "congratulations": "Blahopřejeme!\nVáš BrightID byl vytvořen.\nJe čas navázat spojení.",
+      "congratulations1": "Blahopřejeme!",
+      "congratulations2": "Váš BrightID byl vytvořen. Je čas\nnavázat spojení.",
+      "register": "Zaregistrujte se a vytvořte si vlastní\ndigitální identitu"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "Nepodařilo se vytvořit kanál spojení. Chybová zpráva: {{message}}",
+        "errorJoinChannel": "Nepodařilo se připojit ke kanálu spojení. Chybová zpráva: {{message}}",
+        "localOutdated": "Nelze se spojit s {{name}} kvůli nekompatibilní verzi klienta. Aktualizujte a restartujte aplikaci BrightID.",
+        "otherOutdated": "Nelze se spojit s {{name}} kvůli nekompatibilní verzi klienta. Požádejte {{name}}, aby aplikaci BrightID aktualizoval(a) a restartoval(a)."
+      },
+      "title": {
+        "connectionImpossible": "Spojení není možné"
+      }
+    },
+    "text": {
+      "alreadyRated": "Toto spojení jste již ohodnotili",
+      "errorExpired": "Platnost spojení vypršela. Zkuste je navázat znovu.",
+      "errorMyself": "Nemůžete se spojit sami se sebou.",
+      "errorUnhandled": "Nezpracovaný stav spojení"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "Již známý",
+      "connections": "Spojení",
+      "created": "Připojeno k BrightID {{date}}",
+      "groups": "Skupiny",
+      "justMet": "Právě jsme se setkali",
+      "mutualConnections": "Společná spojení",
+      "rating": "Jak dobře znáte toto spojení?",
+      "recovery": "Obnovení účtu",
+      "reported": "Nahlášeno",
+      "suspicious": "Podezřelé",
+      "unknownLevel": "Neznámá míra známosti"
+    },
+    "text": {
+      "errorGeneric": "Při připojování došlo k chybě. Zkuste spojení navázat znovu.",
+      "rating": "Vaše odpověď nám pomůže předcházet útokům"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} potvrzeno"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "Zahodit",
+        "dontLeave": "Neodcházet"
+      },
+      "text": {
+        "discardChanges": "Máte neuložené změny. Zahodit je a opustit obrazovku?",
+        "invalidPhoneNumber": "Zadejte platné telefonní číslo",
+        "passwordMatch": "Aktuální heslo se neshoduje."
+      },
+      "title": {
+        "discardChanges": "Zahodit změny?",
+        "passwordMatch": "Zkuste to prosím znovu"
+      }
+    },
+    "button": {
+      "socialNext": "Další",
+      "socialPrevious": "Předchozí"
+    },
+    "label": {
+      "contactInfo": "Kontaktní údaje",
+      "currentPassword": "Aktuální heslo",
+      "name": "Jméno",
+      "newPassword": "Nové heslo",
+      "newPasswordAgain": "Zopakujte heslo",
+      "password": "Heslo",
+      "socialMediaLink": "Odkaz na sociální síť"
+    },
+    "placeholder": {
+      "name": "Zadejte jméno",
+      "newPassword": "Nové heslo",
+      "newPasswordAgain": "Zopakujte heslo",
+      "password": "Heslo"
+    },
+    "text": {
+      "backupPasswordTitle": "Heslo pro zálohu",
+      "changePassword": "Změnit heslo",
+      "changeProfilePicture": "Změnit profilovou fotografii",
+      "setPassword": "Nastavit heslo",
+      "viewPassword": "Zobrazit heslo"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "Navažte skupinové spojení s {{name}} na BrightID: {{link}}. Tento odkaz platí do {{expirationTimestamp}}.",
+      "connectSingle": "Navažte spojení s {{name}} na BrightID: {{link}}. Tento odkaz platí do {{expirationTimestamp}}.",
+      "text": {
+        "codeGroup": "Tento QR kód je určen k tomu, aby se mnoho lidí spojilo současně.",
+        "codeSingle": "Tento QR kód lze před vypršením platnosti použít ke spojení s jedním uživatelem.",
+        "codeStar": "Tento QR kód je určen k propojení mnoha lidí s jednou osobou.",
+        "shareLinkGroup": "Sdílet tento odkaz",
+        "shareLinkSingle": "Sdílet tento odkaz s jedním přítelem",
+        "universalLink": "Univerzální odkaz"
+      },
+      "title": {
+        "codeGroup": "Skupinový kód",
+        "codeSingle": "Kód na jedno použití",
+        "codeStar": "Hvězdicový kód"
+      }
+    },
+    "button": {
+      "copyLink": "Kopírovat odkaz",
+      "scanCode": "Naskenovat kód",
+      "showCode": "Zobrazit QR kód"
+    },
+    "header": {
+      "connections_0": "{{count}} / {{max}} spojení",
+      "connections_1": "{{count}} / {{max}} spojení",
+      "connections_2": "{{count}} / {{max}} spojení"
+    },
+    "label": {
+      "connectionType": "Typ spojení:"
+    },
+    "text": {
+      "canAlso": "Nebo můžete také…",
+      "codeGroup": "Skupinový kód",
+      "codeSingle": "Kód na jedno použití",
+      "codeStar": "Hvězdicový kód",
+      "confirmConnections": "Potvrdit spojení",
+      "downloadingConnectionData": "Stahování dat spojení",
+      "expiresIn": "Platnost vyprší za:",
+      "pendingConnections_0": "Máte {{count}} čekající spojení",
+      "pendingConnections_1": "Máte {{count}} čekající spojení",
+      "pendingConnections_2": "Máte {{count}} čekajících spojení",
+      "scanCode": "<text>Ahoj {{name}}, naskenujte kód a</text><text>navázejte dnes nové spojení</text>"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "text": "Sdílejte tento odkaz se svými spojeními pro obnovení účtu.",
+      "title": "Odkaz pro obnovení účtu"
+    },
+    "clipboardmessage": "Pomozte mi obnovit můj BrightID: {{link}}. Tento odkaz platí do {{expirationTimestamp}}.",
+    "error": {
+      "mismatchId": "Vaše spojení pro obnovení účtu vybrala různé účty",
+      "title": "Obnovení účtu se nezdařilo",
+      "unknown": "Došlo k neznámé chybě"
+    },
+    "header": {
+      "text": "Část 1: Obnovení účtu"
+    },
+    "info": "Tímto krokem obnovíte svůj BrightID v tomto zařízení. Obnoví se jména a fotografie spojení, která máte společná se svými spojeními pro obnovení účtu.",
+    "state": "Obnovená spojení: {{recoveredConnections}}, skupiny: {{recoveredGroups}}",
+    "steps": {
+      "complete": "Obnovení účtu dokončeno",
+      "downloading": "Stahování dat ze spojení pro obnovení účtu…",
+      "error": "Obnovení účtu se nezdařilo",
+      "recovering": "Obnovování účtu ..."
+    },
+    "text": {
+      "additionalInfo": "Vaše spojení pro obnovení účtu budou muset tento kód naskenovat, aby vám mohla pomoci obnovit BrightID",
+      "askScanning": "Ukažte tento QR kód svým spojením pro obnovení účtu",
+      "signatures_0": "{{count}} / 2 podpisů",
+      "signatures_1": "{{count}} / 2 podpisů",
+      "signatures_2": "{{count}} / 2 podpisů"
+    }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "Přidat",
+      "addMoreRecovery": "Přidat další spojení pro obnovení účtu +",
+      "addRecoveryConnections": "Přidat spojení pro obnovení účtu",
+      "chooseThreeConnections": "Zvolte tři nebo více již známých spojení pro zálohování BrightID",
+      "completed": "Spojení pro obnovení účtu přidána",
+      "connectionsAlreadyKnown": "Spojení musí být označena jako „již známá“, aby je bylo možné nastavit pro obnovení účtu.",
+      "currentRecoveryConnections": "Aktuální spojení pro obnovení účtu",
+      "emptyList": "Přidejte spojení pro obnovení účtu, abyste mohli obnovit účet pomocí kontaktů",
+      "pleaseMakeSomeConnections": "Navažte prosím nějaká spojení :)",
+      "threeMore": "K povolení obnovení účtu pomocí kontaktů potřebujete ještě {{amount}} již známých spojení"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Rozumím",
+    "text": {
+      "cooldownGeneric": "Z bezpečnostních důvodů se změna spojení pro obnovení účtu projeví až po ochranné lhůtě dlouhé až <period>{{ cooldownPeriod }}</period>."
+    },
+    "title": "Ochranná lhůta pro spojení pro obnovení účtu"
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "requestRecovering": "Žádost o pomoc s obnovením tohoto účtu byla odeslána",
+        "restoreConfirm": "Je {{name}} účet, který pomáháte obnovit?",
+        "restoreSuccess": "Účet obnoven"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "nobodyHasChosen": "Spojení nelze obnovit...\nTato osoba vás nenastavila pro obnovení účtu"
+      }
+    },
+    "header": {
+      "accountRecovery": "Obnovení účtu",
+      "text": "Část 2: Obnovení zálohy (volitelné)"
+    },
+    "info": "Pomocí hesla pro zálohu můžete obnovit jména a fotografie všech spojení a skupin.",
+    "password": {
+      "placeholder": "Zadejte heslo",
+      "skip": "Přeskočit",
+      "submit": "Obnovit"
+    },
+    "steps": {
+      "complete": "Obnovení dokončeno",
+      "error": "Obnovení se nezdařilo. Chybné heslo?",
+      "restoring": "Obnovování dat…",
+      "restoringProgress": "Obnovování položky {{currentItem}} z {{totalItems}}",
+      "skipped": "Obnovení přeskočeno",
+      "waitingAccount": "Čekání na obnovení účtu",
+      "waitingPassword": "Zadejte heslo nebo přeskočte"
+    },
+    "text": {
+      "chooseConnectionToHelp": "Vyberte spojení, jehož účet pomáháte obnovit."
+    }
+  },
+  "settings": {
+    "language": {
+      "label": "Jazyk"
+    }
+  },
+  "signup": {
+    "button": {
+      "skip": "Přeskočit a provést později",
+      "submit": "Odeslat"
+    },
+    "header": {
+      "title": "Registrace"
+    },
+    "placeholder": {
+      "confirmPassword": "potvrďte heslo",
+      "name": "Vaše jméno",
+      "newName": "Jméno",
+      "newPassword": "Heslo",
+      "password": "heslo"
+    },
+    "text": {
+      "createPassword": "Vytvořte heslo k BrightID",
+      "nameAndPhotoNotShared": "Vaše jméno a fotografie nikdy nebudou sdíleny s aplikacemi ani ukládány na servery.",
+      "nameNotShared": "Vaše jméno nikdy nebude sdíleno s aplikacemi ani\nuloženo v našem blockchainu.",
+      "passwordInfo": "Toto heslo zašifruje jména a fotografie vašich spojení pro případ, že je budete potřebovat obnovit. Neumožní však nikomu převzít váš BrightID.",
+      "photoNotShared": "Vaše fotografie nikdy nebude sdílena s aplikacemi ani\nuložena v našem blockchainu.",
+      "pleaseAddPhoto": "Přidejte prosím fotografii",
+      "whatsYouName": "Pod jakým jménem vás znají přátelé?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Otevřete tento odkaz v aplikaci BrightID, kterou chcete synchronizovat.",
+      "title": "Synchronizovat uživatelská data"
+    },
+    "clipboardmessage": "Synchronizujte data BrightID s jiným zařízením: {{link}}. Tento odkaz platí do {{expirationTimestamp}}.",
+    "text": {
+      "additionalInfo": "Tento QR kód naskenujte druhým zařízením, abyste mezi nimi synchronizovali data",
+      "askScanning": "Naskenujte tento QR kód druhým zařízením"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Nahrát uživatelská data"
+    },
+    "info": "Nahrávání uživatelských dat (spojení, propojené aplikace, ...) do nového zařízení",
+    "steps": {
+      "complete": "Nahrávání dokončeno.",
+      "downloading": "Nahrávání uživatelských dat…",
+      "error": "Nahrávání dat se nezdařilo",
+      "waiting": "Čekání na podpisové klíče..."
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "Rozumím!",
+      "setPassword": "Heslo k BrightID můžete kdykoli\nnastavit zde",
+      "viewPassword": "Heslo k BrightID můžete kdykoli\nzobrazit zde"
     }
   }
 }

@@ -1,0 +1,863 @@
+{
+  "achievements": {
+    "auraVerification": {
+      "description": "Pelajari lebih lanjut tentang Aura",
+      "title": "Verifikasi Aura"
+    },
+    "bituVerification": {
+      "description": "Detail selengkapnya",
+      "title": "Verifikasi Bitu"
+    },
+    "getSponsored": {
+      "description": "Dapatkan sponsor dengan menautkan ke aplikasi yang menawarkan sponsor",
+      "title": "Dapatkan sponsor"
+    },
+    "joinMeet": {
+      "description": "Ikuti pertemuan BrightID",
+      "title": "Pertemuan BrightID"
+    },
+    "linkApp": {
+      "description": "Tautkan BrightID Anda ke aplikasi",
+      "title": "Tautkan ke aplikasi"
+    },
+    "makeFirstConnection": {
+      "description": "Terhubung dengan pengguna BrightID lain",
+      "title": "Koneksi pertama"
+    },
+    "makeThreeConnection": {
+      "description": "Terhubung dengan 3 pengguna BrightID",
+      "title": "Tiga koneksi"
+    },
+    "notification": {
+      "message": "Anda telah menyelesaikan tugas \"{{title}}\".",
+      "title": "Pencapaian diraih!"
+    },
+    "progress": {
+      "title": "Penyelesaian:"
+    },
+    "setupBackup": {
+      "description": "Tetapkan kata sandi untuk mengaktifkan pencadangan terenkripsi atas data Anda",
+      "title": "Tetapkan kata sandi cadangan"
+    },
+    "setupRecoveryConnections": {
+      "description": "Atur koneksi pemulihan Anda untuk mengaktifkan pemulihan akun melalui koneksi sosial",
+      "title": "Atur pemulihan sosial"
+    }
+  },
+  "addSigningKey": {
+    "header": {
+      "text": "Tambahkan informasi perangkat"
+    },
+    "info": "Mengizinkan perangkat baru menggunakan BrightID Anda",
+    "steps": {
+      "adding": "Menambahkan kunci penandatanganan...",
+      "complete": "Kunci penandatanganan ditambahkan",
+      "downloading": "Mengunduh data perangkat baru...",
+      "error": "Gagal menambahkan kunci penandatanganan"
+    }
+  },
+  "alert": {
+    "text": {
+      "appInfoFailure": "Gagal mengambil appInfo terbaru: {{message}}. Silakan coba lagi nanti.",
+      "appNotSponsoring": "Anda belum memiliki sponsor dan {{app}} tidak menyediakan sponsor. Silakan cari aplikasi lain untuk menjadi sponsor Anda.",
+      "sponsorOpFailed": "Proses pemberian sponsor gagal",
+      "sponsorOpTimeout": "Waktu tunggu proses pemberian sponsor habis"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Ya"
+      },
+      "nodeError": "API node BrightID tidak tersedia. Silakan coba lagi nanti.",
+      "text": {
+        "blindSigAlreadyLinked": "Anda sudah tertaut ke {{app}} dengan ID {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Anda mencoba menautkan ke {{app}} menggunakan {{appUserId}}. Anda sudah tertaut ke {{app}} dengan ID berbeda, yaitu {{previousAppUserIds}}. Hal ini dapat menyebabkan masalah saat menggunakan aplikasi.",
+        "callbackError": "Aplikasi {{context}} melaporkan kesalahan: {{error}}",
+        "checkWebsite": "Untuk mengetahui lebih lanjut tentang {{name}}, kunjungi situs web mereka!",
+        "invalidApp": "{{app}} bukan aplikasi yang valid!",
+        "invalidContext": "{{context}} bukan konteks yang valid!",
+        "linkApp": "Tautkan akun Anda di {{context}} ke BrightID Anda?",
+        "linkFailure": "Gagal menautkan akun Anda di {{context}} ke BrightID Anda\n{{result}}",
+        "linkSigFailed": "Terjadi kesalahan saat menautkan verifikasi {{verification}} ke aplikasi {{appId}}. Pesan kesalahan: {{msg}}",
+        "linkSuccess": "Berhasil menautkan akun Anda di {{context}} ke BrightID Anda",
+        "missingBlindSig": "Tidak ditemukan blind signature untuk aplikasi {{appId}}. Verifikasi yang belum tersedia: {{missingVerifications}}. Verifikasi yang sudah ditautkan: {{linkedVerifications}}",
+        "missingVerification": "Anda belum memiliki verifikasi berikut: {{verifications}}.",
+        "notPrimary": "Anda sedang menggunakan perangkat sekunder. Penautan aplikasi \"{{app}}\" memerlukan interaksi dengan perangkat utama Anda. Silakan sinkronkan dengan perangkat utama Anda atau lakukan penautan menggunakan perangkat utama Anda."
+      },
+      "title": {
+        "callbackError": "Terjadi kesalahan saat menjalankan callback aplikasi",
+        "linkApp": "Tautkan Aplikasi?",
+        "linkingFailed": "Penautan aplikasi gagal"
+      }
+    },
+    "linking": {
+      "active": "Menautkan ke",
+      "linkWaitingV5": "Menunggu konfirmasi proses penautan",
+      "notPossible": "Tidak dapat menautkan ke {{app}}",
+      "notSponsored": "Anda belum memiliki sponsor.",
+      "precheckApp": "Memeriksa permintaan sponsor sebelumnya",
+      "prelinkCheck": "Memeriksa prasyarat penautan",
+      "refreshingApps": "Memverifikasi detail aplikasi",
+      "sponsorWaitingApp": "Menunggu {{app}} menjadi sponsor Anda",
+      "sponsorWaitingOp": "Meminta sponsor dari aplikasi",
+      "sponsored": "Anda sudah memiliki sponsor.",
+      "success": "Berhasil ditautkan!",
+      "waitingV6": "Menunggu fungsi penautan selesai"
+    },
+    "text": {
+      "noApps": "Tidak Ada Aplikasi",
+      "notSponsored": "Anda belum memiliki sponsor.\nSilakan cari aplikasi di bawah ini untuk menjadi sponsor Anda."
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "versi klien sudah usang - silakan perbarui klien Anda dan coba lagi",
+        "otherOutdated": "versi klien pihak lain sudah usang - pembuat kode QR perlu memperbarui klien dan mencoba lagi"
+      }
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "tambahkan foto",
+      "editPhoto": "edit foto",
+      "profilePhoto": "foto profil",
+      "userPhoto": "foto pengguna"
+    },
+    "actionSheet": {
+      "cancel": "batal",
+      "title": "Apa yang ingin Anda lakukan?"
+    },
+    "alert": {
+      "cancel": "Batal",
+      "dismiss": "Tutup",
+      "error": "Kesalahan",
+      "info": "Informasi",
+      "no": "Tidak",
+      "ok": "OK",
+      "success": "Berhasil",
+      "sure": "Ya",
+      "text": {
+        "commonError": "Maaf, Kami Tidak Dapat Menyelesaikan Permintaan Anda. Silakan Coba Lagi Sebentar Lagi.",
+        "failedOp": "{{name}} gagal!\n{{message}}",
+        "invalidSigningKey": "Kunci penandatanganan Anda tidak valid. Hal ini mungkin disebabkan oleh:\n- Anda memulihkan BrightID Anda di perangkat lain.\n- Anda menghapus perangkat ini dari daftar perangkat aktif Anda.\n- Proses pemulihan Anda gagal.\n- Node yang terhubung dengan Anda mengalami masalah.",
+        "passwordMatch": "Kata sandi dan konfirmasi kata sandi tidak cocok.",
+        "passwordShort": "Kata sandi Anda harus terdiri dari minimal 8 karakter.",
+        "recoverySigned": "Salah satu koneksi pemulihan Anda telah menandatangani permintaan Anda"
+      },
+      "title": {
+        "invalidSigningKey": "Kunci Penandatanganan Tidak Valid",
+        "pleaseConfirm": "Silakan Konfirmasi"
+      },
+      "yes": "Ya"
+    },
+    "button": {
+      "cancel": "Batal",
+      "copy": "Salin",
+      "copyLink": "Salin Tautan",
+      "retry": "Coba Lagi",
+      "save": "Simpan"
+    },
+    "camera": {
+      "cancel": "Batal",
+      "message": "Kami memerlukan izin Anda untuk menggunakan kamera",
+      "ok": "OK",
+      "title": "Izin untuk menggunakan kamera"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Pilih dari Galeri",
+      "takePhoto": "Ambil Foto",
+      "title": "Pilih foto"
+    },
+    "placeholder": {
+      "searchConnections": "Cari Koneksi"
+    },
+    "tag": {
+      "connectionDate": "Terhubung pada {{date}}",
+      "reportReason": " sebagai {{reportReason}}",
+      "reported": "(dilaporkan)",
+      "reportedByUser": "dilaporkan oleh Anda"
+    },
+    "text": {
+      "noConnection": "Tidak dapat terhubung ke server",
+      "uploadingData": "Mengunggah data terenkripsi ke server cadangan…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Simpan",
+      "ok": "OK",
+      "report": "Hapus koneksi ini",
+      "reportCancel": "Batal",
+      "reportSubmit": "Kirim",
+      "undoReport": "Batalkan Laporan"
+    },
+    "header": {
+      "connectionDetails": "Detail koneksi"
+    },
+    "label": {
+      "connectionLevel": "Tingkat Koneksi",
+      "mutualConnections": "Koneksi Bersama",
+      "mutualGroups": "Grup Bersama",
+      "possibleDuplicates": "Kemungkinan Duplikat",
+      "recoveryConnections": "Koneksi Pemulihan",
+      "socialMedia": "Media Sosial"
+    },
+    "tags": {
+      "connectedAt": "Terhubung pada {{date}}",
+      "loading": "Memuat…"
+    },
+    "text": {
+      "copied": "Disalin ke papan klip!",
+      "level": "Seberapa baik Anda mengenal {{name}}?",
+      "levelAlreadyKnown": "Saya sudah mengenal orang ini",
+      "levelJustMet": "Orang ini belum saya kenal dan baru saja saya temui",
+      "levelRecovery": "Saya memercayai orang ini untuk memulihkan BrightID saya",
+      "levelSuspicious": "Saya sama sekali tidak mengenal orang ini",
+      "removeConnection": "Putuskan koneksi dengan {{name}}",
+      "reportConnection": "Laporkan {{name}}",
+      "reportDuplicate": "Pengguna ini membuat beberapa akun dengan niat buruk",
+      "reportOther": "Alasan lain",
+      "reportReplaced": "Pengguna ini kehilangan akses ke akun lama ini dan membuat akun baru",
+      "reportSpammer": "Orang ini mengirimi saya spam berupa permintaan koneksi yang tidak diinginkan",
+      "reportSuspicious": "Akun ini sebelumnya dimiliki oleh orang lain",
+      "unReportConnection": "Pulihkan koneksi",
+      "unReportImpact": "Anda sudah melaporkan {{name}} sebagai {{reportReason}}. Apakah Anda ingin menghapus penanda ini dan memulihkan koneksi Anda?",
+      "unkownRecoveryConnection": "Tidak diketahui",
+      "whyRemove": "Silakan beri tahu kami alasan Anda ingin menghapus koneksi ini",
+      "whyReport": "Silakan beri tahu kami alasan Anda mencurigai koneksi ini"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Foto Koneksi",
+      "viewConnectionDetails": "Lihat Detail Koneksi",
+      "viewPhoto": "Lihat Foto dalam Layar Penuh"
+    },
+    "button": {
+      "reconnect": "Hubungkan Kembali",
+      "reportConnection": "Laporkan koneksi",
+      "updateConnection": "Perbarui koneksi"
+    },
+    "header": {
+      "connections": "Koneksi"
+    },
+    "label": {
+      "currentConnectionLevel": "Tingkat koneksi",
+      "newProfile": "Profil Baru",
+      "oldProfile": "Profil Lama"
+    },
+    "removeActionSheet": {
+      "info": "Apakah Anda yakin ingin menghapus koneksi dengan {{name}}? Anda dapat terhubung kembali kapan saja.",
+      "remove": "Hapus",
+      "title": "Hapus koneksi"
+    },
+    "tag": {
+      "deleted": "Dihapus",
+      "failed": "Gagal terhubung.\nSilakan coba lagi.",
+      "lastConnected": "Terakhir terhubung pada {{date}}",
+      "reported": "Dilaporkan",
+      "reportedAs": "Dilaporkan sebagai {{flag}}",
+      "waiting": "Menunggu"
+    },
+    "text": {
+      "alreadyConnectedWith": "Anda sudah terhubung dengan {{name}}",
+      "noConnections": "Tidak ada koneksi"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "Email",
+      "meet": "Buat Koneksi",
+      "socialMedia": "Media Sosial",
+      "website": "Situs Web"
+    },
+    "text": {
+      "meet": "Ikuti pertemuan BrightID!",
+      "openSource": "bersumber terbuka!",
+      "weAre": "Kami "
+    },
+    "title": {
+      "contactUs": "Hubungi Kami"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Silakan masukkan nama grup",
+        "nameTooShort": "Nama grup harus terdiri dari minimal 2 karakter"
+      },
+      "title": {
+        "createFailed": "Grup dibuat",
+        "formIncomplete": "Formulir Grup Belum Lengkap"
+      }
+    },
+    "button": {
+      "createGroup": "Buat Grup",
+      "next": "Berikutnya",
+      "skip": "Lewati & lakukan nanti"
+    },
+    "label": {
+      "invitees": "PENERIMA UNDANGAN"
+    },
+    "placeholder": {
+      "groupName": "Apa nama grupnya?"
+    },
+    "text": {
+      "invitees": "Undang anggota grup",
+      "noConnections": "Tidak ada koneksi"
+    }
+  },
+  "devices": {
+    "alert": {
+      "addSuperApp": "Apakah Anda yakin ingin menambahkan {{name}} sebagai super app? Lakukan ini hanya jika Anda sangat memercayai {{name}} karena aplikasi tersebut dapat mengendalikan BrightID Anda.",
+      "bothPrimary": "Kedua perangkat dikonfigurasi sebagai perangkat utama. Anda hanya dapat memiliki satu perangkat utama. Atur salah satu perangkat sebagai perangkat sekunder agar keduanya dapat disinkronkan.",
+      "confirmAdd": "Apakah Anda yakin ingin mengekspor BrightID Anda ke perangkat lain?",
+      "confirmAddPrimary": "Apakah Anda yakin ingin mengekspor BrightID Anda ke perangkat lain dan menetapkannya sebagai perangkat utama?",
+      "confirmRemove": "Apakah Anda yakin ingin menghapus BrightID Anda dari \"{{name}}\"?",
+      "confirmSync": "Bagikan dan sinkronkan data BrightID Anda dengan perangkat ini?",
+      "noPrimary": "Perangkat Anda hanya dapat disinkronkan oleh perangkat utama."
+    },
+    "button": {
+      "submit": "Kirim"
+    },
+    "placeholder": {
+      "deviceName": "Nama Perangkat"
+    },
+    "text": {
+      "listDescription": "BrightID Anda tersedia di perangkat dan jaringan berikut:",
+      "notice": "Perhatian:",
+      "primaryDeviceNotice": "Hanya satu perangkat aktif Anda yang boleh ditetapkan sebagai perangkat utama. Jika tidak, Anda akan mengalami masalah saat menyinkronkan perangkat. Sebelum menetapkan perangkat saat ini sebagai perangkat utama, pastikan Anda telah menyinkronkannya dengan perangkat utama lama dan menghapus perangkat lama tersebut.",
+      "switchPrimaryLabel": "Gunakan perangkat saat ini sebagai perangkat utama",
+      "syncCompleted": "Perangkat disinkronkan",
+      "waitSyncing": "Menyinkronkan perangkat, harap tunggu ...",
+      "whatsDeviceName": "Silakan pilih nama untuk perangkat baru"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "BrightID sudah menggunakan versi terbaru."
+      },
+      "title": {
+        "upToDate": "Periksa Pembaruan"
+      }
+    },
+    "label": {
+      "achievements": "Pencapaian",
+      "checkForUpdates": "Periksa Pembaruan",
+      "contactUs": "Hubungi Kami",
+      "copyExplorerCode": "Salin Kode Penjelajah",
+      "devices": "Perangkat dan Jaringan",
+      "editProfile": "Edit Profil",
+      "findFriends": "Cari Teman",
+      "groups": "Grup",
+      "home": "Beranda",
+      "settings": "Pengaturan"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Perjanjian Lisensi"
+    }
+  },
+  "findFriends": {
+    "text": {
+      "invitationNotAvailable": "Maaf, pengiriman undangan saat ini tidak tersedia untuk aplikasi ini.",
+      "noFriends": "Tidak ada teman"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "Disalin ke papan klip!"
+      }
+    },
+    "button": {
+      "copyCode": "Salin Kode"
+    },
+    "text": {
+      "backupRequired": "Anda perlu mengatur pencadangan dan pemulihan untuk mengakses kode penjelajah graf Anda. Periksa notifikasi Anda atau terhubung dengan lebih banyak pengguna agar memenuhi syarat untuk pencadangan dan pemulihan.",
+      "explorerWebsiteDescription": "adalah situs web yang dirancang untuk menjelajahi seluruh graf sosial BrightID. Gunakan kode di atas untuk melihat koneksi Anda dalam graf."
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "logo grup"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "Jadikan {{name}} sebagai admin grup ini?",
+        "dismissMember": "Keluarkan {{name}} dari grup ini?",
+        "groupIdCopied": "ID grup disalin ke papan klip",
+        "inviteSuccess": "Anda mengundang {{name}} ke grup",
+        "leaveGroup": "Keluar dari grup ini?"
+      },
+      "title": {
+        "addAdmin": "Tambahkan admin",
+        "dismissMember": "Keluarkan Anggota",
+        "errorDismissMember": "Terjadi kesalahan saat mengeluarkan anggota dari grup",
+        "errorLeaveGroup": "Terjadi kesalahan saat keluar dari grup",
+        "inviteSuccess": "Undangan dikirim",
+        "leaveGroup": "Keluar dari Grup"
+      }
+    },
+    "button": {
+      "createGroup": "Buat Grup",
+      "learnMore": "Pelajari Lebih Lanjut"
+    },
+    "groupActionSheet": {
+      "cancel": "Batal",
+      "copyGroupId": "Salin ID grup ke papan klip",
+      "inviteUser": "Undang pengguna",
+      "leaveGroup": "Keluar dari grup"
+    },
+    "header": {
+      "groups": "Grup",
+      "inviteList": "Daftar Undangan",
+      "newGroup": "Grup Baru"
+    },
+    "label": {
+      "knownMembers": "Anggota yang dikenal:",
+      "unknownMembers": "Tidak dikenal:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Tambahkan Admin",
+      "cancel": "Batal",
+      "dismissMember": "Keluarkan dari grup"
+    },
+    "state": {
+      "creatingGroup": "membuat grup",
+      "uploadingGroupPhoto": "mengunggah foto grup"
+    },
+    "tag": {
+      "primaryGroup": "Grup Utama"
+    },
+    "text": {
+      "noGroups": "<text>Dapatkan verifikasi lebih cepat</text><text>dengan membuat dan</text><text>bergabung dalam grup</text>",
+      "noGroupsMatchSearch": "Tidak ada grup yang sesuai dengan pencarian Anda",
+      "noMembers": "Belum ada anggota yang dikenal, undang beberapa orang…"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "hubungkan"
+    },
+    "alert": {
+      "text": {
+        "copied": "URL server disalin ke papan klip!"
+      }
+    },
+    "button": {
+      "achievements": "Pencapaian",
+      "apps": "Aplikasi",
+      "connections": "Koneksi",
+      "httpServer": "Berbagi BrightID melalui WiFi",
+      "myCode": "Kode Saya",
+      "scanCode": "Pindai Kode"
+    },
+    "chatActionSheet": {
+      "discord": "Discord BrightID",
+      "title": "Ingin mengobrol dengan kami?"
+    },
+    "label": {
+      "createNewConnection": "Buat Koneksi Baru"
+    },
+    "link": {
+      "community": "Bergabung dengan Komunitas"
+    }
+  },
+  "import": {
+    "alert": {
+      "text": "Buka tautan ini menggunakan aplikasi BrightID yang akan diimpor.",
+      "title": "Tautan impor BrightID"
+    },
+    "clipboardmessage": "Ekspor BrightID Anda ke perangkat lain: {{link}}. Tautan ini berlaku hingga {{expirationTimestamp}}.",
+    "header": {
+      "title": "Impor Akun"
+    },
+    "text": {
+      "additionalInfo": "Kode QR ini harus dipindai menggunakan perangkat Anda yang lain untuk mengimpor BrightID Anda ke perangkat ini",
+      "askScanning": "Silakan pindai kode QR ini menggunakan perangkat Anda yang lain",
+      "waitImporting": "Mengimpor koneksi, harap tunggu ..."
+    }
+  },
+  "missingKeysScreen": {
+    "header": "Pasangan kunci rusak",
+    "options": {
+      "import": {
+        "followWorkflow": "Ikuti alur impor",
+        "header": "Impor dari perangkat lain",
+        "notes": "Prasyarat: BrightID Anda sudah terpasang di perangkat lain",
+        "selectImport": "Pilih opsi \"Impor\" saat aplikasi mulai dijalankan"
+      },
+      "reinstall": "Hapus lalu pasang kembali aplikasi BrightID",
+      "restart": {
+        "header": "Mulai dari awal",
+        "notes": "Ini adalah pilihan terakhir. Anda akan membuat BrightID baru dan kehilangan semua koneksi serta verifikasi yang ada.",
+        "selectCreate": "Pilih opsi \"Buat BrightID Saya\" saat aplikasi mulai dijalankan"
+      },
+      "socialRecovery": {
+        "followWorkflow": "Ikuti alur pemulihan",
+        "header": "Lakukan pemulihan sosial",
+        "notes": "Prasyarat: Anda sudah mengatur pemulihan sosial",
+        "selectRecovery": "Pilih opsi \"Pulihkan\" saat aplikasi mulai dijalankan"
+      }
+    },
+    "recoveryOptions": "Opsi pemulihan",
+    "subHeader": "Kunci penandatanganan di perangkat ini hilang atau rusak. Anda tidak dapat menggunakan aplikasi BrightID sebelum masalah ini diperbaiki."
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Pulihkan daftar node bawaan",
+      "text": "Anda tidak menggunakan daftar node bawaan"
+    },
+    "state": {
+      "connecting": "Menghubungkan ke node BrightID...",
+      "noConnection": "Gagal terhubung ke node BrightID. Silakan periksa koneksi jaringan Anda.",
+      "noNode": "Daftar node kosong."
+    },
+    "timer": {
+      "text": "Waktu tersisa: {{secondsLeft}} detik"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Node saat ini:"
+    },
+    "switchNodeButtonLabel": "Beralih ke node lain"
+  },
+  "notificationBar": {
+    "text": {
+      "backupPassword": "Tetapkan kata sandi untuk mengaktifkan pencadangan terenkripsi atas data Anda",
+      "pendingConnections_0": "Anda memiliki {{count}} koneksi yang menunggu konfirmasi",
+      "socialRecovery": "Pilih koneksi pemulihan untuk mengaktifkan pemulihan sosial BrightID Anda"
+    },
+    "title": {
+      "backupPassword": "Tetapkan Kata Sandi Cadangan",
+      "pendingConnection": "Konfirmasi Koneksi",
+      "socialRecovery": "Atur Pemulihan Sosial"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "Gagal bergabung dengan grup",
+        "rejectGroupInvite": "Tolak undangan untuk bergabung dengan grup ini?",
+        "successGroupInvite": "Anda bergabung dengan {{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "Gagal menolak undangan",
+        "rejectGroupInvite": "Tolak"
+      }
+    },
+    "item": {
+      "msg": {
+        "backupBrightId": "Tetapkan kata sandi untuk mengaktifkan pencadangan terenkripsi atas data Anda",
+        "socialRecovery": "Pilih koneksi pemulihan untuk mengaktifkan pemulihan sosial BrightID Anda"
+      },
+      "text": {
+        "pendingConnections_0": "Anda memiliki {{count}} koneksi yang belum dikonfirmasi",
+        "pendingGroupInvite": "{{name}} mengundang Anda untuk bergabung"
+      },
+      "title": {
+        "backupBrightId": "Tetapkan Kata Sandi Cadangan",
+        "socialRecovery": "Atur Pemulihan Sosial"
+      }
+    },
+    "tab": {
+      "connections": "koneksi",
+      "groups": "grup",
+      "miscellaneous": "lain-lain"
+    },
+    "text": {
+      "noGroupInvites": "Anda tidak memiliki undangan grup…",
+      "noMiscellaneous": "Tidak ada yang ditampilkan di sini…",
+      "noPendingConnections": "Anda tidak memiliki koneksi yang menunggu konfirmasi…"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "Buat BrightID Saya",
+      "import": "Pemulihan Perangkat",
+      "recover": "Pemulihan Sosial"
+    },
+    "text": {
+      "congratulations": "Selamat!\nBrightID Anda telah dibuat.\nSaatnya membuat koneksi.",
+      "congratulations1": "Selamat!",
+      "congratulations2": "BrightID Anda telah dibuat. Saatnya\nmembuat koneksi.",
+      "register": "Daftar untuk membuat\nidentitas digital Anda sendiri"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "Tidak dapat membuat saluran koneksi. Pesan kesalahan: {{message}}",
+        "errorJoinChannel": "Tidak dapat bergabung dengan saluran koneksi. Pesan kesalahan: {{message}}",
+        "localOutdated": "Tidak dapat terhubung dengan {{name}} karena versi klien tidak kompatibel. Silakan perbarui dan mulai ulang aplikasi BrightID Anda.",
+        "otherOutdated": "Tidak dapat terhubung dengan {{name}} karena versi klien tidak kompatibel. Silakan minta {{name}} untuk memperbarui dan memulai ulang aplikasi BrightID."
+      },
+      "title": {
+        "connectionImpossible": "Koneksi tidak dapat dibuat"
+      }
+    },
+    "text": {
+      "alreadyRated": "Anda sudah menilai koneksi ini",
+      "errorExpired": "Koneksi telah kedaluwarsa. Silakan coba hubungkan kembali.",
+      "errorMyself": "Anda tidak dapat terhubung dengan diri sendiri.",
+      "errorUnhandled": "Status koneksi tidak tertangani"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "Sudah dikenal",
+      "connections": "Koneksi",
+      "created": "Bergabung dengan BrightID pada {{date}}",
+      "groups": "Grup",
+      "justMet": "Baru bertemu",
+      "mutualConnections": "Koneksi Bersama",
+      "rating": "Seberapa baik Anda mengenal koneksi ini?",
+      "recovery": "Pemulihan",
+      "reported": "Dilaporkan",
+      "suspicious": "Mencurigakan",
+      "unknownLevel": "Tingkat Tidak Diketahui"
+    },
+    "text": {
+      "errorGeneric": "Terjadi kesalahan saat menghubungkan. Silakan coba hubungkan kembali.",
+      "rating": "Jawaban Anda akan membantu kami mencegah serangan"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} dikonfirmasi"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "Buang",
+        "dontLeave": "Tetap di sini"
+      },
+      "text": {
+        "discardChanges": "Anda memiliki perubahan yang belum disimpan. Buang perubahan tersebut dan tinggalkan layar ini?",
+        "invalidPhoneNumber": "Masukkan nomor telepon yang valid",
+        "passwordMatch": "Kata sandi saat ini tidak cocok."
+      },
+      "title": {
+        "discardChanges": "Buang perubahan?",
+        "passwordMatch": "Silakan coba lagi"
+      }
+    },
+    "button": {
+      "socialNext": "Berikutnya",
+      "socialPrevious": "Sebelumnya"
+    },
+    "label": {
+      "contactInfo": "Informasi Kontak",
+      "currentPassword": "Kata sandi saat ini",
+      "name": "Nama",
+      "newPassword": "Kata sandi baru",
+      "newPasswordAgain": "Ulangi kata sandi",
+      "password": "Kata sandi",
+      "socialMediaLink": "Tautan Media Sosial"
+    },
+    "placeholder": {
+      "name": "Masukkan Nama",
+      "newPassword": "Kata sandi baru",
+      "newPasswordAgain": "Ulangi kata sandi",
+      "password": "Kata sandi"
+    },
+    "text": {
+      "backupPasswordTitle": "Kata sandi cadangan",
+      "changePassword": "Ubah Kata Sandi",
+      "changeProfilePicture": "Ubah Foto Profil",
+      "setPassword": "Tetapkan kata sandi",
+      "viewPassword": "Lihat Kata Sandi"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "Buat koneksi grup dengan {{name}} di BrightID: {{link}}. Tautan ini berlaku hingga {{expirationTimestamp}}.",
+      "connectSingle": "Terhubung dengan {{name}} di BrightID: {{link}}. Tautan ini berlaku hingga {{expirationTimestamp}}.",
+      "text": {
+        "codeGroup": "Kode QR ini dirancang agar banyak orang dapat terhubung secara bersamaan.",
+        "codeSingle": "Kode QR ini dapat digunakan untuk terhubung dengan satu pengguna sebelum kedaluwarsa.",
+        "codeStar": "Kode QR ini dirancang untuk menghubungkan banyak orang dengan satu orang.",
+        "shareLinkGroup": "Bagikan tautan ini",
+        "shareLinkSingle": "Bagikan tautan ini kepada satu teman",
+        "universalLink": "Tautan Universal"
+      },
+      "title": {
+        "codeGroup": "Kode grup",
+        "codeSingle": "Kode sekali pakai",
+        "codeStar": "Kode bintang"
+      }
+    },
+    "button": {
+      "copyLink": "Salin Tautan",
+      "scanCode": "Pindai Kode",
+      "showCode": "Tampilkan kode QR Anda"
+    },
+    "header": {
+      "connections_0": "{{count}} / {{max}} Koneksi"
+    },
+    "label": {
+      "connectionType": "Jenis Koneksi:"
+    },
+    "text": {
+      "canAlso": "Atau Anda juga dapat…",
+      "codeGroup": "Kode grup",
+      "codeSingle": "Kode sekali pakai",
+      "codeStar": "Kode bintang",
+      "confirmConnections": "Konfirmasi Koneksi",
+      "downloadingConnectionData": "Mengunduh Data Koneksi",
+      "expiresIn": "Kedaluwarsa dalam:",
+      "pendingConnections_0": "Anda memiliki {{count}} koneksi yang menunggu konfirmasi",
+      "scanCode": "<text>Halo {{name}}, pindai kode dan</text><text>buat koneksi baru hari ini</text>"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "text": "Bagikan tautan ini kepada koneksi pemulihan Anda.",
+      "title": "Tautan pemulihan"
+    },
+    "clipboardmessage": "Bantu saya memulihkan BrightID saya: {{link}}. Tautan ini berlaku hingga {{expirationTimestamp}}.",
+    "error": {
+      "mismatchId": "Koneksi pemulihan Anda memilih akun yang berbeda",
+      "title": "Pemulihan akun gagal",
+      "unknown": "Terjadi kesalahan yang tidak diketahui"
+    },
+    "header": {
+      "text": "Bagian 1: Pulihkan akun"
+    },
+    "info": "Langkah ini akan memulihkan BrightID Anda di perangkat ini. Nama dan foto koneksi yang juga dimiliki oleh koneksi pemulihan Anda akan dipulihkan.",
+    "state": "{{recoveredConnections}} koneksi dan {{recoveredGroups}} grup dipulihkan",
+    "steps": {
+      "complete": "Pemulihan akun selesai",
+      "downloading": "Mengunduh data dari koneksi pemulihan…",
+      "error": "Pemulihan akun gagal",
+      "recovering": "Memulihkan akun ..."
+    },
+    "text": {
+      "additionalInfo": "Koneksi pemulihan Anda perlu memindai kode ini untuk membantu memulihkan BrightID Anda",
+      "askScanning": "Silakan tunjukkan kode QR ini kepada koneksi pemulihan Anda",
+      "signatures_0": "{{count}} / 2 tanda tangan"
+    }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "Tambahkan",
+      "addMoreRecovery": "Tambahkan lebih banyak koneksi pemulihan +",
+      "addRecoveryConnections": "Tambahkan Koneksi Pemulihan",
+      "chooseThreeConnections": "Pilih tiga atau lebih koneksi yang sudah dikenal untuk mencadangkan BrightID Anda",
+      "completed": "Koneksi pemulihan ditambahkan",
+      "connectionsAlreadyKnown": "Koneksi harus berstatus \"sudah dikenal\" sebelum dapat ditetapkan sebagai koneksi pemulihan.",
+      "currentRecoveryConnections": "Koneksi Pemulihan Anda Saat Ini",
+      "emptyList": "Silakan tambahkan koneksi pemulihan untuk mengaktifkan pemulihan sosial",
+      "pleaseMakeSomeConnections": "Silakan buat beberapa koneksi :)",
+      "threeMore": "Anda memerlukan {{amount}} koneksi yang sudah dikenal lagi untuk mengaktifkan pemulihan sosial"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Mengerti",
+    "text": {
+      "cooldownGeneric": "Untuk alasan keamanan, perubahan koneksi pemulihan baru berlaku setelah masa tunggu hingga <period>{{ cooldownPeriod }}</period>."
+    },
+    "title": "Masa tunggu untuk koneksi pemulihan"
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "requestRecovering": "Permintaan untuk membantu memulihkan akun ini telah dikirim",
+        "restoreConfirm": "Apakah {{name}} merupakan akun yang sedang Anda bantu pulihkan?",
+        "restoreSuccess": "Akun dipulihkan"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "nobodyHasChosen": "Tidak dapat memulihkan koneksi...\nPengguna tersebut tidak menetapkan Anda sebagai koneksi pemulihan"
+      }
+    },
+    "header": {
+      "accountRecovery": "Pemulihan Akun",
+      "text": "Bagian 2: Pulihkan cadangan (opsional)"
+    },
+    "info": "Dengan kata sandi cadangan, Anda dapat memulihkan nama dan foto semua koneksi serta grup Anda.",
+    "password": {
+      "placeholder": "Masukkan kata sandi Anda",
+      "skip": "Lewati",
+      "submit": "Pulihkan"
+    },
+    "steps": {
+      "complete": "Pemulihan selesai",
+      "error": "Pemulihan gagal. Kata sandi salah?",
+      "restoring": "Memulihkan data…",
+      "restoringProgress": "Memulihkan item {{currentItem}} dari {{totalItems}}",
+      "skipped": "Pemulihan dilewati",
+      "waitingAccount": "Menunggu pemulihan akun",
+      "waitingPassword": "Masukkan kata sandi atau lewati"
+    },
+    "text": {
+      "chooseConnectionToHelp": "Silakan pilih koneksi yang akunnya sedang Anda bantu pulihkan."
+    }
+  },
+  "settings": {
+    "language": {
+      "label": "Bahasa"
+    }
+  },
+  "signup": {
+    "button": {
+      "skip": "Lewati & lakukan nanti",
+      "submit": "Kirim"
+    },
+    "header": {
+      "title": "Daftar"
+    },
+    "placeholder": {
+      "confirmPassword": "konfirmasi kata sandi Anda",
+      "name": "Nama Anda",
+      "newName": "Nama",
+      "newPassword": "Kata sandi",
+      "password": "kata sandi"
+    },
+    "text": {
+      "createPassword": "Buat kata sandi BrightID Anda",
+      "nameAndPhotoNotShared": "Nama dan foto Anda tidak akan pernah dibagikan kepada aplikasi atau disimpan di server.",
+      "nameNotShared": "Nama Anda tidak akan pernah dibagikan kepada aplikasi atau\ndisimpan di blockchain kami.",
+      "passwordInfo": "Kata sandi ini akan mengenkripsi nama dan foto koneksi Anda jika Anda perlu memulihkannya. Kata sandi ini tidak dapat digunakan untuk mengambil alih BrightID Anda.",
+      "photoNotShared": "Foto Anda tidak akan pernah dibagikan kepada aplikasi atau\ndisimpan di blockchain kami.",
+      "pleaseAddPhoto": "Silakan tambahkan foto",
+      "whatsYouName": "Dengan nama apa teman-teman mengenal Anda?"
+    }
+  },
+  "sync": {
+    "alert": {
+      "text": "Buka tautan ini menggunakan aplikasi BrightID yang akan disinkronkan.",
+      "title": "Sinkronkan data pengguna"
+    },
+    "clipboardmessage": "Sinkronkan data BrightID Anda dengan perangkat lain: {{link}}. Tautan ini berlaku hingga {{expirationTimestamp}}.",
+    "text": {
+      "additionalInfo": "Kode QR ini harus dipindai menggunakan perangkat Anda yang lain untuk menyinkronkan data antara kedua perangkat",
+      "askScanning": "Silakan pindai kode QR ini menggunakan perangkat Anda yang lain"
+    }
+  },
+  "uploadData": {
+    "header": {
+      "text": "Unggah data pengguna"
+    },
+    "info": "Mengunggah data pengguna (koneksi, aplikasi tertaut, ...) ke perangkat baru",
+    "steps": {
+      "complete": "Unggahan selesai.",
+      "downloading": "Mengunggah data pengguna…",
+      "error": "Gagal mengunggah data",
+      "waiting": "Menunggu kunci penandatanganan..."
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "Mengerti!",
+      "setPassword": "Anda dapat menetapkan kata sandi\nBrightID Anda di sini kapan saja",
+      "viewPassword": "Anda dapat melihat kata sandi\nBrightID Anda di sini kapan saja"
+    }
+  }
+}

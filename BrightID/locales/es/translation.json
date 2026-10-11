@@ -486,7 +486,7 @@
       "leaveGroup": "Salir del grupo"
     },
     "header": {
-      "groups": "grupos",
+      "groups": "Grupos",
       "inviteList": "Lista de invitados",
       "newGroup": "Nuevo Grupo"
     },
@@ -635,8 +635,9 @@
       },
       "text": {
         "backupBrightId": "Elija sus conexiones de confianza",
-        "pendingConnections": "Tienes {{count}} conexión sin confirmar",
-        "pendingConnections_plural": "Tienes {{count}} conexiones sin confirmar",
+        "pendingConnections_0": "Tienes {{count}} conexión sin confirmar",
+        "pendingConnections_1": "Tienes {{count}} conexiones sin confirmar",
+        "pendingConnections_2": "Tienes {{count}} conexiones sin confirmar",
         "pendingGroupInvite": "{{name}} te invitó a unirte"
       },
       "title": {
@@ -787,8 +788,9 @@
       "showCode": "Muestra tu codigo Qr"
     },
     "header": {
-      "connections": "{{count}} / {{max}} Conexión",
-      "connections_plural": "{{count}} / {{max}} Conexiones"
+      "connections_0": "{{count}} / {{max}} Conexión",
+      "connections_1": "{{count}} / {{max}} Conexiones",
+      "connections_2": "{{count}} / {{max}} Conexiones"
     },
     "label": {
       "connectionType": "Tipo de conexión:"
@@ -801,8 +803,9 @@
       "confirmConnections": "Confirmar conexiones",
       "downloadingConnectionData": "Descargando datos de conexión",
       "expiresIn": "Expira en:",
-      "pendingConnections": "Tienes {{count}} conexión pendiente",
-      "pendingConnections_plural": "Tienes {{count}} conexiónes pendientes",
+      "pendingConnections_0": "Tienes {{count}} conexión pendiente",
+      "pendingConnections_1": "Tienes {{count}} conexiones pendientes",
+      "pendingConnections_2": "Tienes {{count}} conexiones pendientes",
       "scanCode": "<text>Hola {{name}}, escanea un codigo</text><text>haz una nueva conexión hoy</text>"
     }
   },
@@ -816,7 +819,7 @@
     "error": {
       "mismatchId": "Tus conexiones de recuperación seleccionaron cuentas diferentes",
       "title": "Falló la recuperación de la cuenta",
-      "unknown": "Se ha producido un error desconocido"
+      "unknown": "Ha ocurrido un error desconocido"
     },
     "header": {
       "text": "Parte 1: Recuperar cuenta",
@@ -834,8 +837,9 @@
       "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
       "askScanning": "Por favor, muestre este código QR a sus conexiones de recuperación",
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
-      "signatures": "{{count}} / firma",
-      "signatures_plural": "{{count}} / firmas"
+      "signatures_0": "{{count}} / firma",
+      "signatures_1": "{{count}} / firmas",
+      "signatures_2": "{{count}} / firmas"
     }
   },
   "recoveryConnections": {
